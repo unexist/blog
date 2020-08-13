@@ -1,0 +1,135 @@
+:root {
+    /* Colors */
+    --font-color: #fff;
+    --link-color: #8cf;
+    --highlight-color: #ff8000;
+    --border-color: #446979;
+    --top-color: #313536;
+    --bottom-color: #1D2021;
+    --h1-color: #888;
+    --h2-color: #777;
+
+    /* Misc */
+    --padding: 10px;
+    --radius: 8px;
+    --border: 1px solid var(--top-color);
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Layout */
+body {
+    background-color: var(--bottom-color);
+    color: var(--font-color);
+    font-family: HelveticaNeue,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+nav {
+    background-color: var(--bottom-color);
+    border-radius: var(--radius) var(--radius) 0px 0px;
+    font-size: 90%;
+}
+
+footer {
+    background-color: var(--top-color);
+    border-left: var(--border);
+    border-right: var(--border);
+    border-bottom: var(--border);
+    border-radius: 0px 0px var(--radius) var(--radius);
+    font-size: 70%;
+}
+
+footer a:link, footer a:visited {
+    color: var(--text-color);
+    text-decoration: underline;
+}
+
+footer a:hover {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+#container {
+    width: 100%;
+}
+
+#content {
+    padding-top: var(--padding);
+    border-left: var(--border);
+    border-right: var(--border);
+}
+
+#header {
+    background-color: var(--top-color);
+    width: 100%;
+}
+
+#headline, #content, nav, footer {
+    width: 70%;
+    margin: 0px auto;
+    padding: var(--padding);
+}
+
+#headline h1 {
+    display: inline-block;
+}
+
+#headline h2 {
+    display: inline-block;
+    padding-left: var(--padding);
+}
+
+#tag-cloud {
+    padding-top: var(--padding);
+}
+
+.tags a:before {
+    content: "#";
+}
+
+/* Text */
+a:link, a:visited {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--highlight-color);
+}
+
+h1 {
+    color: var(--h1-color);
+}
+
+h2 {
+    color: var(--h2-color);
+}
+
+li {
+    display: block;
+}
+
+/* Jekyll */
+.post-list li {
+    padding-top: var(--padding);
+}
+
+.post-meta {
+    font-size: 80%;
+}
+
+.post-content {
+    padding-top: var(--padding);
+    text-align:  justify;
+}
+
+.post-tags {
+    font-size: 70%;
+}
+
+.rss-subscribe {
+    display: none;
+}

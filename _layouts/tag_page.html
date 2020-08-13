@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<h2>Posts tagged as #{{ page.tag }}</h2>
+<ul class="post-list">
+    {% for post in page.posts %}
+        <li>
+            <div class="post-meta">
+                {{ post.date | date_to_string }}
+                &middot;
+                {{ post.author }}
+                &middot;
+                <span class="tags">{{ post | tags }}</span>
+            </div>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+        </li>
+    {% endfor %}
+</ul>

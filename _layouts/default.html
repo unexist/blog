@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ site.title }} | {{ page.title }}</title>
+        <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <div id="headline">
+                    <h1>{{ site.title }}</h1>
+                    <h2>{{ page.title }}</h2>
+                    <h2>{{ page.tag }}</h2>
+                    <p>{{ site.description }}</p>
+                </div>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="https://subforge.org">Subforge</a>
+                </nav>
+            </div>
+            <div id="content">
+                {{ content }}
+
+                {{ page.id }}
+
+                <div id="tag-cloud" class="tags">
+                    {% if page.tags == nil %}
+                        <h2>Tags</h2>
+                        {{ site | tag_cloud }}
+                    {% else %}
+                        <div class="post-tags">
+                            Tagged as: {{ page | tags }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <footer>
+                <a href="{{ "/feed.xml" | relative_url }}">RSS</a>
+                <a href="https://github.com/{{ site.github_username }}">{{ site.github_username }} @ GitHub</a>
+                <a href="https://twitter.com/{{ site.twitter_username }}">{{ site.twitter_username }} @ Twitter</a>
+            </footer>
+        </div>
+    </body>
+</html>
