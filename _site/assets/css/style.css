@@ -1,6 +1,7 @@
 :root {
     /* Colors */
     --font-color: #fff;
+    --font-color2: #aaa;
     --link-color: #8cf;
     --highlight-color: #ff8000;
     --border-color: #446979;
@@ -34,12 +35,14 @@ nav {
 }
 
 footer {
+    color: var(--font-color2);
     background-color: var(--top-color);
     border-left: var(--border);
     border-right: var(--border);
     border-bottom: var(--border);
     border-radius: 0px 0px var(--radius) var(--radius);
     font-size: 70%;
+    text-align: center;
 }
 
 footer a:link, footer a:visited {
@@ -56,10 +59,26 @@ footer a:hover {
     width: 100%;
 }
 
-#content {
+#split {
+    display: table;
     padding-top: var(--padding);
     border-left: var(--border);
     border-right: var(--border);
+}
+
+#content {
+    display: table-cell;
+    padding-right: var(--padding);
+}
+
+#sidebar {
+    display: table-cell;
+    width: 150px;
+    padding-left: var(--padding);
+}
+
+#sidebar a {
+    display: block;
 }
 
 #header {
@@ -67,7 +86,7 @@ footer a:hover {
     width: 100%;
 }
 
-#headline, #content, nav, footer {
+#headline, #split, nav, footer {
     width: 70%;
     margin: 0px auto;
     padding: var(--padding);
@@ -122,8 +141,16 @@ li {
 }
 
 .post-content {
-    padding-top: var(--padding);
     text-align:  justify;
+}
+
+.post-content p {
+    margin: 20px 0px;
+}
+
+.post-content pre.highlight code {
+    padding: 10px;
+    color: var(--font-color2) !important;
 }
 
 .post-tags {

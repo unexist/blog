@@ -1,0 +1,18 @@
+---
+layout: post
+title:  "Benthos"
+date:   2020-09-17 17:00:00 +0200
+author: Christoph Kappel
+tags:   tools streams processor
+---
+Sometimes you discover tools, that sound really awesome, but still
+after a while of thinking, you cannot find a good use for it.
+
+Let me introduce you to [Benthos](https://www.benthos.dev/), a tool
+to basically knit an input to an output, optionally with one or many
+plug-able content processor.
+
+From my understanding, it behaves like a pipe, just for everything that
+can have and/or consume any content.
+
+To be continued..

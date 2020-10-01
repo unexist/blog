@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>{{ site.title }} | {{ page.title }}</title>
         <link rel="stylesheet" href="{{ "/assets/css/style.css" | relative_url }}">
+        <link rel="stylesheet" href="{{ "/assets/css/highlighter.css" | relative_url }}">
     </head>
     <body>
         <div id="container">
@@ -16,28 +17,32 @@
                 </div>
                 <nav>
                     <a href="/">Home</a>
-                    <a href="https://subforge.org">Subforge</a>
+                    <a href="https://unexist.dev">Projects</a>
+                    <a href="https://hg.unexist.dev">Repositories</a>
                 </nav>
             </div>
-            <div id="content">
-                {{ content }}
+            <div id="split">
+                <div id="content">
+                    {{ content }}
 
-                {{ page.id }}
-
-                <div id="tag-cloud" class="tags">
-                    {% if page.tags == nil %}
-                        <h2>Tags</h2>
-                        {{ site | tag_cloud }}
-                    {% else %}
-                        <div class="post-tags">
-                            Tagged as: {{ page | tags }}
+                    {% if page.tags != nil %}
+                        <div id="tag-cloud" class="tags">
+                            <div class="post-tags">
+                                Tagged as: {{ page | tags }}
+                            </div>
                         </div>
                     {% endif %}
+                </div>
+                <div id="sidebar">
+                    <h2>Tags</h2>
+                    {{ site | tag_cloud }}
                 </div>
             </div>
             <footer>
                 <a href="{{ "/feed.xml" | relative_url }}">RSS</a>
+                &middot;
                 <a href="https://github.com/{{ site.github_username }}">{{ site.github_username }} @ GitHub</a>
+                &middot;
                 <a href="https://twitter.com/{{ site.twitter_username }}">{{ site.twitter_username }} @ Twitter</a>
             </footer>
         </div>

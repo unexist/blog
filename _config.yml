@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Subblog
+title: unexist.dev
 email: unexist@subforge.org
 description: Random bits and rants about tech, software design and me
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -53,3 +53,5 @@ tag_page_dir: tag
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+#   - .hg/
+#   - start.sh
