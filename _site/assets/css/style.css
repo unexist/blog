@@ -127,10 +127,6 @@ h2 {
     color: var(--h2-color);
 }
 
-li {
-    display: block;
-}
-
 /* Jekyll */
 .post-list li {
     padding-top: var(--padding);
@@ -140,12 +136,27 @@ li {
     font-size: 80%;
 }
 
+.post-list li {
+    display: block;
+}
+
 .post-content {
     text-align:  justify;
 }
 
 .post-content p {
     margin: 20px 0px;
+}
+
+.post-content li {
+    margin-left: 40px;
+    padding: var(--padding);
+    color: var(--font-color2);
+}
+
+.post-content pre {
+    white-space: pre-wrap;
+    text-align: left;
 }
 
 .post-content pre.highlight code {
@@ -159,4 +170,9 @@ li {
 
 .rss-subscribe {
     display: none;
+}
+
+.highlighter-rouge {
+    padding: var(--padding);
+    border: var(--border);
 }

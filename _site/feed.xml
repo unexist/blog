@@ -1,4 +1,71 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:9000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:9000/" rel="alternate" type="text/html" /><updated>2020-10-01T17:30:35+02:00</updated><id>http://localhost:9000/feed.xml</id><title type="html">unexist.dev</title><subtitle>Random bits and rants about tech, software design and me</subtitle><entry><title type="html">Architecture validation</title><link href="http://localhost:9000/2020/09/25/architecture-validation.html" rel="alternate" type="text/html" title="Architecture validation" /><published>2020-09-25T11:00:00+02:00</published><updated>2020-09-25T11:00:00+02:00</updated><id>http://localhost:9000/2020/09/25/architecture-validation</id><content type="html" xml:base="http://localhost:9000/2020/09/25/architecture-validation.html">&lt;p&gt;Over the last few days I played with tool-based architecture validation,
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:9000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:9000/" rel="alternate" type="text/html" /><updated>2020-10-07T13:27:54+02:00</updated><id>http://localhost:9000/feed.xml</id><title type="html">unexist.dev</title><subtitle>Random bits and rants about tech, software design and me</subtitle><entry><title type="html">Lesson learned</title><link href="http://localhost:9000/2020/10/07/lesson-learned.html" rel="alternate" type="text/html" title="Lesson learned" /><published>2020-10-07T12:00:00+02:00</published><updated>2020-10-07T12:00:00+02:00</updated><id>http://localhost:9000/2020/10/07/lesson-learned</id><content type="html" xml:base="http://localhost:9000/2020/10/07/lesson-learned.html">&lt;p&gt;A friend of mine approached me with a request to - let us say automate -
+a web request to a not-to-be-named raffle. I looked into it and was
+instantly hooked. Both price and challenge are interesting.&lt;/p&gt;
+
+&lt;p&gt;I wrote quite a few scraper in my time, so after a few lines good ol’
+Ruby, with the help of &lt;a href=&quot;https://github.com/sparklemotion/mechanize&quot;&gt;mechanize&lt;/a&gt;,
+the first shot was ready and failed miserably due to &lt;em&gt;CSRF&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;After a quick check, yes they really use a pesudo-random token, which is injected
+into the DOM and a hidden input field via JS.&lt;/p&gt;
+
+&lt;p&gt;I had two options now:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Understand the code that writes the CSRF into the dom&lt;/li&gt;
+  &lt;li&gt;Find a scraper with a JS engine&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;In my day job, we always like to play with with e2e-testing, which mostly
+involves scripts, that remote-control a web browser.&lt;/p&gt;
+
+&lt;p&gt;That said, I had a few glances at this stack again. And after some more reading,
+I settled on &lt;a href=&quot;http://watir.com/&quot;&gt;watir&lt;/a&gt; and &lt;a href=&quot;https://chromedriver.chromium.org/&quot;&gt;chromedriver&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;watir&quot;&gt;Watir&lt;/h3&gt;
+
+&lt;p&gt;The API of &lt;a href=&quot;http://watir.com&quot;&gt;watir&lt;/a&gt; is really amazing and easy to use:&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;watir&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Watir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Browser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://blog.unexist.dev&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;close&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I think the example is pretty self-explanatory, it opens up a remote session and
+points the browser to the given url. When you start that in e.g. irb, you can
+REPL your way to the desired outcome.&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;ss&quot;&gt;visible_text: &lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/GitHub/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;when_present&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;click&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;The above example looks for a link with &lt;em&gt;GitHub&lt;/em&gt; in its visible text and click
+it, when present. Easy as that.&lt;/p&gt;
+
+&lt;h3 id=&quot;headless&quot;&gt;Headless?&lt;/h3&gt;
+
+&lt;p&gt;One problem solved, this runs nicely on my &lt;em&gt;local&lt;/em&gt; machine. Now it would be best,
+if I can just deploy it on a server without installing the whole docker stack.&lt;/p&gt;
+
+&lt;p&gt;Since we are targeting Linux, headless support is kind of built-in. And after a
+quick search I found &lt;a href=&quot;https://github.com/leonid-shevtsov/headless&quot;&gt;headless&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This &lt;em&gt;gem&lt;/em&gt; wraps the handling of a virtual framebuffer for you and, as it turns 
+out, works pretty well with my stack:&lt;/p&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;watir&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;headless&quot;&lt;/span&gt;
+
+&lt;span class=&quot;no&quot;&gt;Headless&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ly&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;Watir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;Browser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;goto&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://blog.unexist.dev&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;browser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;close&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Christoph Kappel</name></author><category term="tools" /><category term="testing" /><category term="ruby" /><category term="watir" /><category term="chromedriver" /><category term="headless" /><summary type="html">A friend of mine approached me with a request to - let us say automate - a web request to a not-to-be-named raffle. I looked into it and was instantly hooked. Both price and challenge are interesting.</summary></entry><entry><title type="html">Architecture validation</title><link href="http://localhost:9000/2020/09/25/architecture-validation.html" rel="alternate" type="text/html" title="Architecture validation" /><published>2020-09-25T11:00:00+02:00</published><updated>2020-09-25T11:00:00+02:00</updated><id>http://localhost:9000/2020/09/25/architecture-validation</id><content type="html" xml:base="http://localhost:9000/2020/09/25/architecture-validation.html">&lt;p&gt;Over the last few days I played with tool-based architecture validation,
 to give colleagues a basic introduction to the whole topic.&lt;/p&gt;
 
 &lt;p&gt;I tested &lt;a href=&quot;https://www.archunit.org/&quot;&gt;ArchUnit&lt;/a&gt; and &lt;a href=&quot;https://jqassistant.org/&quot;&gt;jqAssistant&lt;/a&gt;
@@ -232,15 +299,4 @@ name.&lt;/p&gt;
 &lt;p&gt;One suggestion here is to use a fixed scheme like colors and give the resulting
 thing a meaning name, once you are happy with the result.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&quot;&gt;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&lt;/a&gt;&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="naming" /><category term="ddd" /><category term="clean-code" /><category term="just-a-link" /><summary type="html">Starters like the one in the linked article always hook me, I probably don’t have to actually suggest to read this series and pray for any successor in our lifetime.</summary></entry><entry><title type="html">Property based testing</title><link href="http://localhost:9000/2020/08/13/property-based-testing.html" rel="alternate" type="text/html" title="Property based testing" /><published>2020-08-13T12:10:00+02:00</published><updated>2020-08-13T12:10:00+02:00</updated><id>http://localhost:9000/2020/08/13/property-based-testing</id><content type="html" xml:base="http://localhost:9000/2020/08/13/property-based-testing.html">&lt;p&gt;I initially read about the Python framework
-&lt;a href=&quot;https://hypothesis.readthedocs.io/en/latest/&quot;&gt;Hypothesis&lt;/a&gt; and I must say
-I like the overall idea to just define ranges and the framework does dozen of
-tests with random values from this range.&lt;/p&gt;
-
-&lt;p&gt;This might lead to combinations, you normally wouldn’t think of.&lt;/p&gt;
-
-&lt;p&gt;&lt;del&gt;Now I just need to find time to give it a spin.&lt;/del&gt;&lt;/p&gt;
-
-&lt;p&gt;Update: I found some time to play with a java version of this idea 
-(&lt;a href=&quot;https://jqwik.net/&quot;&gt;jqwik&lt;/a&gt;) and so far the outcome looks promising. I found
-some easy bugs and the whole handling is pretty straight forward.&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="java" /><category term="testing" /><category term="just-a-link" /><category term="never-tried" /><summary type="html">I initially read about the Python framework Hypothesis and I must say I like the overall idea to just define ranges and the framework does dozen of tests with random values from this range.</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&quot;&gt;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&lt;/a&gt;&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="naming" /><category term="ddd" /><category term="clean-code" /><category term="just-a-link" /><summary type="html">Starters like the one in the linked article always hook me, I probably don’t have to actually suggest to read this series and pray for any successor in our lifetime.</summary></entry></feed>

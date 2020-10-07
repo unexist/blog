@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>unexist.dev | Lesson learned</title>
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/highlighter.css">
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <div id="headline">
+                    <h1>unexist.dev</h1>
+                    <h2>Lesson learned</h2>
+                    <h2></h2>
+                    <p>Random bits and rants about tech, software design and me</p>
+                </div>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="https://unexist.dev">Projects</a>
+                    <a href="https://hg.unexist.dev">Repositories</a>
+                </nav>
+            </div>
+            <div id="split">
+                <div id="content">
+                    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Lesson learned</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-10-07T12:00:00+02:00" itemprop="datePublished">Oct 7, 2020
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Christoph Kappel</span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>A friend of mine approached me with a request to - let us say automate -
+a web request to a not-to-be-named raffle. I looked into it and was
+instantly hooked. Both price and challenge are interesting.</p>
+
+<p>I wrote quite a few scraper in my time, so after a few lines good ol’
+Ruby, with the help of <a href="https://github.com/sparklemotion/mechanize">mechanize</a>,
+the first shot was ready and failed miserably due to <em>CSRF</em>.</p>
+
+<p>After a quick check, yes they really use a pesudo-random token, which is injected
+into the DOM and a hidden input field via JS.</p>
+
+<p>I had two options now:</p>
+
+<ol>
+  <li>Understand the code that writes the CSRF into the dom</li>
+  <li>Find a scraper with a JS engine</li>
+</ol>
+
+<p>In my day job, we always like to play with with e2e-testing, which mostly
+involves scripts, that remote-control a web browser.</p>
+
+<p>That said, I had a few glances at this stack again. And after some more reading,
+I settled on <a href="http://watir.com/">watir</a> and <a href="https://chromedriver.chromium.org/">chromedriver</a>.</p>
+
+<h3 id="watir">Watir</h3>
+
+<p>The API of <a href="http://watir.com">watir</a> is really amazing and easy to use:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">require</span> <span class="s2">"watir"</span>
+
+<span class="n">browser</span> <span class="o">=</span> <span class="no">Watir</span><span class="o">::</span><span class="no">Browser</span><span class="o">::</span><span class="n">new</span>
+
+<span class="n">browser</span><span class="p">.</span><span class="nf">goto</span> <span class="s2">"https://blog.unexist.dev"</span>
+
+<span class="n">browser</span><span class="p">.</span><span class="nf">close</span>
+</code></pre></div></div>
+
+<p>I think the example is pretty self-explanatory, it opens up a remote session and
+points the browser to the given url. When you start that in e.g. irb, you can
+REPL your way to the desired outcome.</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">browser</span><span class="p">.</span><span class="nf">link</span><span class="p">(</span><span class="ss">visible_text: </span><span class="sr">/GitHub/</span><span class="p">).</span><span class="nf">when_present</span><span class="p">.</span><span class="nf">click</span>
+</code></pre></div></div>
+<p>The above example looks for a link with <em>GitHub</em> in its visible text and click
+it, when present. Easy as that.</p>
+
+<h3 id="headless">Headless?</h3>
+
+<p>One problem solved, this runs nicely on my <em>local</em> machine. Now it would be best,
+if I can just deploy it on a server without installing the whole docker stack.</p>
+
+<p>Since we are targeting Linux, headless support is kind of built-in. And after a
+quick search I found <a href="https://github.com/leonid-shevtsov/headless">headless</a>.</p>
+
+<p>This <em>gem</em> wraps the handling of a virtual framebuffer for you and, as it turns 
+out, works pretty well with my stack:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">require</span> <span class="s2">"watir"</span>
+<span class="nb">require</span> <span class="s2">"headless"</span>
+
+<span class="no">Headless</span><span class="p">.</span><span class="nf">ly</span> <span class="k">do</span>
+    <span class="n">browser</span> <span class="o">=</span> <span class="no">Watir</span><span class="o">::</span><span class="no">Browser</span><span class="o">::</span><span class="n">new</span>
+
+    <span class="n">browser</span><span class="p">.</span><span class="nf">goto</span> <span class="s2">"https://blog.unexist.dev"</span>
+
+    <span class="n">browser</span><span class="p">.</span><span class="nf">close</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+  </div><a class="u-url" href="/2020/10/07/lesson-learned.html" hidden></a>
+</article>
+
+
+                    
+                        <div id="tag-cloud" class="tags">
+                            <div class="post-tags">
+                                Tagged as: <a href="/tag/tools.html" rel="tag">tools</a>, <a href="/tag/testing.html" rel="tag">testing</a>, <a href="/tag/ruby.html" rel="tag">ruby</a>, <a href="/tag/watir.html" rel="tag">watir</a>, <a href="/tag/chromedriver.html" rel="tag">chromedriver</a>, <a href="/tag/headless.html" rel="tag">headless</a>
+                            </div>
+                        </div>
+                    
+                </div>
+                <div id="sidebar">
+                    <h2>Tags</h2>
+                    <a href="/tag/api.html" class="set-1">api</a> <a href="/tag/architecture.html" class="set-1">architecture</a> <a href="/tag/chromedriver.html" class="set-1">chromedriver</a> <a href="/tag/citrix.html" class="set-1">citrix</a> <a href="/tag/clean-code.html" class="set-1">clean-code</a> <a href="/tag/cloud.html" class="set-1">cloud</a> <a href="/tag/ddd.html" class="set-2">ddd</a> <a href="/tag/diagrams.html" class="set-1">diagrams</a> <a href="/tag/docs.html" class="set-1">docs</a> <a href="/tag/frameworks.html" class="set-1">frameworks</a> <a href="/tag/headless.html" class="set-1">headless</a> <a href="/tag/intellij.html" class="set-1">intellij</a> <a href="/tag/java.html" class="set-1">java</a> <a href="/tag/just-a-link.html" class="set-1">just-a-link</a> <a href="/tag/maven.html" class="set-1">maven</a> <a href="/tag/me.html" class="set-1">me</a> <a href="/tag/naming.html" class="set-1">naming</a> <a href="/tag/never-tried.html" class="set-1">never-tried</a> <a href="/tag/processor.html" class="set-1">processor</a> <a href="/tag/quarkus.html" class="set-1">quarkus</a> <a href="/tag/ruby.html" class="set-1">ruby</a> <a href="/tag/sequence-diagram.html" class="set-1">sequence-diagram</a> <a href="/tag/soft-skills.html" class="set-1">soft-skills</a> <a href="/tag/streams.html" class="set-1">streams</a> <a href="/tag/testing.html" class="set-2">testing</a> <a href="/tag/tools.html" class="set-5">tools</a> <a href="/tag/validation.html" class="set-1">validation</a> <a href="/tag/watir.html" class="set-1">watir</a> <a href="/tag/windows.html" class="set-1">windows</a>
+                </div>
+            </div>
+            <footer>
+                <a href="/feed.xml">RSS</a>
+                &middot;
+                <a href="https://github.com/unexist">unexist @ GitHub</a>
+                &middot;
+                <a href="https://twitter.com/chkappel">unexist @ Twitter</a>
+            </footer>
+        </div>
+    </body>
+</html>

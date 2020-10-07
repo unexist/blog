@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>unexist.dev | Architecture validation</title>
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/highlighter.css">
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <div id="headline">
+                    <h1>unexist.dev</h1>
+                    <h2>Architecture validation</h2>
+                    <h2></h2>
+                    <p>Random bits and rants about tech, software design and me</p>
+                </div>
+                <nav>
+                    <a href="/">Home</a>
+                    <a href="https://unexist.dev">Projects</a>
+                    <a href="https://hg.unexist.dev">Repositories</a>
+                </nav>
+            </div>
+            <div id="split">
+                <div id="content">
+                    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Architecture validation</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-09-25T11:00:00+02:00" itemprop="datePublished">Sep 25, 2020
+      </time>• <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">Christoph Kappel</span></span></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>Over the last few days I played with tool-based architecture validation,
+to give colleagues a basic introduction to the whole topic.</p>
+
+<p>I tested <a href="https://www.archunit.org/">ArchUnit</a> and <a href="https://jqassistant.org/">jqAssistant</a>
+and skipped anything, that isn’t fit to be included into a build pipeline.</p>
+
+<p>Just for completeness: There are other well-known tools like
+<a href="https://structure101.com/">Structure101</a> or <a href="https://www.hello2morrow.com/products/sotograph">Sotograph</a> 
+commercially available, for deeper analysis of a given architecture.</p>
+
+<h2 id="archunit">ArchUnit</h2>
+
+<p>This framework comes with a really nice fluent API, which allows you to easily
+create your own testcases and after a bit of initial try/error, it is pretty
+clear how to roll.</p>
+
+<p>For example, this rule checks, if methods in the package named <em>test</em> are public:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ArchTest</span>
+<span class="kd">static</span> <span class="kd">final</span> <span class="nc">ArchRule</span> <span class="n">checkPlacement</span> <span class="o">=</span>
+    <span class="n">classes</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">that</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">resideInAnyPackage</span><span class="o">(</span><span class="s">"..test.."</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">should</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">bePublic</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Overall, this API is quite powerful and there quite a few plugins to enhance the
+impressive set. So in other words, it is always a good idea to check, if someone
+already solved the problem for you.</p>
+
+<p>So besides simple stuff like the above, architects are probably more interested
+in rules, that enforce a given layout or rather architecture.</p>
+
+<p>One of the better known architecture - the layered architecture - can be
+checked nicely:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">JavaClasses</span> <span class="n">classes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassFileImporter</span><span class="o">().</span><span class="na">importPackages</span><span class="o">(</span><span class="s">"org.subforge"</span><span class="o">);</span>
+
+<span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testLayeredArch</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">layeredArchitecture</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">layer</span><span class="o">(</span><span class="s">"Application"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">definedBy</span><span class="o">(</span><span class="s">"..application.."</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">layer</span><span class="o">(</span><span class="s">"Model"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">definedBy</span><span class="o">(</span><span class="s">"..model.."</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">layer</span><span class="o">(</span><span class="s">"Service"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">definedBy</span><span class="o">(</span><span class="s">"..service.."</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">layer</span><span class="o">(</span><span class="s">"Repository"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">definedBy</span><span class="o">(</span><span class="s">"..repository.."</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">layer</span><span class="o">(</span><span class="s">"Infrastructure"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">definedBy</span><span class="o">(</span><span class="s">"..infrastructure.."</span><span class="o">)</span>
+
+        <span class="o">.</span><span class="na">whereLayer</span><span class="o">(</span><span class="s">"Application"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">mayNotBeAccessedByAnyLayer</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">whereLayer</span><span class="o">(</span><span class="s">"Service"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">mayOnlyBeAccessedByLayers</span><span class="o">(</span><span class="s">"Application"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">whereLayer</span><span class="o">(</span><span class="s">"Model"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">mayOnlyBeAccessedByLayers</span><span class="o">(</span><span class="s">"Application"</span><span class="o">,</span> <span class="s">"Service"</span><span class="o">,</span> <span class="s">"Repository"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">whereLayer</span><span class="o">(</span><span class="s">"Repository"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">mayOnlyBeAccessedByLayers</span><span class="o">(</span><span class="s">"Service"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">whereLayer</span><span class="o">(</span><span class="s">"Infrastructure"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">mayOnlyBeAccessedByLayers</span><span class="o">(</span><span class="s">"Service"</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">check</span><span class="o">(</span><span class="n">classes</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>These rules define different layers and specify the allowed interaction between
+each other.</p>
+
+<h2 id="jqassistant">jqAssistant</h2>
+
+<p>In comparison to <a href="https://www.archunit.org/">ArchUnit</a>, this framework uses a
+different approach and can be broken down into three step/components:</p>
+
+<h3 id="scanneranalyzer">Scanner/Analyzer</h3>
+
+<p>The combination of both scans the given source tree, analyzed the types,
+relations and so on and stores all learnings into the graph database.</p>
+
+<h3 id="graph-database-neo4j">Graph database (<a href="https://neo4j.com/">Neo4j</a>)</h3>
+
+<p>Once data is in the database, it can be queried e.g. via fancy frontends
+like <a href="https://neo4j.com/developer/neo4j-browser/">Neo4j browser</a>.</p>
+
+<h3 id="queryconstraint-checker">Query/Constraint checker</h3>
+
+<p>And lastly, the selected query language (Cypher is the default here) can be
+used to describe either queries to get infos, to formalize concepts or
+constraints.</p>
+
+<p>Concepts are kind of light rules, that can be violated without problem and can
+be cross referenced in other concepts or constraints, which always have a 
+severity.</p>
+
+<h3 id="examples">Examples</h3>
+
+<p>I don’t want to dive depper into the syntax of Cypher, but a base examples looks
+like this:</p>
+
+<div class="language-cypher highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">match</span><span class="w">
+    </span><span class="ss">(</span><span class="py">t:</span><span class="n">Type</span><span class="ss">)</span><span class="o">-</span><span class="ss">[</span><span class="nc">:DEPENDS_ON</span><span class="ss">]</span><span class="o">-&gt;</span><span class="ss">(</span><span class="py">t2:</span><span class="n">Type</span><span class="ss">)</span>
+<span class="k">return</span>
+    <span class="n">t</span><span class="ss">,</span> <span class="n">t2</span>
+</code></pre></div></div>
+
+<p>This asks the database for any type named <em>t</em>, that depends on another type
+named <em>t2</em>.</p>
+
+  </div><a class="u-url" href="/2020/09/25/architecture-validation.html" hidden></a>
+</article>
+
+
+                    
+                        <div id="tag-cloud" class="tags">
+                            <div class="post-tags">
+                                Tagged as: <a href="/tag/tools.html" rel="tag">tools</a>, <a href="/tag/architecture.html" rel="tag">architecture</a>, <a href="/tag/validation.html" rel="tag">validation</a>, <a href="/tag/ddd.html" rel="tag">ddd</a>
+                            </div>
+                        </div>
+                    
+                </div>
+                <div id="sidebar">
+                    <h2>Tags</h2>
+                    <a href="/tag/api.html" class="set-1">api</a> <a href="/tag/architecture.html" class="set-1">architecture</a> <a href="/tag/chromedriver.html" class="set-1">chromedriver</a> <a href="/tag/citrix.html" class="set-1">citrix</a> <a href="/tag/clean-code.html" class="set-1">clean-code</a> <a href="/tag/cloud.html" class="set-1">cloud</a> <a href="/tag/ddd.html" class="set-2">ddd</a> <a href="/tag/diagrams.html" class="set-1">diagrams</a> <a href="/tag/docs.html" class="set-1">docs</a> <a href="/tag/frameworks.html" class="set-1">frameworks</a> <a href="/tag/headless.html" class="set-1">headless</a> <a href="/tag/intellij.html" class="set-1">intellij</a> <a href="/tag/java.html" class="set-1">java</a> <a href="/tag/just-a-link.html" class="set-1">just-a-link</a> <a href="/tag/maven.html" class="set-1">maven</a> <a href="/tag/me.html" class="set-1">me</a> <a href="/tag/naming.html" class="set-1">naming</a> <a href="/tag/never-tried.html" class="set-1">never-tried</a> <a href="/tag/processor.html" class="set-1">processor</a> <a href="/tag/quarkus.html" class="set-1">quarkus</a> <a href="/tag/ruby.html" class="set-1">ruby</a> <a href="/tag/sequence-diagram.html" class="set-1">sequence-diagram</a> <a href="/tag/soft-skills.html" class="set-1">soft-skills</a> <a href="/tag/streams.html" class="set-1">streams</a> <a href="/tag/testing.html" class="set-2">testing</a> <a href="/tag/tools.html" class="set-5">tools</a> <a href="/tag/validation.html" class="set-1">validation</a> <a href="/tag/watir.html" class="set-1">watir</a> <a href="/tag/windows.html" class="set-1">windows</a>
+                </div>
+            </div>
+            <footer>
+                <a href="/feed.xml">RSS</a>
+                &middot;
+                <a href="https://github.com/unexist">unexist @ GitHub</a>
+                &middot;
+                <a href="https://twitter.com/chkappel">unexist @ Twitter</a>
+            </footer>
+        </div>
+    </body>
+</html>
