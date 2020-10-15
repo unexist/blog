@@ -1,4 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:9000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:9000/" rel="alternate" type="text/html" /><updated>2020-10-07T13:30:54+02:00</updated><id>http://localhost:9000/feed.xml</id><title type="html">unexist.dev</title><subtitle>Random bits and rants about tech, software design and me</subtitle><entry><title type="html">Lessons learned</title><link href="http://localhost:9000/2020/10/07/lessons-learned.html" rel="alternate" type="text/html" title="Lessons learned" /><published>2020-10-07T12:00:00+02:00</published><updated>2020-10-07T12:00:00+02:00</updated><id>http://localhost:9000/2020/10/07/lessons-learned</id><content type="html" xml:base="http://localhost:9000/2020/10/07/lessons-learned.html">&lt;p&gt;A friend of mine approached me with a request to - let us say automate -
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:9000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:9000/" rel="alternate" type="text/html" /><updated>2020-10-15T16:23:31+02:00</updated><id>http://localhost:9000/feed.xml</id><title type="html">unexist.dev</title><subtitle>Random bits and rants about tech, software design and me</subtitle><entry><title type="html">Skill matrix</title><link href="http://localhost:9000/2020/10/15/skill-matrix.html" rel="alternate" type="text/html" title="Skill matrix" /><published>2020-10-15T16:00:00+02:00</published><updated>2020-10-15T16:00:00+02:00</updated><id>http://localhost:9000/2020/10/15/skill-matrix</id><content type="html" xml:base="http://localhost:9000/2020/10/15/skill-matrix.html">&lt;p&gt;For a new gig, we started with a bunch of new people with various sets of
+knowledge and skills. Without any way to assess, where our strengths and
+weaknesses are, it is kind of difficult to say, if we are covered in the
+requires areas.&lt;/p&gt;
+
+&lt;p&gt;Someone stumbled upon a promising google sheet, which exactly does what we need:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.nngroup.com/articles/skill-mapping/&quot;&gt;Skill Mapping&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;It allows to pick some categories, enter names and basically ask the team to
+evaluate their own skill. Basically all you need for number and for graphical
+people.&lt;/p&gt;
+
+&lt;p&gt;I am really curious, what the result of this is going to be and how the team
+reacts to it.&lt;/p&gt;
+
+&lt;p&gt;To be continued.&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="tools" /><category term="people" /><category term="soft-skills" /><category term="just-a-link" /><summary type="html">For a new gig, we started with a bunch of new people with various sets of knowledge and skills. Without any way to assess, where our strengths and weaknesses are, it is kind of difficult to say, if we are covered in the requires areas.</summary></entry><entry><title type="html">Lessons learned</title><link href="http://localhost:9000/2020/10/07/lessons-learned.html" rel="alternate" type="text/html" title="Lessons learned" /><published>2020-10-07T12:00:00+02:00</published><updated>2020-10-07T12:00:00+02:00</updated><id>http://localhost:9000/2020/10/07/lessons-learned</id><content type="html" xml:base="http://localhost:9000/2020/10/07/lessons-learned.html">&lt;p&gt;A friend of mine approached me with a request to - let us say automate -
 a web request to a not-to-be-named raffle. I looked into it and was
 instantly hooked. Both price and challenge are interesting.&lt;/p&gt;
 
@@ -286,17 +302,4 @@ a faster workflow and I can already say it always pays to do exactly that.&lt;/p
 &lt;p&gt;I normally just learn new commands and shortcuts, whenever I do pair/mob, but
 while reading through the possible commands I found some helpful things.&lt;/p&gt;
 
-&lt;p&gt;Like popup menus for run configs and open file buffers..&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="tools" /><category term="soft-skills" /><category term="citrix" /><category term="intellij" /><summary type="html">I’ve been using citrix and a windows VM for quite a while, almost two years and never got used to the changes of the shortcuts.</summary></entry><entry><title type="html">Naming and DDD</title><link href="http://localhost:9000/2020/08/18/naming-and-ddd.html" rel="alternate" type="text/html" title="Naming and DDD" /><published>2020-08-18T08:30:00+02:00</published><updated>2020-08-18T08:30:00+02:00</updated><id>http://localhost:9000/2020/08/18/naming-and-ddd</id><content type="html" xml:base="http://localhost:9000/2020/08/18/naming-and-ddd.html">&lt;p&gt;Starters like the one in the linked article always hook me, I probably don’t
-have to actually suggest to read this series and pray for any successor in our 
-lifetime.&lt;/p&gt;
-
-&lt;p&gt;Still, naming things is difficult, especially in a changing world like ours. 
-When you settle for a name, you sometimes end adding stuff to justify the given
-name.&lt;/p&gt;
-
-&lt;p&gt;Ever built a manager, that wasn’t actually managing anything?&lt;/p&gt;
-
-&lt;p&gt;One suggestion here is to use a fixed scheme like colors and give the resulting
-thing a meaning name, once you are happy with the result.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&quot;&gt;https://deliverydoubled.com/name-as-if-your-life-depends-on-it-a-guide-to-cleaner-code/&lt;/a&gt;&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="naming" /><category term="ddd" /><category term="clean-code" /><category term="just-a-link" /><summary type="html">Starters like the one in the linked article always hook me, I probably don’t have to actually suggest to read this series and pray for any successor in our lifetime.</summary></entry></feed>
+&lt;p&gt;Like popup menus for run configs and open file buffers..&lt;/p&gt;</content><author><name>Christoph Kappel</name></author><category term="tools" /><category term="soft-skills" /><category term="citrix" /><category term="intellij" /><summary type="html">I’ve been using citrix and a windows VM for quite a while, almost two years and never got used to the changes of the shortcuts.</summary></entry></feed>
