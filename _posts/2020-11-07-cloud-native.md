@@ -42,14 +42,14 @@ on the fun stuff and expect everything is ready.
 
 Scaffolding a quarkus project is fairly easy:
 
-```Bash
+```console
 mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 -DprojectGroupId=dev.unexist.example \
 -DprojectArtifactId=quarkus-hello-example \
 -DprojectVersion=0.1 \
 -DclassName="dev.unexist.showcase.HelloResource" \
 -Dextensions="health, quarkus-smallrye-openapi, container-image-jib, kubernetes"
-````
+```
 
 After that, you end up with a hello project and some helpful extensions:
 
@@ -64,7 +64,7 @@ Still, a bit config is required to create the ingress manifests, have a proper p
 include the swagger-ui in everything instead of dev builds only. So without further ado, can you
 please add the three lines to your *application.properties* file?
 
-```Bash
+```console
 quarkus.kubernetes.expose=true
 quarkus.servlet.context-path=/hello
 quarkus.swagger-ui.always-include=true
@@ -75,7 +75,7 @@ quarkus.swagger-ui.always-include=true
 And following builds the container, pushes it to the local docker and generates the some helpful
 k8s manifests in one command:
 
-```Bash
+```console
 mvn clean package -Dquarkus.container-image.build=true
 ```
 
@@ -94,7 +94,7 @@ first time and init our cluster directly with the necessary stuff like
 
 ### Create a cluster
 
-```Bash
+```yaml
 cat <<EOF | kind create cluster --name example --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -123,7 +123,7 @@ ingress.
 
 In order for k8s to find our image, we have to load it first. That can be done like this:
 
-```Bash
+```console
 kind load docker-image docker.io/unexist/quarkus-hello-example:0.1 --name example
 ```
 
@@ -140,7 +140,7 @@ with some fancy graphs and a way to see all at once is a quite nice.
 
 The current version at writing this is 2.0 and can be installed with the next line:
 
-```Bash
+```console
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 ```
 
@@ -149,7 +149,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/a
 Once the installation is done we need some accounts to access our new dashboard, the next two manifests
 create an admin for it:
 
-```Bash
+```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: ServiceAccount
@@ -161,7 +161,7 @@ EOF
 
 And..
 
-```Bash
+```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -182,7 +182,7 @@ EOF
 
 In order to access the dashboard, a running proxy is required:
 
-```Bash
+```console
 kubectl proxy
 ```
 
@@ -190,7 +190,7 @@ kubectl proxy
 
 The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
 
-```Bash
+```console
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
 
@@ -204,7 +204,7 @@ We created the cluster with support for ingress, but so complete the installatio
 
 Last step: Init our ingress controller:
 
-```Bash
+```console
 kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
