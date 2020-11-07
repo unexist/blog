@@ -1,5 +1,213 @@
 ---
 layout: post
-title: Cloud native
-date: 2020-11-07 17:44 +0100
+title:  Cloud native
+date:   2020-11-07 17:44 +0100
+tags:   tools quarkus cloud docker kind kubernetes to-be-continued
 ---
+I was never a big fan of all these cloud stuff, especially not of the *cloud native* idea, but for
+my current project I have to get over and used to it.
+
+So far, my only realy experience with [kubernetes](https://kubernetes.io/) was during universities, 
+guided training sessions at work, with some experienced instructor. That never worked well for me. 
+
+I can do guided stuff all day long, but when I don't get my hands dirty, this stuff never sticks to
+me. Most of the commands succeed and I have no idea what I succeeded in *and/or* what is supposed to 
+work now. 
+
+Well - I can surely read the next chapter of the instructions, but my learning just don't works this 
+way.
+
+# Initial thoughts
+
+For me, the whole stack is a bit weird and I start with some questions?
+
+- Where to start? 
+- Do I need some real installation of k8s? 
+- What about the bundled one from "Docker for Desktop"?
+- Why do I have to use macOS for this kind of stuff?
+
+After some asking and searching, I made some decisions: I want to stick with the k8s docker brings to the
+party, along with [Kind](https://kind.sigs.k8s.io/), for the ease of the management of clusters. I might 
+delve into the [Helm](https://helm.sh/) odyssey later.
+
+And I going to use [Quarkus](https://quarkus.ui) as a passenger, there are some extensions, that might 
+make the journey worthwhile.
+
+# Play time
+
+I'll skip all the install stuff of docker and kind, I think there is more than enough available and focus
+on the fun stuff and expect everything is ready.
+
+## Quarkus
+
+Scaffolding a quarkus project is fairly easy:
+
+```Bash
+mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
+-DprojectGroupId=dev.unexist.example \
+-DprojectArtifactId=quarkus-hello-example \
+-DprojectVersion=0.1 \
+-DclassName="dev.unexist.showcase.HelloResource" \
+-Dextensions="health, quarkus-smallrye-openapi, container-image-jib, kubernetes"
+```
+
+After that, you end up with a hello project and some helpful extensions:
+
+- *health* provides the required health and readyness for the k8s pod
+- *openapi* generates the [OpenAPI3](https://swagger.io/specification/) and bundles the Swagger-Ui
+- *container-image-jib* actually builds the images without a requirement for actual Docker
+- *kubernetes* creates the helpful k8s manifests
+
+### Additional config
+
+Still, a bit config is required to create the ingress manifests, have a proper path and to really
+include the swagger-ui in everything instead of dev builds only. So without further ado, can you
+please add the three lines to your *application.properties* file?
+
+```
+quarkus.kubernetes.expose=true
+quarkus.servlet.context-path=/hello
+quarkus.swagger-ui.always-include=true
+```
+
+### Container time
+
+And following builds the container, pushes it to the local docker and generates the some helpful
+k8s manifests in one command:
+
+```Bash
+mvn clean package -Dquarkus.container-image.build=true
+```
+
+### Manifests
+
+The *kubernetes* extension created nice manifests for us, which can be found here:
+
+**quarkus-hellp-example/target/kubernetes**
+
+## Kind
+
+After the passenger is ready, we have to set up our cluster. During my experiments I had to do this
+several times, because I only lated realized I forgot something. So I daresay we'll do it right on the
+first time and init our cluster directly with the necessary stuff like 
+[ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/):
+
+### Create a cluster
+
+```Bash
+cat <<EOF | kind create cluster --name example --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+```
+
+This command creates a new cluster named *example* and sets up some magic port mapping required for
+ingress. 
+
+### Kind docker images
+
+In order for k8s to find our image, we have to load it first. That can be done like this:
+
+```Bash
+kind load docker-image docker.io/unexist/quarkus-hello-example:0.1 --name example
+```
+
+## Kubernetes
+
+Docker and kind have done their best to make it really easy for us. So let's go on.
+
+### Dashboard
+
+I have no problems with the CLI of k8s or tools like [k9s](https://k9scli.io/), but a nice dashboard
+with some fancy graphs and a way to see all at once is a quite nice.
+
+#### Installation
+
+The current version at writing this is 2.0 and can be installed with the next line:
+
+```Bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+```
+
+#### User account
+
+Once the installation is done we need some accounts to access our new dashboard, the next two manifests
+create an admin for it:
+
+```Bash
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
+```
+
+```Bash
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
+```
+
+#### Run it
+
+In order to access the dashboard, a running proxy is required:
+
+```Bash
+kubectl proxy
+```
+
+#### Log in - finally!
+
+The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
+
+``Bash
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+```
+
+Copy this token and use it [here](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login).
+
+### Ingress
+
+We created the cluster with support for ingress, but so complete the installation another quick step is required.
+
+#### Finishing up
+
+Last step: Init our ingress controller:
+
+```Bash
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+```
+
+To be continued.
+
