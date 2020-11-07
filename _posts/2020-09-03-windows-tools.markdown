@@ -8,7 +8,7 @@ tags:   java quarkus maven intellij windows tools
 Oh well - process management under windows is a kind of pain. I especially
 had to deal with my maven/quarkus/intelliJ combination:
 
-I can easily start qQarkus and attach a debugger, but intellij always fails
+I can easily start quarkus and attach a debugger, but intellij always fails
 to stop the related processes and ends up stuck. For a while, I used the task
 manager to manually kill the processes.
 
