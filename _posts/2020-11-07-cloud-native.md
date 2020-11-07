@@ -49,7 +49,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 -DprojectVersion=0.1 \
 -DclassName="dev.unexist.showcase.HelloResource" \
 -Dextensions="health, quarkus-smallrye-openapi, container-image-jib, kubernetes"
-```
+````
 
 After that, you end up with a hello project and some helpful extensions:
 
@@ -64,7 +64,7 @@ Still, a bit config is required to create the ingress manifests, have a proper p
 include the swagger-ui in everything instead of dev builds only. So without further ado, can you
 please add the three lines to your *application.properties* file?
 
-```
+```Bash
 quarkus.kubernetes.expose=true
 quarkus.servlet.context-path=/hello
 quarkus.swagger-ui.always-include=true
@@ -159,6 +159,8 @@ metadata:
 EOF
 ```
 
+And..
+
 ```Bash
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
@@ -188,7 +190,7 @@ kubectl proxy
 
 The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
 
-``Bash
+```Bash
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
 
