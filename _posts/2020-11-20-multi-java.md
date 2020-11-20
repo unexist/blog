@@ -27,7 +27,7 @@ in a weird way:
 
 ```console
 $ mkdir -p ~/.jenv/version
-````
+```
 
 # One java to go
 
@@ -71,14 +71,14 @@ openjdk64-11.0.9.1 added
 11.0.9.1 added
 11.0 added
 11 added
-``
+```
 
 # Versions?
 
 Now we have to versions installed, let's check it:
 
 ```console
-$ jenv versions                                                                                                                          
+$ jenv versions
 * system (set by /Users/unexist/.jenv/version)
   openjdk64-11.0.9.1
   oracle64-1.8.0.201
@@ -86,7 +86,7 @@ $ jenv versions
 
 And what about **java_home**:
 
-````
+```console
 $ /usr/libexec/java_home -V
 Matching Java Virtual Machines (2):
     11.0.9.1, x86_64:	"AdoptOpenJDK 11"	/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
@@ -118,6 +118,3 @@ $ jenv versions
 * openjdk64-11.0.9.1 (set by /Users/unexist/.jenv/version)
   oracle64-1.8.0.201
 ```
-
-
-
