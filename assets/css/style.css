@@ -11,6 +11,7 @@
     --h2-color: #777;
 
     /* Misc */
+    --margin: 10px;
     --padding: 10px;
     --radius: 8px;
     --border: 1px solid var(--top-color);
@@ -90,15 +91,26 @@ footer a:hover {
     width: 70%;
     margin: 0px auto;
     padding: var(--padding);
+
+    /* Stupid hack */
+    min-width: 844px;
+}
+
+@media screen and (max-width: 899px) {
+    #headline, #split, nav, footer {
+        width: 100%;
+    }
 }
 
 #headline h1 {
     display: inline-block;
+    text-decoration: none;
 }
 
 #headline h2 {
     display: inline-block;
     padding-left: var(--padding);
+    text-decoration: none;
 }
 
 #tag-cloud {
@@ -121,10 +133,17 @@ a:hover {
 
 h1 {
     color: var(--h1-color);
+    text-decoration: underline;
 }
 
 h2 {
     color: var(--h2-color);
+    text-decoration: underline;
+}
+
+h3, h4 {
+    padding-top: 10px;
+    text-decoration: underline;
 }
 
 /* Jekyll */
@@ -142,6 +161,10 @@ h2 {
 
 .post-content {
     text-align:  justify;
+}
+
+.post-content article {
+    padding-right: var(--padding);
 }
 
 .post-content p {
@@ -173,6 +196,8 @@ h2 {
 }
 
 .highlighter-rouge {
+    margin-top: var(--margin);
+    margin-bottom: var(--margin);
     padding: var(--padding);
     border: var(--border);
 }
