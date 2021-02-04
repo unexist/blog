@@ -16,7 +16,7 @@ between each of them pretty nicely, once you've set it up correctly.
 
 Installation is as easy as open a cold one:
 
-```console
+```Bash
 $ brew install jenv
 ```
 
@@ -65,7 +65,7 @@ $ brew cask install adoptopenjdk11
 And another command to add it to [Jenv](https://www.jenv.be/):
 
 ```console
-$ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home                                                             
+$ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
 
 openjdk64-11.0.9.1 added
 11.0.9.1 added
