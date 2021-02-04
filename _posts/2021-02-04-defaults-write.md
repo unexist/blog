@@ -1,0 +1,79 @@
+---
+layout: post
+title: Defaults Write
+date: 2021-02-04 17:09 +0100
+tags: macos hate cynical to-be-continued
+---
+I've been using macOs for over two years now and my
+overall experience is:
+I hate it more and more with each successive day.
+
+There are so many annoying things that either can't be
+turned off or there is some arcane setting in
+the configuration depths of the _defaults write_ hell..
+
+Here I am going to collect some of the things that
+solved an issue for me.
+
+# Defaults to write
+
+## Automatically switch spaces
+
+No idea what happens, but sometimes Mission Control
+decides to switch to any space on any screen, regardless
+what its user might want.
+
+This is supposed to be to turn this off:
+
+```bash
+defaults write com.apple.dock workspaces-auto-swoosh -bool NO
+```
+
+NOTE: Keep in mind to restart the Dock afterwards.
+
+## Animations - away
+
+MacOS comes packed with lots of annoying annimations,
+here is a list of defaults to get rid of them:
+
+```bash
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+```
+
+NOTE: Keep in mind to restart the Dock afterwards.
+
+# Fun with the dock
+
+I usually autohide the dock, because is just wastes
+space most of the time, but the delay of the hiding
+is pretty long.
+
+Here is how to speed that up:
+
+```bash
+defaults write com.apple.Dock autohide-delay -float 0
+```
+
+# Miscellaneous
+
+## Slow time machine backups
+
+Every struggled with a backup task, which might not be
+doable in a geological timeframe - yes I am talking
+about backups.
+
+Apparently, the process just gets low CPU priority
+and fails to get any speed on track.
+
+This is also supposed to make it a bit faster:
+
+```bash
+sudo sysctl debug.lowpri_throttle_enabled=0
+```
+
+NOTE: Setting it to 1 again restores te previous slow
+      state.
