@@ -48,7 +48,7 @@ Back to our new ADR, let us just fill in a bit of magic:
 
 ## ADR 2
 
-```asciidoc
+```adoc
 = 1. Assertion library
 
 |===
@@ -120,7 +120,7 @@ So we have to jump right back to jqAssistant, since we are done with the ADR.
 
 Next best thing to do is to create an **index.adoc** document for jqAssistant to render:
 
-```asciidoc
+```adoc
 :description: This is a demo project for the combination of ADR and jqAssistant.
 :doctype: book
 :toc: left
