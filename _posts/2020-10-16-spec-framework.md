@@ -1,12 +1,12 @@
 ---
 layout: post
-title:  "Spec Framework"
-date:   2020-10-16 07:00:00 +0200
+title: "Spec Framework"
+date: 2020-10-16 07:00:00 +0200
 author: Christoph Kappel
-tags:   tools specs testing just-a-link to-be-continued
+tags: tools specs testing just-a-link to-be-continued
 ---
 Writing tests is hard, writing acceptances tests for non-coders is especially
-another ring of hell. There are various frameworks around, like [Cucumber](https://cucumber.io) 
+another ring of hell. There are various frameworks around, like [Cucumber](https://cucumber.io)
 and all the other BDD aproaches.
 
 I never dived into it, but looks like I know have some time in a project to

@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Lessons learned"
-date:   2020-10-07 12:00:00 +0200
+title: "Lessons learned"
+date: 2020-10-07 12:00:00 +0200
 author: Christoph Kappel
-tags:   tools testing ruby watir chromedriver headless
+tags: tools testing ruby watir chromedriver headless
 ---
 A friend of mine approached me with a request to - let us say automate -
 a web request to a not-to-be-named raffle. I looked into it and was
@@ -22,7 +22,7 @@ I had two options now:
 2. Find a scraper with a JS engine
 
 In my day job, we always like to play with with e2e-testing, which mostly
-involves scripts, that remote-control a web browser. 
+involves scripts, that remote-control a web browser.
 
 That said, I had a few glances at this stack again. And after some more reading,
 I settled on [watir](http://watir.com/) and [chromedriver](https://chromedriver.chromium.org/).
@@ -54,12 +54,12 @@ it, when present. Easy as that.
 ### Headless?
 
 One problem solved, this runs nicely on my *local* machine. Now it would be best,
-if I can just deploy it on a server without installing the whole docker stack. 
+if I can just deploy it on a server without installing the whole docker stack.
 
 Since we are targeting Linux, headless support is kind of built-in. And after a
 quick search I found [headless](https://github.com/leonid-shevtsov/headless).
 
-This *gem* wraps the handling of a virtual framebuffer for you and, as it turns 
+This *gem* wraps the handling of a virtual framebuffer for you and, as it turns
 out, works pretty well with my stack:
 
 ```ruby

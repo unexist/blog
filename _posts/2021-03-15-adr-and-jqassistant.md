@@ -3,7 +3,7 @@ layout: post
 title: ADR and jqAssistant
 date: 2021-03-15 17:45 +0100
 author: Christoph Kappel
-tags:   tools architecture validation adr
+tags: tools architecture validation adr
 ---
 I've been in a meetup recently and it was about architecture validation with the help of
 our good friend [jqAssistant](https://jqassistant.org). Although I didn't learn much new in the

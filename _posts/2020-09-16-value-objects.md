@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Value objects"
-date:   2020-09-16 12:00:00 +0200
+title: "Value objects"
+date: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
-tags:   tools ddd frameworks
+tags: tools ddd frameworks
 ---
 Here, whenever we are talking about the general topic **value objects**, sooner
 or later we end up in a discussion about functionality.
@@ -22,7 +22,7 @@ Meter distanceInMeter = 5;
 Kilometer totalDistance = distanceInMeter + distanceInKilometer;
 ```
 
-So why do even mention this contrived example? I stumbled upon 
+So why do even mention this contrived example? I stumbled upon
 [Manifold framework](https://manifold.systems/) and along other useful things
 like `@Jailbreak` to access private methods and `#define/#ifdef`, it comes
 with a really cool way to handle unit types.

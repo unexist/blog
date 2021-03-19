@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Skill matrix"
-date:   2020-10-15 16:00:00 +0200
+title: "Skill matrix"
+date: 2020-10-15 16:00:00 +0200
 author: Christoph Kappel
-tags:   tools people soft-skills just-a-link to-be-continued
+tags: tools people soft-skills just-a-link to-be-continued
 ---
 For a new gig, we started with a bunch of new people with various sets of
 knowledge and skills. Without any way to assess, where our strengths and

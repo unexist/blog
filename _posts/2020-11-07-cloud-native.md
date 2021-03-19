@@ -1,36 +1,36 @@
 ---
 layout: post
-title:  Cloud native
-date:   2020-11-07 17:44 +0100
-tags:   tools quarkus cloud docker kind kubernetes to-be-continued
+title: Cloud native
+date: 2020-11-07 17:44 +0100
+tags: tools quarkus cloud docker kind kubernetes to-be-continued
 ---
 I was never a big fan of all these cloud stuff, especially not of the *cloud native* idea, but for
 my current project I have to get over and used to it.
 
-So far, my only realy experience with [kubernetes](https://kubernetes.io/) was during universities, 
-guided training sessions at work, with some experienced instructor. That never worked well for me. 
+So far, my only realy experience with [kubernetes](https://kubernetes.io/) was during universities,
+guided training sessions at work, with some experienced instructor. That never worked well for me.
 
 I can do guided stuff all day long, but when I don't get my hands dirty, this stuff never sticks to
-me. Most of the commands succeed and I have no idea what I succeeded in *and/or* what is supposed to 
-work now. 
+me. Most of the commands succeed and I have no idea what I succeeded in *and/or* what is supposed to
+work now.
 
-Well - I can surely read the next chapter of the instructions, but my learning just don't works this 
+Well - I can surely read the next chapter of the instructions, but my learning just don't works this
 way.
 
 # Initial thoughts
 
 For me, the whole stack is a bit weird and I start with some questions?
 
-- Where to start? 
-- Do I need some real installation of k8s? 
+- Where to start?
+- Do I need some real installation of k8s?
 - What about the bundled one from "Docker for Desktop"?
 - Why do I have to use macOS for this kind of stuff?
 
 After some asking and searching, I made some decisions: I want to stick with the k8s docker brings to the
-party, along with [Kind](https://kind.sigs.k8s.io/), for the ease of the management of clusters. I might 
+party, along with [Kind](https://kind.sigs.k8s.io/), for the ease of the management of clusters. I might
 delve into the [Helm](https://helm.sh/) odyssey later.
 
-And I going to use [Quarkus](https://quarkus.ui) as a passenger, there are some extensions, that might 
+And I going to use [Quarkus](https://quarkus.ui) as a passenger, there are some extensions, that might
 make the journey worthwhile.
 
 # Play time
@@ -89,7 +89,7 @@ The *kubernetes* extension created nice manifests for us, which can be found her
 
 After the passenger is ready, we have to set up our cluster. During my experiments I had to do this
 several times, because I only lated realized I forgot something. So I daresay we'll do it right on the
-first time and init our cluster directly with the necessary stuff like 
+first time and init our cluster directly with the necessary stuff like
 [ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/):
 
 ### Create a cluster
@@ -117,7 +117,7 @@ EOF
 ```
 
 This command creates a new cluster named *example* and sets up some magic port mapping required for
-ingress. 
+ingress.
 
 ### Kind docker images
 
