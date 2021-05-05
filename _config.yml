@@ -22,7 +22,7 @@ title: unexist.dev
 email: christoph@unexist.dev
 description: Random bits and rants about tech, software design and me
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://blog.unexist.dev" # the base hostname & protocol for your site, e.g. http://example.com
+url: https://blog.unexist.dev # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: chkappel
 github_username:  unexist
 

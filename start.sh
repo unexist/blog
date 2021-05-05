@@ -1,1 +1,1 @@
-bundle exec jekyll serve --port 9000 $*
+JEKYLL_ENV=production bundle exec jekyll serve --port 9000 $*
