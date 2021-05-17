@@ -8,8 +8,9 @@ tags: tools intelli maven asciidoc
 related to **Documentation-as-Code**.
 
 I use it quite excessively in my current project, for documentation on service level but also for
-architecture documentation based on ARC42. (If you really want to look into it I suggest to have a
-look at the [Asciidoc Writer's Guide](https://asciidoctor.org/docs/asciidoc-writers-guide/)
+architecture documentation based on [ARC42](https://arc42.org/).
+(If you really want to look into it I suggest to have a look at the documentation
+[Asciidoc Writer's Guide](https://asciidoctor.org/docs/asciidoc-writers-guide/)
 
 It is as convenient as [Markdown](https://daringfireball.net/projects/markdown/) and has a few
 other tricks up its sleeve like support for images and a proper way to use a hierarchy of
