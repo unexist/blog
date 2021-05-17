@@ -13,7 +13,8 @@ Combine [ADR](https://adr.github.io/) with the asciidoc processing of
 [jqAssistant](https://jqassistant.org).
 I've never thought about it before, but once the speaker presented this idea I was totally into it.
 
-## ADR 1
+ADR 1
+----
 
 For a starter, we need to add [asciidoc](https://asciidoc.org/) support to the ADR tooling,
 since they normally are written in markdown. There is a pending PR that does exactly that:
@@ -33,7 +34,8 @@ adr-tools/adr init -t adoc jqassistant/decisions
 adr-tools/adr new "Assertion Library"
 ```
 
-## jqAssistant 1
+jqAssistant 1
+----
 
 Messing with [jqAssistant](https://jqassistant.org) is always funny, when you manage to make your
 mind about [cypher](https://neo4j.com/developer/cypher/), you are busy with lots of flaky tests
@@ -46,9 +48,10 @@ https://github.com/unexist/quarkus-arch-testing-showcase
 
 Back to our new ADR, let us just fill in a bit of magic:
 
-## ADR 2
+ADR 2
+----
 
-```adoc
+```asciidoc
 = 1. Assertion library
 
 |===
@@ -114,13 +117,14 @@ in the output.
 NOTE: The part around (4) is required to see the actual results in the rendered document, took
       me quite a whole to figure this out.
 
-# jqAssistant 2
+jqAssistant 2
+----
 
 So we have to jump right back to jqAssistant, since we are done with the ADR.
 
 Next best thing to do is to create an **index.adoc** document for jqAssistant to render:
 
-```adoc
+```asciidoc
 :description: This is a demo project for the combination of ADR and jqAssistant.
 :doctype: book
 :toc: left
