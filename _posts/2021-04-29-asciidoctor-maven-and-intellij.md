@@ -2,7 +2,7 @@
 layout: post
 title: Asciidoctor, maven and IntelliJ
 date: 2021-04-29 17:37 +0200
-tags: tools intelli maven asciidoc
+tags: tools intellij maven asciidoc
 ---
 [Asciidoc](https://asciidoctor.org/) is one of my favorite text processors for anything
 related to **Documentation-as-Code**.
