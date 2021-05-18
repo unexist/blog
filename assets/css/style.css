@@ -9,6 +9,7 @@
     --bottom-color: #1D2021;
     --h1-color: #888;
     --h2-color: #777;
+    --h4-color: #d7ba7d;
 
     /* Misc */
     --margin: 10px;
@@ -141,9 +142,12 @@ h2 {
     text-decoration: underline;
 }
 
+h3 {
+    text-decoration: underline;
+}
+
 h3, h4 {
     padding-top: 10px;
-    text-decoration: underline;
 }
 
 /* Jekyll */
@@ -185,6 +189,7 @@ h3, h4 {
 .post-content pre.highlight code {
     padding: 10px;
     color: var(--font-color2) !important;
+    backgrund-color: #000;
 }
 
 .post-tags {
