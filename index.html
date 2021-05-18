@@ -8,11 +8,11 @@ description: A description about my blog homepage
     <div class="post-content">
         {% for post in site.posts %}
         <p>
-            <div class="post-meta">
+            <div>
                 <a href="{{ post.url }}">{{ post.title }}</a>
                 &middot;
-                <span class="tags">{{ post | tags }}</span>
-            </div>>
+                <span class="post-meta tags">{{ post | tags }}</span>
+            </div>
             Added by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_string }}</span>
         </p>
         {% endfor %}

@@ -5,12 +5,12 @@ layout: default
     <h2>Posts tagged as #{{ page.tag }}</h2>
     {% for post in page.posts %}
         <p>
-            <div class="post-meta">
+            <div>
                 {{ post.date | date_to_string }}
                 &middot;
                 {{ post.author }}
                 &middot;
-                <span class="tags">{{ post | tags }}</span>
+                <span class="posts-meta tags">{{ post | tags }}</span>
             </div>
             <a href="{{ post.url }}">{{ post.title }}</a>
         </p>
