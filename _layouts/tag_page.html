@@ -1,10 +1,10 @@
 ---
 layout: default
 ---
-<h2>Posts tagged as #{{ page.tag }}</h2>
-<ul class="post-list">
+<div id="posts">
+    <h2>Posts tagged as #{{ page.tag }}</h2>
     {% for post in page.posts %}
-        <li>
+        <p>
             <div class="post-meta">
                 {{ post.date | date_to_string }}
                 &middot;
@@ -13,6 +13,6 @@ layout: default
                 <span class="tags">{{ post | tags }}</span>
             </div>
             <a href="{{ post.url }}">{{ post.title }}</a>
-        </li>
+        </p>
     {% endfor %}
-</ul>
+</div>
