@@ -10,7 +10,7 @@ layout: default
             <div>
                 <a href="{{ post.url }}">{{ post.title }}</a>
                 &middot;
-                <span class="posts-meta tags">{{ post | tags }}</span>
+                <span class="post-meta tags">{{ post | tags }}</span>
             </div>
             Tagged by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_string }}</span>
         </p>
