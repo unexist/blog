@@ -27,6 +27,7 @@ One of the few things that you commonly see is basically to prefix every image i
 **:imagedir:** attribute:
 
 #### **`random.adoc`**
+
 ```asciidoc
 :imagedir: ./images
 image::foobar.png[caption=Test]
@@ -42,6 +43,7 @@ When you are using [maven](https://maven.apache.org/), there is another way just
 **imagedir** attribute inside of your [pom](https://maven.apache.org/pom.html):
 
 #### **`pom.xml`:**
+
 ```xml
 <plugin>
     <groupId>org.asciidoctor</groupId>
@@ -72,6 +74,7 @@ document and gets prefixed automatically to every [Asciidoc](https://asciidoctor
 is below this paths:
 
 #### **`.asciidoctorconfig`:**
+
 ```asciidoc
 :icons: font
 :imagesdir: {asciidoctorconfigdir}/images
