@@ -8,7 +8,7 @@ layout: default
         {% for post in site.posts %}
         <p>
             <div>
-                <a href="{{ post.url }}">{{ post.title }}</a>
+                <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
             </div>
             Added by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_string }}</span>
             <div class="post-meta tags">Tagged as {{ post | tags }}</div>
