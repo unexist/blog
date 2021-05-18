@@ -150,6 +150,10 @@ h3, h4 {
     padding-top: 10px;
 }
 
+h4 {
+    color: var(--h4-color);
+}
+
 /* Jekyll */
 .post-list li {
     padding-top: var(--padding);
@@ -189,7 +193,7 @@ h3, h4 {
 .post-content pre.highlight code {
     padding: 10px;
     color: var(--font-color2) !important;
-    backgrund-color: #000;
+    background-color: #000;
 }
 
 .post-tags {
