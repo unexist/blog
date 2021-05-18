@@ -193,7 +193,6 @@ h4 {
 .post-content pre.highlight code {
     padding: 10px;
     color: var(--font-color2) !important;
-    background-color: #000;
 }
 
 .post-tags {
@@ -209,4 +208,5 @@ h4 {
     margin-bottom: var(--margin);
     padding: var(--padding);
     border: var(--border);
+    background-color: #000;
 }

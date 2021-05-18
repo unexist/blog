@@ -28,7 +28,7 @@ One of the few things that you commonly see is basically to prefix every image i
 
 #### **random.adoc**
 
-```asciidoc
+```adoc
 :imagedir: ./images
 image::foobar.png[caption=Test]
 ```
@@ -75,7 +75,7 @@ is below this paths:
 
 #### **.asciidoctorconfig:**
 
-```asciidoc
+```adoc
 :icons: font
 :imagesdir: {asciidoctorconfigdir}/images
 ```
