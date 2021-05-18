@@ -25,7 +25,7 @@ That out of the way, let us see how it actually works. Written in [python](https
 it uses  [jinja2](https://docs.ansible.com/ansible/latest/user_guide/playbooks_templating.html) for
 templating, which looks awfully familiar (and yes, I copied the first example):
 
-#### **`random.yaml`:**
+#### **random.yaml:**
 ```yaml
 - name: Create a k8s namespace
   community.kubernetes.k8s:
@@ -106,7 +106,7 @@ inherited-chart/templates:
 
 And the content of files can be like this:
 
-#### **`base-chart/templates/_service.tpl`:**
+#### **base-chart/templates/_service.tpl:**
 ```yaml
 {{- define "base-chart.service" -}}
 apiVersion: v1
@@ -175,7 +175,7 @@ inherited.yaml
 The usage of environments is a bit tricky, but I will explain it down the road. So let us focus on
 the *helmfile*, which contains all the fun:
 
-#### **`helmfile.yaml`:**
+#### **helmfile.yaml:**
 ```yaml
 repositories:
   - name: stable
@@ -211,7 +211,7 @@ postgres:
 
 In order to use this config, we have to rename **inherited.yaml** to **inherited.tpl**:
 
-#### **`values/inherited.tpl`:**
+#### **values/inherited.tpl:**
 ```yaml
 # snip
   config:

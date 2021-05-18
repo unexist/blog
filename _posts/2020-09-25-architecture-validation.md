@@ -5,24 +5,24 @@ date:   2020-09-25 11:00:00 +0200
 author: Christoph Kappel
 tags:   tools architecture validation ddd
 ---
-Over the last few days I played with tool-based architecture validation,
-to give colleagues a basic introduction to the whole topic.
+Over the last few days I played with tool-based architecture validation, to give colleagues a basic
+introduction to the whole topic.
 
-I tested [ArchUnit](https://www.archunit.org/) and [jqAssistant](https://jqassistant.org/)
-and skipped anything, that isn't fit to be included into a build pipeline.
+I tested [ArchUnit](https://www.archunit.org/) and [jqAssistant](https://jqassistant.org/) and
+skipped anything, that isn't fit to be included into a build pipeline.
 
 Just for completeness: There are other well-known tools like
-[Structure101](https://structure101.com/) or [Sotograph](https://www.hello2morrow.com/products/sotograph) 
+[Structure101](https://structure101.com/) or [Sotograph](https://www.hello2morrow.com/products/sotograph)
 commercially available, for deeper analysis of a given architecture.
 
 ## ArchUnit
 
-This framework comes with a really nice fluent API, which allows you to easily
-create your own testcases and after a bit of initial try/error, it is pretty
-clear how to roll.
+This framework comes with a really nice fluent API, which allows you to easily create your own
+testcases and after a bit of initial try/error, it is pretty clear how to roll.
 
 For example, this rule checks, if methods in the package named *test* are public:
 
+#### **test.java:**
 ```java
 @ArchTest
 static final ArchRule checkPlacement =
@@ -33,16 +33,15 @@ static final ArchRule checkPlacement =
             .bePublic();
 ```
 
-Overall, this API is quite powerful and there quite a few plugins to enhance the
-impressive set. So in other words, it is always a good idea to check, if someone
-already solved the problem for you.
+Overall, this API is quite powerful and there quite a few plugins to enhance the impressive set. So
+in other words, it is always a good idea to check, if someone already solved the problem for you.
 
-So besides simple stuff like the above, architects are probably more interested
-in rules, that enforce a given layout or rather architecture. 
+So besides simple stuff like the above, architects are probably more interested in rules, that
+enforce a given layout or rather architecture.
 
-One of the better known architecture - the layered architecture - can be
-checked nicely:
+One of the better known architecture - the layered architecture - can be checked nicely:
 
+#### **test.java:**
 ```java
 private final JavaClasses classes = new ClassFileImporter().importPackages("org.subforge");
 
@@ -74,18 +73,17 @@ public void testLayeredArch() {
 }
 ```
 
-These rules define different layers and specify the allowed interaction between
-each other.
+These rules define different layers and specify the allowed interaction between each other.
 
 ## jqAssistant
 
-In comparison to [ArchUnit](https://www.archunit.org/), this framework uses a
-different approach and can be broken down into three step/components:
+In comparison to [ArchUnit](https://www.archunit.org/), this framework uses a different approach
+and can be broken down into three step/components:
 
 ### Scanner/Analyzer
 
-The combination of both scans the given source tree, analyzed the types,
-relations and so on and stores all learnings into the graph database.
+The combination of both scans the given source tree, analyzed the types, relations and so on and
+stores all learnings into the graph database.
 
 ### Graph database ([Neo4j](https://neo4j.com/))
 
@@ -94,19 +92,18 @@ like [Neo4j browser](https://neo4j.com/developer/neo4j-browser/).
 
 ### Query/Constraint checker
 
-And lastly, the selected query language (Cypher is the default here) can be
-used to describe either queries to get infos, to formalize concepts or
-constraints.
+And lastly, the selected query language (Cypher is the default here) can be used to describe either
+queries to get infos, to formalize concepts or constraints.
 
-Concepts are kind of light rules, that can be violated without problem and can
-be cross referenced in other concepts or constraints, which always have a 
-severity.
+Concepts are kind of light rules, that can be violated without problem and can be cross referenced
+in other concepts or constraints, which always have a severity.
 
 ### Examples
 
 I don't want to dive depper into the syntax of Cypher, but a base examples looks
 like this:
 
+#### **test.cypher:**
 ````cypher
 match
     (t:Type)-[:DEPENDS_ON]->(t2:Type)
@@ -114,5 +111,4 @@ return
     t, t2
 ````
 
-This asks the database for any type named *t*, that depends on another type
-named *t2*. 
+This asks the database for any type named *t*, that depends on another type named *t2*.

@@ -48,9 +48,8 @@ NOTE: Keep in mind to restart the Dock afterwards.
 
 # Fun with the dock
 
-I usually autohide the dock, because is just wastes
-space most of the time, but the delay of the hiding
-is pretty long.
+I usually autohide the dock, because is just wastes space most of the time, but the delay of the
+hiding is pretty long.
 
 Here is how to speed that up:
 
@@ -62,12 +61,10 @@ defaults write com.apple.Dock autohide-delay -float 0
 
 ## Slow time machine backups
 
-Every struggled with a backup task, which might not be
-doable in a geological timeframe - yes I am talking
-about backups.
+Every struggled with a backup task, which might not be doable in a geological timeframe - yes I am
+talking about backups.
 
-Apparently, the process just gets low CPU priority
-and fails to get any speed on track.
+Apparently, the process just gets low CPU priority and fails to get any speed on track.
 
 This is also supposed to make it a bit faster:
 
@@ -75,5 +72,4 @@ This is also supposed to make it a bit faster:
 sudo sysctl debug.lowpri_throttle_enabled=0
 ```
 
-NOTE: Setting it to 1 again restores te previous slow
-      state.
+NOTE: Setting it to 1 again restores te previous slow state.

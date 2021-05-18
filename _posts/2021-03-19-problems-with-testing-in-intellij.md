@@ -15,6 +15,7 @@ FWIW: I'd expect that the pom is readable for the bundled maven as well.
 
 Sometimes the import fails even more spectacular and the test runner fails with goodies like this:
 
+#### **random.log:**
 ```log
 Exception in thread "main" java.lang.NoClassDefFoundError: org/junit/platform/engine/TestDescriptor
 ```

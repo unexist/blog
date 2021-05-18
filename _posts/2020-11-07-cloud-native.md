@@ -94,6 +94,7 @@ first time and init our cluster directly with the necessary stuff like
 
 ### Create a cluster
 
+#### **random.yaml:**
 ```yaml
 cat <<EOF | kind create cluster --name example --config=-
 kind: Cluster
@@ -149,6 +150,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/a
 Once the installation is done we need some accounts to access our new dashboard, the next two manifests
 create an admin for it:
 
+#### **random.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -161,6 +163,7 @@ EOF
 
 And..
 
+#### **random.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
@@ -198,7 +201,8 @@ Copy this token and use it [here](http://localhost:8001/api/v1/namespaces/kubern
 
 ### Ingress
 
-We created the cluster with support for ingress, but so complete the installation another quick step is required.
+We created the cluster with support for ingress, but so complete the installation another quick step
+is required.
 
 #### Finishing up
 
@@ -212,4 +216,3 @@ kubectl wait --namespace ingress-nginx \
 ```
 
 To be continued.
-
