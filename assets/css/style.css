@@ -9,6 +9,7 @@
     --bottom-color: #1D2021;
     --h1-color: #888;
     --h2-color: #777;
+    --h3-color: #666;
     --h4-color: #d7ba7d;
 
     /* Misc */
@@ -143,6 +144,7 @@ h2 {
 }
 
 h3 {
+    color: var(--h3-color);
     text-decoration: underline;
 }
 
