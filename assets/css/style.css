@@ -181,13 +181,18 @@ h4 {
 
 .post-content li {
     margin-left: 40px;
-    padding: var(--padding);
+    padding: 0px 0px var(--padding) 0px;
     color: var(--font-color2);
 }
 
 .post-content pre {
     white-space: pre-wrap;
     text-align: left;
+    margin-top: var(--margin);
+    margin-bottom: var(--margin);
+    padding: var(--padding);
+    border: var(--border);
+    background-color: #000;
 }
 
 .post-content pre.highlight code {
@@ -201,12 +206,4 @@ h4 {
 
 .rss-subscribe {
     display: none;
-}
-
-.highlighter-rouge {
-    margin-top: var(--margin);
-    margin-bottom: var(--margin);
-    padding: var(--padding);
-    border: var(--border);
-    background-color: #000;
 }
