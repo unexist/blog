@@ -2,6 +2,7 @@
 layout: post
 title: Defaults Write
 date: 2021-02-04 17:09 +0100
+author: Christoph Kappel
 tags: macos hate cynical to-be-continued
 ---
 I've been using macOs for over two years now and my

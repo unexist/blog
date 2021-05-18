@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Architecture validation"
-date:   2020-09-25 11:00:00 +0200
+title: "Architecture validation"
+date: 2020-09-25 11:00:00 +0200
 author: Christoph Kappel
-tags:   tools architecture validation ddd
+tags: tools architecture validation ddd
 ---
 Over the last few days I played with tool-based architecture validation, to give colleagues a basic
 introduction to the whole topic.
