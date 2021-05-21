@@ -13,7 +13,7 @@ A pretty easy way to still achieve what you probably want to do is to use
 [define](https://www.gnu.org/software/make/manual/make.html#index-define):
 
 #### **Makefile**:
-```Makefile
+```makefile
 define JSON_TODO # <1>
 curl -X 'POST' \
   'http://localhost:8080/todo' \
