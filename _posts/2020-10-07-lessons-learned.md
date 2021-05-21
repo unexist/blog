@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Lessons learned"
+title: Lessons learned
 date: 2020-10-07 12:00:00 +0200
 author: Christoph Kappel
 tags: tools testing ruby watir chromedriver headless

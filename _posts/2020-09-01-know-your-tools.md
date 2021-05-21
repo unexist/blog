@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Know your tools"
+title: Know your tools
 date: 2020-09-01 14:30:00 +0200
 author: Christoph Kappel
 tags: tools soft-skills citrix intellij

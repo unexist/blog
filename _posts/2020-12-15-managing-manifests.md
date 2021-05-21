@@ -12,11 +12,11 @@ After my first few steps and mistakes, which basically lead to a complete re-set
 [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) cluster, I decided I want to find a
 proper way to manage the configs.
 
-After some research, I found support for [kubernetes](https://kubernetes.io/) manifests in
-ansible, which a good friend of mine is fond of, so I gave it a spin.
+I found support for [kubernetes](https://kubernetes.io/) manifests in ansible, which a good friend
+of mine is fond of, so I gave it a spin.
 
-# Ansible
-
+Ansible
+====
 The installation of [ansible](https://www.ansible.com/) itself and the galaxy plugin is pretty
 straight forward and better explained
 [here](https://docs.ansible.com/ansible/latest/collections/community/kubernetes/k8s_module.html),
@@ -39,8 +39,8 @@ templating, which looks awfully familiar (and yes, I copied the first example):
 This basically let's us rewrite or rather copy the whole manifests and put them into playbooks,
 there is bit of template magic available, but I don't see any really advantage here. Next!
 
-# Make
-
+Make
+====
 Using good ol' [make](https://www.gnu.org/software/make/manual/make.html) should be sufficient
 here, right? We just apply a bunch of yaml files and can define dependencies to targets, this
 should make it pretty worthwhile.
@@ -57,8 +57,8 @@ During my time with make, I had a few learnings along the way:
 
 I used this for a while, but.. NEXT!
 
-# Helm
-
+Helm
+====
 [Helm](https://helm.sh/) is another way of managing your resources. Behind the nautical-themed
 name is a full-featured repository manager and a powerful templating engine, which I mentioned
 earlier looks pretty similar to [jinja2](https://jinja.palletsprojects.com/en/2.11.x/)
@@ -68,8 +68,8 @@ of the repositories (still nautical - you see?) or roll your own. There is lots 
 and I don't want to even try to give a glimpse into it, there are dozen of better resources
 available.
 
-## Library type
-
+Library type
+----
 Still one noteworthy thing is the new library type in v3 of helm: They allow us to create
 non-installable base charts and let new charts inherit from. This way you don't have to copy/paste
 manifests and can just include them from a base.

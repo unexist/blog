@@ -16,10 +16,11 @@ the configuration depths of the _defaults write_ hell..
 Here I am going to collect some of the things that
 solved an issue for me.
 
-# Defaults to write
+Defaults to write
+====
 
-## Automatically switch spaces
-
+Automatically switch spaces
+----
 No idea what happens, but sometimes Mission Control
 decides to switch to any space on any screen, regardless
 what its user might want.
@@ -32,8 +33,8 @@ defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 
 NOTE: Keep in mind to restart the Dock afterwards.
 
-## Animations - away
-
+Animations - away
+----
 MacOS comes packed with lots of annoying annimations,
 here is a list of defaults to get rid of them:
 
@@ -58,10 +59,11 @@ Here is how to speed that up:
 defaults write com.apple.Dock autohide-delay -float 0
 ```
 
-# Miscellaneous
+Miscellaneous
+====
 
-## Slow time machine backups
-
+Slow time machine backups
+----
 Every struggled with a backup task, which might not be doable in a geological timeframe - yes I am
 talking about backups.
 

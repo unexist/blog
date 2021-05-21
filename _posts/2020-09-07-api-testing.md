@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "API testing"
+title: API testing
 date: 2020-09-06 12:00:00 +0200
 author: Christoph Kappel
 tags: tools testing api

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Windows tools"
+title: Windows tools
 date: 2020-09-03 16:30:00 +0200
 author: Christoph Kappel
 tags: java quarkus maven intellij windows tools

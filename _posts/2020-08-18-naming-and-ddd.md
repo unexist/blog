@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Naming and DDD"
+title: Naming and DDD
 date: 2020-08-18 08:30:00 +0200
 author: Christoph Kappel
 tags: naming ddd clean-code just-a-link

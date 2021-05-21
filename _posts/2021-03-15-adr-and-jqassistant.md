@@ -15,7 +15,6 @@ I've never thought about it before, but once the speaker presented this idea I w
 
 ADR 1
 ----
-
 For a starter, we need to add [asciidoc](https://asciidoc.org/) support to the ADR tooling,
 since they normally are written in markdown. There is a pending PR that does exactly that:
 
@@ -36,7 +35,6 @@ adr-tools/adr new "Assertion Library"
 
 jqAssistant 1
 ----
-
 Messing with [jqAssistant](https://jqassistant.org) is always funny, when you manage to make your
 mind about [cypher](https://neo4j.com/developer/cypher/), you are busy with lots of flaky tests
 and varying output errors, but we'll come to that later I guess.
@@ -50,7 +48,6 @@ Back to our new ADR, let us just fill in a bit of magic:
 
 ADR 2
 ----
-
 #### **001-assertion-library.adoc:**
 ```asciidoc
 = 1. Assertion library

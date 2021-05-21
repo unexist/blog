@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Architecture decisions"
+title: Architecture decisions
 date: 2020-09-15 08:00:00 +0200
 author: Christoph Kappel
 tags: tools architecture docs

@@ -11,8 +11,8 @@ and index the dependencies.
 
 FWIW: I'd expect that the pom is readable for the bundled maven as well.
 
-## JUnit5
-
+JUnit5
+----
 Sometimes the import fails even more spectacular and the test runner fails with goodies like this:
 
 #### **random.log:**

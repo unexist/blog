@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Value objects"
+title: Value objects
 date: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
 tags: tools ddd frameworks
@@ -26,5 +26,5 @@ So why do even mention this contrived example? I stumbled upon
 [Manifold framework](https://manifold.systems/) and along other useful things like `@Jailbreak` to
 access private methods and `#define/#ifdef`, it comes with a really cool way to handle unit types.
 
-I know strictly speaking this has isn't even closely related to **DDD**, but it still cool and hey,
-clickbait.
+I know strictly speaking this has isn't even closely related to **DDD**, but it still cool and
+hey, clickbait.

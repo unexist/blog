@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Spec Framework"
+title: Spec Framework
 date: 2020-10-16 07:00:00 +0200
 author: Christoph Kappel
 tags: tools specs testing just-a-link to-be-continued

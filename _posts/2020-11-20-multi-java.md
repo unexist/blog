@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Multi java"
+title: Multi java
 date: 2020-11-20 17:01 +0100
 author: Christoph Kappel
 tags: tools java jenv macos

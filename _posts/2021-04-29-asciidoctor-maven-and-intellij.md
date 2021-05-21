@@ -23,12 +23,10 @@ to this new root now. This leads to interesting issues, especially if you want t
 
 Images
 ----
-
 One of the few things that you commonly see is basically to prefix every image include with the
 **:imagedir:** attribute:
 
 #### **random.adoc**
-
 ```adoc
 :imagedir: ./images
 image::foobar.png[caption=Test]
@@ -39,12 +37,10 @@ with a large document.
 
 Maven
 ----
-
 When you are using [maven](https://maven.apache.org/), there is another way just to set the
 **imagedir** attribute inside of your [pom](https://maven.apache.org/pom.html):
 
 #### **pom.xml:**
-
 ```xml
 <plugin>
     <groupId>org.asciidoctor</groupId>
@@ -61,7 +57,6 @@ When you are using [maven](https://maven.apache.org/), there is another way just
 
 IntelliJ
 ----
-
 There seems to be some kind of unwritten rule, that [IntelliJ](https://www.jetbrains.com/idea/)
 **always** has to fail for something that works quite nicely with [maven](https://maven.apache.org/)
 even when you install the [plugin](https://plugins.jetbrains.com/plugin/7391-asciidoc) - so no
@@ -75,7 +70,6 @@ document and gets prefixed automatically to every [Asciidoc](https://asciidoctor
 is below this paths:
 
 #### **.asciidoctorconfig:**
-
 ```adoc
 :icons: font
 :imagesdir: {asciidoctorconfigdir}/images
