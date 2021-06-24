@@ -5,8 +5,8 @@ date: 2021-03-19 08:40 +0100
 author: Christoph Kappel
 tags: tools intellij
 ---
-Importing projects in IntelliJ is usually a problem. I haven't figured out, why I always end up
-with projects, that can be build with maven without any problems and intellij fails to find
+Importing projects in [IntelliJ][1] is usually a problem. I haven't figured out, why I always end up
+with projects, that can be build with maven without any problems and [IntelliJ][1] fails to find
 and index the dependencies.
 
 FWIW: I'd expect that the pom is readable for the bundled maven as well.
@@ -25,14 +25,16 @@ create the modules and assigned paths randomly among them.
 
 That means the classpaths are wrong and the error message makes actually sense.
 
-So when this error happens, open the **Module settings** inside of intellij and switch to the
+So when this error happens, open the **Module settings** inside of [Intellij][1] and switch to the
 **modules** tab. Verify that there is only one module or rather modules that match the structure
 of your project.
 
-_NOTE: IntelliJ usually tells you, when the settings are bogus when you try to quit the dialog
+_NOTE: [IntelliJ][1] usually tells you, when the settings are bogus when you try to quit the dialog
 via **OK**.:_
 
 Things you should look for:
 
 * Same **source**, **test source**, **ressource** path cannot be split/re-used in different modules
 * Each of the above should exist
+
+[1]: https://www.jetbrains.com/idea/

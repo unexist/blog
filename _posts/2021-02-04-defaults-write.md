@@ -5,28 +5,24 @@ date: 2021-02-04 17:09 +0100
 author: Christoph Kappel
 tags: macos hate cynical to-be-continued
 ---
-I've been using macOs for over two years now and my
-overall experience is:
-I hate it more and more with each successive day.
+I've been using macOs for over two years now and my overall experience is: I hate it more and more
+with each successive day.
 
-There are so many annoying things that either can't be
-turned off or there is some arcane setting in
+There are so many annoying things that either can't be turned off or there is some arcane setting in
 the configuration depths of the _defaults write_ hell..
 
-Here I am going to collect some of the things that
-solved an issue for me.
+Here I am going to collect some of the things that solved an issue for me.
 
 Defaults to write
 ====
-
 Automatically switch spaces
 ----
-No idea what happens, but sometimes Mission Control
-decides to switch to any space on any screen, regardless
-what its user might want.
+No idea what happens, but sometimes Mission Control decides to switch to any space on any screen,
+regardless what its user might want.
 
 This is supposed to be to turn this off:
 
+#### **Shell:**
 ```bash
 defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 ```
@@ -35,9 +31,9 @@ NOTE: Keep in mind to restart the Dock afterwards.
 
 Animations - away
 ----
-MacOS comes packed with lots of annoying annimations,
-here is a list of defaults to get rid of them:
+MacOS comes packed with lots of annoying animations, here is a list of defaults to get rid of them:
 
+#### **Shell:**
 ```bash
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
@@ -50,11 +46,12 @@ NOTE: Keep in mind to restart the Dock afterwards.
 
 # Fun with the dock
 
-I usually autohide the dock, because is just wastes space most of the time, but the delay of the
+I usually auto-hide the dock, because is just wastes space most of the time, but the delay of the
 hiding is pretty long.
 
 Here is how to speed that up:
 
+#### **Shell:**
 ```bash
 defaults write com.apple.Dock autohide-delay -float 0
 ```
@@ -71,6 +68,7 @@ Apparently, the process just gets low CPU priority and fails to get any speed on
 
 This is also supposed to make it a bit faster:
 
+#### **Shell:**
 ```bash
 sudo sysctl debug.lowpri_throttle_enabled=0
 ```
