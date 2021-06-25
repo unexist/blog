@@ -8,8 +8,8 @@ tags: tools quarkus cloud docker kind kubernetes to-be-continued
 I was never a big fan of all these cloud stuff, especially not of the *cloud native* idea, but for
 my current project I have to get over and used to it.
 
-So far, my only realy experience with [kubernetes](https://kubernetes.io/) was during universities,
-guided training sessions at work, with some experienced instructor. That never worked well for me.
+So far, my only really experience with [kubernetes][1] was during universities, guided training
+sessions at work, with some experienced instructor. That never worked well for me.
 
 I can do guided stuff all day long, but when I don't get my hands dirty, this stuff never sticks to
 me. Most of the commands succeed and I have no idea what I succeeded in *and/or* what is supposed to
@@ -27,24 +27,25 @@ For me, the whole stack is a bit weird and I start with some questions?
 - What about the bundled one from "Docker for Desktop"?
 - Why do I have to use macOS for this kind of stuff?
 
-After some asking and searching, I made some decisions: I want to stick with the k8s docker brings to the
-party, along with [Kind](https://kind.sigs.k8s.io/), for the ease of the management of clusters. I might
-delve into the [Helm](https://helm.sh/) odyssey later.
+After some asking and searching, I made some decisions: I want to stick with the k8s docker brings
+to the party, along with [Kind][2], for the ease of the management of clusters. I might delve into
+the [Helm][3] odyssey later.
 
-And I going to use [Quarkus](https://quarkus.ui) as a passenger, there are some extensions, that might
-make the journey worthwhile.
+And I going to use [Quarkus][4] as a passenger, there are some extensions, that might make the
+journey worthwhile.
 
 # Play time
 
-I'll skip all the install stuff of docker and kind, I think there is more than enough available and focus
-on the fun stuff and expect everything is ready.
+I'll skip all the install stuff of docker and kind, I think there is more than enough available and
+focus on the fun stuff and expect everything is ready.
 
 ## Quarkus
 
-Scaffolding a quarkus project is fairly easy:
+Scaffolding a Quarkus[4] project is fairly easy:
 
-```console
-mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
+#### **Shell:**
+```property
+$ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 -DprojectGroupId=dev.unexist.example \
 -DprojectArtifactId=quarkus-hello-example \
 -DprojectVersion=0.1 \
@@ -55,7 +56,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 After that, you end up with a hello project and some helpful extensions:
 
 - *health* provides the required health and readyness for the k8s pod
-- *openapi* generates the [OpenAPI3](https://swagger.io/specification/) and bundles the Swagger-Ui
+- *openapi* generates the [OpenAPI3][5] and bundles the Swagger-Ui
 - *container-image-jib* actually builds the images without a requirement for actual Docker
 - *kubernetes* creates the helpful k8s manifests
 
@@ -65,7 +66,8 @@ Still, a bit config is required to create the ingress manifests, have a proper p
 include the swagger-ui in everything instead of dev builds only. So without further ado, can you
 please add the three lines to your *application.properties* file?
 
-```console
+#### **Shell:**
+```property
 quarkus.kubernetes.expose=true
 quarkus.servlet.context-path=/hello
 quarkus.swagger-ui.always-include=true
@@ -76,22 +78,22 @@ quarkus.swagger-ui.always-include=true
 And following builds the container, pushes it to the local docker and generates the some helpful
 k8s manifests in one command:
 
-```console
-mvn clean package -Dquarkus.container-image.build=true
+#### **Shell:**
+```shell
+$ mvn clean package -Dquarkus.container-image.build=true
 ```
 
 ### Manifests
 
 The *kubernetes* extension created nice manifests for us, which can be found here:
 
-**quarkus-hellp-example/target/kubernetes**
+**quarkus-hello-example/target/kubernetes**
 
 ## Kind
 
 After the passenger is ready, we have to set up our cluster. During my experiments I had to do this
 several times, because I only lated realized I forgot something. So I daresay we'll do it right on the
-first time and init our cluster directly with the necessary stuff like
-[ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/):
+first time and init our cluster directly with the necessary stuff like [ingress][6]:
 
 ### Create a cluster
 
@@ -123,10 +125,11 @@ ingress.
 
 ### Kind docker images
 
-In order for k8s to find our image, we have to load it first. That can be done like this:
+In order for [k8s][1] to find our image, we have to load it first. That can be done like this:
 
-```console
-kind load docker-image docker.io/unexist/quarkus-hello-example:0.1 --name example
+#### **Shell:**
+```shell
+$ kind load docker-image docker.io/unexist/quarkus-hello-example:0.1 --name example
 ```
 
 ## Kubernetes
@@ -135,15 +138,16 @@ Docker and kind have done their best to make it really easy for us. So let's go 
 
 ### Dashboard
 
-I have no problems with the CLI of k8s or tools like [k9s](https://k9scli.io/), but a nice dashboard
-with some fancy graphs and a way to see all at once is a quite nice.
+I have no problems with the CLI of k8s or tools like [k9s][6], but a nice dashboard with some fancy
+graphs and a way to see all at once is a quite nice.
 
 #### Installation
 
 The current version at writing this is 2.0 and can be installed with the next line:
 
-```console
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+#### **Shell:**
+```shell
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 ```
 
 #### User account
@@ -186,16 +190,18 @@ EOF
 
 In order to access the dashboard, a running proxy is required:
 
-```console
-kubectl proxy
+#### **Shell:**
+```shell
+$ kubectl proxy
 ```
 
 #### Log in - finally!
 
 The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
 
+#### **Shell:**
 ```console
-kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+$ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
 
 Copy this token and use it [here](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login).
@@ -209,11 +215,20 @@ is required.
 
 Last step: Init our ingress controller:
 
-```console
-kubectl wait --namespace ingress-nginx \
+#### **Shell:**
+```shell
+$ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=90s
 ```
 
 To be continued.
+
+[1]: https://kubernetes.io/
+[2]: https://kind.sigs.k8s.io/
+[3]: https://helm.sh/
+[4]: https://quarkus.io
+[5]: https://swagger.io/specification/
+[6]: https://kubernetes.io/docs/concepts/services-networking/ingress/
+[7]:https://k9scli.io/

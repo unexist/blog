@@ -12,28 +12,29 @@ first part, the second part was highly interesting:
 Combine [ADR][2] with the asciidoc processing of [jqAssistant][1].
 I've never thought about it before, but once the speaker presented this idea I was totally into it.
 
-ADR 1
-----
+## ADR 1
+
 For a starter, we need to add [AsciiDoc][3] support to the ADR tooling,
 since they normally are written in markdown. There is a pending PR that does exactly that:
 
-[https://github.com/npryce/adr-tools/pull/101]()
+<https://github.com/npryce/adr-tools/pull/101>
 
 Or if you need a complete set along with other nifty things like indexing a database
 (sqlite3) handling and basic atom/rss support, just use my version of it:
 
-[https://github.com/unexist/adr-tools]()
+<https://github.com/unexist/adr-tools>
 
 Once we've picked our version, we need to set this up accordingly:
 
+#### **Shell:**
 ```shell
-adr-tools/adr init -t adoc jqassistant/decisions
+$ adr-tools/adr init -t adoc jqassistant/decisions
 
-adr-tools/adr new "Assertion Library"
+$ adr-tools/adr new "Assertion Library"
 ```
 
-jqAssistant 1
-----
+## jqAssistant 1
+
 Messing with [jqAssistant][1] is always funny, when you manage to make your mind about [cypher][4],
 you are busy with lots of flaky tests and varying output errors, but we'll come to that later I
 guess.
@@ -41,12 +42,12 @@ guess.
 I also will not go into detail how to set up jgAssistant or how to create a bootstrap project and
 focus on the funny parts. If you want to dive head first just checkout my demo project:
 
-[https://github.com/unexist/showcase-architecture-testing-quarkus]()
+<https://github.com/unexist/showcase-architecture-testing-quarkus>
 
 Back to our new ADR, let us just fill in a bit of magic:
 
-ADR 2
-----
+## ADR 2
+
 #### **001-assertion-library.adoc:**
 ```asciidoc
 = 1. Assertion library
@@ -114,8 +115,7 @@ in the output.
 NOTE: The part around **<4>** is required to see the actual results in the rendered document, took
       me quite a whole to figure this out.
 
-jqAssistant 2
-----
+## jqAssistant 2
 
 So we have to jump right back to [jqAssistant][1], since we are done with the ADR.
 

@@ -8,13 +8,16 @@ tags: tools diagrams sequence-diagram cloud
 TL;DR: Never found a good way to automate it; but nice tools.
 
 While checking for ways to automate the creation of sequence diagrams I came across
-[sequencediagram.org](https://sequencediagram.org) and really liked the ease of use and syntax.
+[sequencediagram.org][1] and really liked the ease of use and syntax.
 
-Although the syntax is quite similar to the one of [PlantUML](https://plantuml.com/), I really
+Although the syntax is quite similar to the one of [PlantUML][2], I really
 appreciate the idea to do just one thing in your browser. No client, no frills.
 
-Another good one is:
-[mingrammer/diagrams](https://github.com/mingrammer/diagrams/blob/master/README.md)
+Another interesting one is [mingrammer/diagrams][3].
 
 I still lack a proper usecase, but the overall idea is nice and it is good to have a tool to chart
  cloud-based interaction.
+
+[1]: https://sequencediagram.org
+[2]: https://plantuml.com/
+[3]: https://github.com/mingrammer/diagrams/blob/master/README.md

@@ -11,12 +11,13 @@ alternative mechanisms, but on macOS?
 
 # Welcome jenv!
 
-[Jenv](https://www.jenv.be/) is a kind of package manager for all your Java versions, which helps you to switch
+[Jenv][1] is a kind of package manager for all your Java versions, which helps you to switch
 between each of them pretty nicely, once you've set it up correctly.
 
 Installation is as easy as open a cold one:
 
-```Bash
+#### **Shell:**
+```shell
 $ brew install jenv
 ```
 
@@ -25,7 +26,8 @@ $ brew install jenv
 Quick side note: Make sure to create the proper directories too, otherwise the commands fail
 in a weird way:
 
-```console
+#### **Shell:**
+```shell
 $ mkdir -p ~/.jenv/version
 ```
 
@@ -33,15 +35,17 @@ $ mkdir -p ~/.jenv/version
 
 The easiest way to see your installed Java version sis via the **java_home** command:
 
-```console
+#### **Shell:**
+```shell
 $ /usr/libexec/java_home -V
 Matching Java Virtual Machines (1):
     1.8.0_201, x86_64:	"Java SE 8"	/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home
 ```
 
-So far, nothing much to switch, but we still want to add it to [Jenv](https://www.jenv.be/):
+So far, nothing much to switch, but we still want to add it to [Jenv][1]:
 
-```console
+#### **Shell:**
+```shell
 $ jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home
 
 oracle64-1.8.0.201 added
@@ -55,16 +59,18 @@ installation.
 # Make it two
 
 There is still not much to do, for a Java version manager, when there is only one version. Time
-to install another one, this time [AdoptOpenJdk](https://adoptopenjdk.net/):
+to install another one, this time [AdoptOpenJdk][2]:
 
-```console
+#### **Shell:**
+```shell
 $ brew cask install adoptopenjdk
 $ brew cask install adoptopenjdk11
 ```
 
-And another command to add it to [Jenv](https://www.jenv.be/):
+And another command to add it to [Jenv][1]:
 
-```console
+#### **Shell:**
+```shell
 $ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
 
 openjdk64-11.0.9.1 added
@@ -77,7 +83,8 @@ openjdk64-11.0.9.1 added
 
 Now we have to versions installed, let's check it:
 
-```console
+#### **Shell:**
+```shell
 $ jenv versions
 * system (set by /Users/unexist/.jenv/version)
   openjdk64-11.0.9.1
@@ -86,7 +93,8 @@ $ jenv versions
 
 And what about **java_home**:
 
-```console
+#### **Shell:**
+```shell
 $ /usr/libexec/java_home -V
 Matching Java Virtual Machines (2):
     11.0.9.1, x86_64:	"AdoptOpenJDK 11"	/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
@@ -101,13 +109,15 @@ All set up done, we can now do the following:
 
 This can be done like this:
 
-```console
+#### **Shell:**
+```shell
 $ jenv global openjdk64-11.0.9.1
 ```
 
 And verified like:
 
-```console
+#### **Shell:**
+```shell
 $ jenv versions
   system
   1.8
@@ -118,3 +128,6 @@ $ jenv versions
 * openjdk64-11.0.9.1 (set by /Users/unexist/.jenv/version)
   oracle64-1.8.0.201
 ```
+
+[1]: https://www.jenv.be/
+[2]: https://adoptopenjdk.net/

@@ -9,10 +9,9 @@ Yesterday we had another discussion about architecture documentation and especia
 made about it. We came to a quick agreement, that the form makes no difference, but that there
 **is** a dire need for a way to see, **why** something is like it is.
 
-One of the tooling suggestions here is [ADR](https://adr.github.io/)
-([repo](https://github.com/npryce/adr-tools)), which basically is just a helper for easy to handle
-markdown files, which can either be placed next to the code (for microservices) or into a dedicated
-repository. (for macroarchitecture)
+One of the tooling suggestions here is [ADR][1] along with the [adr-tools][2]), which basically is
+just a helper for easy to handle markdown files, which can either be placed next to the code (for
+microservices) or into a dedicated repository. (for macro-architecture)
 
 I am always in favor to have docs next to code, so the chance that; a) someone really reads it and
 more importantly b) keeps it up to date is better. From my experience a wiki is just a collection
@@ -25,3 +24,6 @@ The latter is really easy, whenever a decision is made like which technology sta
 framework and so on, just write an entry.
 
 And the answer to the first question? **Probably you!**
+
+[1]: https://adr.github.io/
+[2]: https://github.com/npryce/adr-tools

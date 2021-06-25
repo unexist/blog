@@ -13,38 +13,38 @@ the configuration depths of the _defaults write_ hell..
 
 Here I am going to collect some of the things that solved an issue for me.
 
-Defaults to write
-====
-Automatically switch spaces
-----
+## Defaults to write
+
+### Automatically switch spaces
+
 No idea what happens, but sometimes Mission Control decides to switch to any space on any screen,
 regardless what its user might want.
 
 This is supposed to be to turn this off:
 
 #### **Shell:**
-```bash
-defaults write com.apple.dock workspaces-auto-swoosh -bool NO
+```shell
+$ defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 ```
 
 NOTE: Keep in mind to restart the Dock afterwards.
 
-Animations - away
-----
+### Animations - away
+
 MacOS comes packed with lots of annoying animations, here is a list of defaults to get rid of them:
 
 #### **Shell:**
-```bash
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+```shell
+$ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+$ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+$ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+$ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+$ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 ```
 
 NOTE: Keep in mind to restart the Dock afterwards.
 
-# Fun with the dock
+## Fun with the dock
 
 I usually auto-hide the dock, because is just wastes space most of the time, but the delay of the
 hiding is pretty long.
@@ -52,15 +52,15 @@ hiding is pretty long.
 Here is how to speed that up:
 
 #### **Shell:**
-```bash
-defaults write com.apple.Dock autohide-delay -float 0
+```shell
+$ defaults write com.apple.Dock autohide-delay -float 0
 ```
 
-Miscellaneous
-====
+## Miscellaneous
 
-Slow time machine backups
-----
+
+### Slow time machine backups
+
 Every struggled with a backup task, which might not be doable in a geological timeframe - yes I am
 talking about backups.
 
@@ -69,8 +69,8 @@ Apparently, the process just gets low CPU priority and fails to get any speed on
 This is also supposed to make it a bit faster:
 
 #### **Shell:**
-```bash
-sudo sysctl debug.lowpri_throttle_enabled=0
+```shell
+$ sudo sysctl debug.lowpri_throttle_enabled=0
 ```
 
 NOTE: Setting it to 1 again restores te previous slow state.

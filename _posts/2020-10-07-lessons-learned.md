@@ -10,10 +10,9 @@ not-to-be-named raffle. I looked into it and was instantly hooked. Both price an
 interesting.
 
 I wrote quite a few scraper in my time, so after a few lines good ol' Ruby, with the help of
-[mechanize](https://github.com/sparklemotion/mechanize), the first shot was ready and failed
-miserably due to *CSRF*.
+[mechanize][1], the first shot was ready and failed miserably due to *CSRF*.
 
-After a quick check, yes they really use a pesudo-random token, which is injected into the DOM and
+After a quick check, yes they really use a pseudo-random token, which is injected into the DOM and
 a hidden input field via JS.
 
 I had two options now:
@@ -25,11 +24,11 @@ In my day job, we always like to play with with e2e-testing, which mostly involv
 remote-control a web browser.
 
 That said, I had a few glances at this stack again. And after some more reading, I settled on
-[watir](http://watir.com/) and [chromedriver](https://chromedriver.chromium.org/).
+[watir][2]: and [chromedriver][3].
 
 ### Watir
 
-The API of [watir](http://watir.com) is really amazing and easy to use:
+The API of [watir][2] is really amazing and easy to use:
 
 #### **watir.rb:**
 ```ruby
@@ -58,7 +57,7 @@ One problem solved, this runs nicely on my *local* machine. Now it would be best
 deploy it on a server without installing the whole docker stack.
 
 Since we are targeting Linux, headless support is kind of built-in. And after a quick search I
-found [headless](https://github.com/leonid-shevtsov/headless).
+found [headless][4].
 
 This *gem* wraps the handling of a virtual framebuffer for you and, as it turns out, works pretty
 well with my stack:
@@ -76,3 +75,8 @@ Headless.ly do
     browser.close
 end
 ```
+
+[1]: https://github.com/sparklemotion/mechanize
+[2]: http://watir.com/
+[3]: https://chromedriver.chromium.org/
+[4]: https://github.com/leonid-shevtsov/headless

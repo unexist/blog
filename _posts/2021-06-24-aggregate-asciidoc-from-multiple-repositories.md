@@ -67,7 +67,7 @@ That is all that is required from the config part - let us talk about the struct
 there is **no reliable** way to use a custom layout and the [structure][6] from [Antora][3]'s authors
 has to be used.
 
-No I am not kidding, see here: [https://gitlab.com/antora/antora/-/issues/28]()
+No I am not kidding, see here: [https://gitlab.com/antora/antora/-/issues/28][8]
 
 I've tested this for quite some time, here are my learnings:
 
@@ -88,3 +88,4 @@ to use than the java tooling for [AsciiDoc][1].
 [5]: https://docs.antora.org/antora/2.3/component-version-descriptor/
 [6]: https://docs.antora.org/antora/2.3/standard-directories/
 [7]: https://gitlab.com/djencks/antora-aggregate-collector
+[8]: https://gitlab.com/antora/antora/-/issues/28

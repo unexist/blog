@@ -8,11 +8,10 @@ tags: tools architecture validation ddd
 Over the last few days I played with tool-based architecture validation, to give colleagues a basic
 introduction to the whole topic.
 
-I tested [ArchUnit](https://www.archunit.org/) and [jqAssistant](https://jqassistant.org/) and
-skipped anything, that isn't fit to be included into a build pipeline.
+I tested [ArchUnit][1] and [jqAssistant][2] and skipped anything, that isn't fit to be included
+into a build pipeline.
 
-Just for completeness: There are other well-known tools like
-[Structure101](https://structure101.com/) or [Sotograph](https://www.hello2morrow.com/products/sotograph)
+Just for completeness: There are other well-known tools like [Structure101][3] or [Sotograph][4]
 commercially available, for deeper analysis of a given architecture.
 
 ## ArchUnit
@@ -43,7 +42,7 @@ One of the better known architecture - the layered architecture - can be checked
 
 #### **test.java:**
 ```java
-private final JavaClasses classes = new ClassFileImporter().importPackages("org.subforge");
+private final JavaClasses classes = new ClassFileImporter().importPackages("dev.unexist");
 
 @Test
 public void testLayeredArch() {
@@ -77,7 +76,7 @@ These rules define different layers and specify the allowed interaction between 
 
 ## jqAssistant
 
-In comparison to [ArchUnit](https://www.archunit.org/), this framework uses a different approach
+In comparison to [ArchUnit][1], this framework uses a different approach
 and can be broken down into three step/components:
 
 ### Scanner/Analyzer
@@ -85,14 +84,13 @@ and can be broken down into three step/components:
 The combination of both scans the given source tree, analyzed the types, relations and so on and
 stores all learnings into the graph database.
 
-### Graph database ([Neo4j](https://neo4j.com/))
+### Graph database ([Neo4j][5])
 
-Once data is in the database, it can be queried e.g. via fancy frontends
-like [Neo4j browser](https://neo4j.com/developer/neo4j-browser/).
+Once data is in the database, it can be queried e.g. via fancy frontends like [Neo4j browser][6].
 
 ### Query/Constraint checker
 
-And lastly, the selected query language (Cypher is the default here) can be used to describe either
+And lastly, the selected query language ([Cypher][7] is the default here) can be used to describe either
 queries to get infos, to formalize concepts or constraints.
 
 Concepts are kind of light rules, that can be violated without problem and can be cross referenced
@@ -100,15 +98,23 @@ in other concepts or constraints, which always have a severity.
 
 ### Examples
 
-I don't want to dive depper into the syntax of Cypher, but a base examples looks
+I don't want to dive deeper into the syntax of [Cypher][7], but a base examples looks
 like this:
 
 #### **test.cypher:**
-````cypher
+```cypher
 match
     (t:Type)-[:DEPENDS_ON]->(t2:Type)
 return
     t, t2
-````
+```
 
 This asks the database for any type named *t*, that depends on another type named *t2*.
+
+[1]: https://www.archunit.org/
+[2]: https://jqassistant.org/
+[3]: https://structure101.com/
+[4]: https://www.hello2morrow.com/products/sotograph
+[5]: https://neo4j.com/
+[6]: https://neo4j.com/developer/neo4j-browser/
+[7]: https://neo4j.com/developer/cypher/
