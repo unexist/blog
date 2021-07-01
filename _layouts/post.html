@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<div class="post-content">
+    <div>
+        <h2>{{ page.title }}</h2>
+        Written by <a href="/about">{{ page.author }}</a> on {{ page.date | date_to_long_string }}
+        {% if page.tags != nil %}
+        <div id="tag-cloud" class="tags">
+            <div class="post-tags">
+                and tagged as {{ page | tags }}
+            </div>
+        </div>
+        {% endif %
+    </div>
+
+    {{ content }}
+</div>
