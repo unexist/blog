@@ -16,8 +16,8 @@ properly and to combine it to a single document.
 _There is surely a way to use something like git modules, but there are also not many faster ways
 to annoy me._
 
-Antora
-----
+## Antora
+
 So time to check out [Antora][3]:
 
 > The multi-repository documentation site generator for tech writers who <3 writing in AsciiDoc.
