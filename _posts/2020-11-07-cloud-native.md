@@ -231,4 +231,4 @@ To be continued.
 [4]: https://quarkus.io
 [5]: https://swagger.io/specification/
 [6]: https://kubernetes.io/docs/concepts/services-networking/ingress/
-[7]:https://k9scli.io/
+[7]: https://k9scli.io/
