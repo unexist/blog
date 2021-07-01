@@ -78,7 +78,7 @@ public class TodoTest {
 
 **<1>**: This is pretty much the same, besides it includes an `@IntRange` now. \
 **<2>**: Here we use `unixtime` as an input to create dates. \
-**<3>**:
+**<3>**: A small test of test combinators..
 
 ## Conclusions
 
