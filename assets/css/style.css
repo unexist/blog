@@ -3,7 +3,7 @@
     --font-color: #fff;
     --font-color2: #aaa;
     --link-color: #8cf;
-    --highlight-color: #d7ba7d;
+    --highlight-color: #ff8000;
     --border-color: #446979;
     --top-color: #313536;
     --bottom-color: #1D2021;
@@ -11,6 +11,7 @@
     --h2-color: #777;
     --h3-color: #666;
     --h4-color: #d7ba7d;
+    --code-color: #d7ba7d;
 
     /* Misc */
     --margin: 10px;
@@ -194,7 +195,7 @@ h4 {
 }
 
 .post-content p code.highlighter-rouge {
-    color: var(--highlight-color);
+    color: var(--code-color);
 }
 
 .post-content li {
