@@ -3,7 +3,7 @@ layout: post
 title: Skill matrix
 date: 2020-10-15 16:00:00 +0200
 author: Christoph Kappel
-tags: tools people soft-skills just-a-link management
+tags: tools people soft-skills management
 ---
 For a new gig, we started with a bunch of new people with various sets of knowledge and skills.
 Without any way to assess, where our strengths and weaknesses are, it is kind of difficult to say,
