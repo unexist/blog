@@ -7,11 +7,13 @@ layout: default
     <div class="post-content">
         {% for post in site.posts %}
         <p>
-            <div>
-                <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+            <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+            <div class="posts-meta">
+                Added by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_long_string }}</span>
+                {% if page.tags != nil %}
+                    and tagged as {{ page | tags }}
+                {% endif %
             </div>
-            Added by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_string }}</span>
-            <div class="post-meta tags">Tagged as {{ post | tags }}</div>
         </p>
         {% endfor %}
     </div>
