@@ -196,18 +196,21 @@ h4 {
 }
 
 .post-content blockquote {
-    white-space: pre-wrap;
-    text-align: left;
-    margin-top: var(--margin);
-    margin-bottom: var(--margin);
     padding: var(--padding);
-    border: var(--border);
-    background-color: #000
+}
+
+.post-content blockquote::before {
+    color: var(--highlight-color);
+    content: '"';
 }
 
 .post-content blockquote cite {
     display: block;
-    color:
+}
+
+.post-content blockquote cite::before {
+    color: var(--cite-color);
+    content: '--';
 }
 
 .post-content p code.highlighter-rouge {
