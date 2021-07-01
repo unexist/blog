@@ -41,10 +41,10 @@ focus on the fun stuff and expect everything is ready.
 
 ## Quarkus
 
-Scaffolding a Quarkus[4] project is fairly easy:
+Scaffolding a [Quarkus][4] project is fairly easy:
 
 #### **Shell:**
-```property
+```shell
 $ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 -DprojectGroupId=dev.unexist.example \
 -DprojectArtifactId=quarkus-hello-example \
@@ -55,7 +55,7 @@ $ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 
 After that, you end up with a hello project and some helpful extensions:
 
-- *health* provides the required health and readyness for the k8s pod
+- *health* provides the required health and `readyness` for the k8s pod
 - *openapi* generates the [OpenAPI3][5] and bundles the Swagger-Ui
 - *container-image-jib* actually builds the images without a requirement for actual Docker
 - *kubernetes* creates the helpful k8s manifests
@@ -66,8 +66,8 @@ Still, a bit config is required to create the ingress manifests, have a proper p
 include the swagger-ui in everything instead of dev builds only. So without further ado, can you
 please add the three lines to your *application.properties* file?
 
-#### **Shell:**
-```property
+#### **application.properties:**
+```ini
 quarkus.kubernetes.expose=true
 quarkus.servlet.context-path=/hello
 quarkus.swagger-ui.always-include=true
@@ -97,7 +97,7 @@ first time and init our cluster directly with the necessary stuff like [ingress]
 
 ### Create a cluster
 
-#### **random.yaml:**
+#### **manifest.yaml:**
 ```yaml
 cat <<EOF | kind create cluster --name example --config=-
 kind: Cluster
@@ -155,7 +155,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0
 Once the installation is done we need some accounts to access our new dashboard, the next two manifests
 create an admin for it:
 
-#### **random.yaml:**
+#### **manifest.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -168,7 +168,7 @@ EOF
 
 And..
 
-#### **random.yaml:**
+#### **manifest.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
@@ -200,7 +200,7 @@ $ kubectl proxy
 The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
 
 #### **Shell:**
-```console
+```shell
 $ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
 
