@@ -12,6 +12,7 @@
     --h3-color: #666;
     --h4-color: #d7ba7d;
     --code-color: #d7ba7d;
+    --cite-color: #777;
 
     /* Misc */
     --margin: 10px;
@@ -192,6 +193,21 @@ h4 {
 
 .post-content p {
     margin: 20px 0px;
+}
+
+.post-content p blockquote {
+    white-space: pre-wrap;
+    text-align: left;
+    margin-top: var(--margin);
+    margin-bottom: var(--margin);
+    padding: var(--padding);
+    border: var(--border);
+    background-color: #000
+}
+
+.post-content p blockquote cite {
+    display: block;
+    color:
 }
 
 .post-content p code.highlighter-rouge {

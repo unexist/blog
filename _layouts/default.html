@@ -24,14 +24,6 @@
             <div id="split">
                 <div id="content">
                     {{ content }}
-
-                    {% if page.tags != nil %}
-                        <div id="tag-cloud" class="tags">
-                            <div class="post-tags">
-                                Tagged as: {{ page | tags }}
-                            </div>
-                        </div>
-                    {% endif %}
                 </div>
                 <div id="sidebar">
                     <h2>Tags</h2>
