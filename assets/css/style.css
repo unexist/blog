@@ -3,7 +3,7 @@
     --font-color: #fff;
     --font-color2: #aaa;
     --link-color: #8cf;
-    --highlight-color: #ff8000;
+    --highlight-color: #d7d7d7;
     --border-color: #446979;
     --top-color: #313536;
     --bottom-color: #1D2021;
@@ -191,6 +191,10 @@ h4 {
 
 .post-content p {
     margin: 20px 0px;
+}
+
+.post-content p code.highlighter-rouge {
+    color: var(--highlight-color);
 }
 
 .post-content li {
