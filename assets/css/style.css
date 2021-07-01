@@ -195,7 +195,7 @@ h4 {
     margin: 20px 0px;
 }
 
-.post-content p blockquote {
+.post-content blockquote {
     white-space: pre-wrap;
     text-align: left;
     margin-top: var(--margin);
@@ -205,7 +205,7 @@ h4 {
     background-color: #000
 }
 
-.post-content p blockquote cite {
+.post-content blockquote cite {
     display: block;
     color:
 }
