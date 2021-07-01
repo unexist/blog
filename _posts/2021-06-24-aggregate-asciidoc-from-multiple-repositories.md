@@ -3,7 +3,7 @@ layout: post
 title: Aggregate asciidoc from multiple repositories
 date: 2021-06-24 15:24 +0200
 author: Christoph Kappel
-tags: tools asciidoc antora docs
+tags: tools asciidoc antora docs showcase
 ---
 [AsciiDoc][1] is my favorite text processing tool, I basically use it everywhere - well except in
 in this blog. It has lots of advantages over [Markdown][2], but don't let us delve into preferences
@@ -76,10 +76,14 @@ something like [this][7].
 - I read symlinks might be a possibility - no they are not; don't waste time here.
 - Themes act weird and it is probably better to just keep the default one.
 
-Conclusions
-----
+## Conclusions
+
 When you can really stick to the modules structure this is a really nice tool and probably easier
 to use than the java tooling for [AsciiDoc][1].
+
+My showcase can be found here:
+
+<https://github.com/unexist/showcase-antora>
 
 [1]: https://asciidoctor.org
 [2]: https://daringfireball.net/projects/markdown/

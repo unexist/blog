@@ -3,7 +3,7 @@ layout: post
 title: Architecture validation
 date: 2020-09-25 11:00:00 +0200
 author: Christoph Kappel
-tags: tools architecture validation ddd
+tags: tools architecture validation ddd showcase
 ---
 Over the last few days I played with tool-based architecture validation, to give colleagues a basic
 introduction to the whole topic.
@@ -110,6 +110,12 @@ return
 ```
 
 This asks the database for any type named *t*, that depends on another type named *t2*.
+
+## Conclusions
+
+My showcase can be found here:
+
+<https://github.com/unexist/showcase-architecture-testing-quarkus>
 
 [1]: https://www.archunit.org/
 [2]: https://jqassistant.org/

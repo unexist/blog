@@ -3,7 +3,7 @@ layout: post
 title: ADR and jqAssistant
 date: 2021-03-15 17:45 +0100
 author: Christoph Kappel
-tags: tools architecture validation adr
+tags: tools architecture validation adr showcase
 ---
 I've been in a meetup recently and it was about architecture validation with the help of
 our good friend [jqAssistant][1]. Although I didn't learn much new in the
@@ -150,6 +150,12 @@ The default group **<1>** is **required**, otherwise jqAssistant will not pick u
 and render nothing at all.
 
 The remaining points, namely **<2>** and **<3>**, include the ADR into our main document.
+
+## Conclusions
+
+My showcase can be found here:
+
+<https://github.com/unexist/showcase-architecture-testing-quarkus>
 
 [1]: https://jqassistant.org
 [2]: https://adr.github.io/
