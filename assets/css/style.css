@@ -202,6 +202,9 @@ h4 {
 .post-content blockquote::before {
     color: var(--highlight-color);
     content: '"';
+    float: left;
+    font-size: 500%;
+    margin-top: -10px;
 }
 
 .post-content blockquote cite {
