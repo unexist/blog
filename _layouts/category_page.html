@@ -2,16 +2,16 @@
 layout: default
 ---
 <div id="posts">
-    <h2>Posts tagged as #{{ page.tag }}</h2>
+    <h2>Posts categorized under #{{ page.categories }}</h2>
 
     <div class="post-content">
         {% for post in page.posts %}
         <p>
             <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
             <div class="post-meta">
-                Tagged by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_long_string }}</span>
+                Categorized by <a href="/about">{{ post.author }}</a> on <span>{{ post.date | date_to_long_string }}</span>
                 {% if post.tags != nil %}
-                    and also as {{ post | tags }}
+                    and tagged as {{ post | tags }}
                 {% endif %}
             </div>
         </p>
