@@ -125,12 +125,13 @@ footer a:hover {
 #headline h1 {
     display: inline-block;
     text-decoration: none;
+    border-bottom: none;
 }
 
 #headline h2 {
     display: inline-block;
     padding-left: var(--padding);
-    text-decoration: none;
+    border-bottom: none;
 }
 
 #tag-cloud {
