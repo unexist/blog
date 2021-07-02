@@ -1,0 +1,3 @@
+= Personal blog
+
+This project holds my personal blog.
