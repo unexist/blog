@@ -16,7 +16,7 @@ module Jekyll
         def generate(site)
             self.class.site = self.site = site
 
-            site.categories.keys.each do |category, posts|
+            site.categories.each do |category, posts|
                 new_category(category, posts)
             end
         end
