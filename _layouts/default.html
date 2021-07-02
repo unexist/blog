@@ -26,13 +26,17 @@
                     {{ content }}
                 </div>
                 <div id="sidebar">
-                    <h2>Categories</h2>
-                    {% for category in site.categories %}
-                        <a href="/category">{{ category[0] }} ({{ category[1].size }})</a>
-                    {% endfor %}
+                    <div id="categories">
+                        <h2>Categories</h2>
+                        {% for category in site.categories %}
+                            <a href="/category/{{ category[0] }}.html">{{ category[0] }} ({{ category[1].size }})</a>
+                        {% endfor %}
+                    </div>
 
-                    <h2>Tags</h2>
-                    {{ site | tag_cloud }}
+                    <div id="tags">
+                        <h2>Tags</h2>
+                        {{ site | tag_cloud }}
+                    </div>
                 </div>
             </div>
             <footer>

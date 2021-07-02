@@ -71,6 +71,10 @@ footer a:hover {
     border-right: var(--border);
 }
 
+#categories, #tags {
+    margin-bottom: 10px;
+}
+
 #content {
     display: table-cell;
     padding-right: var(--padding);
