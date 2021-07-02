@@ -201,14 +201,16 @@ h4 {
 
 .post-content blockquote::before {
     color: var(--highlight-color);
-    content: '"';
+    content: '“';
     float: left;
     font-size: 500%;
     margin-top: -10px;
+    margin-right: 5px;
 }
 
 .post-content blockquote cite {
     display: block;
+    margin-top: 5px;
 }
 
 .post-content blockquote cite::before {
