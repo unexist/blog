@@ -22,7 +22,7 @@ module Jekyll
         end
 
         def new_category(category, posts)
-            self.class.types.each { |type|
+            self.class.types.each do |type|
                 if layout = site.config["category_#{type}_layout"]
                     data = { 'layout' => layout, 'posts' => posts.sort.reverse!, 'category' => category }
                     data.merge!(site.config["category_#{type}_data"] || {})
@@ -32,7 +32,7 @@ module Jekyll
                     name = jekyll_category_slug(name)
 
                     category_dir = site.config["category_#{type}_dir"]
-                    category_dir = File.joincategory_dir, (pretty? ? name : ''))
+                    category_dir = File.join(category_dir, (pretty? ? name : ''))
 
                     page_name = "#{pretty? ? 'index' : name}#{site.layouts[data['layout']].ext}"
 
@@ -40,20 +40,20 @@ module Jekyll
                         site, site.source, category_dir, page_name, data
                     )
                 end
-            }
+            end
         end
-  end
-
-  class CategoryPage < Page
-    def initialize(site, base, dir, name, data = {})
-        self.content = data.delete('content') || ''
-        self.data    = data
-
-        super(site, base, dir[-1, 1] == '/' ? dir : '/' + dir, name)
     end
 
-    def read_yaml(*)
-      # Do nothing
+    class CategoryPage < Page
+        def initialize(site, base, dir, name, data = {})
+            self.content = data.delete('content') || ''
+            self.data    = data
+
+            super(site, base, dir[-1, 1] == '/' ? dir : '/' + dir, name)
+        end
+
+        def read_yaml(*)
+            # Do nothing
+        end
     end
-  end
 end
