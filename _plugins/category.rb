@@ -42,6 +42,10 @@ module Jekyll
                 end
             end
         end
+
+        def pretty?
+            @pretty ||= (site.permalink_style == :pretty || site.config['category_permalink_style'] == 'pretty')
+        end
     end
 
     class CategoryPage < Page
