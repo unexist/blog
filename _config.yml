@@ -32,6 +32,9 @@ highlighter: rouge
 plugins:
   - jekyll-feed
 
+category_page_layout: category_page
+category_page_dir: category
+
 tag_page_layout: tag_page
 tag_page_dir: tag
 
