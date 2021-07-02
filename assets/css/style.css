@@ -249,3 +249,24 @@ h4 {
 .rss-subscribe {
     display: none;
 }
+
+/* Tagcloud */
+#sidebar .set-1 {
+    font-size: 100%;
+}
+
+#sidebar .set-2 {
+    font-size: 110%;
+}
+
+#sidebar .set-3 {
+    font-size: 120%;
+}
+
+#sidebar .set-4 {
+    font-size: 130%;
+}
+
+#sidebar .set-5 {
+    font-size: 140%;
+}
