@@ -4,6 +4,7 @@ title: Value objects
 date: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
 tags: tools ddd frameworks
+categories: software-design
 ---
 Here, whenever we are talking about the general topic **value objects**, sooner or later we end up
 in a discussion about functionality.

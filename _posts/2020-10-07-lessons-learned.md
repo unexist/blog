@@ -4,6 +4,7 @@ title: Lessons learned
 date: 2020-10-07 12:00:00 +0200
 author: Christoph Kappel
 tags: tools testing ruby watir chromedriver headless
+categories: tech
 ---
 A friend of mine approached me with a request to - let us say automate - a web request to a
 not-to-be-named raffle. I looked into it and was instantly hooked. Both price and challenge are

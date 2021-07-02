@@ -4,6 +4,7 @@ title: Multiline commands in makefiles
 date: 2021-05-21 16:27 +0200
 author: Christoph Kappel
 tags: tools makefile
+categories: tech
 ---
 Using multiline commands in [make][1] is usually a pain, I've tried so many ways and still you
 either have to use arcane extensions or just use a separate file that can be called from the

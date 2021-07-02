@@ -3,7 +3,8 @@ layout: post
 title: First things first
 date: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
-tags: me
+tags: myself
+categories: myself
 ---
 So, well - let's try to become a blogger once again.
 

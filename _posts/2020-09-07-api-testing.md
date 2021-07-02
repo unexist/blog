@@ -4,6 +4,7 @@ title: API testing
 date: 2020-09-06 12:00:00 +0200
 author: Christoph Kappel
 tags: tools testing api
+categories: software-design
 ---
 Testing APIs is getting more and more complex and therefore there's lots of tooling out there to
 assist.

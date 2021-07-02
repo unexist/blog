@@ -4,6 +4,7 @@ title: Know your tools
 date: 2020-09-01 14:30:00 +0200
 author: Christoph Kappel
 tags: tools soft-skills citrix intellij
+categories: tech
 ---
 I've been using citrix and a windows VM for quite a while, almost two years and never got used to
 the changes of the shortcuts.

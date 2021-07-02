@@ -4,6 +4,7 @@ title: Cloud native
 date: 2020-11-07 17:44 +0100
 author: Christoph Kappel
 tags: tools quarkus cloud docker kind kubernetes to-be-continued
+categories: tech
 ---
 I was never a big fan of all these cloud stuff, especially not of the *cloud native* idea, but for
 my current project I have to get over and used to it.
