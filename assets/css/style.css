@@ -51,7 +51,7 @@ footer {
 }
 
 footer a:link, footer a:visited {
-    color: var(--text-color);
+    color: var(--font-color2);
     text-decoration: underline;
 }
 
