@@ -77,7 +77,7 @@ something like [this][7].
 - I read symlinks might be a possibility - no they are not; don't waste time here.
 - Themes act weird and it is probably better to just keep the default one.
 
-## Conclusions
+## Conclusion
 
 When you can really stick to the modules structure this is a really nice tool and probably easier
 to use than the java tooling for [AsciiDoc][1].
