@@ -11,7 +11,7 @@ they are more a technical solution, than a real requirement, it is time to to re
 current state of the support for [Quarkus][1].
 
 When you fire up Google and ask it for `workflow engine quarkus`, there is usually [Camunda][2] and
-[Kogito][3] in the top10 of the results, so let as test both of them.
+[Kogito][3] in the top10 of the results, so let us test both of them.
 
 ## Camunda
 
@@ -81,8 +81,8 @@ Looking at this quote, they apparently are *not* afraid of bold statements. Alth
 is in comparison to [Camunda][2] quite young (1.8.0, >2 years), it surely comes with a impressive
 feature set.
 
-[Kogito][3] provides an extension for [Quarkus][1], so the installation is pretty straight forward.
-and all it really takes is to add one dependency:
+[Kogito][3] provides an extension for [Quarkus][1], so the installation is pretty straight forward:
+All it really takes is to add one dependency:
 
 #### **pom.xml**:
 ```xml
@@ -94,7 +94,7 @@ and all it really takes is to add one dependency:
 
 With the help of their web-based and *colorful* [online modeler][9], it was quite easy to get an
 initial workflow. Apparently, playing with it is quite funny and even CDI works out-of-the-box, so
-after a while I ended with this:
+after a while I ended with up this:
 
 ![image](/assets/images/20210721-kogito_modeler.png)
 
@@ -121,7 +121,7 @@ Another really interesting feature is to directly interface with [Kafka][11] or 
 
 ## Benchmark
 
-I also did some benchmarking with [wrk][14], to get some numbers on it, which probably speak for
+I also did some benchmarks with [wrk][14], to get some numbers on it, which probably speak for
 themselves:
 
 #### **payload.lua**:
@@ -160,8 +160,8 @@ Transfer/sec:    217.81KB
 ## Conclusion
 
 I have to look into [Camunda][2] again, once the new version has been released. Currently I'd
-suggest to give [Kogito][3] a try. The impressive feature set, the ease of use and also the fact,
-that it already is a good cloud-native citizen is something to consider.
+suggest to pick [Kogito][3] and give it a try. The impressive feature set, the ease of use and also
+the fact, that it already is a good cloud-native citizen is something to consider.
 
 My showcase can be found here:
 
