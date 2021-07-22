@@ -152,7 +152,11 @@ and render nothing at all.
 
 The remaining points, namely **<2>** and **<3>**, include the ADR into our main document.
 
-## Conclusions
+## Conclusion
+
+Both tools can be used to write tests for architecture. The addition of a graph database in
+[jqAssistant][1] along with the query language [Cypher][4] and the different input plugins allow
+more flexibility, but also set a steep learning curve.
 
 My showcase can be found here:
 

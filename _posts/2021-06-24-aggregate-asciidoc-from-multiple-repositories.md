@@ -79,8 +79,8 @@ something like [this][7].
 
 ## Conclusion
 
-When you can really stick to the modules structure this is a really nice tool and probably easier
-to use than the java tooling for [AsciiDoc][1].
+When you can really stick to the modules structure, [Antora][3] is a really nice tool and probably
+easier to use than the Java tooling for [AsciiDoc][1].
 
 My showcase can be found here:
 

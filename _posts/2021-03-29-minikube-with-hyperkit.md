@@ -7,24 +7,26 @@ tags: tools minikube hyperkit virtualbox dns macos
 categories: tech
 ---
 I cannot really say what happened, but unfortunately during some of the latest updates
-DNS resolution inside of my hyperkit VM stopped working. I can manually set the DNS
-to something like *8.8.8.8*, but after a while it fails again.
+DNS resolution inside of my [Hyperkit][1] VM stopped working. I can manually set the DNS
+to something like `8.8.8.8`, but after a while it fails again.
 
 After some digging around I found this:
 
 <https://github.com/kubernetes/minikube/issues/3036>
 
 Looks like a local running DNS server for the Bonjour handler clashes with CoreDNS and
-results in a non-working DNS configuration inside of kubernetes. That leads to various issues,
+results in a non-working DNS configuration inside of [Kubernetes][2]. That leads to various issues,
 but formost problems to fetch any container from docker and the likes.
 
 Surely there are lots of arcane solutions, one of my favorite is to disable the
-[System Integrity Protection][1] and the Bonjour system. Since I don't want
+[System Integrity Protection][3] and the Bonjour system. Since I don't want
 to deal with all the consequences of it yet, there should be another way I can approach.
 
-## Solution
+## Conclusion
 
-Alas, the solution is pretty easy: Just don't use hyperkit and switch to virtualbox.
+Alas, the solution is pretty easy: Just don't use [HyperKit][1] and switch to [Virtualbox][4].
 
-[1]: https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection
-[2]: https://github.com/kubernetes/minikube/issues/3036
+[1]: https://github.com/moby/hyperkit
+[2]: https://kubernetes.io/
+[3]: https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection
+[4]: https://www.virtualbox.org/
