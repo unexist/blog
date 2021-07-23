@@ -51,7 +51,9 @@ specs:
 
 #### **Shell**:
 ```shell
+{% raw %}
 docker inspect --format='{{(index (index .NetworkSettings.Ports "9092/tcp") 0).HostPort}}' $(docker ps --format "{{.ID}}" --filter="ancestor=vectorized/redpanda:v21.5.5")
+{% endraw %}
 ```
 
 [1]: https://docker.com
