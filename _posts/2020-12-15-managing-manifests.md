@@ -6,22 +6,22 @@ author: Christoph Kappel
 tags: tools kubernetes ansible make helm helmfile to-be-continued
 categories: tech
 ---
-Starting with [kubernetes][1] can be funny, especially when you finally
+Starting with [Kubernetes][1] can be funny, especially when you finally
 understand a bit more about the internals and how to use all those manifests and objects.
 
-After my first few steps and mistakes, which basically lead to a complete re-setup of my [kind][2]
+After my first few steps and mistakes, which basically lead to a complete re-setup of my [Kind][2]
 cluster, I decided I want to find a proper way to manage the configs.
 
-I found support for [kubernetes][1] manifests in ansible, which a good friend of mine is fond of,
+I found support for [Kubernetes][1] manifests in ansible, which a good friend of mine is fond of,
 so I gave it a spin.
 
 ## Ansible
 
-The installation of [ansible][3] itself and the galaxy plugin is pretty
+The installation of [Ansible][3] itself and the galaxy plugin is pretty
 straight forward and better explained [here][4], than I ever could.
 
-That out of the way, let us see how it actually works. Written in [python][5],
-it uses  [jinja2][6] for templating, which looks awfully familiar (and yes, I copied the first
+That out of the way, let us see how it actually works. Written in [Python][5],
+it uses  [Jinja2][6] for templating, which looks awfully familiar (and yes, I copied the first
 example):
 
 #### **random.yaml:**
@@ -43,14 +43,14 @@ Using good ol' [make][6] should be sufficient here, right? We just apply a bunch
 can define dependencies to targets, this should make it pretty worthwhile.
 
 After some hours fighting multiline commands and a complete lack of any heredoc, I assembled some
-simple targets, which basically consisted of ```kubectl apply -f deployment/file.yaml``` or the
+simple targets, which basically consisted of `kubectl apply -f deployment/file.yaml` or the
 reversal of it with **delete**.
 
 During my time with make, I had a few learnings along the way:
 
-* Setting variables inside of targets is difficult and can only be done via: ```$(eval VAR := $(shell ls))```
-* Default targets can be set like this: ```.DEFAULT_GOAL := target```
-* Use **.PHONY**, when the name of the target is also a directory: ```.PHONY: docs```
+* Setting variables inside of targets is difficult and can only be done via: `$(eval VAR := $(shell ls))`
+* Default targets can be set like this: `.DEFAULT_GOAL := target`
+* Use **.PHONY**, when the name of the target is also a directory: `.PHONY: docs`
 
 I used this for a while, but.. NEXT!
 
@@ -58,7 +58,7 @@ I used this for a while, but.. NEXT!
 
 [Helm][8] is another way of managing your resources. Behind the nautical-themed name is a
 full-featured repository manager and a powerful templating engine, which I mentioned
-earlier looks pretty similar to [jinja2][9]
+earlier looks pretty similar to [Jinja2][9]
 
 So you can either use one of the many ready-to-use charts from a chart museum - that is the name
 of the repositories (still nautical - you see?) or roll your own. There is lots of ground to cover
@@ -107,7 +107,7 @@ And the content of files can be like this:
 
 #### **base-chart/templates/_service.tpl:**
 ```yaml
-{{- define "base-chart.service" -}}
+{% raw %}{{- define "base-chart.service" -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -123,12 +123,12 @@ spec:
       name: http
   selector:
     {{- include "base-chart.selectorLabels" . | nindent 4 }}
-{{- end -}}
+{{- end -}}{% endraw %}
 ```
 
 #### **`inherited-chart/templates/service.yaml`:**
 ```yaml
-{{ include "base-chart.service" . }}
+{% raw %}{{ include "base-chart.service" . }}{% endraw %}
 ```
 
 ## Managing kubernetes
@@ -213,13 +213,13 @@ In order to use this config, we have to rename **inherited.yaml** to **inherited
 
 #### **values/inherited.tpl:**
 ```yaml
-# snip
+{% raw %}# snip
   config:
     - key: POSTGRES_USER
       value: {{ .Environment.Values.postgres.username }}
     - key: POSTGRES_PASSWORD
       value: {{ .Environment.Values.postgres.password }}
-# snip
+# snip{% endraw %}
 ```
 [1]: https://kubernetes.io/
 [2]: https://kind.sigs.k8s.io/docs/user/quick-start/
