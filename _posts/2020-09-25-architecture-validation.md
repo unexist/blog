@@ -112,7 +112,7 @@ return
 
 This asks the database for any type named *t*, that depends on another type named *t2*.
 
-## Conclusions
+## Conclusion
 
 My showcase can be found here:
 

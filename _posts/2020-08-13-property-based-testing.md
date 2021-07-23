@@ -81,7 +81,7 @@ public class TodoTest {
 **<2>**: Here we use `unixtime` as an input to create dates. \
 **<3>**: A small test of test combinators..
 
-## Conclusions
+## Conclusion
 
 During my tests I've found some interesting bug, mostly related to empty string and some weird
 combination of unicode characters. I think the handling is pretty easy and generators can be a huge

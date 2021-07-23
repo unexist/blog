@@ -106,8 +106,8 @@ So this is basically the complete ADR and I assume most of the things beside the
 is pretty self explanatory.
 The code block - glad you've asked - is cypher.
 
-It creates a simple query **<1>** for all methods, that have **assertThat** in its method signature
-and then checks, if the full-qualified name of the package is NOT **org.assertj.core.api**. **<2>**
+It creates a simple query **<1>** for all methods, that have `assertThat` in its method signature
+and then checks, if the full-qualified name of the package is NOT `org.assertj.core.api`. **<2>**
 For every match **<3>**, it returns the name of the method, along with its line number.
 
 When this list is empty the test passes, if not you'll get a neat nice table below the definition
@@ -120,7 +120,7 @@ NOTE: The part around **<4>** is required to see the actual results in the rende
 
 So we have to jump right back to [jqAssistant][1], since we are done with the ADR.
 
-Next best thing to do is to create an **index.adoc** document for jqAssistant to render:
+Next best thing to do is to create an `index.adoc` document for jqAssistant to render:
 
 #### **index.adoc:**
 ```asciidoc
