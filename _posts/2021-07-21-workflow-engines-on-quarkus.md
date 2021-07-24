@@ -78,8 +78,9 @@ default datasource:
 @Inject
 AgroalDataSource defaultDataSource;
 ```
+
 > *_NOTE_*: Setting the JDBC URL always prevented H2 from starting for me, so you also might want
-to check or rather avoid that.
+> to check or rather avoid that.
 
 #### How to use CDI?
 
