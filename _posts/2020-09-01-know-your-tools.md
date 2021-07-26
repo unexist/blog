@@ -6,8 +6,8 @@ author: Christoph Kappel
 tags: tools soft-skills citrix intellij
 categories: tech
 ---
-I've been using citrix and a windows VM for quite a while, almost two years and never got used to
-the changes of the shortcuts.
+I've been using [Citrix][1] and a Windows VM for quite a while, almost two years and never got used
+to the changes of the shortcuts.
 
 And with macOS as host and windows in a VM it becomes quite nasty.
 
@@ -18,3 +18,5 @@ I normally just learn new commands and shortcuts, whenever I do pair/mob, but wh
 the possible commands I found some helpful things.
 
 Like popup menus for run configs and open file buffers..
+
+[1]: https://www.citrix.com/
