@@ -154,7 +154,7 @@ all about. Citation time:
 > Realize ultra-fast in-memory data processing with pure Java. Microsecond query time. Low-latency
 data access. Gigantic data throughput and workloads. Save lots of CPU power, CO2 emission, and
 costs in the data center.
-<cite>https://microstream.one/platforms/microstream-for-java/</cite>
+<cite><https://microstream.one/platforms/microstream-for-java/></cite>
 
 Between all of this marketing blabla, there are still some interesting properties. Let me try to
 explain it in my own words:
