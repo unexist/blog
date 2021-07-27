@@ -201,10 +201,21 @@ $ rpk topic --brokers localhost:55019 create topic_in --replicas 1
 
 After a bit of testing, I must admit [Redpanda][19] is blazingly fast, I am really impressed.
 
+Another thing that has to be included manually is the addon for [CloudEvents][20], somehow it is
+not pulled automatically:
+
+#### **pom.xml**:
+```xml
+<dependency>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-addons-quarkus-cloudevents</artifactId>
+</dependency>
+```
+
 #### More modelling
 
-The docs say we can create consumer and producer directly inside of our workflow, so let us do
-that:
+That out of the way, we can finally start modelling a new workflow with a message consumer and
+producer:
 
 ![image](/assets/images/20210721-kogito_modeler_messaging.png)
 
@@ -251,7 +262,7 @@ respectively send to:
 
 ## Benchmark
 
-I also did some benchmarks with [wrk][20], to get some numbers on it, which probably speak for
+I also did some benchmarks with [wrk][21], to get some numbers on it, which probably speak for
 themselves:
 
 #### **payload.lua**:
@@ -316,4 +327,5 @@ My showcase can be found here:
 [17]: https://kubernetes.io/
 [18]: https://quarkus.io/blog/quarkus-1-13-0-final-released/
 [19]: https://github.com/vectorizedio/redpanda
-[20]: https://github.com/wg/wrk
+[20]: https://cloudevents.io
+[21]: https://github.com/wg/wrk
