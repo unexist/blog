@@ -5,6 +5,7 @@ date: 2021-07-24 17:01 +0200
 author: Christoph Kappel
 tags: tools microstream helidon showcase
 categories: tech showcase frameworks
+toc: true
 ---
 Someone at work recently asked the crowd, if there are any experience at all with [MicroStream][1]
 without success. And I also must admit at this point I've never even heard about it.
@@ -107,10 +108,15 @@ properly:
 </plugin>
 ```
 
+### Config is ignored?
+
+Apparently, [Helidon][2] ignores my `microprofile-config.properties` and its content and to make
+things worse not in a consistent way. Sometimes it works and sometimes it does not.
+
 ### No handler found for path?
 
-Almost there - just another tiny problem: [Helidon][2] seems to ignore all resources and also my
-`microprofile-config.properties` file completely. This results into:
+Almost there - just another tiny problem: [Helidon][2] seems to ignore all resources and dutifully
+reports this when I try to send something to my expected resource:
 
 #### **Log**:
 ```log
