@@ -135,6 +135,10 @@ footer a:hover {
 }
 
 /* TOC */
+#table-of-contents:first-child {
+    margin: 10px 0px 10px 0px;
+}
+
 #table-of-contents li {
     padding: 0px;
 }
@@ -202,6 +206,13 @@ h4 {
 h6 {
     color: var(--h4-color);
     text-decoration: underline;
+    background-color: black;
+    display: inline;
+    padding: var(--padding);
+    border: var(--border);
+    border-bottom: 1px solid #000;
+    padding-bottom: 12px;
+    border-radius: var(--radius) var(--radius) 0px 0px;
 }
 
 /* Jekyll */
