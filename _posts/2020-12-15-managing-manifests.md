@@ -25,7 +25,7 @@ That out of the way, let us see how it actually works. Written in [Python][5],
 it uses  [Jinja2][6] for templating, which looks awfully familiar (and yes, I copied the first
 example):
 
-#### **random.yaml:**
+###### **random.yaml:**
 ```yaml
 - name: Create a k8s namespace
   community.kubernetes.k8s:
@@ -78,7 +78,7 @@ This is pretty straight forward, here is a small example:
 
 The layout can be like this:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ ls -R1 base-chart
  Chart.yaml
@@ -106,7 +106,7 @@ inherited-chart/templates:
 
 And the content of files can be like this:
 
-#### **base-chart/templates/_service.tpl:**
+###### **base-chart/templates/_service.tpl:**
 ```yaml
 {% raw %}{{- define "base-chart.service" -}}
 apiVersion: v1
@@ -127,7 +127,7 @@ spec:
 {{- end -}}{% endraw %}
 ```
 
-#### **`inherited-chart/templates/service.yaml`:**
+###### **`inherited-chart/templates/service.yaml`:**
 ```yaml
 {% raw %}{{ include "base-chart.service" . }}{% endraw %}
 ```
@@ -154,7 +154,7 @@ For new deployments, you just create a new *values file* and let [Helmfile][10] 
 
 A simple layout can be like this:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ ls -R1 helmfile
  helmfile.yaml
@@ -175,7 +175,7 @@ inherited.yaml
 The usage of environments is a bit tricky, but I will explain it down the road. So let us focus on
 the *helmfile*, which contains all the fun:
 
-#### **helmfile.yaml:**
+###### **helmfile.yaml:**
 ```yaml
 repositories:
   - name: stable
@@ -203,7 +203,7 @@ env - so you don't have to use different versions here.
 
 Here we define the username and password for a postgress database_
 
-#### **random.yaml:**
+###### **random.yaml:**
 ```yaml
 postgres:
   username: test
@@ -212,7 +212,7 @@ postgres:
 
 In order to use this config, we have to rename **inherited.yaml** to **inherited.tpl**:
 
-#### **values/inherited.tpl:**
+###### **values/inherited.tpl:**
 ```yaml
 {% raw %}# snip
   config:

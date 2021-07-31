@@ -23,7 +23,7 @@ is set automatically.
 To configure [Redpanda][3], I need to know the exposed port to connect to and the
 [Testcontainers][7] integration prints it dutifully to the log though:
 
-#### **Log**:
+###### **Log**:
 ```log
 2021-07-23 07:48:44,130 INFO  [io.qua.kaf.cli.dep.DevServicesKafkaProcessor] (build-38) Dev Services for Kafka started. Start applications that need to use the same Kafka broker using -Dkafka.bootstrap.servers=PLAINTEXT://localhost:55002
 ```
@@ -37,7 +37,7 @@ mapping of image name to the actual container is quite complicated. For my taste
 many calls to different shell tools, which probably is not portable, but it can be done with
 [port][8] and [inspect][9]:
  
-#### **Shell**:
+###### **Shell**:
 ```shell
 $ docker port $(docker ps | grep redpanda | awk '{print $1}') | grep -m 1 9092 | cut -d ':' -f 2
 ```
@@ -50,7 +50,7 @@ starting with supporting tools like [Helm][11] or the foundation of the cloud it
 So if the next example is pretty straight forward to you have fun with it, I am in a corner reading
 specs:
 
-#### **Shell**:
+###### **Shell**:
 ```shell
 {% raw %}docker inspect --format='{{(index (index .NetworkSettings.Ports "9092/tcp") 0).HostPort}}' $(docker ps --format "{{.ID}}" --filter="ancestor=vectorized/redpanda:v21.5.5"){% endraw %}
 ```

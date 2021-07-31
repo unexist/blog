@@ -12,7 +12,7 @@ makefile.
 
 A pretty easy way to still achieve what you probably want to do is to use [define][2]:
 
-#### **Makefile**:
+###### **Makefile**:
 ```makefile
 define JSON_TODO # <1>
 curl -X 'POST' \

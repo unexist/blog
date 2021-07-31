@@ -28,7 +28,7 @@ Or if you need a complete set along with other nifty things like indexing a data
 
 Once we've picked our version, we need to set this up accordingly:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ adr-tools/adr init -t adoc jqassistant/decisions
 
@@ -50,7 +50,7 @@ Back to our new ADR, let us just fill in a bit of magic:
 
 ## ADR 2
 
-#### **001-assertion-library.adoc:**
+###### **001-assertion-library.adoc:**
 ```asciidoc
 = 1. Assertion library
 
@@ -123,7 +123,7 @@ So we have to jump right back to [jqAssistant][1], since we are done with the AD
 
 Next best thing to do is to create an `index.adoc` document for jqAssistant to render:
 
-#### **index.adoc:**
+###### **index.adoc:**
 ```asciidoc
 :description: This is a demo project for the combination of ADR and jqAssistant.
 :doctype: book

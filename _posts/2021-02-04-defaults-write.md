@@ -24,7 +24,7 @@ regardless what its user might want.
 
 This is supposed to be to turn this off:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ defaults write com.apple.dock workspaces-auto-swoosh -bool NO
 ```
@@ -35,7 +35,7 @@ NOTE: Keep in mind to restart the Dock afterwards.
 
 MacOS comes packed with lots of annoying animations, here is a list of defaults to get rid of them:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 $ defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
@@ -53,7 +53,7 @@ hiding is pretty long.
 
 Here is how to speed that up:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ defaults write com.apple.Dock autohide-delay -float 0
 ```
@@ -70,7 +70,7 @@ Apparently, the process just gets low CPU priority and fails to get any speed on
 
 This is also supposed to make it a bit faster:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ sudo sysctl debug.lowpri_throttle_enabled=0
 ```

@@ -32,7 +32,7 @@ That said, I had a few glances at this stack again. And after some more reading,
 
 The API of [watir][2] is really amazing and easy to use:
 
-#### **watir.rb:**
+###### **watir.rb:**
 ```ruby
 require "watir"
 
@@ -46,7 +46,7 @@ browser.close
 I think the example is pretty self-explanatory, it opens up a remote session and points the browser
 to the given url. When you start that in e.g. irb, you can REPL your way to the desired outcome.
 
-#### **watir.rb:**
+###### **watir.rb:**
 ```ruby
 browser.link(visible_text: /GitHub/).when_present.click
 ```
@@ -64,7 +64,7 @@ found [headless][4].
 This *gem* wraps the handling of a virtual framebuffer for you and, as it turns out, works pretty
 well with my stack:
 
-#### **watir.rb:**
+###### **watir.rb:**
 ```ruby
 require "watir"
 require "headless"

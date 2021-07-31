@@ -23,7 +23,7 @@ testcases and after a bit of initial try/error, it is pretty clear how to roll.
 
 For example, this rule checks, if methods in the package named *test* are public:
 
-#### **test.java:**
+###### **test.java:**
 ```java
 @ArchTest
 static final ArchRule checkPlacement =
@@ -42,7 +42,7 @@ enforce a given layout or rather architecture.
 
 One of the better known architecture - the layered architecture - can be checked nicely:
 
-#### **test.java:**
+###### **test.java:**
 ```java
 private final JavaClasses classes = new ClassFileImporter().importPackages("dev.unexist");
 
@@ -103,7 +103,7 @@ in other concepts or constraints, which always have a severity.
 I don't want to dive deeper into the syntax of [Cypher][7], but a base examples looks
 like this:
 
-#### **test.cypher:**
+###### **test.cypher:**
 ```cypher
 match
     (t:Type)-[:DEPENDS_ON]->(t2:Type)

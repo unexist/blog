@@ -26,7 +26,7 @@ Images
 One of the few things that you commonly see is basically to prefix every image include with the
 **:imagedir:** attribute:
 
-#### **random.adoc**
+###### **random.adoc**
 ```adoc
 :imagedir: ./images
 image::foobar.png[caption=Test]
@@ -40,7 +40,7 @@ Maven
 When you are using [maven][6], there is another way just to set the
 **imagedir** attribute inside of your [pom][7]:
 
-#### **pom.xml:**
+###### **pom.xml:**
 ```xml
 <plugin>
     <groupId>org.asciidoctor</groupId>
@@ -67,7 +67,7 @@ The plugin supports the usage of a config file, that can be placed in the root l
 document and gets prefixed automatically to every [AsciiDoc][1] file that
 is below this paths:
 
-#### **.asciidoctorconfig:**
+###### **.asciidoctorconfig:**
 ```adoc
 :icons: font
 :imagesdir: {asciidoctorconfigdir}/images

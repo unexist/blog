@@ -32,7 +32,7 @@ So here is the general idea about [Antora][3]: On the sourcing side, you just
 have a plain yaml file - the [playbook][4] - which contains every source you want to aggregate.
 Each of the sources **must be** a working git repository with **at least one** actual commit.
 
-#### **antora-playbook.yml**:
+###### **antora-playbook.yml**:
 ```yaml
 site:
   title: Showcase for antora
@@ -55,7 +55,7 @@ Inside of each repository there has to be another config file - the
 [component descriptor][5] - which is read after a checkout of the repository and basically provides
 [Antora][3] with a bit of meta informationen
 
-#### **antora.yml**:
+###### **antora.yml**:
 ```yaml
 name: showcase-architecture-documentation
 title: Showcase for architecture documentation

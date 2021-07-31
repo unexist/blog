@@ -19,7 +19,7 @@ that can be used.
 
 In general, the whole handling of pretty straight forward.
 
-#### **TodoTest.java**:
+###### **TodoTest.java**:
 ```java
 @PropertyDefaults(tries = 10) // <1>
 public class TodoTest {
@@ -43,7 +43,7 @@ public class TodoTest {
 
 ## Adding a bit of complexity
 
-#### **TodoTest.java**:
+###### **TodoTest.java**:
 ```java
 @PropertyDefaults(tries = 10)
 public class TodoTest {

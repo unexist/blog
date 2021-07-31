@@ -32,7 +32,7 @@ added [Helidon][2] to it.
 
 Let us start with the easy problems: The [Helidon CLI][7] cannot find the main class:
 
-#### **Log**:
+###### **Log**:
 ```log
 Helidon project is not supported: The required 'mainClass' property is missing.
 ```
@@ -40,7 +40,7 @@ Helidon project is not supported: The required 'mainClass' property is missing.
 During my research I've found many projects that defined their own, but apparently all it takes is
 this:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <properties>
     <mainClass>io.helidon.microprofile.cdi.Main</mainClass>
@@ -54,7 +54,7 @@ watches files for changes and restarts when necessary - the so called `devloop`.
 
 On my first try I was greeted with a really cryptic error message:
 
-#### **Log**:
+###### **Log**:
 ```log
 loop failed helidon-cli-maven-plugin must be configured as an extension
 ```
@@ -63,7 +63,7 @@ After a bit of a try out and some more googling I finally narrowed it down and i
 configuration problem coupled with my lack of knowledge how [Maven][7] extensions are supposed to
 work:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <plugin>
     <groupId>io.helidon.build-tools</groupId>
@@ -83,7 +83,7 @@ most of the time.
 Unfortunately, [Helidon][2] refused to pick any [JAX-RS][9] applications and I found this goodie here
 in my application log:
 
-#### **Log**:
+###### **Log**:
 ```log
 There are no JAX-RS applications or resources. Maybe you forgot META-INF/beans.xml file?"
 ```
@@ -92,7 +92,7 @@ Looks like I am kind of spoiled by [Quarkus][10], because it really took me a wh
 what is going on here. Alas, the solution is quite easy - I just had to configure [Jandex][11]
 properly:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <plugin>
     <groupId>org.jboss.jandex</groupId>
@@ -118,7 +118,7 @@ things worse not in a consistent way. Sometimes it works and sometimes it does n
 Almost there - just another tiny problem: [Helidon][2] seems to ignore all resources and dutifully
 reports this when I try to send something to my expected resource:
 
-#### **Log**:
+###### **Log**:
 ```log
 No handler found for path: /todo
 ```
@@ -129,7 +129,7 @@ that I could generate with the [archetypes][12].
 Although the examples just included `helidon-dependencies`, I also had to include `helidon-bom` to
 get this working:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependencyManagement>
     <dependencies>

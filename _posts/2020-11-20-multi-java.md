@@ -18,7 +18,7 @@ between each of them pretty nicely, once you've set it up correctly.
 
 Installation is as easy as open a cold one:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ brew install jenv
 ```
@@ -28,7 +28,7 @@ $ brew install jenv
 Quick side note: Make sure to create the proper directories too, otherwise the commands fail
 in a weird way:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ mkdir -p ~/.jenv/version
 ```
@@ -37,7 +37,7 @@ $ mkdir -p ~/.jenv/version
 
 The easiest way to see your installed Java version sis via the **java_home** command:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ /usr/libexec/java_home -V
 Matching Java Virtual Machines (1):
@@ -46,7 +46,7 @@ Matching Java Virtual Machines (1):
 
 So far, nothing much to switch, but we still want to add it to [Jenv][1]:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ jenv add /Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home
 
@@ -63,7 +63,7 @@ installation.
 There is still not much to do, for a Java version manager, when there is only one version. Time
 to install another one, this time [AdoptOpenJdk][2]:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ brew cask install adoptopenjdk
 $ brew cask install adoptopenjdk11
@@ -71,7 +71,7 @@ $ brew cask install adoptopenjdk11
 
 And another command to add it to [Jenv][1]:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ jenv add /Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home
 
@@ -85,7 +85,7 @@ openjdk64-11.0.9.1 added
 
 Now we have to versions installed, let's check it:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ jenv versions
 * system (set by /Users/unexist/.jenv/version)
@@ -95,7 +95,7 @@ $ jenv versions
 
 And what about **java_home**:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ /usr/libexec/java_home -V
 Matching Java Virtual Machines (2):
@@ -111,14 +111,14 @@ All set up done, we can now do the following:
 
 This can be done like this:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ jenv global openjdk64-11.0.9.1
 ```
 
 And verified like:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ jenv versions
   system

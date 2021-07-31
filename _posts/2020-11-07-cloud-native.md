@@ -45,7 +45,7 @@ focus on the fun stuff and expect everything is ready.
 
 Scaffolding a [Quarkus][4] project is fairly easy:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 -DprojectGroupId=dev.unexist.example \
@@ -68,7 +68,7 @@ Still, a bit config is required to create the ingress manifests, have a proper p
 include the swagger-ui in everything instead of dev builds only. So without further ado, can you
 please add the three lines to your *application.properties* file?
 
-#### **application.properties:**
+###### **application.properties:**
 ```ini
 quarkus.kubernetes.expose=true
 quarkus.servlet.context-path=/hello
@@ -80,7 +80,7 @@ quarkus.swagger-ui.always-include=true
 And following builds the container, pushes it to the local docker and generates the some helpful
 k8s manifests in one command:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ mvn clean package -Dquarkus.container-image.build=true
 ```
@@ -99,7 +99,7 @@ first time and init our cluster directly with the necessary stuff like [ingress]
 
 ### Create a cluster
 
-#### **manifest.yaml:**
+###### **manifest.yaml:**
 ```yaml
 cat <<EOF | kind create cluster --name example --config=-
 kind: Cluster
@@ -129,7 +129,7 @@ ingress.
 
 In order for [k8s][1] to find our image, we have to load it first. That can be done like this:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ kind load docker-image docker.io/unexist/quarkus-hello-example:0.1 --name example
 ```
@@ -143,21 +143,21 @@ Docker and kind have done their best to make it really easy for us. So let's go 
 I have no problems with the CLI of k8s or tools like [k9s][6], but a nice dashboard with some fancy
 graphs and a way to see all at once is a quite nice.
 
-#### Installation
+###### Installation
 
 The current version at writing this is 2.0 and can be installed with the next line:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
 ```
 
-#### User account
+###### User account
 
 Once the installation is done we need some accounts to access our new dashboard, the next two manifests
 create an admin for it:
 
-#### **manifest.yaml:**
+###### **manifest.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -170,7 +170,7 @@ EOF
 
 And..
 
-#### **manifest.yaml:**
+###### **manifest.yaml:**
 ```yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: rbac.authorization.k8s.io/v1
@@ -188,20 +188,20 @@ subjects:
 EOF
 ```
 
-#### Run it
+###### Run it
 
 In order to access the dashboard, a running proxy is required:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ kubectl proxy
 ```
 
-#### Log in - finally!
+###### Log in - finally!
 
 The easiest way to log into this dashboard is via a token, this can be fetched via CLI like this:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
@@ -213,11 +213,11 @@ Copy this token and use it [here](http://localhost:8001/api/v1/namespaces/kubern
 We created the cluster with support for ingress, but so complete the installation another quick step
 is required.
 
-#### Finishing up
+###### Finishing up
 
 Last step: Init our ingress controller:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \

@@ -27,7 +27,7 @@ there is an [embeddable engine][5], which can be used inside of JAX-RS implement
 
 The essential dependencies are following with versions from the current BOM of [Camunda][2]:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>org.camunda.bpm</groupId>
@@ -56,13 +56,13 @@ the problems with it, back then._
 
 There are a few noteworthy gotchas here:
 
-#### How to use a datasource?
+###### How to use a datasource?
 
 [Quarkus][1] does not support JNDI, so the datasource *must* be passed to engine manually and the
 engine only way to access it is via CDI. An easy way here just to include [agroal][7] and inject the
 default datasource:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>io.quarkus</groupId>
@@ -74,7 +74,7 @@ default datasource:
 </dependency>
 ```
 
-#### **CamundaEngine.java**:
+###### **CamundaEngine.java**:
 ```java
 @Inject
 AgroalDataSource defaultDataSource;
@@ -83,7 +83,7 @@ AgroalDataSource defaultDataSource;
 *NOTE: Setting the JDBC URL always prevented H2 from starting for me, so you also might want*
 to check or rather avoid that.
 
-#### How to use CDI?
+###### How to use CDI?
 
 [Camunda][2] also supports model integration for CDI, so the only thing that has to be done is
 adding  [engine-cdi][8] as a dependency. Unfortunately, it relies on CDI features which are not
@@ -98,18 +98,18 @@ extension for [Quarkus][1] to fix this problem within their next release in Octo
 
 <https://jira.camunda.com/browse/CAM-13628>
 
-#### JSON handling is quite troublesome.. Why?
+###### JSON handling is quite troublesome.. Why?
 
 According to all the stuff I've read about, you just want to use the [spin extension][10] wherever
 possible. This doesn't solve all problems, especially if you want to handle time and date, but
 every Java developer should be well aware of it.
 
-#### What is the REST path to the engine?
+###### What is the REST path to the engine?
 
 And just a minor issue, which actually took me quite a whole to understand: The path to the engine
 has been changed recently in [Camunda][2]:
 
-#### **Shell**:
+###### **Shell**:
 ```log
 Old: http://localhost:8080/rest/engine/default/process-definition/key/todo/start
 New: http://localhost:8080/engine-rest/engine/default/process-definition/key/todo/start
@@ -132,7 +132,7 @@ feature set.
 [Kogito][3] provides an extension for [Quarkus][1], so the installation is pretty straight forward:
 All it really takes is to add one dependency:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>org.kie.kogito</groupId>
@@ -144,7 +144,7 @@ Starting with [Quarkus][1] `2.1.0.CR1` it looks like the extension is part of th
 and according to [this example][12] this should work, if you use a current snapshot. It never did for
 me, but I will still mention it here for completeness:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>io.quarkus</groupId>
@@ -165,7 +165,7 @@ after a while I ended with up this:
 One of the things I really liked is the easy integration of the rules engine [Drools][14], which
 allows to write business rules in a DSL-like language:
 
-#### **todo.drl**:
+###### **todo.drl**:
 ```drl
 package dev.unexist.showcase.todo.adapter;
 dialect  "mvel"
@@ -193,7 +193,7 @@ compatible project with the lovely name [Redpanda][19].
 
 It comes with its own complete set of tools, which can be used to e.g. access topics:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```shell
 $ brew install vectorizedio/tap/redpanda
 $ rpk topic --brokers localhost:55019 list
@@ -205,7 +205,7 @@ After a bit of testing, I must admit [Redpanda][19] is blazingly fast, I am real
 Another thing that has to be included manually is the addon for [CloudEvents][20], somehow it is
 not pulled automatically:
 
-#### **pom.xml**:
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>org.kie.kogito</groupId>
@@ -213,7 +213,7 @@ not pulled automatically:
 </dependency>
 ```
 
-#### More modelling
+###### More modelling
 
 That out of the way, we can finally start modelling a new workflow with a message consumer and
 producer:
@@ -222,24 +222,24 @@ producer:
 
 ### Problems
 
-#### Fire rule limit - what?
+###### Fire rule limit - what?
 
 If you ever see this inside of your log, it just means there is a rule that is called repetitively
 until a stack limit is reached. In my case it was just a test rule with a condition which could
 never be fulfilled.
 
-#### **Log**:
+###### **Log**:
 ```log
 Fire rule limit reached 10000, limit can be set via system property org.jbpm.rule.task.firelimit or
 via data input of business task named FireRuleLimit
 ```
 
-#### How to configure the topics?
+###### How to configure the topics?
 
 Since we are using a [devservice][18] the configuration part like the broker URL is done for us
 automatically. Still, I kind of missed a really essential part of the documentation:
 
-#### **application.properties**:
+###### **application.properties**:
 ```properties
 # Messaging
 mp.messaging.incoming.kogito_incoming_stream.connector=smallrye-kafka
@@ -266,14 +266,14 @@ respectively send to:
 I also did some benchmarks with [wrk][21], to get some numbers on it, which probably speak for
 themselves:
 
-#### **payload.lua**:
+###### **payload.lua**:
 ```lua
 wrk.method = "POST"
 wrk.body   = '{ "todo": { "description": "string", "done": false, "dueDate": { "due": "2022-05-08", "start": "2022-05-07" }, "title": "string" }}'
 wrk.headers["Content-Type"] = "application/json"
 ```
 
-#### **Camunda**:
+###### **Camunda**:
 ```shell
 $ wrk -t1 -c1 -d30s -s payload.lua http://127.0.0.1:8080/camunda​
 Running 30s test @ http://127.0.0.1:8080/camunda​
@@ -286,7 +286,7 @@ Requests/sec:    568.17​
 Transfer/sec:     50.15KB
 ```
 
-#### **Kogito**:
+###### **Kogito**:
 ```shell
 $ wrk -t1 -c1 -d30s -s payload.lua http://127.0.0.1:8080/kogito
 Running 30s test @ http://127.0.0.1:8080/kogito

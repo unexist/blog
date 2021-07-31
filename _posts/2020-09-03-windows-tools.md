@@ -17,7 +17,7 @@ Sometimes I didn't kill all properly and the port was blocked etc, you probably 
 _wmic_ to the rescue! With it, you can basically use SQL-ish syntax to do funny things like killing
  processes:
 
-#### **Shell:**
+###### **Shell:**
 ```shell
 $ wmic process where "commandline like '%%projectname%%jar%%'" delete
 ```
