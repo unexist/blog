@@ -136,7 +136,10 @@ footer a:hover {
 
 /* TOC */
 #table-of-contents #toc-header {
-    margin: 10px 0px 10px 0px;
+    margin-top: var(--margin);
+}
+
+#table-of-contents #toc-header {
     color: var(--h4-color);
     text-decoration: underline;
 }
