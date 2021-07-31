@@ -135,8 +135,10 @@ footer a:hover {
 }
 
 /* TOC */
-#table-of-contents:first-child {
+#table-of-contents #toc-header {
     margin: 10px 0px 10px 0px;
+    color: var(--h4-color);
+    text-decoration: underline;
 }
 
 #table-of-contents li {
