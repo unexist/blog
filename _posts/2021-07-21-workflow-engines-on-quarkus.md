@@ -5,6 +5,7 @@ date: 2021-07-21 17:15 +0200
 author: Christoph Kappel
 tags: tools workflow-engine rules-engine camunda kogito quarkus kafka redpanda messaging showcase
 categories: tech showcase
+toc: true
 ---
 Discussions about flexibility as a requirement, usually lead to workflow engines and although
 they are more a technical solution, than a real requirement, it is time to to re-evaluate the

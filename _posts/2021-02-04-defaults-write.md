@@ -5,6 +5,7 @@ date: 2021-02-04 17:09 +0100
 author: Christoph Kappel
 tags: macos hate cynical to-be-continued
 categories: tech
+toc: true
 ---
 I've been using macOs for over two years now and my overall experience is: I hate it more and more
 with each successive day.

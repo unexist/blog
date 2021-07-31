@@ -5,6 +5,7 @@ date: 2021-03-29 07:29 +0200
 author: Christoph Kappel
 tags: tools minikube hyperkit virtualbox dns macos
 categories: tech
+toc: true
 ---
 I cannot really say what happened, but unfortunately during some of the latest updates
 DNS resolution inside of my [Hyperkit][1] VM stopped working. I can manually set the DNS

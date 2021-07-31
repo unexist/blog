@@ -5,6 +5,7 @@ date: 2020-11-20 17:01 +0100
 author: Christoph Kappel
 tags: tools java jenv macos
 categories: tech
+toc: true
 ---
 There are many difficulties with Java, specially if you have to use multiple versions on
 your machine like you usual have to. Coming from Debian, this was quite easy with the

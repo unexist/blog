@@ -5,6 +5,7 @@ date: 2021-06-24 15:24 +0200
 author: Christoph Kappel
 tags: tools asciidoc antora docs showcase
 categories: tech showcase
+toc: true
 ---
 [AsciiDoc][1] is my favorite text processing tool, I basically use it everywhere - well except in
 in this blog. It has lots of advantages over [Markdown][2], but don't let us delve into preferences

@@ -5,6 +5,7 @@ date: 2021-04-29 17:37 +0200
 author: Christoph Kappel
 tags: tools intellij maven asciidoc
 categories: tech
+toc: true
 ---
 [AsciiDoc][1] is one of my favorite text processors for anything related to **Documentation-as-Code**.
 

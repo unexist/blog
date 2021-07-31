@@ -5,6 +5,7 @@ date: 2020-12-15 16:53 +0100
 author: Christoph Kappel
 tags: tools kubernetes ansible make helm helmfile to-be-continued
 categories: tech
+toc: true
 ---
 Starting with [Kubernetes][1] can be funny, especially when you finally
 understand a bit more about the internals and how to use all those manifests and objects.

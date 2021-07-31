@@ -5,6 +5,7 @@ date: 2020-08-18 08:30:00 +0200
 author: Christoph Kappel
 tags: naming ddd clean-code just-a-link
 categories: software-design
+toc: true
 ---
 Starters like the one in the linked article always hook me, I probably don't have to actually
 suggest to read this series and pray for any successor in our lifetime.

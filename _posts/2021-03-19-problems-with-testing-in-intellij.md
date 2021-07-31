@@ -5,6 +5,7 @@ date: 2021-03-19 08:40 +0100
 author: Christoph Kappel
 tags: tools intellij
 categories: tech
+toc: true
 ---
 Importing projects in [IntelliJ][1] is usually a problem. I haven't figured out, why I always end up
 with projects, that can be build with maven without any problems and [IntelliJ][1] fails to find
