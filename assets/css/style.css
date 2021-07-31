@@ -135,7 +135,7 @@ footer a:hover {
 }
 
 /* TOC */
-#table-of-contents #toc-header {
+#table-of-contents {
     margin-top: var(--margin);
 }
 
