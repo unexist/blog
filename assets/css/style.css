@@ -138,6 +138,18 @@ footer a:hover {
     padding-top: var(--padding);
 }
 
+#table-of-contents li.toc-h2 {
+    margin-left: 20px;
+}
+
+#table-of-contents li.toc-h3 {
+    margin-left: 25px;
+}
+
+#table-of-contents li.toc-h4 {
+    margin-left: 30px;
+}
+
 .tags a:before {
     content: "#";
 }
