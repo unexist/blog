@@ -41,7 +41,7 @@ tag_page_dir: tag
 
 toc:
   min_level: 1 # default: 1
-  max_level: 3 # default: 6
+  max_level: 5 # default: 6
 
 # Exclude from processing.
 # The following items will not be processed, by default.
