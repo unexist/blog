@@ -39,6 +39,10 @@ category_page_dir: category
 tag_page_layout: tag_page
 tag_page_dir: tag
 
+toc:
+  min_level: 1 # default: 1
+  max_level: 3 # default: 6
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
