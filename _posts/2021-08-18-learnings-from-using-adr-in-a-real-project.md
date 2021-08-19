@@ -62,7 +62,7 @@ with several records (about 60) and had no means of verifying them.
 
 _In my post about [ADR and jqAssistant]({% post_url 2021-03-15-adr-and-jqassistant %}) I basically
 laid out how this can be easily done with [jqAssistant][7], but we never had the time to look into
-that_
+that._
 
 ## Conclusion
 
