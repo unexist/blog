@@ -21,10 +21,11 @@ found out and are having a mix now, with quite different records. Some of the de
 philosophy of the project, some of them describe macro-architectural decisions, some of them
 just evaluate different aspects of technology.
 
-```
-A clear learning here is to separate *micro* and *marco* architecture from each other, to avoid
-lots of confusion of the intended audience - namely developers.
-```
+***
+
+_A clear learning here is to separate *micro* and *marco* architecture from each other, to avoid
+lots of confusion of the intended audience - namely developers._
+
 
 ### Format
 
@@ -34,11 +35,11 @@ So I basically picked up an abandoned pull-request which adds this support and a
 [adr-tools][4] to better reflect our way of working.
 ([See here]({% post_url 2021-03-15-adr-and-jqassistant %})
 
-```
-Although switching to [AsciiDoc][3] eased the handling for us writers, it never got much buy in by
+***
+
+_Although switching to [AsciiDoc][3] eased the handling for us writers, it never got much buy in by
 the teams. The overall preference there was to have a [Confluence][5] page, to be able to add
-comments.
-```
+comments._
 
 ### Single page
 
@@ -46,10 +47,10 @@ The default output for [AsciiDoc][3] is a single page, so handling of it, when t
 records included, is quite difficult. Also the tooling gets slower and I had to add indexing via
 [sqlite][6].
 
-```
-We haven't found a real solution yet, there is a way to split it up, but I have to look into it
-as my last task on this.
-```
+***
+
+_We haven't found a real solution yet, there is a way to split it up, but I have to look into it
+as my last task on this._
 
 ### Fitness functions
 
@@ -57,11 +58,11 @@ as my last task on this.
 fitness function or some other means to test, if this [ADR][1] has been followed. So we ended up
 with several records (about 60) and had no means of verifying them.
 
-```
-In my post about [ADR and jqAssistant]({% post_url 2021-03-15-adr-and-jqassistant %}) I basically
+***
+
+_In my post about [ADR and jqAssistant]({% post_url 2021-03-15-adr-and-jqassistant %}) I basically
 laid out how this can be easily done with [jqAssistant][7], but we never had the time to look into
-that
-```
+that_
 
 ## Conclusion
 
