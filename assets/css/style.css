@@ -220,6 +220,11 @@ h6 {
     border-radius: var(--radius) var(--radius) 0px 0px;
 }
 
+hr {
+    color: var(--link-color);
+    border-style: solid;
+}
+
 /* Jekyll */
 .post-list li {
     padding-top: var(--padding);
