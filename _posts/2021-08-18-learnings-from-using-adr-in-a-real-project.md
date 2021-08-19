@@ -23,7 +23,7 @@ just evaluate different aspects of technology.
 
 ***
 
-_A clear learning here is to separate *micro* and *marco* architecture from each other, to avoid
+_A clear learning here is to separate **micro** and **marco** architecture from each other, to avoid
 lots of confusion of the intended audience - namely developers._
 
 
@@ -33,7 +33,7 @@ Originally geared toward [Markdown][2]-only, we soon reached a limit what can be
 additionally we've already made the general decision to use [AsciiDoc][3] as a documentation format.
 So I basically picked up an abandoned pull-request which adds this support and also updated the
 [adr-tools][4] to better reflect our way of working.
-([See here]({% post_url 2021-03-15-adr-and-jqassistant %})
+([See here]({% post_url 2021-03-15-adr-and-jqassistant %}))
 
 ***
 
