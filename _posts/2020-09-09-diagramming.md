@@ -5,6 +5,7 @@ date: 2020-09-09 15:00:00 +0200
 author: Christoph Kappel
 tags: tools diagrams sequence-diagram cloud
 categories: tech
+toc: false
 ---
 TL;DR: Never found a good way to automate it; but nice tools.
 

@@ -4,7 +4,7 @@ title: Idiosyncrasy of the Docker CLI
 date: 2021-07-23 10:53 +0200
 tags: tools docker cli quarkus kafka redpanda
 categories: tech
-toc: true
+toc: false
 ---
 Although I use [Docker][1] on a daily basis, I never really got into its CLI. Most of the time I am
 just baffled how complex it is to get really simple things done.

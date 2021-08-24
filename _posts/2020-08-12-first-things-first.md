@@ -5,6 +5,7 @@ date: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
 tags: myself
 categories: myself
+toc: false
 ---
 So, well - let's try to become a blogger once again.
 

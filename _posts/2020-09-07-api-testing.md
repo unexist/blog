@@ -5,6 +5,7 @@ date: 2020-09-06 12:00:00 +0200
 author: Christoph Kappel
 tags: tools testing api
 categories: testing
+toc: false
 ---
 Testing APIs is getting more and more complex and therefore there's lots of tooling out there to
 assist.
@@ -23,7 +24,11 @@ testing rig and cannot give it a try for real things.
 The same is true for [Insomnia][4], it looks promising and I really dig the idea of separating the
 designing stuff from the base testing tool.
 
+One of my latest discoveries is [Portman][5] and the description sounds promising, although I hadn't
+time to give a try yet..
+
 [1]: https://www.postman.com/
 [2]: https://hoppscotch.io/
 [3]: https://testmace.com/
 [4]: https://insomnia.rest/
+[5]: https://blog.apideck.com/announcing-portman

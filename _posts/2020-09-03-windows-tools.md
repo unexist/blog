@@ -5,6 +5,7 @@ date: 2020-09-03 16:30:00 +0200
 author: Christoph Kappel
 tags: java quarkus maven intellij windows tools
 categories: tech
+toc: false
 ---
 Oh well - process management under windows is a kind of pain. I especially had to deal with my
 [maven][1]/[Quarkus][2]/[IntelliJ][3] combination:

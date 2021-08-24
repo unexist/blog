@@ -14,7 +14,7 @@ first part, the second part was highly interesting:
 Combine [ADR][2] with the asciidoc processing of [jqAssistant][1].
 I've never thought about it before, but once the speaker presented this idea I was totally into it.
 
-## ADR 1
+## ADR tools
 
 For a starter, we need to add [AsciiDoc][3] support to the ADR tooling,
 since they normally are written in markdown. There is a pending PR that does exactly that:
@@ -35,7 +35,7 @@ $ adr-tools/adr init -t adoc jqassistant/decisions
 $ adr-tools/adr new "Assertion Library"
 ```
 
-## jqAssistant 1
+## First steps with jqAssistant
 
 Messing with [jqAssistant][1] is always funny, when you manage to make your mind about [cypher][4],
 you are busy with lots of flaky tests and varying output errors, but we'll come to that later I
@@ -48,7 +48,7 @@ focus on the funny parts. If you want to dive head first just checkout my demo p
 
 Back to our new ADR, let us just fill in a bit of magic:
 
-## ADR 2
+## Revisit our ADR
 
 ###### **001-assertion-library.adoc:**
 ```asciidoc
@@ -117,7 +117,7 @@ in the output.
 NOTE: The part around **<4>** is required to see the actual results in the rendered document, took
       me quite a whole to figure this out.
 
-## jqAssistant 2
+## Put it to the test in jqAssistant
 
 So we have to jump right back to [jqAssistant][1], since we are done with the ADR.
 

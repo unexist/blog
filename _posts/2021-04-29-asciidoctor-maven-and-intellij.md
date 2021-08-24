@@ -21,8 +21,8 @@ is the import idiocy - a few of you probably know from [PHP][5]:
 If you include something from a subdirectory, all other other includes are relative
 to this new root now. This leads to interesting issues, especially if you want to deal with images.
 
-Images
-----
+## Images
+
 One of the few things that you commonly see is basically to prefix every image include with the
 **:imagedir:** attribute:
 
@@ -35,8 +35,8 @@ image::foobar.png[caption=Test]
 This leads to lots of redundancy and makes a change of this quite nasty, once you are dealing
 with a large document.
 
-Maven
-----
+## Maven
+
 When you are using [maven][6], there is another way just to set the
 **imagedir** attribute inside of your [pom][7]:
 
@@ -55,8 +55,8 @@ When you are using [maven][6], there is another way just to set the
 </plugin>
 ```
 
-IntelliJ
-----
+## IntelliJ
+
 There seems to be some kind of unwritten rule, that [IntelliJ][8] **always** has to fail for
 something that works quite nicely with [maven][6] even when you install the [asciidoc plugin][9] -
 so no surprises here.

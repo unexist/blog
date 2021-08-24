@@ -5,6 +5,7 @@ date: 2020-09-15 08:00:00 +0200
 author: Christoph Kappel
 tags: tools architecture docs
 categories: architecture
+toc: false
 ---
 Yesterday we had another discussion about architecture documentation and especially about decisions
 made about it. We came to a quick agreement, that the form makes no difference, but that there
