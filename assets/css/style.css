@@ -142,6 +142,8 @@ footer a:hover {
 #table-of-contents #toc-header {
     color: var(--h4-color);
     text-decoration: underline;
+    display: block;
+    margin-bottom: var(--margin);
 }
 
 #table-of-contents li {
