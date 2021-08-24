@@ -28,7 +28,7 @@
                 <div id="sidebar">
                     <div id="categories">
                         <h2>Categories</h2>
-                        {% for category in site.categories %}
+                        {% for category in site.categories.sort_by { |h| h[0] } %}
                             <a href="/category/{{ category[0] }}.html">{{ category[0] }} ({{ category[1].size }})</a>
                         {% endfor %}
                     </div>
