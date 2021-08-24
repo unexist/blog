@@ -4,7 +4,7 @@ title: Property based testing
 date: 2020-08-13 12:10:00 +0200
 author: Christoph Kappel
 tags: java testing showcase
-categories: software-design showcase
+categories: testing showcase
 toc: true
 ---
 I initially read about the Python framework [Hypothesis][1] and I must say I like the overall idea
