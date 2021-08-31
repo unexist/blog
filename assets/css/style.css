@@ -218,7 +218,7 @@ h6 {
     padding: var(--padding);
     border: var(--border);
     border-bottom: 1px solid #000;
-    padding-bottom: 12px;
+    padding-bottom: 1px;
     border-radius: var(--radius) var(--radius) 0px 0px;
 }
 
@@ -288,7 +288,6 @@ hr {
 .post-content pre {
     white-space: pre-wrap;
     text-align: left;
-    margin-top: var(--margin);
     margin-bottom: var(--margin);
     padding: var(--padding);
     border: var(--border);
