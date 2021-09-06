@@ -326,7 +326,7 @@ My showcase can be found here:
 [15]: https://kafka.apache.org/
 [16]: https://github.com/kiegroup/kogito-operator
 [17]: https://kubernetes.io/
-[18]: https://quarkus.io/blog/quarkus-1-13-0-final-released/
+[18]: https://quarkus.io/guides/dev-services
 [19]: https://github.com/vectorizedio/redpanda
 [20]: https://cloudevents.io
 [21]: https://github.com/wg/wrk

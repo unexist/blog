@@ -58,7 +58,7 @@ specs:
 [1]: https://docker.com
 [2]: https://quarkus.io
 [3]: https://github.com/vectorizedio/redpanda
-[4]: https://quarkus.io/blog/quarkus-1-13-0-final-released/
+[4]: https://quarkus.io/guides/dev-services
 [5]: https://kafka.apache.org/
 [6]: https://kogito.kie.org/
 [7]: https://www.testcontainers.org/
