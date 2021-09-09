@@ -80,8 +80,8 @@ most of the time.
 
 ### No beans found?
 
-Unfortunately, [Helidon][2] refused to pick any [JAX-RS][9] applications and I found this goodie here
-in my application log:
+Unfortunately, [Helidon][2] refused to pick any [JAX-RS][9] applications and I found this goodie
+here in my application log:
 
 ###### **Log**:
 ```log
