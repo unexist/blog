@@ -58,8 +58,8 @@ Alas, consumer-driven contracts are **not** a [silver bullet][1]:
 
 That out of the way, let us focus on a examples.
 
-There are some frameworks available to support this, like [Spring Cloud Contract][2] and [Pact][3]
-- we will focus on the latter one and see shortly, what it really can do for us.
+There are some frameworks available to support this, like [Spring Cloud Contract][2] and
+[Pact][3] - we will focus on the latter one and see shortly, what it really can do for us.
 
 ## Pact
 
