@@ -43,7 +43,8 @@ comments and have everything just in one place._
 ### Size
 
 Laying out the context of an [ADR][1] is sometimes a bit difficult and requires lots of
-explanations and reasoning, but it probably should never end in just gossip. So we clearly
+explanations and reasoning, but it probably should never end in just gossip. So we clearly need some
+boundaries of scope and size of the [ADR][1].
 
 ### Single page
 
