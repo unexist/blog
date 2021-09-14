@@ -142,10 +142,8 @@ So let us take a step back and talk about what we have archived so far:
 1. We've created some kind of language with a modest chance, that it is understandable by other
 than technical folks, although they will probably never check out the source code to read it and
 have to rely on reports.
-
 2. We can split the task of writing the fixture and the steps, but introduce problems how to combine
 them again and how to make the results visible.
-
 3. Another issue here is that we've introduced tables to test what in particular? Based on the
 description of the values and the columns, is clear to everyone what kind of use case this feature
 really addresses?
@@ -265,11 +263,9 @@ Let us consonder the problems that I've mentioned before:
 
 1. [FitNesse][17] solves the problem how non-tech-savy folk can write and run tests and also allows
 a quick verification just with the use of a browser, when properly set up.
-
 2. It kind of lacks the benefits of the [DSL][11], but from my experience it all boils down to lots
 of tables anyway. ([FitNesse][17] is extendable and there are some outdated projects like
 [fitnesse-cucumber-testing-system][21] which I am trying to fix [here][22] though)
-
 3. There is still the same problem with the test cases.
 
 Let us talk about number three.
@@ -378,12 +374,10 @@ Time for talk about the usual points:
 
 1. The generation of the reports is a nice addition to make it easier to read the results of a test
 and the possibilities of [markdown][15] even allow the linking of different files.
-
 2. The approach of [Concordion][23] is a bit different, instead of relying on a [DSL][11] like
 [Cucumber][8] or on tables only like [FitNesse][17], it allows to easily use natural language and
 enhances it. This moves some of the complexity of the specification to the writer and probably
 limits who can do that at all.
-
 3. Did you notice the difference of the tables? In the last example I just limited the values to
 the ones that are actually relevant to the test case, so that the intention of the test is clearer
 to the reader. This is, of course, possible with all of the named frameworks.
