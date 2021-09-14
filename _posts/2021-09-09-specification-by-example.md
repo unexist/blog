@@ -152,7 +152,7 @@ really addresses?
 
 Let us check how [FitNesse][17] tries to solve these problems.
 
-### FitNesse
+## FitNesse
 
 [Fitnesse][17] is another testing framework, which also uses the table approach, but provides
 access to the test cases, definitions and results in a unique way: It comes bundled with a
@@ -274,7 +274,7 @@ of tables anyway. ([FitNesse][17] is extendable and there are some outdated proj
 
 Let us talk about number three.
 
-### Concordion
+## Concordion
 
 [Concordion][23] is the latest addition in my [showcase][15] and also in the overall list of
 frameworks that I gave a try. It is a bit similar to the idea of [Cucumber][8], with the exception
