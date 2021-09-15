@@ -397,8 +397,10 @@ For whatever framework you choose, the real gain lies in communication: You are 
 forward, if you sit together, talk about story cards and actually share your knowledge and come
 to a shared understanding.
 
-*I am personally totally intrigued by [Concordion][23], but like [FitNesse][17] I've never seen it
-in a real project and I better consider the trade-offs and requirements of any solution.*
+*I must admit I am personally totally intrigued by [Concordion][23], I really like the flexbility
+of the specifications and the nice reports, but unlike [Cucumber][8] I've never seen it in a real
+project. And since I don't want to favor tech because it is tech, I promise will carefully consider
+the requirements and trade-offs and try to make an educated guess what to pick.*
 
 My showcase can be found here:
 
