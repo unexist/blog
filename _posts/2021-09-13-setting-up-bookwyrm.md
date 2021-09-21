@@ -110,15 +110,15 @@ especially liked, that it includes reading challenges like the ones from [GoodRe
 
 I must admit that depends on some things I have to consider:
 
-1) Although I understand the social aspect, I'd really prefer to be able to limit the instances it
+1. Although I understand the social aspect, I'd really prefer to be able to limit the instances it
 can connect to without blocking them directly. (_This is something that doesn't scale well._)
-2) Imports from [GoodReads][5] aren't up to par, when I initially imported 96 books which took quite
+2. Imports from [GoodReads][5] aren't up to par, when I initially imported 96 books which took quite
 a while, 23 couldn't be found. This is remarkable, both in the failed in percent and also, if you
 consider the export from [GoodReads][5] actually contains the ISBN.
-3) The complexity of the stack if kind of frightening, I am not sure the the numbers on the instances
+3. The complexity of the stack if kind of frightening, I am not sure the the numbers on the instances
 will ever justify the [Celery][2] task queue with [Redis][7] as backend. (_Scaling it when necessary
 would have been the better approach, imho._)
-4) [docker-compose][9] shouldn't be the default mode. Maybe I will really start to take it apart
+4. [docker-compose][9] shouldn't be the default mode. Maybe I will really start to take it apart
 and create a documentation how to do that on the way.
 
 You can find my instance of [BookWyrm][1] here:
