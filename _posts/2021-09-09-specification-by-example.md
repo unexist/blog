@@ -57,7 +57,9 @@ and also might lead to interesting questions and problems.
 
 Let us talk about some of the existing tools to support this now.
 
-## Cucumber
+## Tools
+
+### Cucumber
 
 If you fire up Google and search for `tool for automated acceptance testing`, one of the first few
 matches is probably [Cucumber][8], obviously depending on your personal filter bubble. It uses the
@@ -150,7 +152,7 @@ really addresses?
 
 Let us check how [FitNesse][17] tries to solve these problems.
 
-## FitNesse
+### FitNesse
 
 [Fitnesse][17] is another testing framework, which also uses the table approach, but provides
 access to the test cases, definitions and results in a unique way: It comes bundled with a
@@ -270,7 +272,7 @@ of tables anyway. ([FitNesse][17] is extendable and there are some outdated proj
 
 Let us talk about number three.
 
-## Concordion
+### Concordion
 
 [Concordion][23] is the latest addition in my [showcase][15] and also in the overall list of
 frameworks that I gave a try. It is a bit similar to the idea of [Cucumber][8], with the exception
