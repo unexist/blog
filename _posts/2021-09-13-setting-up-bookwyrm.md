@@ -55,7 +55,7 @@ This one is probably on me: Apparently, [BookWyrm][1] uses features from [Postgr
 which is a problem when you are still running **v9**. [Debian][3] or rather [apt-get][8] is quite
 careful, when it installs a new version of your database and you might end up with more than one:
 
-###### **Shell**`
+###### **Shell**:
 ```shell
 $ su - postgres -c 'pg_lsclusters' # Ask for existing clusters
 Ver Cluster Port Status Owner    Data directory               Log file
@@ -66,7 +66,7 @@ Ver Cluster Port Status Owner    Data directory               Log file
 Considering the output, it looks like there are two clusters configured and the older one is running,
 so we just have to migrate the existing one to **v11**:
 
-###### **Shell**`
+###### **Shell**:
 ```shell
 $ su - postgres -c 'pg_dropcluster --stop 11 main' # Delete the empty default cluster
 $ su - postgres -c 'pg_upgradecluster 9.6 main'    # Upgrade the other one
@@ -86,7 +86,7 @@ $ apt autoclean
 
 The next run of `./bw-dev initdb` went a bit further until it failed with this error:
 
-###### **Shell**`
+###### **Shell**:
 ```log
 psycopg2.errors.InsufficientPrivilege: permission denied to create extension "pg_trgm"
 ```
@@ -95,7 +95,7 @@ I am not a big fan of using triggers for business logic, because they make upgra
 of hide logic and don't necessarily convey how something is done. Nevertheless, the easiest way here
 was to temporarily elevate the privileges of the database user:
 
-###### **Shell**`
+###### **Shell**:
 ```sql
 alter role user_name superuser;
 alter role user_name nosuperuser;
