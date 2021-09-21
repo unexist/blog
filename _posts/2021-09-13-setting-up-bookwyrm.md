@@ -72,7 +72,7 @@ $ su - postgres -c 'pg_dropcluster --stop 11 main' # Delete the empty default cl
 $ su - postgres -c 'pg_upgradecluster 9.6 main'    # Upgrade the other one
 ```
 
-And I've _verified_ everything is running properly, I just got rid of **v9.6** entirely:
+After _verification_ everything is running properly, I just got rid of **v9.6** entirely:
 
 ###### **Shell**`
 ```shell
