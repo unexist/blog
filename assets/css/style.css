@@ -90,32 +90,34 @@ footer a:hover {
     text-decoration: none;
     border-bottom: 1px solid var(--h1-color);
     margin-bottom: 10px;
+    font-size: 1.5em;
 }
 
 #content h1:before {
     content: "#";
-    padding-right: 1em;
+    padding-right: 0.2em;
 }
 
 #content h2 {
     text-decoration: none;
     border-bottom: 1px solid var(--h2-color);
     margin-bottom: 10px;
+    font-size: 1.5em;
 }
 
 #content h2:before {
     content: "##";
-    padding-right: 1em;
+    padding-right: 0.2em;
 }
 
 #content h3:before {
     content: "###";
-    padding-right: 1em;
+    padding-right: 0.2em;
 }
 
 #content h4:before {
     content: "####";
-    padding-right: 1em;
+    padding-right: 0.2em;
 }
 
 #sidebar {
@@ -152,12 +154,14 @@ footer a:hover {
     display: inline-block;
     text-decoration: none;
     border-bottom: none;
+    font-size: 1.5em;
 }
 
 #headline h2 {
     display: inline-block;
     padding-left: var(--padding);
     border-bottom: none;
+    font-size: 1.5em;
 }
 
 /* TOC */
