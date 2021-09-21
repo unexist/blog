@@ -92,8 +92,9 @@ footer a:hover {
     margin-bottom: 10px;
 }
 
-#content h2:before {
+#content h1:before {
     content: "#";
+    padding-right: 1em;
 }
 
 #content h2 {
@@ -104,14 +105,17 @@ footer a:hover {
 
 #content h2:before {
     content: "##";
-}
-
-#content h4:before {
-    content: "####";
+    padding-right: 1em;
 }
 
 #content h3:before {
     content: "###";
+    padding-right: 1em;
+}
+
+#content h4:before {
+    content: "####";
+    padding-right: 1em;
 }
 
 #sidebar {
