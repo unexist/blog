@@ -3,8 +3,8 @@ layout: post
 title: Setting up Bookwyrm
 date: 2021-09-13 15:32 +0200
 author: Christoph Kappel
-tags: tech books bookwyrm social
-categories: me
+tags: myself tech books bookwyrm social
+categories: myself
 toc: true
 ---
 As a book enthusiast and long time [GoodReads][5] user, I really liked the idea of [BookWyrm][1],
