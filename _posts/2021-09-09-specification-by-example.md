@@ -406,7 +406,7 @@ the requirements and trade-offs and try to make an educated guess what to pick.*
 
 My showcase can be found here:
 
-<https://github.com/unexist/showcase-testing-quarkus>
+<https://github.com/unexist/showcase-acceptance-testing-quarkus>
 
 [1]: https://en.wikipedia.org/wiki/Test-driven_development
 [2]: https://en.wikipedia.org/wiki/Acceptance_testing

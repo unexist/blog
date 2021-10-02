@@ -247,7 +247,7 @@ many stages test or dev may contain different versions of the services.
 
 My showcase can be found here:
 
-<https://github.com/unexist/showcase-testing-quarkus>
+<https://github.com/unexist/showcase-cdc-quarkus>
 
 [1]: https://en.wikipedia.org/wiki/No_Silver_Bullet
 [2]: https://spring.io/projects/spring-cloud-contract
