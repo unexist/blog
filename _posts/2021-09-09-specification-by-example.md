@@ -3,7 +3,7 @@ layout: post
 title: Specification by example
 date: 2021-09-09 14:17 +0200
 author: Christoph Kappel
-tags: tools testing specification-by-example showcase
+tags: tools testing specification-by-example cucumber concordion fitnesse showcase updated
 categories: testing showcase
 toc: true
 ---
@@ -78,26 +78,17 @@ support for a few) and example values can be loaded from tables:
 ###### **todo.feature**:
 ```gherkin
 Feature: Create a todo
-  I want to create a new todo
+  Create various todo entries to test the endpoint.
 
-  Scenario Outline: Dream of a todo
-    Given I imagine a todo "<title>"
-    And a description of "<description>"
-    And starting on "<start>"
-    And lasting no longer than "<due>"
-    And still not "<done>"
-    When I would ask for the status code
-    Then I should be told "<status>"
+  Scenario Outline: Create a todo with title and description and check the id.
+    Given I create a todo with the title "<title>"
+    And the description "<description>"
+    Then its id should be <id>
 
     Examples:
-      | title | description | start      | due        | done  | status |
-      | Test  | Test        | 2021-01-01 | 2021-02-01 | false | 201    |
-      |       | Test        | 2021-01-01 | 2021-02-01 | false | 201    |
-      | Test  |             | 2021-01-01 | 2021-02-01 | false | 201    |
-      | Test  | Test        |            | 2021-02-01 | false | 201    |
-      | Test  | Test        | 2021-01-01 |            | false | 201    |
-      | Test  | Test        | 2021-01-01 | 2021-02-01 |       | 201    |
-      |       |             |            |            |       | 400    |
+      | title  | description  | id |
+      | title1 | description1 | 1  |
+      | title2 | description2 | 2  |
 ```
 
 As you can see, the format of **features** is pretty open and the only limit is probably the
@@ -110,13 +101,13 @@ Once the feature is ready, someone needs to write the test fixture or **steps** 
 ###### **TodoSteps.java**:
 ```java
 public class TodoSteps {
-    @Given("I imagine a todo {string}")
+    @Given("I create a todo with the title {string}")
     public void given_set_title(String title) {
         this.todoBase.setTitle(title);
     }
 
-    @And("a description of {string}")
-    public void given_set_description(String description) {
+    @And("the description {string}")
+    public void and_set_description(String description) {
         this.todoBase.setDescription(description);
     }
 }
@@ -129,14 +120,10 @@ So let us check the output of the [Cucumber][8] test runner:
 
 ###### **Log**:
 ```gherkin
-Scenario Outline: Dream of a todo         # src/test/resources/features/todo.feature:15
-  Given I imagine a todo "Test"           # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_title(java.lang.String)
-  And a description of "Test"             # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_description(java.lang.String)
-  And starting on "2021-01-01"            # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_start_date(java.lang.String)
-  And lasting no longer than "2021-02-01" # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_due_date(java.lang.String)
-  And still not "false"                   # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_done(java.lang.String)
-  When I would ask for the status code    # dev.unexist.showcase.todo.domain.todo.TodoSteps.when_get_status()
-  Then I should be told "201"             # dev.unexist.showcase.todo.domain.todo.TodoSteps.then_get_status_code(java.lang.String)
+Scenario Outline: Create a todo with title and description and check the id. # src/test/resources/features/todo.feature:11
+  Given I create a todo with the title "title1"                              # dev.unexist.showcase.todo.domain.todo.TodoSteps.given_set_title(java.lang.String)
+  And the description "description1"                                         # dev.unexist.showcase.todo.domain.todo.TodoSteps.and_set_description(java.lang.String)
+  Then its id should be 1                                                    # dev.unexist.showcase.todo.domain.todo.TodoSteps.then_get_id(int)
 ```
 
 So let us take a step back and talk about what we have archived so far:
@@ -145,10 +132,9 @@ So let us take a step back and talk about what we have archived so far:
 than technical folks, although they will probably never check out the source code to read it and
 have to rely on reports.
 2. We can split the task of writing the fixture and the steps, but introduce problems how to combine
-them again and how to make the results visible.
-3. Another issue here is that we've introduced tables to test what in particular? Based on the
-description of the values and the columns, is clear to everyone what kind of use case this feature
-really addresses?
+them again and how to make the results visible. (There is a follow up post about reporting
+[here]({% post_url 2021-10-16-cucumber-reports %}))
+3. And we've introduced tables for values, which makes the testing pretty easy and understandable.
 
 Let us check how [FitNesse][17] tries to solve these problems.
 
@@ -158,7 +144,7 @@ Let us check how [FitNesse][17] tries to solve these problems.
 access to the test cases, definitions and results in a unique way: It comes bundled with a
 standalone [wiki engine][18] and can be accessed with any browser:
 
-![image](/assets/images/20210909-fitnesse_wiki_browser.png)
+![image](/assets/images/20210909-fitnesse_wiki_before.png)
 
 Before you ask, yes you can also run it headless in case you want to integrate it into a CI
 pipeline. *We all know that you want to do that, right?*
@@ -202,9 +188,7 @@ Let us talk about an actual test page:
 
 ###### **Wiki: Test SlimTest**:
 ```asc
-!1 Test status code of the REST endpoint
-
-This test runs different calls to the REST endpoint
+!1 Create a todo
 
 ----
 !contents -R2 -g -p -f -h
@@ -212,15 +196,12 @@ This test runs different calls to the REST endpoint
 |import|
 |dev.unexist.showcase.todo.domain.todo|
 
-!|Todo Fixture                                                      |
-| title   | description | start date | due date   | done  | status? |
-| Test    | Test        | 2021-01-01 | 2021-02-01 | false | 201     |
-|         | Test        | 2021-01-01 | 2021-02-01 | false | 201     |
-| Test    |             | 2021-01-01 | 2021-02-01 | false | 201     |
-| Test    | Test        |            | 2021-02-01 | false | 201     |
-| Test    | Test        | 2021-01-01 |            | false | 201     |
-| Test    | Test        | 2021-01-01 | 2021-02-01 |       | 201     |
-|         |             |            |            |       | 400     |
+Create various todo entries to test the endpoint.
+
+!|Todo Endpoint Fitnesse Fixture |
+| title   | description   | id?  |
+| title1  | description1  | 1    |
+| title2  | description2  | 2    |
 ```
 
 The interesting points here are the two tables: The first one specifies the path to the fixture that
@@ -230,29 +211,33 @@ blog post.
 
 And here is another excerpt from the fixture:
 
-###### **TodoFitnesseFixture.java**:
+###### **TodoEndpointFitnesseFixture.java**:
 ```java
-public class TodoFitnesseFixture {
+public class TodoEndpointFitnesseFixture {
     private TodoBase todoBase;
     private RequestSpecification requestSpec;
 
-    public void setDone(Boolean isDone) {
-        this.todoBase.setDone(isDone);
+    public void setTitle(String title) {
+        this.todoBase.setTitle(title);
     }
 
-    public int status() {
-        Response response = given(requestSpec)
-                .when()
+    public int id() {
+        String location = given(this.requestSpec)
+            .when()
                 .body(this.todoBase)
-                .post("/todo");
+                .post("/todo")
+            .then()
+                .statusCode(201)
+            .and()
+                .extract().header("location");
 
-        return response.getStatusCode();
+        return Integer.parseInt(location.substring(location.lastIndexOf("/") + 1));
     }
 }
 ```
 
-[FitNesse][17] automatically uses the column names of the table as the accessos of the fixtures,
-so the column `done` directly relates to the setter `setDone` and `status?` to the getter `status`.
+[FitNesse][17] automatically uses the column names of the table as the accessors of the fixtures,
+so the column `title` directly relates to the setter `setTitle` and `id?` to the getter `id`.
 *I am not entirely sure why, but at least we got rid of half of the bean spec.*
 
 Back to your browser: When you click on the test button at the top, [FitNesse][17] fires up and
@@ -261,14 +246,14 @@ results:
 
 ![image](/assets/images/20210909-fitnesse_wiki_after.png)
 
-Let us consonder the problems that I've mentioned before:
+Let us talk about the problems I've mentioned before:
 
 1. [FitNesse][17] solves the problem how non-tech-savy folk can write and run tests and also allows
 a quick verification just with the use of a browser, when properly set up.
 2. It kind of lacks the benefits of the [DSL][11], but from my experience it all boils down to lots
 of tables anyway. ([FitNesse][17] is extendable and there are some outdated projects like
 [fitnesse-cucumber-testing-system][21] which I am trying to fix [here][22] though)
-3. There is still the same problem with the test cases.
+3. The idea with the table is pretty similar to the one of [Cucumber][8].
 
 Let us talk about number three.
 
@@ -356,9 +341,9 @@ All the other examples use a table, so here is a small example with a table as w
 This example combines ideas from the others ones:
 
 | [createWithDate][][Start date][start] | [Due date][due] | [Is done?][done] |
-| ------------------------------------ | ----------------| -----------------|
-| 2021-09-10                           | 2022-09-10      | yes              |
-| 2021-09-10                           | 2021-09-09      | no               |
+| ------------------------------------ | ----------------| ------------------|
+| 2021-09-10                           | 2022-09-10      | undone            |
+| 2021-09-10                           | 2021-09-09      | done              |
 
 [createWithDate]: - "#result = createWithDate(#start,#due)"
 [start]: - "#start"
@@ -380,9 +365,7 @@ and the possibilities of [markdown][15] even allow the linking of different file
 [Cucumber][8] or on tables only like [FitNesse][17], it allows to easily use natural language and
 enhances it. This moves some of the complexity of the specification to the writer and probably
 limits who can do that at all.
-3. Did you notice the difference of the tables? In the last example I just limited the values to
-the ones that are actually relevant to the test case, so that the intention of the test is clearer
-to the reader. This is, of course, possible with all of the named frameworks.
+3. And we have another pretty similar approach here.
 
 Conclusion time!
 
@@ -399,7 +382,7 @@ For whatever framework you choose, the real gain lies in communication: You are 
 forward, if you sit together, talk about story cards and actually share your knowledge and come
 to a shared understanding.
 
-*I must admit I am personally totally intrigued by [Concordion][23], I really like the flexbility
+*I must admit I am personally totally intrigued by [Concordion][23], I really like the flexibility
 of the specifications and the nice reports, but unlike [Cucumber][8] I've never seen it in a real
 project. And since I don't want to favor tech because it is tech, I promise will carefully consider
 the requirements and trade-offs and try to make an educated guess what to pick.*
