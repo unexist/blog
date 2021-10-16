@@ -42,7 +42,7 @@ Once this is set, the next run of [Cucumber][4] ends with this information box:
 
 ![image](/assets/images/20211016-cucumber-shell.png)
 
-Since the reports really disappear after the given time (go ahead and give it a try) here is a
+Since the reports really disappear after the given time (_go ahead and give it a try_) here is a
 screenshot with some hints how it looks like and what is included:
 
 ![image](/assets/images/20211016-cucumber-report-online.png)
