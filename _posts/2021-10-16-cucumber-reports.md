@@ -8,7 +8,7 @@ categories: testing showcase
 toc: true
 ---
 In my previous post about
-[specification-by-example]({% post_url 2021-09-09-specification-by-example %})) I touched the
+[specification-by-example]({% post_url 2021-09-09-specification-by-example %}) I touched the
 general idea about the method and also about some supporting frameworks to execute the tests and
 create some kind of feedback.
 
