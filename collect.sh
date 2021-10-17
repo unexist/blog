@@ -1,8 +1,9 @@
 #!/bin/zsh
+set -x
 FILE="$1"
 IDX=1
 
-for LINK in `\grep -oh "\[[^[]*\]\[[0-9]*\]" $FILE | sort -u`; do
+while read LINK; do
     LINKNAME=`echo $LINK | cut -d "]" -f 1 | tr -d "[]"`
 
     sed -i -e "s#\[${LINKNAME}\]\[[0-9]*\]#\[$LINKNAME\]\[$IDX\]#g" $FILE
@@ -10,4 +11,4 @@ for LINK in `\grep -oh "\[[^[]*\]\[[0-9]*\]" $FILE | sort -u`; do
     echo "[$IDX]: $LINKNAME" >> $FILE
 
     IDX=`expr $IDX + 1`
-done
+done < <(\grep -oh "\[[^[]*\]\[[0-9]*\]" $FILE | sort -u)
