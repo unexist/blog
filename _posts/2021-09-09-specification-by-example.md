@@ -50,7 +50,7 @@ to be written, the story's stakeholder, a developer who will most likely be task
 tester have a short session about what has to be done. During this session, they share their
 knowledge, talk about edge cases and define test cases how this story can be verified and accepted.
 
-The format of the output is completey open, ranging from simple lines written down on the story
+The format of the output is completely open, ranging from simple lines written down on the story
 card or a rough table with values of edge cases, that have to be considered. The key here is the
 exchange of knowledge, which directly improves the understanding of the story of the participants
 and also might lead to interesting questions and problems.
@@ -341,9 +341,9 @@ All the other examples use a table, so here is a small example with a table as w
 This example combines ideas from the others ones:
 
 | [createWithDate][][Start date][start] | [Due date][due] | [Is done?][done] |
-| ------------------------------------ | ----------------| ------------------|
-| 2021-09-10                           | 2022-09-10      | undone            |
-| 2021-09-10                           | 2021-09-09      | done              |
+| ------------------------------------- | --------------- | ---------------- |
+| 2021-09-10                            | 2022-09-10      | undone           |
+| 2021-09-10                            | 2021-09-09      | done             |
 
 [createWithDate]: - "#result = createWithDate(#start,#due)"
 [start]: - "#start"
