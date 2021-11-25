@@ -1,0 +1,76 @@
+---
+layout: post
+title: Aspect-oriented with Micronaut
+date: 2021-10-03 12:48 +0200
+author: Christoph Kappel
+tags: tech micronaut aspect-oriented-programming showcase
+categories: tech showcase
+toc: true
+---
+
+```xml
+<dependency>
+    <groupId>io.micronaut</groupId>
+    <artifactId>micronaut-inject</artifactId>
+    <scope>compile</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jaax-annotation-api</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>io.micronaut.jaxrs</groupId>
+    <artifactId>micronaut-jaxrs-processor</artifactId>
+    <version>${micronaut-jaxrs-processor.version}</version>
+    <scope>compile</scope>
+</dependency>
+```
+
+Response => HttpResponse
+
+@GET, @PUT, .. => @Get, @Put
+
+@PathParam => @Parameter
+@APIResponse => @ApiResponse
+
+@ApplicationScoped => @Singleton
+
+@Context => No equivalent
+
+The parameters 'mainClass' for goal io.micronaut.build:micronaut-maven-plugin:3.0.2:run are missing or invalid
+
+<exec.mainClass>dev.unexist.showcase.todo.application.Application</exec.mainClass>
+
+Caused by: java.lang.RuntimeException: java.lang.NoClassDefFoundError: javax/annotation/Nullable
+
+```xml
+<dependency>
+    <groupId>javax.annotation</groupId>
+    <artifactId>javax.annotation-api</artifactId>
+    <scope>compile</scope>
+</dependency>
+```
+
+```log
+[WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
+````
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>${maven-shade-plugin.version}</version>
+    <configuration>
+        <filters>
+            <filter>
+                <artifact>*:*</artifact>
+                <excludes>
+                    <exclude>module-info.class</exclude>
+                </excludes>
+            </filter>
+        </filters>
+    </configuration>
+</plugin>
+```
