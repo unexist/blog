@@ -18,18 +18,29 @@ time, but due to their limitation to run on Linux systems only, this poor macOS 
 chance to really look into it. Gladly, they've found a workaround with [Qemu][] - so let us give it
 a spin now.
 
+I am currently working on a showcase for logging vs tracing, which needs a bit of infrastructure
+components, so this sounds like a nice exercise: In this post we are going to migrate from
+[Docker][2] and [docker-compose][7] to something that works properly with [Podman][5].
+
+And for completeness, here is the [docker-compose][7] file upfront:
+
+<https://github.com/unexist/showcase-observability-quarkus/blob/master/docker/docker-compose.yaml>
+
 ## Podman
+
+Before we start with the actual infrastructure services, let us talk a bit about [Podman][] and
+cover the base installation and also some things that are good to know from the start.
 
 ### Installation
 
-[Podman][5] comes with a pretty good [install guide][10], but basically boils down to:
+[Podman][5] comes with a pretty good [install guide][10], the essential part for us is:
 
 ###### **Shell**:
 ```bash
 $ brew install podman
 ```
 
-And once the installation is complete we can create and start our machine like this:
+Right after the installation is complete we need to init and start our new machine:
 
 ###### **Shell**:
 ```bash
@@ -48,22 +59,21 @@ got fluent in using it from the CLI, which actually hurts my heart as a long tim
 
 ### Can I compose?
 
-Although I've made the decision to run all commands via CLI in this post, there still is the open
+Although I've made the decision to run all commands in this post via CLI, there still is the open
 question if there is something like [docker-compose][7] for [Podman][].
 
 [podman-compose][13] can help to translate your [docker-compose][7] file to the commands required
 for [Podman][5], but has some drawbacks:
 
 1. It directly runs all of them and mixes the outputs.
-2. During my tests it didn't expose any of the container ports.
-3. Why the heck are people still using absolute paths in a shebang? Please use **env**.
+2. It starts all containers in a new pod.
+3. Ports of the container aren't properly exposed to the host.
+4. And why the heck are people still using absolute paths in a shebang? Please use **env**.
+5. The output is quite messy, if you are used to something like [lazydocker][].
 
 Unfortunately there isn't support for [Podman][] in [lazydocker][] yet:
 
 <https://github.com/jesseduffield/lazydocker/issues/4>
-
-Since [Podman][] does some things a bit differently than [Docker][], let us sort this out before we
-go on.
 
 ### What about networking?
 
@@ -94,11 +104,6 @@ share the Pod's resources.
 So generally speaking, a [pod][] is a group of containers, that share the same network, process id
 and also the ipc namespaces and this is true for both [Podman][] and [Kubernetes][].
 
-###### **Shell**:
-```bash
-$ podman pod create -n observ
-```
-
 Due to this conceptual resemblance it shoudln't surprise anyone, that we can easily convert a
 [Podman][5] pod to something, that can be deployed directly to [Kubernetes][3]:
 
@@ -107,26 +112,49 @@ Due to this conceptual resemblance it shoudln't surprise anyone, that we can eas
 $ podman generate kube my-pod >> my-pod.yaml
 ```
 
-### How to add containers manually?
+### How can I start a container?
 
-Like the previous commands, adding containers to our new pod is also really easy:
+If you need to start a single container either **rootfull** or **rootless** should work, so let us
+focus on examples with and without a [pod][].
+
+#### No pod
 
 ###### **Shell**:
 ```bash
-$ podman run -it --pod=observ busybox
+$ podman run -dt -p 8080:80 nginx
+21ee82cae8b8e0e2744426c3a2f57d7274779b71370e242532e26d3e301124ca
+```
+
+Once the container is running you can reach it with curl:
+
+```bash
+$ curl -s localhost:8080 | htmlq --text h1
+Welcome to nginx!
+```
+
+#### A pod
+
+[Podman][] comes with a nice shortcut to directly start a container in a new [pod][]:
+
+###### **Shell**:
+```bash
+$ podman run -dt --pod new:mypod -p 8080:80 nginx
+309d7f33bf472d790a13cc1a1cc7fff432d026e4c26c3844731b5c448b1b100a
+```
+
+The same can be achieved manually:
+
+###### **Shell**:
+```bash
+$ podman pod create -n mypod -p 8080:80
+41983bfdf2e1c13d209cf9d114abe6dc298fffc24b7385d353edabbbc9890792
+$ podman run -dt --pod mypod nginx
+e2182dec80aa1fb42a06a01337fe86e951b13d89f9b600c50b39678d25a24301
 ```
 
 Equipped with this we should be able to start our services now.
 
-## How do we start?
 
-I am currently working on a showcase for logging vs tracing, which needs a bit of infrastructure
-components, so this sounds like a nice exercise: In this post we are going to migrate from
-[Docker][2] and [docker-compose][7] to something that works properly with [Podman][5].
-
-And for completeness, here is the [docker-compose][7] file upfront:
-
-<https://github.com/unexist/showcase-observability-quarkus/blob/master/docker/docker-compose.yaml>
 
 ## Services
 
