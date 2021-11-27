@@ -232,13 +232,14 @@ h3 {
     border-bottom: 1px solid var(--h3-color);
 }
 
-h3, h4 {
-    padding-top: 10px;
-}
-
 h4 {
     color: var(--h4-color);
     border-bottom: 1px solid var(--h4-color);
+}
+
+h3, h4 {
+    text-decoration: none;
+    padding-top: 10px;
 }
 
 h6 {
