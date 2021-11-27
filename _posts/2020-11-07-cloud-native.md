@@ -1,16 +1,16 @@
 ---
 layout: post
-title: Cloud native
+title: Cloud-native
 date: 2020-11-07 17:44 +0100
 author: Christoph Kappel
 tags: tools quarkus cloud docker kind kubernetes to-be-continued
 categories: tech
 toc: true
 ---
-I was never a big fan of all these cloud stuff, especially not of the *cloud native* idea, but for
+I was never a big fan of all these cloud stuff, especially not of the *cloud-native* idea, but for
 my current project I have to get over and used to it.
 
-So far, my only really experience with [kubernetes][1] was during universities, guided training
+So far, my only really experience with [Kubernetes][1] was during universities, guided training
 sessions at work, with some experienced instructor. That never worked well for me.
 
 I can do guided stuff all day long, but when I don't get my hands dirty, this stuff never sticks to
@@ -24,8 +24,8 @@ way.
 
 For me, the whole stack is a bit weird and I start with some questions?
 
-- Where to start?
-- Do I need some real installation of k8s?
+- Where do I start?
+- Do I need some real installation of [Kubernetes][1]?
 - What about the bundled one from "Docker for Desktop"?
 - Why do I have to use macOS for this kind of stuff?
 
@@ -57,10 +57,10 @@ $ mvn io.quarkus:quarkus-maven-plugin:1.9.1.Final:create \
 
 After that, you end up with a hello project and some helpful extensions:
 
-- *health* provides the required health and `readyness` for the k8s pod
-- *openapi* generates the [OpenAPI3][5] and bundles the Swagger-Ui
-- *container-image-jib* actually builds the images without a requirement for actual Docker
-- *kubernetes* creates the helpful k8s manifests
+- **health** provides the required health and `readyness` for the k8s pod
+- **openapi** generates the [OpenAPI3][5] and bundles the Swagger-Ui
+- **container-image-jib** actually builds the images without a requirement for actual Docker
+- **kubernetes** creates the helpful k8s manifests
 
 ### Additional config
 
@@ -127,7 +127,7 @@ ingress.
 
 ### Kind docker images
 
-In order for [k8s][1] to find our image, we have to load it first. That can be done like this:
+In order for [Kubernetes][1] to find our image, we have to load it first. That can be done like this:
 
 ###### **Shell:**
 ```shell
@@ -206,7 +206,9 @@ The easiest way to log into this dashboard is via a token, this can be fetched v
 $ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```
 
-Copy this token and use it [here](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login).
+Copy this token and use it here:
+
+<http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login>
 
 ### Ingress
 
