@@ -110,8 +110,8 @@ is easy to read and informative.
 
 ### Serenity BDD (aka Thucydides)
 
-Just to get this out upfront: I am quite a fan of the show [Serenity-BDD][7], but I have no idea why so
-many projects must adopt this name. (_Maybe these projects have some bored SEO experts who
+Just to get this out upfront: I am quite a fan of the [Serenity][9] movie, but I have no idea why
+so many projects must adopt this name. (_Maybe these projects have some bored SEO experts who
 need a challenge?_)
 
 I really preferred the previous name, especially because of this quote which really describes why
@@ -119,7 +119,7 @@ we need more reporting:
 
 > More generally, Thucydides developed an understanding of human nature to explain behavior in such
 crises as plagues, massacres, and civil war.
-<cite>https://en.wikipedia.org/wiki/Thucydides</cite>
+<cite><https://en.wikipedia.org/wiki/Thucydides></cite>
 
 Coming back to the tool itself: This isn't another plain reporting plugin for [Cucumber][4], but a
 drop-in replacement for the test runner. It comes with some additional test steps, but all that is
@@ -195,3 +195,4 @@ As always, my showcase can be found here:
 [6]: https://cucumber.io/docs/gherkin/
 [7]: https://serenity-bdd.github.io/theserenitybook/latest/index.html
 [8]: https://cucumber.io/docs/cucumber/reporting/
+[9]: https://www.imdb.com/title/tt0379786/

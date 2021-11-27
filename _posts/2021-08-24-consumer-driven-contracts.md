@@ -47,7 +47,7 @@ In other words:
 
 > A contract between a consuming service and a providing service, stating what the consumer wants
 from a providing service, in a defined format.
-<cite>Ian Robinson, https://martinfowler.com/articles/consumerDrivenContracts.html</cite>
+<cite>Ian Robinson, <https://martinfowler.com/articles/consumerDrivenContracts.html></cite>
 
 Alas, consumer-driven contracts are **not** a [silver bullet][1]:
 
