@@ -50,7 +50,7 @@ screenshot with some hints how it looks like and what is included:
 For a default this is pretty nice and well readable, although online-only (as far as I know) might
 be a problem for some cases.
 
-So let us pick us an option from the list.
+Back to our list, next!
 
 ### Cluecumber
 
