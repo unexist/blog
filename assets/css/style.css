@@ -303,6 +303,7 @@ hr {
 .post-content blockquote cite::before {
     color: var(--cite-color);
     content: '--';
+    padding-right: 5px;
 }
 
 .post-content p code.highlighter-rouge {
