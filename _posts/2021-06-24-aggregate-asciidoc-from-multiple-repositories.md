@@ -23,7 +23,7 @@ to annoy me._
 So time to check out [Antora][3]:
 
 > The multi-repository documentation site generator for tech writers who <3 writing in AsciiDoc.
-<cite>[https://antora.org][3]</cite>
+<cite><https://antora.org></cite>
 
 According to this, this looks really interesting and promising. And after a few hours down the road
 I managed to actually generate docs and found a few gotchas.
