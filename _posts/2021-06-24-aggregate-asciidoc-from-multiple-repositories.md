@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Aggregate asciidoc from multiple repositories
+title: Aggregate AsciiDoc from multiple repositories
 date: 2021-06-24 15:24 +0200
 author: Christoph Kappel
 tags: tools asciidoc antora docs showcase
