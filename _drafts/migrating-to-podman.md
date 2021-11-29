@@ -36,14 +36,14 @@ cover the base installation and also some things that are good to know from the 
 [Podman][5] comes with a pretty good [install guide][10], the essential part for us is:
 
 ###### **Shell**:
-```bash
+```shell
 $ brew install podman
 ```
 
 Right after the installation is complete we need to init and start our new machine:
 
 ###### **Shell**:
-```bash
+```shell
 $ podman machine init --memory=8192 --cpus=2
 $ podman machine start
 ```
@@ -84,7 +84,7 @@ networking is handled internally in default configuration:
 network, so they can access each other and the outside network (like the internet) via NAT. This
 also allows to bind container ports to privileged host ports. (<1024)
 - In **rootless** mode (_run as user_), a tap device is created to connect the container's network
-with the usermode TCP/IP-stack, which unfortunately completely isolates containers from each other.
+with the usermode TCP/IP-stack, which unfortunately completely **isolates** containers from each other.
 The only way to access others containers is via host ports.
 
 For all practical means, both modes behave quite similar for a standalone container. If you require
@@ -108,7 +108,7 @@ Due to this conceptual resemblance it shoudln't surprise anyone, that we can eas
 [Podman][5] pod to something, that can be deployed directly to [Kubernetes][3]:
 
 ###### **Shell**:
-```bash
+```shell
 $ podman generate kube my-pod >> my-pod.yaml
 ```
 
@@ -117,50 +117,110 @@ $ podman generate kube my-pod >> my-pod.yaml
 If you need to start a single container either **rootfull** or **rootless** should work, so let us
 focus on examples with and without a [pod][].
 
-#### No pod
+#### Rootless without a pod
 
 ###### **Shell**:
-```bash
+```shell
 $ podman run -dt -p 8080:80 nginx
 21ee82cae8b8e0e2744426c3a2f57d7274779b71370e242532e26d3e301124ca
 ```
 
 Once the container is running you can reach it with curl:
 
-```bash
+```shell
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
 ```
 
-#### A pod
+#### Rootless within a pod
 
-[Podman][] comes with a nice shortcut to directly start a container in a new [pod][]:
-
-###### **Shell**:
-```bash
-$ podman run -dt --pod new:mypod -p 8080:80 nginx
-309d7f33bf472d790a13cc1a1cc7fff432d026e4c26c3844731b5c448b1b100a
-```
-
-The same can be achieved manually:
+Let us do the same again, but this time within a [pod][]. The first thing we have to do is to
+create the actual [pod][]:
 
 ###### **Shell**:
-```bash
+```shell
 $ podman pod create -n mypod -p 8080:80
 41983bfdf2e1c13d209cf9d114abe6dc298fffc24b7385d353edabbbc9890792
+```
+
+This looks good, let us see what we've got:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES               PODNAME
+67b89dbd6e21  k8s.gcr.io/pause:3.5  Created     0.0.0.0:8080->80/tcp  b6548bd64e31-infra  mypod
+```
+
+Noteworthy here is we need to publish the ports on pod-level and that [Podman][] creates an
+[infrastructure container][] for us.
+
+###### **Shell**`
+```shell
 $ podman run -dt --pod mypod nginx
 e2182dec80aa1fb42a06a01337fe86e951b13d89f9b600c50b39678d25a24301
 ```
 
+**Hint**: There is handy shortcut to directly start a container in a new [pod][]:
+
+###### **Shell**:
+```shell
+$ podman run -dt --pod new:mypod -p 8080:80 nginx
+309d7f33bf472d790a13cc1a1cc7fff432d026e4c26c3844731b5c448b1b100a
+```
+
+In a previous section about [networking](#what-about-networking), I've mentioned that containers
+are isolated in this mode, here you can see it in action:
+
+###### **Shell**:
+```shell
+$ curl localhost:8080
+curl: (7) Failed to connect to localhost port 8080: Connection refused
+```
+
+This can be avoided by creating a new network or by just using the **bridge**:
+
+###### **Shell**:
+```shell
+$ podman run -dt --pod new:mypod -p 8080:80 --network bridge nginx
+54d6d488edad06477286e579fd255981761e5881b0d9a5eda1d5d7a14c016559
+```
+
+And just for the sake of completeness:
+
+###### **Shell**:
+```shell
+$ curl -s localhost:8080 | htmlq --text h1
+Welcome to nginx!
+```
+
 Equipped with this we should be able to start our services now.
-
-
 
 ## Services
 
 In this section we are going to create each service from my [docker-compose][7] file and start
 it via [Podman][5]. Since we are doing it manually, we ignore the dependencies between the services
-and just start everything in order.
+and just start everything in correct order.
+
+### Create a pod
+
+No surprises here: We need a new [pod][], which also does the port handling on our bridge:
+
+###### **Shell**:
+```shell
+$ podman pod create -n observ --network bridge -p 6831:6831/udp -p 16686:16686 \
+		-p 9200:9200 -p 9300:9300 -p 12201:12201/udp -p 5601:5601 -p 9092:9092
+ee627e6718c19e707eb03c97b5cf86e8280c91cce9b031fea000ff180fac3c28
+```
+
+A quick check if everything is well:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
+```
 
 ### jaeger
 
@@ -174,13 +234,22 @@ jaeger:
         - "16686:16686"
 ```
 
-The first service is pretty easy, the only new thing is how to expose ports. This can be done with
-`-p` or with the long version `--publish`:
-
+This is going to be easy:
 
 ###### **Shell**:
-```bash
-$ podman run -it --pod=observ busybox
+```shell
+$ podman run -dit --name jaeger --pod=observ jaegertracing/all-in-one:latest
+7f5a083ece1ee60e9d8b394bf25bd361aa98afa987a6840f0d5b2b5929b44b72
+```
+
+Checking time:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
 ```
 
 ### Elastic
@@ -197,13 +266,48 @@ elasticsearch:
         ES_JAVA_OPTS: "-Xms512m -Xmx512m"
 ```
 
-```log
+Besides the [environment][] there is also no magic involved:
+
+###### **Shell**:
+```shell
+$ podman run -dit --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+    docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+2d81acbf527a3f2c26b4c66133b4826c460f719124d2ff1d71005127994c77a7
+```
+
+Checking time:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
+2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2  Exited (78) 3 days ago  elastic             observ
+```
+
+Something obviously went wrong.  Unfortunate, but let us check what is wrong here:
+
+###### **Shell**:
+```shell
+$ podman logs 2d81acbf527a | grep -A 2 ERROR
 ERROR: [1] bootstrap checks failed
+
 [1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
 ```
 
-```bash
-$ podman run -it --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+Looks like we have some problems within [Qemu][], that didn't happen in [Docker][]. The problem is
+well explained here - including a solution:
+
+<https://stackoverflow.com/questions/51445846/elasticsearch-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-inc>
+
+Even easier than dealing with `systcl` inside of a container, let us just move on to the current version of
+[elasticsearch][], which seems to ignore this error altogether:
+
+###### **Shell**:
+```shell
+$ podman run -it --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+    docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
 ```
 
 ### Fluent
@@ -264,4 +368,5 @@ https://github.com/heyvito/podman-macos
 https://marcusnoble.co.uk/2021-09-01-migrating-from-docker-to-podman/
 https://github.com/containers/podman/blob/main/docs/tutorials/basic_networking.md
 https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
+https://docs.podman.io/en/latest/markdown/podman-run.1.html
 ```
