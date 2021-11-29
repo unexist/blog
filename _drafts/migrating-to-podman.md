@@ -152,7 +152,7 @@ CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES     
 67b89dbd6e21  k8s.gcr.io/pause:3.5  Created     0.0.0.0:8080->80/tcp  b6548bd64e31-infra  mypod
 ```
 
-Noteworthy here is we need to publish the ports on pod-level and that [Podman][] creates an
+Noteworthy here is we need to publish the ports on [pod][]-level and that [Podman][] creates an
 [infrastructure container][] for us.
 
 ###### **Shell**`
@@ -188,10 +188,32 @@ $ podman run -dt --pod new:mypod -p 8080:80 --network bridge nginx
 
 And just for the sake of completeness:
 
-###### **Shell**:
+###### **Shell**`
 ```shell
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
+```
+
+### How can I build a container?
+
+Building container is also piece of cake. [Podman][] uses [buildah][] (or rather code from it) to
+actually build the container, which is better explained [here][]. The interesting part for us is
+that [Dockerfile][] is also supported and heads up to a quick and pointless example:
+
+###### **Dockerfile**`
+```Dockerfile
+FROM nginx
+```
+
+###### **Shell**`
+```shell
+$ podman build --format docker -t mynginx .
+STEP 1/1: FROM nginx
+COMMIT mynginx
+--> ea335eea17a
+Successfully tagged localhost/mynginx:latest
+Successfully tagged docker.io/library/nginx:latest
+ea335eea17ab984571cd4a3bcf90a0413773b559c75ef4cda07d0ce952b00291
 ```
 
 Equipped with this we should be able to start our services now.
@@ -286,7 +308,7 @@ CONTAINER ID  IMAGE                                                    STATUS   
 2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2  Exited (78) 3 days ago  elastic             observ
 ```
 
-Something obviously went wrong.  Unfortunate, but let us check what is wrong here:
+Something obviously went wrong. Unfortunate, but let us check what is wrong here:
 
 ###### **Shell**:
 ```shell
@@ -301,13 +323,27 @@ well explained here - including a solution:
 
 <https://stackoverflow.com/questions/51445846/elasticsearch-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-inc>
 
-Even easier than dealing with `systcl` inside of a container, let us just move on to the current version of
-[elasticsearch][], which seems to ignore this error altogether:
+Even easier than dealing with `systcl` inside of a container, let us just bump to the current
+version of [elasticsearch][], which seems to ignore this error altogether:
 
 ###### **Shell**:
 ```shell
+$ podman rm 2d81acbf527a
+2d81acbf527a
 $ podman run -it --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
-    docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+847f303ffa7562778ea8b15fb83f8a6f6beec949af78edfc31f060a1cb50469b
+```
+
+Checking time:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
 ```
 
 ### Fluent
@@ -327,6 +363,45 @@ fluentd:
         - elasticsearch
 ```
 
+Next on our list is [fluent][]. For this service we have to [build](#how-can-i-build-a-container)
+and after that start it with a [volume mount][].
+
+###### **Shell**:
+```shell
+$ cd docker
+$ podman build --format docker -t fluent .
+STEP 1/5: FROM fluent/fluentd:v1.14-debian-1
+..
+STEP 2/5: USER root
+..
+STEP 3/5: RUN ["gem", "install", "fluent-plugin-elasticsearch"]
+..
+STEP 4/5: RUN ["gem", "install", "fluent-plugin-input-gelf"]
+..
+Successfully tagged localhost/fluent:latest
+215d4b1979f362ec4ce38c4ef57da8e16c3261d7060f07ec403e2d86941c6c61
+```
+
+And after that we just need to start the container:
+
+###### **Shell**:
+```shell
+podman run -dit --name fluent --pod=observ -v fluentd:/fluentd/etc:Z fluent
+a76a5ecb32efb2ef5d22447d1cacce369ef6639afaadd3a8f41b1b6653c01852
+```
+
+Checking time again:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
+```
+
 ### Kibana
 
 ###### **docker-compose.yaml**:
@@ -338,6 +413,27 @@ kibana:
         - "5601:5601"
     depends_on:
         - elasticsearch
+```
+
+I think you get it and know the drill:
+
+###### **Shell**:
+```shell
+$ podman run -dit --name kibana --pod=observ docker.elastic.co/kibana/kibana-oss:7.10.2
+cad125873b438efea4b549e51edc00981bf88bb3ed78c8bdf54aecb43fba64d8
+```
+
+More checking time:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
+cad125873b43  docker.elastic.co/kibana/kibana-oss:6.8.2                 Up 3 days ago  kibana              observ
 ```
 
 ### Redpanda
@@ -353,6 +449,28 @@ redpanda:
         - "9092:9092"
 ```
 
+One more - last time - promised:
+
+###### **Shell**:
+```shell
+$ podman run -dit --name redpanda --pod=observ vectorized/redpanda
+b728da318549cca15ddd0019eec1cddff4e3e388cacbc0dcc1f7ea38480c81fc
+```
+
+And final checking time:
+
+###### **Shell**:
+```shell
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
+cad125873b43  docker.elastic.co/kibana/kibana-oss:6.8.2                 Up 3 days ago  kibana              observ
+b728da318549  docker.io/vectorized/redpanda:latest                      Up 3 days ago  redpanda            observ
+```
+
 ## Conclusion
 
 ```log
@@ -360,7 +478,6 @@ https://www.docker.com/resources/what-container
 https://www.capitalone.com/tech/cloud/container-runtime/
 https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
 https://www.docker.com/blog/updating-product-subscriptions/
-https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users#how_does_docker_work_
 https://www.redhat.com/sysadmin/compose-podman-pods
 https://podman.io/getting-started/installation
 https://github.com/containers/podman-compose
@@ -369,4 +486,6 @@ https://marcusnoble.co.uk/2021-09-01-migrating-from-docker-to-podman/
 https://github.com/containers/podman/blob/main/docs/tutorials/basic_networking.md
 https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
 https://docs.podman.io/en/latest/markdown/podman-run.1.html
+https://docs.podman.io/en/latest/markdown/podman-build.1.html
+https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users
 ```
