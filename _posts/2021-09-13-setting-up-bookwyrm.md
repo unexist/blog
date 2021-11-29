@@ -77,7 +77,6 @@ After _verification_ everything is running properly, I just got rid of **v9.6** 
 ###### **Shell**`
 ```shell
 $ su - postgres -c 'pg_dropcluster --stop 9.6 main'
-
 $ apt autoremove postgresql-9.6
 $ apt autoclean
 ```
@@ -95,7 +94,7 @@ I am not a big fan of using triggers for business logic, because they make upgra
 of hide logic and don't necessarily convey how something is done. Nevertheless, the easiest way here
 was to temporarily elevate the privileges of the database user:
 
-###### **Shell**:
+###### **SQL**:
 ```sql
 alter role user_name superuser;
 alter role user_name nosuperuser;
