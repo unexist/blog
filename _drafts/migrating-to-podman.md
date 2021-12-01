@@ -1,9 +1,9 @@
 ---
 layout: post
 title: migrating to podman
-date: 2021-11-20 12:51 +0100
+date: 2021-12-01 19:00 +0100
 author: Christoph Kappel
-tags: tools docker podman macos howcase
+tags: tools docker podman macos kibana elastic fluent jaeger showcase
 categories: tech showcase
 toc: true
 ---
@@ -155,7 +155,7 @@ CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES     
 Noteworthy here is we need to publish the ports on [pod][]-level and that [Podman][] creates an
 [infrastructure container][] for us.
 
-###### **Shell**`
+###### **Shell**:
 ```shell
 $ podman run -dt --pod mypod nginx
 e2182dec80aa1fb42a06a01337fe86e951b13d89f9b600c50b39678d25a24301
@@ -188,7 +188,7 @@ $ podman run -dt --pod new:mypod -p 8080:80 --network bridge nginx
 
 And just for the sake of completeness:
 
-###### **Shell**`
+###### **Shell**:
 ```shell
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
@@ -200,12 +200,12 @@ Building container is also piece of cake. [Podman][] uses [buildah][] (or rather
 actually build the container, which is better explained [here][]. The interesting part for us is
 that [Dockerfile][] is also supported and heads up to a quick and pointless example:
 
-###### **Dockerfile**`
+###### **Dockerfile**:
 ```Dockerfile
 FROM nginx
 ```
 
-###### **Shell**`
+###### **Shell**:
 ```shell
 $ podman build --format docker -t mynginx .
 STEP 1/1: FROM nginx
@@ -293,7 +293,7 @@ Besides the [environment][] there is also no magic involved:
 ###### **Shell**:
 ```shell
 $ podman run -dit --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
-    docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+    docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 2d81acbf527a3f2c26b4c66133b4826c460f719124d2ff1d71005127994c77a7
 ```
 
@@ -302,10 +302,10 @@ Checking time:
 ###### **Shell**:
 ```shell
 $ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
-CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
-2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2  Exited (78) 3 days ago  elastic             observ
+CONTAINER ID  IMAGE                                                 STATUS                  NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago           ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago           jaeger              observ
+2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Exited (78) 3 days ago  elastic             observ
 ```
 
 Something obviously went wrong. Unfortunate, but let us check what is wrong here:
@@ -331,7 +331,7 @@ version of [elasticsearch][], which seems to ignore this error altogether:
 $ podman rm 2d81acbf527a
 2d81acbf527a
 $ podman run -it --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
-    -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 847f303ffa7562778ea8b15fb83f8a6f6beec949af78edfc31f060a1cb50469b
 ```
 
@@ -340,10 +340,10 @@ Checking time:
 ###### **Shell**:
 ```shell
 $ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
-CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
+CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
 ```
 
 ### Fluent
@@ -363,20 +363,40 @@ fluentd:
         - elasticsearch
 ```
 
-Next on our list is [fluent][]. For this service we have to [build](#how-can-i-build-a-container)
-and after that start it with a [volume mount][].
+Next on our list is [fluent][]. For this service we need to mount and bind a host path into the
+running container. Unfortunately, this is no easy task on macOS and there is a pending issue:
+
+<https://github.com/containers/podman/issues/8016>
+
+Alas, we don't need to be able to change the config on-the-fly, copying the config directly into
+the container also does the trick here. So we are going to change the [Dockerfile][] from my
+project a bit here:
+
+
+###### **Dockerfile**:
+```Dockerfile
+FROM fluent/fluentd:v1.14-debian-1
+
+USER root
+
+COPY ./fluentd/fluent.conf /fluentd/etc/fluent.conf
+
+RUN ["gem", "install", "fluent-plugin-elasticsearch"]
+RUN ["gem", "install", "fluent-plugin-input-gelf"]
+
+USER fluent
+```
 
 ###### **Shell**:
 ```shell
 $ cd docker
 $ podman build --format docker -t fluent .
-STEP 1/5: FROM fluent/fluentd:v1.14-debian-1
-..
-STEP 2/5: USER root
-..
-STEP 3/5: RUN ["gem", "install", "fluent-plugin-elasticsearch"]
-..
-STEP 4/5: RUN ["gem", "install", "fluent-plugin-input-gelf"]
+STEP 1/6: FROM fluent/fluentd:v1.14-debian-1
+STEP 2/6: USER root
+STEP 3/6: COPY ./fluentd/fluent.conf /fluent/etc/fluent.conf
+STEP 4/6: RUN ["gem", "install", "fluent-plugin-elasticsearch"]
+STEP 5/6: RUN ["gem", "install", "fluent-plugin-input-gelf"]
+STEP 6/6: USER fluent
 ..
 Successfully tagged localhost/fluent:latest
 215d4b1979f362ec4ce38c4ef57da8e16c3261d7060f07ec403e2d86941c6c61
@@ -386,7 +406,7 @@ And after that we just need to start the container:
 
 ###### **Shell**:
 ```shell
-podman run -dit --name fluent --pod=observ -v fluentd:/fluentd/etc:Z fluent
+$ podman run -dit --name fluent --pod=observ fluent
 a76a5ecb32efb2ef5d22447d1cacce369ef6639afaadd3a8f41b1b6653c01852
 ```
 
@@ -395,11 +415,11 @@ Checking time again:
 ###### **Shell**:
 ```shell
 $ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
-CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
+CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
 ```
 
 ### Kibana
@@ -415,11 +435,13 @@ kibana:
         - elasticsearch
 ```
 
-I think you get it and know the drill:
+I think you get it and know the drill. The only thing we need to take care of is the hostname of
+[elasticsearch][], since networking works a bit different in [Podman][]:
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name kibana --pod=observ docker.elastic.co/kibana/kibana-oss:7.10.2
+$ podman run -dit --name kibana --pod=observ -e "ELASTICSEARCH_HOSTS=http://localhost:9200" \
+    docker.elastic.co/kibana/kibana-oss:7.10.2
 cad125873b438efea4b549e51edc00981bf88bb3ed78c8bdf54aecb43fba64d8
 ```
 
@@ -428,12 +450,12 @@ More checking time:
 ###### **Shell**:
 ```shell
 $ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
-CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
-cad125873b43  docker.elastic.co/kibana/kibana-oss:6.8.2                 Up 3 days ago  kibana              observ
+CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
+cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              observ
 ```
 
 ### Redpanda
@@ -462,16 +484,37 @@ And final checking time:
 ###### **Shell**:
 ```shell
 $ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
-CONTAINER ID  IMAGE                                                     STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                      Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                 Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                                   Up 3 days ago  fluent              observ
-cad125873b43  docker.elastic.co/kibana/kibana-oss:6.8.2                 Up 3 days ago  kibana              observ
-b728da318549  docker.io/vectorized/redpanda:latest                      Up 3 days ago  redpanda            observ
+CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
+cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              observ
+b728da318549  docker.io/vectorized/redpanda:latest                  Up 3 days ago  redpanda            observ
 ```
 
 ## Conclusion
+
+[Podman][] is a nice replacement for [Docker][], but not every workflow and especially not every
+[docker-compose][] file works out of the box. Network handling is quite different, but that might
+just be true on macOS.
+
+While writing this post I enjoyed playing with it, learning the commands and also the way this can
+be scripted and added some handy aliases to my zsh file like this goodie:
+
+###### **Shell**:
+```shell
+$ eval `podman ps -a | fzf --multi --tac --no-sort | cut -d ' ' -f1 | sed -nE "s#(.*)#-l \'podman logs -f \1\'#gp" | xargs -r -0 -n10 -d'\n' echo multitail -C`
+```
+
+This basically displays the running container via [fzf][], allows multiselect and displays logs of
+the selected container in [multitail][].
+
+I never did something like this with [Docker][], would have saved me quite some headaches I suppose.
+
+The showcase of the logging vs tracing can be found here:
+
+<https://github.com/unexist/showcase-observability-quarkus>
 
 ```log
 https://www.docker.com/resources/what-container
