@@ -127,6 +127,7 @@ $ podman run -dt -p 8080:80 nginx
 
 Once the container is running you can reach it with curl:
 
+###### **Shell**:
 ```shell
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
@@ -244,7 +245,7 @@ CONTAINER ID  IMAGE                                                    STATUS   
 443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
 ```
 
-### jaeger
+### Deploy Jaeger
 
 ###### **docker-compose.yaml**:
 ```yaml
@@ -274,7 +275,7 @@ CONTAINER ID  IMAGE                                                    STATUS   
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
 ```
 
-### Elastic
+### Deploy Elastic
 
 ###### **docker-compose.yaml**:
 ```yaml
@@ -346,7 +347,7 @@ CONTAINER ID  IMAGE                                                 STATUS      
 847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
 ```
 
-### Fluent
+### Deploy Fluentd
 
 ###### **docker-compose.yaml**:
 ```yaml
@@ -422,7 +423,7 @@ CONTAINER ID  IMAGE                                                 STATUS      
 a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
 ```
 
-### Kibana
+### Deploy Kibana
 
 ###### **docker-compose.yaml**:
 ```yaml
@@ -458,7 +459,7 @@ a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ag
 cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              observ
 ```
 
-### Redpanda
+### Deploy Redpanda
 
 ###### **docker-compose.yaml**:
 ```yaml
