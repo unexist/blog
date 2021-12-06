@@ -235,6 +235,7 @@ h3 {
 h4 {
     color: var(--h4-color);
     border-bottom: 1px solid var(--h4-color);
+    margin-bottom: 15px;
 }
 
 h3, h4 {
@@ -325,7 +326,7 @@ hr {
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
-    overflow-x: scroll;
+    overflow-x: hidden;
 }
 
 .post-content pre.highlight code {
