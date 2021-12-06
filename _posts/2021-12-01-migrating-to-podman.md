@@ -202,7 +202,7 @@ actually build the container, which is better explained [here][14]. The interest
 that [Dockerfile][3] is also supported and heads up to a quick and pointless example:
 
 ###### **Dockerfile**:
-```Dockerfile
+```dockerfile
 FROM nginx
 ```
 
@@ -375,7 +375,7 @@ project a bit here:
 
 
 ###### **Dockerfile**:
-```Dockerfile
+```dockerfile
 FROM fluent/fluentd:v1.14-debian-1
 
 USER root
