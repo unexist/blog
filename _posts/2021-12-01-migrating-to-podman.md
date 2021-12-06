@@ -99,7 +99,7 @@ The concept of a [pod][21] was originally introduced within [Kubernetes][5]:
 instance of a running process in your cluster. Pods contain one or more containers, such as Docker
 containers. When a Pod runs multiple containers, the containers are managed as a single entity and
 share the Pod's resources.
-<cite>https://cloud.google.com/kubernetes-engine/docs/concepts/pod</cite>
+<cite><https://cloud.google.com/kubernetes-engine/docs/concepts/pod></cite>
 
 So generally speaking, a [pod][21] is a group of containers, that share the same network, process id
 and also the ipc namespaces and this is true for both [Podman][6] and [Kubernetes][5].
@@ -148,7 +148,7 @@ This looks good, let us see what we've got:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES               PODNAME
 67b89dbd6e21  k8s.gcr.io/pause:3.5  Created     0.0.0.0:8080->80/tcp  b6548bd64e31-infra  mypod
 ```
@@ -240,7 +240,7 @@ A quick check if everything is well:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
 ```
@@ -269,7 +269,7 @@ Checking time:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
@@ -302,7 +302,7 @@ Checking time:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago           ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago           jaeger              observ
@@ -340,7 +340,7 @@ Checking time:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
@@ -415,7 +415,7 @@ Checking time again:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
@@ -450,7 +450,7 @@ More checking time:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
@@ -484,7 +484,7 @@ And final checking time:
 
 ###### **Shell**:
 ```shell
-$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
+{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
