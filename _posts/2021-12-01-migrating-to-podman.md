@@ -513,7 +513,7 @@ the selected container in [multitail][19].
 
 I never did something like this with [Docker][2], would have saved me quite some headaches I suppose.
 
-The showcase of the logging vs tracing can be found here:
+My logging vs tracing showcase can be found here:
 
 <https://github.com/unexist/showcase-observability-quarkus>
 
