@@ -148,7 +148,7 @@ This looks good, let us see what we've got:
 
 ###### **Shell**:
 ```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"{% endraw %}
+$ podman ps -a --pod --format {% raw %}"table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES               PODNAME
 67b89dbd6e21  k8s.gcr.io/pause:3.5  Created     0.0.0.0:8080->80/tcp  b6548bd64e31-infra  mypod
 ```
