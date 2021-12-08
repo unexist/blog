@@ -333,7 +333,7 @@ hr {
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .post-content pre.highlight code {
