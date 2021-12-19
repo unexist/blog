@@ -4,7 +4,7 @@ title: Specification by example
 date: 2021-09-09 14:17 +0200
 author: Christoph Kappel
 tags: tools testing specification-by-example cucumber concordion fitnesse showcase updated
-categories: testing showcase
+categories: testing specification showcase
 toc: true
 ---
 Testing is one of the few topics developers like to avoid when possible and admittedly I am no
