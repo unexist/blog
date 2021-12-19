@@ -3,15 +3,15 @@ layout: post
 title: Domain Storytelling
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
-categories: showcase
+tags: agile ddd
+categories: specification
 toc: true
 ---
 In my previous post about
 [Specification by Example]({% post_url 2021-09-09-specification-by-example %}) I pointed out, that
 for me communication is a major problem within software projects and I suggested [specification
-workshops][] as a way to transport the intent of a specific feature or task. This probably works
-best in agile projects with short sprints, so that there is no need to define everything upfront.
+workshops][] as a way to transport the intent of a specific feature. This probably works best in
+agile projects with short sprints, so that there is no need to define everything upfront.
 
 What if we have to define everything upfront, because there are waterfall-y processes in place and
 there is no short term plan to go agile?
@@ -46,8 +46,10 @@ doctors~~ reduce ambiguity.
 
 ### When is long too long?
 
-The length of a specification is also a difficult topic. It should include everything that is
-required to understand
+The length of a specification is also a difficult topic. In agile, stories are just a reminder for
+people who had a discussion about a particular feature, so it is perfectly fine when the stories
+just include the gist of it. Upfront, more explanation is required and sometimes leads to whole
+screens of prosa.
 
 ## Domain Storytelling
 
