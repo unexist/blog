@@ -30,8 +30,8 @@ I assume the manual on how to remove a combustion engine from a car for technica
 something, that I don't easily grasp.
 
 **Hint**: A nice trick from the agile community is to define [personas][] for the targeted
-audience. They create a fictional person, fill in some details like hobbies (sometimes even
-pictures) and then try to impersonate this person while writing stories.
+audience. They create a fictional person, fill in some details like hobbies, pictures etc and
+and then try to impersonate this person while writing stories.
 
 ### What do you mean by that?
 
@@ -49,11 +49,16 @@ doctors~~ reduce ambiguity.
 The length of a specification is also a difficult topic. In agile, stories are just a reminder for
 people who had a discussion about a particular feature, so it is perfectly fine when the stories
 just include the gist of it. Upfront, more explanation is required and sometimes leads to whole
-screens of prosa.
+screens of prosa and it is difficult to get the gist of it.
+
+In the agile world there is a saying:
+
+>If you run out of space use smaller cards.
+<cite>Unknown</cite>
 
 ## Domain Storytelling
 
-I recently stumbled upon a new method to model
+I recently stumbled upon another method of modelling
 [Domain Storytelling][] is collaborative and graphical modelling tool
 
 ![image](/assets/images/20211209-overview.png)
