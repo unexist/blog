@@ -25,9 +25,9 @@ gvproxy cannot port forward UDP until Podman v4
 https://issueexplorer.com/issue/containers/podman-machine-cni/8
 
 
-Fluent, gelf, TCP:
+Fluent, gelf, TCP: protocol_type
 
-https://community.graylog.org/t/fluentd-cannot-send-logs-to-udp-port-of-graylog-only-tcp/18150
+https://github.com/MerlinDMC/fluent-plugin-input-gelf/blob/master/lib/fluent/plugin/in_gelf.rb
 
 Opentracing vs Opentelemetry
 Quarkus Update
