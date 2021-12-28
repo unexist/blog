@@ -18,13 +18,13 @@ time, but due to their limitation to run on Linux systems only, this poor macOS 
 chance to really look into it. Gladly, they've found a workaround with [Qemu][7] - so let us give it
 a spin now.
 
-I am currently working on a showcase for logging vs tracing, which needs a bit of infrastructure
+I am currently working on a showcase for logging-vs-tracing, which needs a bit of infrastructure
 components, so this sounds like a nice exercise: In this post we are going to migrate from
 [Docker][2] and [docker-compose][9] to something that works properly with [Podman][6].
 
 And for completeness, here is the [docker-compose][9] file upfront:
 
-<https://github.com/unexist/showcase-observability-quarkus/blob/master/docker/docker-compose.yaml>
+<https://github.com/unexist/showcase-logtraceability-quarkus/blob/master/docker/docker-compose.yaml>
 
 ## Podman
 
@@ -231,7 +231,7 @@ No surprises here: We need a new [pod][21], which also does the port handling on
 
 ###### **Shell**:
 ```shell
-$ podman pod create -n observ --network bridge -p 6831:6831/udp -p 16686:16686 \
+$ podman pod create -n logtrace --network bridge -p 6831:6831/udp -p 16686:16686 \
 		-p 9200:9200 -p 9300:9300 -p 12201:12201/udp -p 5601:5601 -p 9092:9092
 ee627e6718c19e707eb03c97b5cf86e8280c91cce9b031fea000ff180fac3c28
 ```
@@ -242,7 +242,7 @@ A quick check if everything is well:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  logtrace
 ```
 
 ### Deploy Jaeger
@@ -261,7 +261,7 @@ This is going to be easy:
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name jaeger --pod=observ jaegertracing/all-in-one:latest
+$ podman run -dit --name jaeger --pod=logtrace jaegertracing/all-in-one:latest
 7f5a083ece1ee60e9d8b394bf25bd361aa98afa987a6840f0d5b2b5929b44b72
 ```
 
@@ -271,8 +271,8 @@ Checking time:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              logtrace
 ```
 
 ### Deploy Elastic
@@ -293,7 +293,7 @@ Besides the [environment][11] there is also no magic involved:
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+$ podman run -dit --name elastic --pod=logtrace -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
     docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 2d81acbf527a3f2c26b4c66133b4826c460f719124d2ff1d71005127994c77a7
 ```
@@ -304,9 +304,9 @@ Checking time:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS                  NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago           ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago           jaeger              observ
-2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Exited (78) 3 days ago  elastic             observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago           ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago           jaeger              logtrace
+2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Exited (78) 3 days ago  elastic             logtrace
 ```
 
 Something obviously went wrong. Unfortunate, but let us check what is wrong here:
@@ -331,7 +331,7 @@ version of [elasticsearch][10], which seems to ignore this error altogether:
 ```shell
 $ podman rm 2d81acbf527a
 2d81acbf527a
-$ podman run -it --name elastic --pod=observ -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
+$ podman run -it --name elastic --pod=logtrace -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
     -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 847f303ffa7562778ea8b15fb83f8a6f6beec949af78edfc31f060a1cb50469b
 ```
@@ -342,9 +342,9 @@ Checking time:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
 ```
 
 ### Deploy Fluentd
@@ -407,7 +407,7 @@ And after that we just need to start the container:
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name fluent --pod=observ fluent
+$ podman run -dit --name fluent --pod=logtrace fluent
 a76a5ecb32efb2ef5d22447d1cacce369ef6639afaadd3a8f41b1b6653c01852
 ```
 
@@ -417,10 +417,10 @@ Checking time again:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
 ```
 
 ### Deploy Kibana
@@ -441,8 +441,8 @@ I think you get it and know the drill. The only thing we need to take care of is
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name kibana --pod=observ -e "ELASTICSEARCH_HOSTS=http://localhost:9200" \
-    docker.elastic.co/kibana/kibana-oss:7.10.2
+$ podman run -dit --name kibana --pod=logtrace -e "ELASTICSEARCH_HOSTS=http://localhost:9200" \
+    docker.elastic.co/kibana/kibana:7.14.2
 cad125873b438efea4b549e51edc00981bf88bb3ed78c8bdf54aecb43fba64d8
 ```
 
@@ -452,11 +452,11 @@ More checking time:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
-cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
+cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              logtrace
 ```
 
 ### Deploy Redpanda
@@ -476,7 +476,7 @@ One more - last time - promised:
 
 ###### **Shell**:
 ```shell
-$ podman run -dit --name redpanda --pod=observ vectorized/redpanda
+$ podman run -dit --name redpanda --pod=logtrace vectorized/redpanda
 b728da318549cca15ddd0019eec1cddff4e3e388cacbc0dcc1f7ea38480c81fc
 ```
 
@@ -486,12 +486,12 @@ And final checking time:
 ```shell
 {% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
-443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  observ
-7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              observ
-847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             observ
-a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              observ
-cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              observ
-b728da318549  docker.io/vectorized/redpanda:latest                  Up 3 days ago  redpanda            observ
+443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
+7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
+847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
+a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
+cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              logtrace
+b728da318549  docker.io/vectorized/redpanda:latest                  Up 3 days ago  redpanda            logtrace
 ```
 
 ## Conclusion
@@ -513,9 +513,9 @@ the selected container in [multitail][19].
 
 I never did something like this with [Docker][2], would have saved me quite some headaches I suppose.
 
-My logging vs tracing showcase can be found here:
+My logging-vs-tracing showcase can be found here:
 
-<https://github.com/unexist/showcase-observability-quarkus>
+<https://github.com/unexist/showcase-logging-tracing-quarkus>
 
 [1]: https://www.docker.com/products/docker-desktop
 [2]: https://www.docker.com/
