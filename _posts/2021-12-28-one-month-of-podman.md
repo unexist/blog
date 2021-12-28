@@ -1,7 +1,6 @@
 ---
 layout: post
 title: One month of Podman
-date: %%%DATE%%%
 date: 2021-12-28 22:45 +0100
 author: Christoph Kappel
 tags: showcase
