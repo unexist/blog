@@ -14,11 +14,7 @@ layout: default
                 {% endif %}
             {% endif %}
             {% if page.follow_up != nil %}
-                {% capture follow_up }}
-                    {{ page.follow_up }}
-                {% endcapture %}
-
-                and follow-up {%- post_url follow_up -%}
+                and follow-up {{ post.follow_up | to_post_link }}
             {% endif %}
         </div>
     </div>
