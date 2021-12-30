@@ -8,13 +8,13 @@ layout: default
             Written by <a href="/about">{{ page.author }}</a> on <span>{{ page.date | date_to_long_string }}</span>
             {% if page.tags != nil %}
                 {% if page.follow_up != nil %}
-                    , tagged as {{ page | tags }} and
+                    , tagged as {{ page | tags }}
                 {% else %}
                     and tagged as {{ page | tags }}
                 {% endif %}
             {% endif %}
             {% if page.follow_up != nil %}
-                and followed-up {% post_url {{ page.follow_up }} %}
+                and followed-up {% post_url "{{ page.follow_up }}" %}
             {% endif %}
         </div>
     </div>
