@@ -9,10 +9,12 @@ layout: default
             {% if page.tags != nil %}
                 and tagged as {{ page | tags }}
             {% endif %}
-            {% if page.follow_up != nil %}
-                and followed by {{ post_url page_follow_up }}
-            {% endif %}
         </div>
+        {% if page.follow_up != nil %}
+        <div class="post-meta">
+            and followed by {{ post_url page.follow_up }}
+        </div>
+        {% endif %}
     </div>
 
     <div id="table-of-contents">
