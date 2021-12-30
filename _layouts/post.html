@@ -7,14 +7,16 @@ layout: default
         <div class="post-meta">
             Written by <a href="/about">{{ page.author }}</a> on <span>{{ page.date | date_to_long_string }}</span>
             {% if page.tags != nil %}
-                and tagged as {{ page | tags }}
+                {% if page.follow_up != nil %}
+                    , tagged as {{ page | tags }} and
+                {% else %}
+                    and tagged as {{ page | tags }}
+                {% endif %}
+            {% endif %}
+            {% if page.follow_up != nil %}
+                and followed-up {% post_url page.follow_up %}
             {% endif %}
         </div>
-        {% if page.follow_up != nil %}
-        <div class="post-meta">
-            and followed by {{ post_url page.follow_up }}
-        </div>
-        {% endif %}
     </div>
 
     <div id="table-of-contents">
