@@ -95,7 +95,7 @@ ofc.
 
 I know I don't have to remind you, but my logging-vs-tracing showcase can still be found here:
 
-<https://github.com/unexist/showcase-logtraceability-quarkus>
+<https://github.com/unexist/showcase-logging-vs-tracing-quarkus>
 
 [1]: https://www.fluentd.org/
 [2]: https://www.jaegertracing.io/
