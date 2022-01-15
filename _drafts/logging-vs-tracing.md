@@ -16,7 +16,7 @@ This can work pretty well for standalone applications, but what about [distribut
 systems easily span across dozen of services on different nodes and have a quite complex call
 hierarchy.
 
-## Overview with a Domainstory
+## Tell me a Domainstory
 
 I want to demonstrate the difference of [logging][] and [tracing][], so we are going to use a
 totally contrived example with needless complexity, just to prove my point. I hadn't had time to
@@ -41,18 +41,31 @@ Just for a starter, read the first steps like this:
 > 2. The todo-service-create assigns an id to a Todo
 > 3. ...
 
+This [Domainstory][] is **digitalized** and way too big, but I will conclude on that in an
+upcoming post - promised.
+
 ## Logging vs Tracing
 
-Let us start this post with two images, pick the one you would prefer on, let us say a Friday
-evening, when something is wrong and you are losing data on production:
+Now that we have a common understanding what this example is all about, let us get started with
+our comparison of [logging][] and [tracing][]. I think the first big difference is the visuals:
 
 | Logging ([Kibana][])                        | Tracing ([Jaeger][])                         |
 |----------------------------------------------|----------------------------------------------|
 | ![image](/assets/images/20220115-kibana.png) | ![image](/assets/images/20220115-jaeger.png) |
 
-## Logging
+### Logging
 
-## Tracing
+On the left side we see a typical [EFK][] stack with an excerpt of the entries of our use case. I
+said excerpt, because there are several lines missing - there are 19 in total. Each of them
+describes only a single instance and includes no further context.
+
+###### **Log**:
+```java
+LOGGER.info("Updated todo: {}",
+    fb -> List.of(fb.todo("todo", todo)));
+```
+
+### Tracing
 
 ## Conclusion
 
@@ -65,3 +78,4 @@ All of the examples can be found here:
 
 https://github.com/unexist/showcase-logging-tracing-quarkus/blob/master/docs/todo.dst
 https://egon.io
+https://github.com/tersesystems/echopraxia
