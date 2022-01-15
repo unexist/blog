@@ -7,27 +7,24 @@ tags: tracing jaeger opentelemetry logging kibana elascticsearch fluentd gelf sh
 categories: observability showcase
 toc: true
 ---
-[Migrating to Podman]({% post_url 2021-12-01-migrating-to-podman %})
+If you talk to developers about what they need to see what is happening in an application, they
+usually tell you about logs and sometimes even about [structured][] ones, which include a bit
+more meta  information, than the stuff the original developer deemed necessary at the time of
+writing.
 
-Podman Port
-Jaeger vs Collector Port 6832
+This can work pretty well for standalone applications, but what about [distributed][] ones? Todays
+systems easily span across dozen of services on different nodes and have a quite complex call
+hierarchy.
 
-```log
-Error: cannot setup pipelines: cannot start receivers: listen udp :6832: bind: address already in use
-```
+Let us start this post with two images, pick the one you would prefer, on let us say a Friday
+evening, when something is wrong and you are losing data on production:
 
-```log
-LogManager error of type GENERIC_FAILURE: Port localhost:12201 not reachable
-```
+| Logging                                      | Tracing                                      |
+|----------------------------------------------|----------------------------------------------|
+| ![image](/assets/images/20220115-kibana.png) | ![image](/assets/images/20220115-jaeger.png) |
 
-gvproxy cannot port forward UDP until Podman v4
+## Conclusion
 
-https://issueexplorer.com/issue/containers/podman-machine-cni/8
+All of the examples can be found here:
 
-
-Fluent, gelf, TCP: protocol_type
-
-https://github.com/MerlinDMC/fluent-plugin-input-gelf/blob/master/lib/fluent/plugin/in_gelf.rb
-
-Opentracing vs Opentelemetry
-Quarkus Update
+<https://github.com/unexist/showcase-logging-vs-tracing-quarkus>
