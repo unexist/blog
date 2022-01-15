@@ -8,9 +8,10 @@ categories: tech showcase
 toc: true
 ---
 In my previous post [Migrating to Poadman]({% post_url 2021-12-01-migrating-to-podman %}) you
-basically accompanied me on my migration from a [docker-compose][10] file to a more CLI-based approach
-with [Podman][5]. I am still working on the **logging-vs-tracing** showcase, but there were a few
-surprises and I just wanted to write a follow-up instead of just modifying my original post.
+basically accompanied me on my migration from a [docker-compose][10] file to a more CLI-based
+approach with [Podman][5]. I am still working on the **logging-vs-tracing** showcase, but there
+were a few surprises and I just wanted to write a follow-up instead of just modifying my original
+post.
 
 ## Container ports
 
@@ -23,27 +24,28 @@ Adding another container is no problem, but when I tried to fire it up I found t
 
 ###### **Log**:
 ```log
-Error: cannot setup pipelines: cannot start receivers: listen udp :6832: bind: address already in use
+Error: cannot setup pipelines: cannot start receivers: listen udp :6832: bind: address already in
+use
 ```
 
-The apparent problem here is that both the [jaeger-collector][15] and the [otel-collector][17] run on
-the same port. To my surprise, there is no network separation of the containers inside of a
+The apparent problem here is that both the [jaeger-collector][15] and the [otel-collector][17] run
+on the same port. To my surprise, there is no network separation of the containers inside of a
 [pod][18] (by default), but after some headaches to be expected. When you publish a port it also
 just works on [pod][18]-level for **rootless**.
 
 ## Networking between pods
 
 I spent some hours trying to figure out, if I can just disable this port either for the
-[jaeger-collector][15] or the [otel-collector][17], but to no avail. Desperate as I was, I just moved
-both collectors to different [pod][19] and considered it done.
+[jaeger-collector][15] or the [otel-collector][17], but to no avail. Desperate as I was, I just
+moved both collectors to different [pod][19] and considered it done.
 
 This was, when I discovered how my networking really worked: Although I can access the published
 ports from my host machine, the application inside of the container inside of a [pod][18] cannot.
 
 Possible solutions that I came up with:
 
-1. Switch the [pod][18] network from [bridge][8] to [sirp4netns][19] mode and find solutions for all
-newly introduced problems.
+1. Switch the [pod][18] network from [bridge][8] to [sirp4netns][19] mode and find solutions for
+all newly introduced problems.
 2. Move from [jaeger-all-in-one][14] to the standalone versions of each component. (There is also
 [opentelemetry-all-in-one][16] version, but according to [this][20] post it has been discontinued.)
 3. Start [Jaeger][2] first and just hope it doesn't complain.
@@ -60,9 +62,9 @@ Yes, I went the obvious way and just started [Jaeger][2] first, worked like a ch
 LogManager error of type GENERIC_FAILURE: Port localhost:12201 not reachable
 ```
 
-The problem here is that I configured [Fluentd][1] to expect [gelf][12] messages there and absolutely
-had no clue about the message format. I found this handy shell script as a gist, kudos to the
-author:
+The problem here is that I configured [Fluentd][1] to expect [gelf][12] messages there and
+absolutely had no clue about the message format. I found this handy shell script as a gist, kudos
+to the author:
 
 <https://gist.github.com/gm3dmo/7721379>
 
@@ -79,16 +81,17 @@ This pretty much explained all my problems: Currently [gvproxy][13] has no suppo
 ignores the udp flag altogether. My instances were expecting udp, all they got was tcp and this
 ultimately failed.
 
-The easiest solution here was to configure [gelf][12] to run on tcp, which both the input plugin and
-in the [gelf][12] handler of [Quarkus][6] support. I don't want to bore you with the troubles I had to
-find the correct config option, so I will just point you to the source code:
+The easiest solution here was to configure [gelf][12] to run on tcp, which both the input plugin
+and in the [gelf][12] handler of [Quarkus][6] support. I don't want to bore you with the troubles
+I had to find the correct config option, so I will just point you to the source code:
 
 <https://github.com/MerlinDMC/fluent-plugin-input-gelf/blob/master/lib/fluent/plugin/in_gelf.rb>
 
 ## Conclusion
 
 I had some problems getting warm with[Podman][5], but since I've sorted this out it works like a
-charm. I created even more scripts to make the usage for me easier - with the help of [fzf][11], ofc.
+charm. I created even more scripts to make the usage for me easier - with the help of [fzf][11],
+ofc.
 
 I know I don't have to remind you, but my logging-vs-tracing showcase can still be found here:
 
