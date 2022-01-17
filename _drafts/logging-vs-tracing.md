@@ -3,7 +3,7 @@ layout: post
 title: Logging vs Tracing
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tracing jaeger opentelemetry logging kibana elascticsearch fluentd gelf showcase
+tags: tracing jaeger opentelemetry logging kibana elascticsearch fluentd gelf domainstory showcase
 categories: observability showcase
 toc: true
 ---
@@ -26,14 +26,14 @@ about what is happening:
 ![image](/assets/images/20220115-overview.png)
 
 This is probably still difficult to understand, especially when you've never seen such a diagram
-before. One of the main drivers of [Domain Storytelling][] is to be able to tell a story and the
-modeler is able to replay it based on the numbers:
+before. One of the main drivers of [Domain Storytelling][] is to convey information as a story
+and the modeler is able to replay it based on the numbers:
 
 1. Download the [source file][] from the repository.
-2. Browse to the [modeler][].
-3. Import the file with the **up arrow icon** on the upper right.
+2. Point your browser to <https://egon.io>.
+3. Import the downloaded file with the **up arrow icon** on the upper right.
 4. Click on the **play icon** and start the replay.
-5. And browse through the steps via **next icon** or **prev icon**
+5. And step through the story with either the **next icon** or the **prev icon**.
 
 Just for a starter, read the first steps like this:
 
@@ -41,13 +41,13 @@ Just for a starter, read the first steps like this:
 > 2. The todo-service-create assigns an id to a Todo
 > 3. ...
 
-This [Domainstory][] is **digitalized** and way too big, but I will conclude on that in an
-upcoming post - promised.
+This [Domainstory][] is **digitalized** (includes technology) and way too big, but I will conclude
+on that in an upcoming post - promised.
 
 ## Logging vs Tracing
 
 Now that we have a common understanding what this example is all about, let us get started with
-our comparison of [logging][] and [tracing][]. I think the first big difference is the visuals:
+our comparison of [logging][] and [tracing][].
 
 | Logging ([Kibana][])                        | Tracing ([Jaeger][])                         |
 |----------------------------------------------|----------------------------------------------|
@@ -55,17 +55,54 @@ our comparison of [logging][] and [tracing][]. I think the first big difference 
 
 ### Logging
 
+
 On the left side we see a typical [EFK][] stack with an excerpt of the entries of our use case. I
 said excerpt, because there are several lines missing - there are 19 in total. Each of them
 describes only a single instance and includes no further context.
 
-###### **Log**:
+#### Structured logs with Echopraxia
+
+###### **TodoService.java**:
 ```java
-LOGGER.info("Updated todo: {}",
-    fb -> List.of(fb.todo("todo", todo)));
+private static final Logger<Todo.FieldBuilder> LOGGER = LoggerFactory.getLogger(TodoService.class)
+    .withFieldBuilder(Todo.FieldBuilder.class); // <1>
+
+public Optional<Todo> create(TodoBase base) {
+    Todo todo = new Todo(base);
+
+    todo.setId(UUID.randomUUID().toString());
+
+    await().between(Duration.ofSeconds(1), Duration.ofSeconds(10));
+
+    LOGGER.info("Created todo: {}",
+            fb -> List.of(fb.todo("todo", todo))); // <2>
+
+    return Optional.of(todo);
+}
 ```
 
 ### Tracing
+
+#### Tracing with OpenTelemetry
+
+###### **TodoService.java**:
+```java
+@WithSpan("Create todo") // <1>
+public Optional<Todo> create(TodoBase base) {
+    Todo todo = new Todo(base);
+
+    todo.setId(UUID.randomUUID().toString());
+
+    await().between(Duration.ofSeconds(1), Duration.ofSeconds(10));
+
+    Span.current()
+            .addEvent("Added id to todo", Attributes.of(
+                    AttributeKey.stringKey("id"), todo.getId())) // <2>
+            .setStatus(StatusCode.OK); // <3>
+
+    return Optional.of(todo);
+}
+```
 
 ## Conclusion
 
