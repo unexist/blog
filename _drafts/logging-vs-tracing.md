@@ -55,12 +55,11 @@ our comparison of [logging][] and [tracing][].
 
 ### Logging
 
+#### What is logging?
 
-On the left side we see a typical [EFK][] stack with an excerpt of the entries of our use case. I
-said excerpt, because there are several lines missing - there are 19 in total. Each of them
-describes only a single instance and includes no further context.
 
-#### Structured logs with Echopraxia
+
+#### Structured logs
 
 ###### **TodoService.java**:
 ```java
