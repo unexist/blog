@@ -56,8 +56,8 @@ timestamped events, that happened inside a system or rather an application at a 
 
 #### Structured logs
 
-###### **StructuredLog**:
-```log
+###### **Structured log**:
+```json
 {
     "host": "C02FQ379MD6R",
     "short_message": "Created todo",
@@ -77,11 +77,18 @@ timestamped events, that happened inside a system or rather an application at a 
 }
 ```
 
+###### **Logging.java**:
 ```java
-//LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
-//LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
-//LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
+/* Logstash */
+LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
 
+/* quarkus-logging-json */
+LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
+
+/* Echopraxia */
+LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
+
+/* Base MDC */
 MDC.put("todo", todo.get().toString());
 MDC.put("foo", "bar");
 LOGGER.info("Created todo");
