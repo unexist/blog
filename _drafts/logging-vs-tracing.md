@@ -59,6 +59,7 @@ timestamped events, that happened inside a system or rather an application at a 
 ###### **Structured log**:
 ```json
 {
+    "@timestamp": "2022-01-20T09:02:49.917000055+00:00",
     "host": "C02FQ379MD6R",
     "short_message": "Created todo",
     "full_message": "Created todo",
@@ -72,17 +73,16 @@ timestamped events, that happened inside a system or rather an application at a 
     "Time": "2022-01-20 10:02:49,917",
     "Severity": "INFO",
     "Thread": "executor-thread-0",
-    "SourceMethodName": "create",
-    "@timestamp": "2022-01-20T09:02:49.917000055+00:00"
+    "SourceMethodName": "create"
 }
 ```
 
 ###### **Logging.java**:
 ```java
-/* Logstash */
+/* quarkus-logging-json (https://github.com/quarkiverse/quarkus-logging-json) */
 LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
 
-/* quarkus-logging-json */
+/* Logstash */
 LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
 
 /* Echopraxia */
@@ -159,3 +159,4 @@ All of the examples can be found here:
 https://github.com/unexist/showcase-logging-tracing-quarkus/blob/master/docs/todo.dst
 https://egon.io
 https://github.com/tersesystems/echopraxia
+https://www.innoq.com/en/blog/structured-logging/
