@@ -98,6 +98,8 @@ MDC.remove("foo");
 
 ###### **TodoService.java**:
 ```java
+private static final Logger LOGGER = LoggerFactory.getLogger(TodoResource.class); /// <1>
+
 private static final Logger<Todo.FieldBuilder> LOGGER = LoggerFactory.getLogger(TodoService.class)
     .withFieldBuilder(Todo.FieldBuilder.class); // <1>
 
@@ -114,6 +116,9 @@ public Optional<Todo> create(TodoBase base) {
     return Optional.of(todo);
 }
 ```
+
+**<1>** Create logger \
+**<2>** Use the field builder to create the log entry
 
 ### Tracing
 
@@ -137,6 +142,10 @@ public Optional<Todo> create(TodoBase base) {
     return Optional.of(todo);
 }
 ```
+
+**<1>** Create a new span \
+**<2>** Add a logging event to the current span \
+**<3>** Set status code to the current span
 
 ## Logging vs Tracing
 
