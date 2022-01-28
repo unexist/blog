@@ -61,11 +61,11 @@ Let us move on to logging.
 
 #### What is a log?
 
-Defining a log is quite easy: A log is a timestamped event that happened at a particular time on
-a system. These logs can be pure informational like when a user sends a request to your service,
-but can also carry helpful bits of information to figure out what exactly went wrong in
-troubleshooting. There are different categories (or levels) for log messages like  **Info**,
-**Warn** or **Error**, which can be used to filter the data and/or create monitoring alarms.
+A log is a timestamped event that happened at a particular time on a system. These logs can be pure
+informational like when a user sends a request to your service, but can also carry helpful bits of
+information to figure out what exactly went wrong in troubleshooting. There are different
+categories (or levels) for log messages like  **Info**, **Warn** or **Error**, which can be used to
+filter the data and/or create monitoring alarms.
 
 Figuring out what is good information and what is just line noise can be quite difficult, so
 logging can get quite messy, difficult to stay manageable and consumes lots of disk space when
@@ -73,11 +73,34 @@ aggregated at a central place.
 
 #### Structured logs
 
-Querying unstructured logs can also become a challenge,
+Another problem is logs are normally unstructured, which makes it a challenge to query them for
+something specific. An easy solution to this is to create log entries in a structured format, which
+can be parsed easily. The standard format is JSON and many logging libraries come with integrated
+support.
 
-More experienced ones might also throw in
-[structured logs][], which include more meta information, than the stuff the original developer
-deemed necessary at the time of writing.
+Here is an example of a structured log entry:
+
+###### **Structured log**:
+```json
+{
+    "host": "C02FQ379MD6R",
+    "short_message": "Created todo",
+    "full_message": "Created todo",
+    "level": 6,
+    "facility": "jboss-logmanager",
+    "todo": "dev.unexist.showcase.todo.domain.todo.Todo@151819bd",
+    "LoggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
+    "SourceSimpleClassName": "TodoResource",
+    "SourceClassName": "dev.unexist.showcase.todo.adapter.TodoResource",
+    "Time": "2022-01-20 10:02:49,917",
+    "Severity": "INFO",
+    "Thread": "executor-thread-0",
+    "SourceMethodName": "create",
+    "@timestamp": "2022-01-20T09:02:49.917000055+00:00"
+}
+```
+
+##### Add meta information
 
 ###### **Structured log**:
 ```json
@@ -99,6 +122,7 @@ deemed necessary at the time of writing.
     "SourceMethodName": "create"
 }
 ```
+
 
 ###### **Logging.java**:
 ```java
