@@ -8,53 +8,76 @@ categories: observability showcase
 toc: true
 ---
 If you talk to developers about what they need to figure out what is happening in an application,
-they usually tell you about logs or logging stacks. More experienced ones might also throw in
-[structured logs][], which include more meta information, than the stuff the original developer
-deemed necessary at the time of writing.
-
-This can work pretty well for standalone applications, but what about [distributed][] ones? Todays
-systems easily span across dozen of services on different nodes and have a quite complex call
-hierarchy.
+usually the single answer to this is logging or just logs. This can work pretty well for standalone
+applications, but what about [distributed][] ones? Todays systems easily span across dozen of
+services on different nodes and might have a quite complex call hierarchy.
 
 ## Tell a Domainstory
 
-I want to demonstrate the difference of [logging][] and [tracing][], so we are going to use a
-totally contrived example with needless complexity, just to prove my point. I hadn't had time to
-start with a post about [Domain Storytelling][], but I think it is well-suited to give an overview
-about what is happening:
+In this post I want to demonstrate the difference of [logging][] and [tracing][], so we are going
+to use a totally contrived example with needless complexity, just to prove my point. I hadn't had
+time to start with a post about [Domain Storytelling][], but I think this format is well-suited to
+give an overview about what is supposed to happen:
 
 ![image](/assets/images/20220115-overview.png)
 
-This is probably still difficult to understand, especially when you've never seen such a diagram
-before. One of the main drivers of [Domain Storytelling][] is to convey information as a story
-and the modeler is able to replay it based on the numbers:
+That is probably lots of information to the untrained eye, so let me break this down a bit.
+
+### Get the whole story
+
+One of the main drivers of [Domain Storytelling][] is to convey information step-by-step in
+complete sentences. Each step is one action item inside of the story and normally just covers one
+specific path - the happy path here.
+
+This is still probably difficult to grasp, so fire up your browser, it is time for some first
+hand experience:
 
 1. Download the [source file][] from the repository.
 2. Point your browser to <https://egon.io>.
 3. Import the downloaded file with the **up arrow icon** on the upper right.
 4. Click on the **play icon** and start the replay.
-5. And step through the story with either the **next icon** or the **prev icon**.
 
-Just for a starter, read the first steps like this:
+### How to read it?
 
-> 1. A User sends a Todo to the todo-service-create
-> 2. The todo-service-create assigns an id to a Todo
-> 3. ...
+Once you start with the first step of the story, you should see something like this:
 
-Before experts blame me: I admit this [Domainstory][] is **digitalized** (includes technology) and
-way too big, but I will conclude on that in an upcoming post - promised.
+![image](/assets/images/20220115-step1.png)
 
-Now that we have a common understanding what this example is all about, let us get started with
-a quick introduction of [logging][] and [tracing][].
+This is the actual first step of the story and can be read like:
+
+> A User sends a Todo to the todo-service-create
+
+Can you follow the story and understand the next step? Give it a try with either the **next icon**
+the **prev icon** from the toolbar.
+
+### Disclaimer
+
+*Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
+omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.*
+
+Let us move on to logging.
 
 ### Logging
 
-#### What is logging?
+#### What is a log?
 
-On a high level, logging is the aggregation of log entries and those are can be defined as
-timestamped events, that happened inside a system or rather an application at a specific time.
+Defining a log is quite easy: A log is a timestamped event that happened at a particular time on
+a system. These logs can be pure informational like when a user sends a request to your service,
+but can also carry helpful bits of information to figure out what exactly went wrong in
+troubleshooting. There are different categories (or levels) for log messages like  **Info**,
+**Warn** or **Error**, which can be used to filter the data and/or create monitoring alarms.
+
+Figuring out what is good information and what is just line noise can be quite difficult, so
+logging can get quite messy, difficult to stay manageable and consumes lots of disk space when
+aggregated at a central place.
 
 #### Structured logs
+
+Querying unstructured logs can also become a challenge,
+
+More experienced ones might also throw in
+[structured logs][], which include more meta information, than the stuff the original developer
+deemed necessary at the time of writing.
 
 ###### **Structured log**:
 ```json
@@ -145,7 +168,7 @@ public Optional<Todo> create(TodoBase base) {
 
 **<1>** Create a new span \
 **<2>** Add a logging event to the current span \
-**<3>** Set status code to the current span
+**<3>** Set status code of the current span
 
 ## Logging vs Tracing
 
@@ -169,3 +192,5 @@ https://github.com/unexist/showcase-logging-tracing-quarkus/blob/master/docs/tod
 https://egon.io
 https://github.com/tersesystems/echopraxia
 https://www.innoq.com/en/blog/structured-logging/
+https://github.com/quarkusio/quarkus/issues/18228
+https://quarkus.io/guides/centralized-log-management
