@@ -73,8 +73,8 @@ aggregated at a central place.
 
 #### Structured logs
 
-Another problem is logs are normally unstructured, which makes it a challenge to query them for
-something specific. An easy solution to this is to create log entries in a structured format, which
+Normally, logs are unstructured and it can become a challenge to query them for something
+specific. An easy solution here is to create log entries in a structured format, which
 can be parsed easily. The standard format is JSON and many logging libraries come with integrated
 support.
 
