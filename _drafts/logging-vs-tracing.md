@@ -100,12 +100,51 @@ Here is an example of a structured log entry:
 }
 ```
 
+Included is lots of meta information by default like the calling class, the method or the log level
+and each piece of information can be used to fine-tune your search results in e.g. [Kibana][]:
+
+![image](/assets/images/20220115-kibana_search.png)
+
 ##### Add meta information
+
+If you have a look at our example the message `Created todo` is no help at all without a bit of
+context like the working object it created. One way is to just append it to the log message itself,
+but this kind of beats the idea to have something structured, which is also easy to search through.
+
+Most of the logging libraries support the usage of [Mapped Diagnostic Context][] (or MDC) to
+provide exactly that. It consists of static methods and keeps the information in a per-thread
+basis until you remove it again:
+
+###### **Logging.java**:
+```java
+/* Base MDC */
+MDC.put("foo", "bar");
+LOGGER.info("Created todo");
+MDC.remove("foo");
+
+/* In try-with block */
+try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
+    LOGGER.info("Created todo");
+}
+```
+
+More advanced logging libraries support
+
+###### **Logging.java**:
+```java
+/* quarkus-logging-json () */
+LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
+
+/* Logstash */
+LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
+
+/* Echopraxia */
+LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
+```
 
 ###### **Structured log**:
 ```json
 {
-    "@timestamp": "2022-01-20T09:02:49.917000055+00:00",
     "host": "C02FQ379MD6R",
     "short_message": "Created todo",
     "full_message": "Created todo",
@@ -119,53 +158,10 @@ Here is an example of a structured log entry:
     "Time": "2022-01-20 10:02:49,917",
     "Severity": "INFO",
     "Thread": "executor-thread-0",
-    "SourceMethodName": "create"
+    "SourceMethodName": "create",
+    "@timestamp": "2022-01-20T09:02:49.917000055+00:00",
 }
 ```
-
-
-###### **Logging.java**:
-```java
-/* quarkus-logging-json (https://github.com/quarkiverse/quarkus-logging-json) */
-LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
-
-/* Logstash */
-LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
-
-/* Echopraxia */
-LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
-
-/* Base MDC */
-MDC.put("todo", todo.get().toString());
-MDC.put("foo", "bar");
-LOGGER.info("Created todo");
-MDC.remove("todo");
-MDC.remove("foo");
-```
-
-###### **TodoService.java**:
-```java
-private static final Logger LOGGER = LoggerFactory.getLogger(TodoResource.class); /// <1>
-
-private static final Logger<Todo.FieldBuilder> LOGGER = LoggerFactory.getLogger(TodoService.class)
-    .withFieldBuilder(Todo.FieldBuilder.class); // <1>
-
-public Optional<Todo> create(TodoBase base) {
-    Todo todo = new Todo(base);
-
-    todo.setId(UUID.randomUUID().toString());
-
-    await().between(Duration.ofSeconds(1), Duration.ofSeconds(10));
-
-    LOGGER.info("Created todo: {}",
-            fb -> List.of(fb.todo("todo", todo))); // <2>
-
-    return Optional.of(todo);
-}
-```
-
-**<1>** Create logger \
-**<2>** Use the field builder to create the log entry
 
 ### Tracing
 
@@ -215,6 +211,8 @@ All of the examples can be found here:
 https://github.com/unexist/showcase-logging-tracing-quarkus/blob/master/docs/todo.dst
 https://egon.io
 https://github.com/tersesystems/echopraxia
+https://github.com/quarkiverse/quarkus-logging-json
 https://www.innoq.com/en/blog/structured-logging/
 https://github.com/quarkusio/quarkus/issues/18228
+https://logback.qos.ch/manual/mdc.html
 https://quarkus.io/guides/centralized-log-management
