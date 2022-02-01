@@ -100,35 +100,37 @@ Here is an example of a structured log entry:
 }
 ```
 
-Included is lots of meta information by default like the calling class, the method or the log level
+Included is lots of meta information by default like the calling class, the method or the host
 and each piece of information can be used to fine-tune your search results in e.g. [Kibana][]:
 
 ![image](/assets/images/20220115-kibana_search.png)
 
 ##### Add meta information
 
-If you have a look at our example the message `Created todo` is no help at all without a bit of
-context like the working object it created. One way is to just append it to the log message itself,
-but this kind of beats the idea to have something structured, which is also easy to search through.
+If you have a closer look at our example, the message `Created todo` is no help at all without any
+kind of context like the working object it created or its attributes at least. One way is to just
+append it to the log message itself, but this kind of beats the idea to have something structured,
+which is also easy to search through.
 
-Most of the logging libraries support the usage of [Mapped Diagnostic Context][] (or MDC) to
-provide exactly that. It consists of static methods and keeps the information in a per-thread
-basis until you remove it again:
+Most of the logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to
+provide exactly that. The essential points here are it consists of some static methods and keeps
+the information per-thread until you remove it again:
 
 ###### **Logging.java**:
 ```java
-/* Base MDC */
+/* Manual MDC handling */
 MDC.put("foo", "bar");
 LOGGER.info("Created todo");
 MDC.remove("foo");
 
-/* In try-with block */
+/* try-with-resources block */
 try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
     LOGGER.info("Created todo");
 }
 ```
 
-More advanced logging libraries support
+More advanced logging libraries also provide key-value-helpers to conveniently add information
+to the output:
 
 ###### **Logging.java**:
 ```java
@@ -141,6 +143,13 @@ LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
 /* Echopraxia */
 LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
 ```
+
+The first two are probably easy to understand, the latter one comes with a nice concept of
+field builders as formatter for your objects. If this sounds and look interesting head over to
+[Echopraxia][] and give it a spin.
+
+If you manage to add data into the [MDC][] and your [logshipper][] actually includes it,
+something like this could be visible in [Kibana][]:
 
 ###### **Structured log**:
 ```json
@@ -163,7 +172,26 @@ LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo"
 }
 ```
 
+I didn't provide any fancy output format of the `Todo` object, but you still should get the point.
+
 ### Tracing
+
+Tracing or rather distributed tracing needs a bit of explanation, because it comes with some
+concepts, which are required to really understand what is going on.
+
+In general, a **trace** is a collection of [spans][], which function as the smallest unit in the
+world of tracing. They represent any kind of workflow of your application like HTTP requests, calls
+of a database or even message handling in [eventing][].
+
+Each trace gets a unique **trace ID** on creation and keeps it, while it is passed via
+[context propagation][] from one point to another in your landscape. On each step, a new [span][]
+with a **span ID** is created and can additionally carry other useful information like [tags][], a
+status or other [attributes][].
+
+![image](/assets/images/20220115-jaeger_trace.png)
+
+In the example above you can see a trace, that consists of 20 spans, passed three services and
+took 3.73s in total.
 
 #### Tracing with OpenTelemetry
 
@@ -216,3 +244,5 @@ https://www.innoq.com/en/blog/structured-logging/
 https://github.com/quarkusio/quarkus/issues/18228
 https://logback.qos.ch/manual/mdc.html
 https://quarkus.io/guides/centralized-log-management
+https://opentelemetry.lightstep.com/core-concepts/context-propagation/
+https://opentelemetry.lightstep.com/spans/
