@@ -174,6 +174,16 @@ something like this could be visible in [Kibana][]:
 
 I didn't provide any fancy output format of the `Todo` object, but you still should get the point.
 
+#### Send logs to Kibana
+
+
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-logging-gelf</artifactId>
+</dependency>
+```
+
 ### Tracing
 
 Tracing or rather distributed tracing needs a bit of explanation, because it comes with some
@@ -185,15 +195,25 @@ of a database or even message handling in [eventing][].
 
 Each trace gets a unique **trace ID** on creation and keeps it, while it is passed via
 [context propagation][] from one point to another in your landscape. On each step, a new [span][]
-with a **span ID** is created and can additionally carry other useful information like [tags][], a
-status or other [attributes][].
+with a **span ID** is created and can additionally carry other useful bits of information like
+timing, [tags][], a status or other attributes.
 
 ![image](/assets/images/20220115-jaeger_trace.png)
 
-In the example above you can see a trace, that consists of 20 spans, passed three services and
-took 3.73s in total.
+In the example above you can see a single trace in [Jaeger][], that consists of 20 spans, passed
+three services and took 3.73s in total.
 
 #### Tracing with OpenTelemetry
+
+I originally started with [OpenTracing][] for this post, but [Quarkus][] finally made the switch
+to  [OpenTelemetry][] and I had to start from scratch. Poor me, but let us focus on
+[OpenTelemetry][] then.
+
+[Quarkus][] or rather [Smallrye][] comes with some nice defaults: All it takes is to add the
+necessary dependency and it happily creates a new trace for every incoming or outgoing HTTP
+request:
+
+
 
 ###### **TodoService.java**:
 ```java
