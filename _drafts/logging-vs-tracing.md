@@ -53,17 +53,18 @@ the **prev icon** from the toolbar.
 *Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
 omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.*
 
-## Setting everything up
+## Getting the stack ready
 
-During my journey ([here]({% post_url 2021-12-01-migrating-to-podman %} and
-[here]({% post_url 2021-12-28-one-month-of-podman %}) from [Docker][] to [Podman][], I prepared
-everything that is required for this scenario and setting it up should be fairly easy.
+During my journey from [Docker][] to [Podman][]
+([here]({% post_url 2021-12-01-migrating-to-podman %} and
+[here]({% post_url 2021-12-28-one-month-of-podman %}), I've prepared everything that is required
+for this scenario and setting it up should be fairly easy.
 
 <https://github.com/unexist/showcase-logging-tracing-quarkus>
 
 ### Docker
 
-If you want to start with [Docker][], just checkout following and fire up [docker-compose][]:
+If you want to start with [Docker][], just do the following and fire up [docker-compose][]:
 
 ###### **Shell**:
 ```shell
@@ -89,7 +90,7 @@ f6cc2adcc462: Pull complete
 
 ### Podman
 
-And if you prefer [Podman][], run these commands:
+And if you prefer [Podman][], we are going the hard way without [podman-compose][]:
 
 ###### **Shell**:
 ```shell
@@ -130,7 +131,7 @@ Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cd
 ...
 ```
 
-Let us move on to logging.
+Everything set? Then let us move on to logging.
 
 ### Logging
 
@@ -269,14 +270,15 @@ quarkus.log.handler.gelf.include-full-mdc=true
 
 ### Tracing
 
-Tracing or rather distributed tracing needs a bit of explanation, because it comes with some
-concepts, which are required to really understand what is going on.
+Let us also start with a bit of upfront explanation, just to get some concepts right and then we
+are going to focus on the gory details.
 
-In general, a **trace** is a collection of [spans][], which function as the smallest unit in the
-world of tracing. They represent any kind of workflow of your application like HTTP requests, calls
-of a database or even message handling in [eventing][].
+A **trace** consists of various meta information like an unique **trace ID** and a collection of
+[spans][]. These **spans** are the smallest unit in the world of distributed tracing and represent
+any kind of workflow of your application like HTTP requests, calls of a database or even message
+handling in [eventing][].
 
-Each trace gets a unique **trace ID** on creation and keeps it, while it is passed via
+On creation, the **trace ID** is assigned and it keeps, while it is passed via
 [context propagation][] from one point to another in your landscape. On each step, a new [span][]
 with a **span ID** is created and can additionally carry other useful bits of information like
 timing, [tags][], a status or other attributes.
