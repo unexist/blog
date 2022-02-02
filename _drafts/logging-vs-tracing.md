@@ -39,7 +39,7 @@ hand experience:
 
 ### How to read it?
 
-Once you start with the first step of the story, you should see something like this:
+Once started you should see something like this:
 
 ![image](/assets/images/20220115-step1.png)
 
@@ -50,10 +50,85 @@ This is the actual first step of the story and can be read like:
 Can you follow the story and understand the next step? Give it a try with either the **next icon**
 the **prev icon** from the toolbar.
 
-### Disclaimer
-
 *Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
 omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.*
+
+## Setting everything up
+
+During my journey ([here]({% post_url 2021-12-01-migrating-to-podman %} and
+[here]({% post_url 2021-12-28-one-month-of-podman %}) from [Docker][] to [Podman][], I prepared
+everything that is required for this scenario and setting it up should be fairly easy.
+
+<https://github.com/unexist/showcase-logging-tracing-quarkus>
+
+### Docker
+
+If you want to start with [Docker][], just checkout following and fire up [docker-compose][]:
+
+###### **Shell**:
+```shell
+$ svn export https://github.com/unexist/showcase-logging-tracing-quarkus/trunk/docker
+A    docker
+A    docker/Makefile
+A    docker/collector
+A    docker/collector/otel-collector-config.yaml
+A    docker/docker-compose.yaml
+A    docker/fluentd
+A    docker/fluentd/Dockerfile
+A    docker/fluentd/fluent.conf
+Exported revision 106.
+
+$ make -f docker/Makefile docker-compose
+Creating network "logtrace_default" with the default driver
+Pulling collector (otel/opentelemetry-collector:latest)...
+latest: Pulling from otel/opentelemetry-collector
+f6cc2adcc462: Pull complete
+08f620cbce51: Pull complete
+...
+```
+
+### Podman
+
+And if you prefer [Podman][], run these commands:
+
+###### **Shell**:
+```shell
+$ svn export https://github.com/unexist/showcase-logging-tracing-quarkus/trunk/podman
+A    podman
+A    podman/Makefile
+A    podman/collector
+A    podman/collector/Dockerfile
+A    podman/collector/otel-collector-config.yaml
+A    podman/fluentd
+A    podman/fluentd/Dockerfile
+A    podman/fluentd/fluent.conf
+Exported revision 106.
+
+$ make -f podman/Makefile pd-init
+Downloading VM image: fedora-coreos-35.20220131.2.0-qemu.x86_64.qcow2.xz: done
+Extracting compressed file
+Image resized.
+INFO[0000] waiting for clients...
+INFO[0000] listening tcp://127.0.0.1:7777
+INFO[0000] new connection from  to /var/folders/fb/k_q6yq7s0qvf0q_z971rdsjh0000gq/T/podman/qemu_podman-machine-default.sock
+Waiting for VM ...
+...
+
+$ make -f podman/Makefile pd-start
+# Install Elastic
+#elasticsearch:
+#  image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+#  ports:
+#    - "9200:9200"
+#    - "9300:9300"
+#  environment:
+#    ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+Trying to pull docker.elastic.co/elasticsearch/elasticsearch:7.16.0...
+Getting image source signatures
+Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344eba1
+Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cde8e4
+...
+```
 
 Let us move on to logging.
 
@@ -182,6 +257,14 @@ I didn't provide any fancy output format of the `Todo` object, but you still sho
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-logging-gelf</artifactId>
 </dependency>
+```
+
+```property
+quarkus.log.handler.gelf.enabled=true
+#quarkus.log.handler.gelf.host=localhost
+quarkus.log.handler.gelf.host=tcp:localhost
+quarkus.log.handler.gelf.port=12201
+quarkus.log.handler.gelf.include-full-mdc=true
 ```
 
 ### Tracing
