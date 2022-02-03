@@ -14,10 +14,10 @@ services on different nodes and might have a quite complex call hierarchy.
 
 ## Tell a Domainstory
 
-In this post I want to demonstrate the difference of [logging][] and [tracing][], so we are going
-to use a totally contrived example with needless complexity, just to prove my point. I hadn't had
-time to start with a post about [Domain Storytelling][], but I think this format is well-suited to
-give an overview about what is supposed to happen:
+In this post I want to demonstrate the difference between [logging][] and [tracing][], so we are
+going to use a totally contrived example with needless complexity, just to prove my point. I
+hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
+well-suited to give you an overview about what is supposed to happen:
 
 ![image](/assets/images/20220115-overview.png)
 
@@ -26,11 +26,11 @@ That is probably lots of information to the untrained eye, so let me break this 
 ### Get the whole story
 
 One of the main drivers of [Domain Storytelling][] is to convey information step-by-step in
-complete sentences. Each step is one action item inside of the story and normally just covers one
+complete sentences. Each step is one action item of the story and normally just covers one
 specific path - the happy path here.
 
-This is still probably difficult to grasp, so fire up your browser, it is time for some first
-hand experience:
+This is still probably difficult to grasp, so fire up your browser, it is time to see it for
+yourself:
 
 1. Download the [source file][] from the repository.
 2. Point your browser to <https://egon.io>.
@@ -39,26 +39,34 @@ hand experience:
 
 ### How to read it?
 
-Once started you should see something like this:
+When you press play, the modeler hides everything besides the first step:
 
 ![image](/assets/images/20220115-step1.png)
 
-This is the actual first step of the story and can be read like:
+And when you are looking at it just try to read it like this:
 
 > A User sends a Todo to the todo-service-create
 
+{% capture question %}
 Can you follow the story and understand the next step? Give it a try with either the **next icon**
 the **prev icon** from the toolbar.
+{% endcapture %}
 
-*Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
-omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.*
+{% include question.html content=question %}
+
+{% capture exclamation %}
+Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
+omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.
+{% endcapture %}
+
+{% include exclamation.html content=question %}
 
 ## Getting the stack ready
 
 During my journey from [Docker][] to [Podman][]
 ([here]({% post_url 2021-12-01-migrating-to-podman %} and
-[here]({% post_url 2021-12-28-one-month-of-podman %}), I've prepared everything that is required
-for this scenario and setting it up should be fairly easy.
+[here]({% post_url 2021-12-28-one-month-of-podman %}), I've laid down everything that is required
+for this scenario, so setting it up should be fairly easy:
 
 <https://github.com/unexist/showcase-logging-tracing-quarkus>
 
@@ -77,7 +85,7 @@ A    docker/docker-compose.yaml
 A    docker/fluentd
 A    docker/fluentd/Dockerfile
 A    docker/fluentd/fluent.conf
-Exported revision 106.
+Exported revision 107.
 
 $ make -f docker/Makefile docker-compose
 Creating network "logtrace_default" with the default driver
@@ -88,9 +96,15 @@ f6cc2adcc462: Pull complete
 ...
 ```
 
+{% capture question %}
+Did you know you can check out stuff with [svn][] from [GitHub][]?
+{% endcapture %}
+
+{% include question.html content=question %}
+
 ### Podman
 
-And if you prefer [Podman][], we are going the hard way without [podman-compose][]:
+And if you prefer [Podman][], there are some [make][] targets waiting:
 
 ###### **Shell**:
 ```shell
@@ -103,7 +117,7 @@ A    podman/collector/otel-collector-config.yaml
 A    podman/fluentd
 A    podman/fluentd/Dockerfile
 A    podman/fluentd/fluent.conf
-Exported revision 106.
+Exported revision 107.
 
 $ make -f podman/Makefile pd-init
 Downloading VM image: fedora-coreos-35.20220131.2.0-qemu.x86_64.qcow2.xz: done
@@ -116,14 +130,6 @@ Waiting for VM ...
 ...
 
 $ make -f podman/Makefile pd-start
-# Install Elastic
-#elasticsearch:
-#  image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
-#  ports:
-#    - "9200:9200"
-#    - "9300:9300"
-#  environment:
-#    ES_JAVA_OPTS: "-Xms512m -Xmx512m"
 Trying to pull docker.elastic.co/elasticsearch/elasticsearch:7.16.0...
 Getting image source signatures
 Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344eba1
@@ -176,21 +182,22 @@ Here is an example of a structured log entry:
 }
 ```
 
-Included is lots of meta information by default like the calling class, the method or the host
-and each piece of information can be used to fine-tune your search results in e.g. [Kibana][]:
+There is lots of meta information included by default like the calling class, the method or the
+host and each piece of information can be used to fine-tune your search results in e.g.
+ [Kibana][]:
 
 ![image](/assets/images/20220115-kibana_search.png)
 
-##### Add meta information
+#### Add meta information
 
-If you have a closer look at our example, the message `Created todo` is no help at all without any
+If you have a closer look at our example, the message `Created todo` is no help at all without some
 kind of context like the working object it created or its attributes at least. One way is to just
-append it to the log message itself, but this kind of beats the idea to have something structured,
-which is also easy to search through.
+append it to the log message itself, but this kind of beats the idea to have something structured
+and you are losing on of the advantages to be able create decent queries for it.
 
-Most of the logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to
-provide exactly that. The essential points here are it consists of some static methods and keeps
-the information per-thread until you remove it again:
+Most logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to provide
+exactly that. With it, you can add information to the context and it is included in the next log
+message for this thread until you remove it again:
 
 ###### **Logging.java**:
 ```java
@@ -205,8 +212,7 @@ try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
 }
 ```
 
-More advanced logging libraries also provide key-value-helpers to conveniently add information
-to the output:
+Advanced logging libraries also provide helpers to add key-value pairs conveniently:
 
 ###### **Logging.java**:
 ```java
@@ -220,12 +226,12 @@ LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
 LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
 ```
 
-The first two are probably easy to understand, the latter one comes with a nice concept of
-field builders as formatter for your objects. If this sounds and look interesting head over to
+The first two are probably easy to understand, the latter comes with the nice concept of
+[field builders][]  as formatter for your objects. If this sounds and look interesting head over to
 [Echopraxia][] and give it a spin.
 
-If you manage to add data into the [MDC][] and your [logshipper][] actually includes it,
-something like this could be visible in [Kibana][]:
+And depending on the [logshipper][], it will pick up your additions to the [MDC][] and transfer it
+to [Kibana][]:
 
 ###### **Structured log**:
 ```json
@@ -248,11 +254,15 @@ something like this could be visible in [Kibana][]:
 }
 ```
 
+{% capture note %}
 I didn't provide any fancy output format of the `Todo` object, but you still should get the point.
+{% endcapture %}
+
+{% include note.html content=note %}
 
 #### Send logs to Kibana
 
-
+###### **pom.xml**:
 ```xml
 <dependency>
     <groupId>io.quarkus</groupId>
@@ -260,6 +270,7 @@ I didn't provide any fancy output format of the `Todo` object, but you still sho
 </dependency>
 ```
 
+###### **application.properties**:
 ```property
 quarkus.log.handler.gelf.enabled=true
 #quarkus.log.handler.gelf.host=localhost
@@ -273,12 +284,12 @@ quarkus.log.handler.gelf.include-full-mdc=true
 Let us also start with a bit of upfront explanation, just to get some concepts right and then we
 are going to focus on the gory details.
 
-A **trace** consists of various meta information like an unique **trace ID** and a collection of
+A **trace** consists of various meta information like a unique **trace ID** and a collection of
 [spans][]. These **spans** are the smallest unit in the world of distributed tracing and represent
 any kind of workflow of your application like HTTP requests, calls of a database or even message
 handling in [eventing][].
 
-On creation, the **trace ID** is assigned and it keeps, while it is passed via
+On creation, the **trace ID** is assigned and it, while it is passed via
 [context propagation][] from one point to another in your landscape. On each step, a new [span][]
 with a **span ID** is created and can additionally carry other useful bits of information like
 timing, [tags][], a status or other attributes.
