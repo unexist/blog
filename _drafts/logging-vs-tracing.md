@@ -8,14 +8,16 @@ categories: observability showcase
 toc: true
 ---
 If you talk to developers about what they need to figure out what is happening in an application,
-usually the single answer to this is logging or just logs. This can work pretty well for standalone
-applications, but what about [distributed][] ones? Todays systems easily span across dozen of
-services on different nodes and might have a quite complex call hierarchy.
+usually the single answer to this is logging or just logs.
+This can work pretty well for standalone applications, but what about [distributed][] ones?
+Todays systems easily span across dozen of services on different nodes and might have a quite
+complex call hierarchy.
 
 In this post I want to demonstrate the difference between **logging** and **tracing** and that
-needs a bit if explanation before we really can compare both. So in the first part we are covering
-the foundation and talk about what both actually is. After that, I am going to present my really
-convoluted example (to prove my point) and then we going to conclude our learnings.
+needs a bit if explanation before we really can compare both.
+So in the first part we are covering the basics and talk about what both actually is.
+After that, I am going to present my really convoluted example (to prove my point), which we are
+going to use for the actual comparison.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -23,21 +25,21 @@ Are you still with me? Great - let us move on to **logging**!
 
 #### What is a log?
 
-A **log** is a timestamped event that happened at a particular time on a system. These logs can be
-pure informational, like when a user sends a request to your service, but can also carry helpful
-bits of information to figure out what exactly went wrong during troubleshooting. There are
-different categories (or levels) for log messages like  **Info**, **Warn** or **Error**, which can
-be used to filter the data and/or create monitoring alarms.
+A **log** is a timestamped event that happened at a particular time on a system.
+These logs can be pure informational, like when a user sends a request to your service, but can
+also carry helpful bits of information to figure out what exactly went wrong during troubleshooting.
+There are different categories (or levels) for log messages like  **Info**, **Warn** or **Error**,
+which can be used to filter the data and/or create monitoring alarms.
 
 Separating good information from line noise can be quite a task and it is oftentimes difficult to
 keep logs manageable, especially when aggregated from multiple services at a central place.
 
 #### Structured logs
 
-When we talk about logs, we are usually referring to unstructured text and it can become a
-challenge to query them for something specific. An easy solution here is switch the format and use
-something that is structured. The defacto standard is JSON and many logging libraries come with
-integrated support.
+When we talk about logs, we are usually referring to unstructured text and it can be a challenge to
+query them for something specific.
+An easy solution here is switch the format to something that is inherently structured and the
+defacto standard many logging libraries already support is JSON.
 
 Here is an example of a structured log entry:
 
@@ -61,24 +63,25 @@ Here is an example of a structured log entry:
 }
 ```
 
-There is lots of meta information included by default and ranges from calling class, to the method
-or the host and each piece of information can be used to fine-tune your search results in e.g.
- [Kibana][]:
+There is lots of meta information included by default and ranges from the calling class, to the
+method or the host and each piece of information can be used to fine-tune your search results in
+e.g. [Kibana][]:
 
 ![image](/assets/images/20220115-kibana_search.png)
 
-#### More meta information
+#### Additional meta information
 
-If you have a closer look at our example, the message `Created todo` is no help at all without some
-kind of context like the working object it created or its attributes at least. One way is to just
-append it to the log message itself, but this kind of beats the idea to have something structured
-and you are losing on of the advantages to be able create decent queries for it.
+If you have a closer look at our example, the log message `Created todo` is no help at all without
+some kind of context like the working object it created or its attributes at least.
+One way is to just append it to the log message itself, but this kind of beats the idea to have
+something structured and you are losing the advantage of being able create decent queries for it.
 
 Most logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to provide
-exactly that. With it, you can add information to the context and it is included in the next log
-message for this thread until you remove it again:
+exactly that.
+With it, you can add information to the thread-based context and everything is included in the
+log messages until you remove it again:
 
-###### **Logging.java**:
+###### **Logging.java**`
 ```java
 /* Manual MDC handling */
 MDC.put("foo", "bar");
@@ -88,6 +91,26 @@ MDC.remove("foo");
 /* try-with-resources block */
 try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
     LOGGER.info("Created todo");
+}
+```
+
+###### **Structured log**:
+```json
+{
+  "timestamp": "2022-02-04T17:23:34.674+01:00",
+  "sequence": 1987,
+  "loggerClassName": "org.slf4j.impl.Slf4jLogger",
+  "loggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
+  "level": "INFO",
+  "message": "Created todo",
+  "threadName": "executor-thread-0",
+  "threadId": 104,
+  "mdc": {
+    "foo": "bar"
+  },
+  "hostName": "c02fq379md6r",
+  "processName": "todo-service-create-dev.jar",
+  "processId": 97284
 }
 ```
 
@@ -143,8 +166,13 @@ I didn't provide any fancy output format of the `Todo` object, but you still sho
 
 ### What is a trace?
 
-A **trace** is a visualization of a request of its way through multiple services in a microservice
-environment and can uniquely be identified by a **trace ID**.
+A **trace** is a visualization of a request of its way in a microservice environment. When it is
+created it gets an unique **trace ID** assigned and collects **spans** on every step it passes
+through.
+
+These **spans** are the smallest unit in the world of distributed tracing and represent
+any kind of workflow of your application like HTTP requests, calls of a database or even message
+handling in [eventing][].
 
 [context propagation][] is
 allowed it
@@ -153,9 +181,6 @@ It can uniquely be identified by **trace ID** and collects a new **span** When i
 id while it is passed via [context propagation][] from  On each
 new step, a **span** is added to the **trace**.
 
-These **spans** are the smallest unit in the world of distributed tracing and represent
-any kind of workflow of your application like HTTP requests, calls of a database or even message
-handling in [eventing][].
 
 On creation, the **trace ID** is assigned and it, while it is passed via
 [context propagation][] from one point to another in your landscape. On each step, a new [span][]
