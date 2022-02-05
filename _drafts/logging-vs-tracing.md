@@ -9,15 +9,14 @@ toc: true
 ---
 If you talk to developers about what they need to figure out what is happening in an application,
 usually the single answer to this is logging or just logs.
-This can work pretty well for standalone applications, but what about [distributed][] ones?
-Todays systems easily span across dozen of services on different nodes and might have a quite
-complex call hierarchy.
+This can work pretty well for standalone applications, but what about more complex or even
+[distributed][] ones?
 
-In this post I want to demonstrate the difference between **logging** and **tracing** and that
-needs a bit if explanation before we really can compare both.
-So in the first part we are covering the basics and talk about what both actually is.
-After that, I am going to present my really convoluted example (to prove my point), which we are
-going to use for the actual comparison.
+In this post I want to demonstrate the difference between **logging** and **tracing** and talk
+about the good parts, the bad parts and why I would prefer one over the other.
+So in the first part we are covering the basics and talk a bit about what both actually is.
+After that, I am going to present my really convoluted example just to prove my point and based on
+it we are going to do the actual comparison.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -29,7 +28,7 @@ A **log** is a timestamped event that happened at a particular time on a system.
 These logs can be pure informational, like when a user sends a request to your service, but can
 also carry helpful bits of information to figure out what exactly went wrong during troubleshooting.
 There are different categories (or levels) for log messages like  **Info**, **Warn** or **Error**,
-which can be used to filter the data and/or create monitoring alarms.
+which can be used to filter the data and/or create monitoring alarms:
 
 Here is an example of such a simple log message:
 
@@ -38,15 +37,29 @@ Here is an example of such a simple log message:
 LOGGER.info("Created todo");
 ```
 
-###### **Unstructured log**:
+###### **Log**:
 ```log
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
 ```
 
-If you have a closer look at our example, this log message is no help at all without some kind of
-context, like the working object it created or some its attributes at least.
+If you have a closer look at our example, this is probably no help at all.
+There is basically no context given and it is impossible to say what really happened.
 
 #### Adding context
+
+The easiest way to provide more information is to log some of the attributes of the created todo
+object like the id:
+
+###### **Logging.java**:
+```java
+LOGGER.info("Created todo: id={}", todo.getId());
+```
+
+###### **Log**:
+```log
+2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo: id=8659a492-1b3b-42f6-b25c-3f542ab11562
+```
+
 
 One way is to just append it to the log message itself, but this kind of beats the idea to have
 something structured and you are losing the advantage of being able create decent queries for it.
