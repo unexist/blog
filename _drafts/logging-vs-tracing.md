@@ -31,14 +31,75 @@ also carry helpful bits of information to figure out what exactly went wrong dur
 There are different categories (or levels) for log messages like  **Info**, **Warn** or **Error**,
 which can be used to filter the data and/or create monitoring alarms.
 
-Separating good information from line noise can be quite a task and it is oftentimes difficult to
-keep logs manageable, especially when aggregated from multiple services at a central place.
+Here is an example of such a simple log message:
+
+###### **Logging.java**:
+```java
+LOGGER.info("Created todo");
+```
+
+###### **Unstructured log**:
+```log
+2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
+```
+
+If you have a closer look at our example, this log message is no help at all without some kind of
+context, like the working object it created or some its attributes at least.
+
+#### Adding context
+
+One way is to just append it to the log message itself, but this kind of beats the idea to have
+something structured and you are losing the advantage of being able create decent queries for it.
+
+Most logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to provide
+exactly that.
+With it, you can add information to the thread-based context and everything is included in the
+log messages until you remove it again:
+
+###### **Logging.java**`
+```java
+/* Manual MDC handling */
+MDC.put("foo", "bar");
+LOGGER.info("Created todo");
+MDC.remove("foo");
+
+/* try-with-resources block */
+try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
+    LOGGER.info("Created todo");
+}
+```
+
+The example from [quarkus-logging-json][] looks like this:
+
+###### **Structured log**:
+```json
+{
+  "timestamp": "2022-02-04T17:23:34.674+01:00",
+  "sequence": 1987,
+  "loggerClassName": "org.slf4j.impl.Slf4jLogger",
+  "loggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
+  "level": "INFO",
+  "message": "Created todo",
+  "threadName": "executor-thread-0",
+  "threadId": 104,
+  "mdc": {
+    "foo": "bar"
+  },
+  "hostName": "c02fq379md6r",
+  "processName": "todo-service-create-dev.jar",
+  "processId": 97284
+}
+```
+
+Applications usually produce countless lines like this and it can be quite a task to separate
+helpful information from line noise.
+And to make things even worse: In your usually distributed system there are multiple services and
+each it them  especially when messages from multiple services are aggregated
+at a central place.
 
 #### Structured logs
 
-When we talk about logs, we are usually referring to unstructured text and it can be a challenge to
-query them for something specific.
-An easy solution here is switch the format to something that is inherently structured and the
+An easy solution here is to switch the format from something unstructured to something that is inherently structured and the
 defacto standard many logging libraries already support is JSON.
 
 Here is an example of a structured log entry:
@@ -63,56 +124,13 @@ Here is an example of a structured log entry:
 }
 ```
 
-There is lots of meta information included by default and ranges from the calling class, to the
-method or the host and each piece of information can be used to fine-tune your search results in
+There is lots of meta information included by default like calling class, calling method or
+the host and each piece of information can be used to fine-tune your search results in
 e.g. [Kibana][]:
 
 ![image](/assets/images/20220115-kibana_search.png)
 
-#### Additional meta information
 
-If you have a closer look at our example, the log message `Created todo` is no help at all without
-some kind of context like the working object it created or its attributes at least.
-One way is to just append it to the log message itself, but this kind of beats the idea to have
-something structured and you are losing the advantage of being able create decent queries for it.
-
-Most logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to provide
-exactly that.
-With it, you can add information to the thread-based context and everything is included in the
-log messages until you remove it again:
-
-###### **Logging.java**`
-```java
-/* Manual MDC handling */
-MDC.put("foo", "bar");
-LOGGER.info("Created todo");
-MDC.remove("foo");
-
-/* try-with-resources block */
-try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
-    LOGGER.info("Created todo");
-}
-```
-
-###### **Structured log**:
-```json
-{
-  "timestamp": "2022-02-04T17:23:34.674+01:00",
-  "sequence": 1987,
-  "loggerClassName": "org.slf4j.impl.Slf4jLogger",
-  "loggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
-  "level": "INFO",
-  "message": "Created todo",
-  "threadName": "executor-thread-0",
-  "threadId": 104,
-  "mdc": {
-    "foo": "bar"
-  },
-  "hostName": "c02fq379md6r",
-  "processName": "todo-service-create-dev.jar",
-  "processId": 97284
-}
-```
 
 Advanced logging libraries also provide helpers to add key-value pairs conveniently:
 
@@ -129,10 +147,10 @@ LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo"
 ```
 
 The first two are probably easy to understand, the latter comes with the concept of
-[field builders][] as formatter for your objects. If this sounds and looks interesting head over
-to [Echopraxia][] and give it a spin.
+[field builders][] as formatter for your objects. If this sounds interesting head over to
+[Echopraxia][] and give it a spin.
 
-Depending on the [logshipper][], it will pick up your additions to the [MDC][] and transfer it
+Depending on your [logshipper][], [Kibana][] will also  it will pick up your additions to the [MDC][] and transfer it
 to [Kibana][]:
 
 ###### **Structured log**:
