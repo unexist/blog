@@ -164,13 +164,20 @@ LOGGER.info("Created todo", keyValue("todo_id", todo.getId()));
 LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
 ```
 
-The first two are probably easy to understand, the latter comes with the concept of
-[field builders][] as formatter for your objects.
+The first two are probably easy to understand, they just add the specific pair to the log.
+The last one uses the concept of [field builders][] as formatter for your objects and with it you
+can define which attributes are included.
 If this sounds interesting head over to [Echopraxia][] and give it a spin.
 
 #### Central log aggregation
 
-Another benefit if storing
+This post is about the handling of **distributed** systems, so it is probably not much help to keep
+the logs on the respective machines.
+There are multiple ways for [central logging][], so in this example we are going to focus on
+[gelf][] and [Kibana][].
+
+[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
+configure it for our setup:
 
 ###### **pom.xml**:
 ```xml
@@ -183,33 +190,18 @@ Another benefit if storing
 ###### **application.properties**:
 ```properties
 quarkus.log.handler.gelf.enabled=true
-#quarkus.log.handler.gelf.host=localhost
+#quarkus.log.handler.gelf.host=localhost <1>
 quarkus.log.handler.gelf.host=tcp:localhost
 quarkus.log.handler.gelf.port=12201
 quarkus.log.handler.gelf.include-full-mdc=true
 ```
 
-![image](/assets/images/20220115-kibana_search.png)
+**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
+forward UDP via its [gvproxy][] yet.
 
-###### **Kibana**:
-```json
-{
-    "host": "C02FQ379MD6R",
-    "short_message": "Created todo",
-    "full_message": "Created todo",
-    "level": 6,
-    "facility": "jboss-logmanager",
-    "todo_id": "8659a492-1b3b-42f6-b25c-3f542ab11562",
-    "LoggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
-    "SourceSimpleClassName": "TodoResource",
-    "SourceClassName": "dev.unexist.showcase.todo.adapter.TodoResource",
-    "Time": "2022-01-20 10:02:49,917",
-    "Severity": "INFO",
-    "Thread": "executor-thread-0",
-    "SourceMethodName": "create",
-    "@timestamp": "2022-01-20T09:02:49.917000055+00:00"
-}
-```
+When everything wents well you should be able to see something like this in [Kibana][]:
+
+![image](/assets/images/20220115-kibana_log.png)
 
 ### Tracing
 
