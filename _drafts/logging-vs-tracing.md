@@ -16,7 +16,7 @@ In this post I want to demonstrate the difference between **logging** and **trac
 about the good parts, the bad parts and why I would prefer one over the other.
 So in the first part we are covering the basics and talk a bit about what both actually is.
 After that, I am going to present my really convoluted example just to prove my point and based on
-it we are going to do the actual comparison.
+that we are going to do the actual comparison.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -24,13 +24,19 @@ Are you still with me? Great - let us move on to **logging**!
 
 #### What is a log?
 
-A **log** is a timestamped event that happened at a particular time on a system.
-These logs can be pure informational, like when a user sends a request to your service, but can
-also carry helpful bits of information to figure out what exactly went wrong during troubleshooting.
-There are different categories (or levels) for log messages like  **Info**, **Warn** or **Error**,
-which can be used to filter the data and/or create monitoring alarms:
+Generally speaking, a **log** is some kind of output of an event that happened on an application
+on a specific system at a particular time.
+During the daily business logs can be pure informational, like when a user sends a request to your
+service, but when there is an application issue, they can deliver helpful bits of information
+for troubleshooting.
 
-Here is an example of such a simple log message:
+One problem with log messages is the sheer amount of data that is generated every day, which makes
+it quite difficult to keep track of them and to find something specific.
+To keep them manageable, they are grouped into different categories (called levels) like **Info**,
+**Warn** or **Error**, depending on their severity.
+Theses log levels can be used to filter data and to create monitoring alarms.
+
+Here is an example of a simple log message:
 
 ###### **Logging.java**:
 ```java
@@ -42,13 +48,17 @@ LOGGER.info("Created todo");
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
 ```
 
-If you have a closer look at our example, this is probably no help at all.
-There is basically no context given and it is impossible to say what really happened.
+Writing good log message can be difficult and there is usually lots of discussion what and
+especially when to log something.
+A good approach here is to consider the log as a kind of journal for your application and always
+provide enough contextual information to be able to reproduce what has happened.
+Useful information can be everything like request ID's, user ID's or other object identifiers.
 
 #### Adding context
 
-The easiest way to provide more information is to log some of the attributes of the created todo
-object like the id:
+Knowing this and with a skeptical view at our previous example, there is an awful lack of any
+contextual information and we really should fix that.
+For single messages, this can be easily fixed by appending e.g. the object ID manually:
 
 ###### **Logging.java**:
 ```java
@@ -60,27 +70,54 @@ LOGGER.info("Created todo: id={}", todo.getId());
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo: id=8659a492-1b3b-42f6-b25c-3f542ab11562
 ```
 
+This new version of our log message allows to search for a particular object ID and can also be
+used to correlate different messages; but what if we have more than one message?
+Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
+impossible to find this message:
 
-One way is to just append it to the log message itself, but this kind of beats the idea to have
-something structured and you are losing the advantage of being able create decent queries for it.
+###### **Logging.java**:
+```java
+LOGGER.info("Created todo: id ={}", todo.getId());
+```
 
-Most logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to provide
-exactly that.
-With it, you can add information to the thread-based context and everything is included in the
-log messages until you remove it again:
+Modern logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to
+automate this e.g. via [interceptors][] or even [aspect-oriented programming][].
+The **MDC** allows to add information via static methods to a thread-based context and if the
+logger is configured correctly - is automatically included in the next log messages until you
+remove it again:
 
 ###### **Logging.java**`
 ```java
 /* Manual MDC handling */
-MDC.put("foo", "bar");
+MDC.put("todo_id", todo.getId());
 LOGGER.info("Created todo");
-MDC.remove("foo");
+MDC.remove("todo_id");
 
 /* try-with-resources block */
-try (MDC.MDCCloseable closable = MDC.putCloseable("foo", "bar")) {
+try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
     LOGGER.info("Created todo");
 }
 ```
+
+The default logger of [Quarkus][] requires further configuration to actually include [MDC][]
+information:
+
+###### **application.properies**:
+```properties
+quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
+```
+
+###### **Log**:
+```log
+2022-01-19 16:46:14,298 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {todo_id=8659a492-1b3b-42f6-b25c-3f542ab11562} Created todo
+```
+
+#### Structured logs
+
+An easy solution here is to switch the format from something unstructured to something that is inherently structured and the
+defacto standard many logging libraries already support is JSON.
+
+Here is an example of a structured log entry:
 
 The example from [quarkus-logging-json][] looks like this:
 
@@ -104,18 +141,7 @@ The example from [quarkus-logging-json][] looks like this:
 }
 ```
 
-Applications usually produce countless lines like this and it can be quite a task to separate
-helpful information from line noise.
-And to make things even worse: In your usually distributed system there are multiple services and
-each it them  especially when messages from multiple services are aggregated
-at a central place.
 
-#### Structured logs
-
-An easy solution here is to switch the format from something unstructured to something that is inherently structured and the
-defacto standard many logging libraries already support is JSON.
-
-Here is an example of a structured log entry:
 
 ###### **Structured log**:
 ```json
@@ -433,5 +459,6 @@ https://www.innoq.com/en/blog/structured-logging/
 https://github.com/quarkusio/quarkus/issues/18228
 https://logback.qos.ch/manual/mdc.html
 https://quarkus.io/guides/centralized-log-management
+https://quarkus.io/guides/logging
 https://opentelemetry.lightstep.com/core-concepts/context-propagation/
 https://opentelemetry.lightstep.com/spans/
