@@ -58,7 +58,7 @@ Useful information can be everything like request ID's, user ID's or other objec
 
 Knowing this and with a skeptical view at our previous example, there is an awful lack of any
 contextual information and we really should fix that.
-For single messages, this can be easily fixed by appending e.g. the object ID manually:
+For single messages, this can be easily done by appending e.g. the object ID manually:
 
 ###### **Logging.java**:
 ```java
@@ -72,6 +72,7 @@ LOGGER.info("Created todo: id={}", todo.getId());
 
 This new version of our log message allows to search for a particular object ID and can also be
 used to correlate different messages; but what if we have more than one message?
+
 Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
 impossible to find this message:
 
@@ -80,11 +81,13 @@ impossible to find this message:
 LOGGER.info("Created todo: id ={}", todo.getId());
 ```
 
-Modern logging libraries support the usage of [Mapped Diagnostic Context][] (or **MDC**) to
-automate this e.g. via [interceptors][] or even [aspect-oriented programming][].
-The **MDC** allows to add information via static methods to a thread-based context and if the
-logger is configured correctly - is automatically included in the next log messages until you
-remove it again:
+#### Mapped Diagnostic Context
+
+Modern logging libraries support the usage of [MDC][] to automate this e.g. via [filters][],
+[interceptors][] or even [aspect-oriented programming][].
+The [MDC][] allows to add information via static methods to a thread-based context and a properly
+configured logger is able to pick it up and include in the next log messages until you remove it
+again:
 
 ###### **Logging.java**`
 ```java
@@ -99,13 +102,15 @@ try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
 }
 ```
 
-The default logger of [Quarkus][] requires further configuration to actually include [MDC][]
-information:
+Unfortunately, the default logger of [Quarkus][] requires further configuration to actually include
+[MDC][] information:
 
 ###### **application.properies**:
 ```properties
 quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
 ```
+
+And after this change the log dutifully includes our value:
 
 ###### **Log**:
 ```log
