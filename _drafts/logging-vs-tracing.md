@@ -3,7 +3,7 @@ layout: post
 title: Logging vs Tracing
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tracing jaeger opentelemetry logging kibana elascticsearch fluentd gelf domainstory showcase
+tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf domain-storytelling showcase
 categories: observability showcase
 toc: true
 ---
@@ -13,7 +13,7 @@ This can work pretty well for standalone applications, but what about more compl
 [distributed][] ones?
 
 In this post I want to demonstrate the difference between **logging** and **tracing** and talk
-about the good parts, the bad parts and why I would prefer one over the other.
+why and when I would prefer one over the other.
 So in the first part we are covering the basics and talk a bit about what both actually is.
 After that, I am going to present my really convoluted example just to prove my point and based on
 that we are going to do the actual comparison.
@@ -83,7 +83,7 @@ LOGGER.info("Created todo: id ={}", todo.getId());
 
 #### Mapped Diagnostic Context
 
-Modern logging libraries support the usage of [MDC][] to automate this e.g. via [filters][],
+Modern logging libraries support the usage of a [MDC][] to automate this e.g. via [filters][],
 [interceptors][] or even [aspect-oriented programming][].
 The [MDC][] allows to add information via static methods to a thread-based context and a properly
 configured logger is able to pick it up and include in the next log messages until you remove it
@@ -110,21 +110,24 @@ Unfortunately, the default logger of [Quarkus][] requires further configuration 
 quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
 ```
 
-And after this change the log dutifully includes our value:
+But after this change the log dutifully includes our value:
 
 ###### **Log**:
 ```log
 2022-01-19 16:46:14,298 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {todo_id=8659a492-1b3b-42f6-b25c-3f542ab11562} Created todo
 ```
 
+Adding all the parameters either manually or via [MDC][] allows to write better filter queries for
+our values, but we are still using an unstructured format which cannot be parsed easily.
+
 #### Structured logs
 
-An easy solution here is to switch the format from something unstructured to something that is inherently structured and the
-defacto standard many logging libraries already support is JSON.
+Switching to a structured format further improves the searchability and allows to include
+additional meta information like the calling class or the host name and to add (business)
+analytics.
+The defacto standard for structured logs is [JSON][] and supported widely.
 
-Here is an example of a structured log entry:
-
-The example from [quarkus-logging-json][] looks like this:
+The [quarkus-logging-json][] extension adds this capability:
 
 ###### **Structured log**:
 ```json
@@ -138,7 +141,7 @@ The example from [quarkus-logging-json][] looks like this:
   "threadName": "executor-thread-0",
   "threadId": 104,
   "mdc": {
-    "foo": "bar"
+    "todo_id": "8659a492-1b3b-42f6-b25c-3f542ab11562"
   },
   "hostName": "c02fq379md6r",
   "processName": "todo-service-create-dev.jar",
@@ -146,9 +149,49 @@ The example from [quarkus-logging-json][] looks like this:
 }
 ```
 
+Advanced logging libraries also provide helpers to add key-value pairs conveniently to the
+[MDC][]:
 
+###### **Logging.java**:
+```java
+/* quarkus-logging-json */
+LOGGER.info("Created todo", kv("todo_id", todo.getId()));
 
-###### **Structured log**:
+/* Logstash */
+LOGGER.info("Created todo", keyValue("todo_id", todo.getId()));
+
+/* Echopraxia */
+LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
+```
+
+The first two are probably easy to understand, the latter comes with the concept of
+[field builders][] as formatter for your objects.
+If this sounds interesting head over to [Echopraxia][] and give it a spin.
+
+#### Central log aggregation
+
+Another benefit if storing
+
+###### **pom.xml**:
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-logging-gelf</artifactId>
+</dependency>
+```
+
+###### **application.properties**:
+```properties
+quarkus.log.handler.gelf.enabled=true
+#quarkus.log.handler.gelf.host=localhost
+quarkus.log.handler.gelf.host=tcp:localhost
+quarkus.log.handler.gelf.port=12201
+quarkus.log.handler.gelf.include-full-mdc=true
+```
+
+![image](/assets/images/20220115-kibana_search.png)
+
+###### **Kibana**:
 ```json
 {
     "host": "C02FQ379MD6R",
@@ -156,7 +199,7 @@ The example from [quarkus-logging-json][] looks like this:
     "full_message": "Created todo",
     "level": 6,
     "facility": "jboss-logmanager",
-    "todo": "dev.unexist.showcase.todo.domain.todo.Todo@151819bd",
+    "todo_id": "8659a492-1b3b-42f6-b25c-3f542ab11562",
     "LoggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
     "SourceSimpleClassName": "TodoResource",
     "SourceClassName": "dev.unexist.showcase.todo.adapter.TodoResource",
@@ -167,62 +210,6 @@ The example from [quarkus-logging-json][] looks like this:
     "@timestamp": "2022-01-20T09:02:49.917000055+00:00"
 }
 ```
-
-There is lots of meta information included by default like calling class, calling method or
-the host and each piece of information can be used to fine-tune your search results in
-e.g. [Kibana][]:
-
-![image](/assets/images/20220115-kibana_search.png)
-
-
-
-Advanced logging libraries also provide helpers to add key-value pairs conveniently:
-
-###### **Logging.java**:
-```java
-/* quarkus-logging-json () */
-LOGGER.info("Created todo", kv("todo", todo), kv("foo", "bar"));
-
-/* Logstash */
-LOGGER.info("Created todo", keyValue("todo", todo), keyValue("foo", "bar"));
-
-/* Echopraxia */
-LOGGER.info("Created todo", fb -> List.of(fb.todo("todo", todo), fb.string("foo", "bar")));
-```
-
-The first two are probably easy to understand, the latter comes with the concept of
-[field builders][] as formatter for your objects. If this sounds interesting head over to
-[Echopraxia][] and give it a spin.
-
-Depending on your [logshipper][], [Kibana][] will also  it will pick up your additions to the [MDC][] and transfer it
-to [Kibana][]:
-
-###### **Structured log**:
-```json
-{
-    "host": "C02FQ379MD6R",
-    "short_message": "Created todo",
-    "full_message": "Created todo",
-    "level": 6,
-    "facility": "jboss-logmanager",
-    "todo": "dev.unexist.showcase.todo.domain.todo.Todo@151819bd",
-    "LoggerName": "dev.unexist.showcase.todo.adapter.TodoResource",
-    "SourceSimpleClassName": "TodoResource",
-    "foo": "bar",
-    "SourceClassName": "dev.unexist.showcase.todo.adapter.TodoResource",
-    "Time": "2022-01-20 10:02:49,917",
-    "Severity": "INFO",
-    "Thread": "executor-thread-0",
-    "SourceMethodName": "create",
-    "@timestamp": "2022-01-20T09:02:49.917000055+00:00",
-}
-```
-
-{% capture note %}
-I didn't provide any fancy output format of the `Todo` object, but you still should get the point.
-{% endcapture %}
-
-{% include note.html content=note %}
 
 ### Tracing
 
@@ -289,16 +276,14 @@ public Optional<Todo> create(TodoBase base) {
 **<2>** Add a logging event to the current span \
 **<3>** Set status code of the current span
 
+## Example time
 
+As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
+to explain what this is about.
 
+### Tell a Domainstory
 
-
-
-## Tell a Domainstory
-
-In this post I want to demonstrate the difference between [logging][] and [tracing][], so we are
-going to use a totally contrived example with needless complexity, just to prove my point. I
-hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
+I hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
 well-suited to give you an overview about what is supposed to happen:
 
 ![image](/assets/images/20220115-overview.png)
@@ -414,29 +399,6 @@ Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344
 Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cde8e4
 ...
 ```
-
-
-
-#### Send logs to Kibana
-
-###### **pom.xml**:
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-logging-gelf</artifactId>
-</dependency>
-```
-
-###### **application.properties**:
-```property
-quarkus.log.handler.gelf.enabled=true
-#quarkus.log.handler.gelf.host=localhost
-quarkus.log.handler.gelf.host=tcp:localhost
-quarkus.log.handler.gelf.port=12201
-quarkus.log.handler.gelf.include-full-mdc=true
-```
-
-
 
 ## Logging vs Tracing
 
