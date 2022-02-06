@@ -105,7 +105,7 @@ try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
 Unfortunately, the default logger of [Quarkus][] requires further configuration to actually include
 [MDC][] information:
 
-###### **application.properies**:
+###### **application.properties**:
 ```properties
 quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
 ```
@@ -169,7 +169,7 @@ The last one uses the concept of [field builders][] as formatter for your object
 can define which attributes are included.
 If this sounds interesting head over to [Echopraxia][] and give it a spin.
 
-#### Central log aggregation
+#### Central logging
 
 This post is about the handling of **distributed** systems, so it is probably not much help to keep
 the logs on the respective machines.
@@ -199,39 +199,33 @@ quarkus.log.handler.gelf.include-full-mdc=true
 **<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
 forward UDP via its [gvproxy][] yet.
 
-When everything wents well you should be able to see something like this in [Kibana][]:
+When everything goes well you should be able to see something like this in [Kibana][]:
 
 ![image](/assets/images/20220115-kibana_log.png)
+
+Let us move on to **tracing** now.
 
 ### Tracing
 
 ### What is a trace?
 
-A **trace** is a visualization of a request of its way in a microservice environment. When it is
-created it gets an unique **trace ID** assigned and collects **spans** on every step it passes
-through.
+A **trace** is a visualization of a request of its way through a complete microservice environment.
+When it is created it gets an unique **trace ID** assigned and collects **spans** on every step it
+passes through.
 
-These **spans** are the smallest unit in the world of distributed tracing and represent
-any kind of workflow of your application like HTTP requests, calls of a database or even message
-handling in [eventing][].
+These **spans** are the smallest unit in the world of distributed tracing and represent any kind
+of workflow of your application like HTTP requests, calls of a database or even message handling
+in [eventing][].
+They include a **span ID**, specific timings and optionally other attributes, a status or even
+[log events][].
 
-[context propagation][] is
-allowed it
-It can uniquely be identified by **trace ID** and collects a new **span** When it is created a unique **trace ID**. It keeps this
+A **trace** can pass service boundaries via [context propagation][] and specific headers for e.g.
+HTTP or [Kafka][].
 
-id while it is passed via [context propagation][] from  On each
-new step, a **span** is added to the **trace**.
-
-
-On creation, the **trace ID** is assigned and it, while it is passed via
-[context propagation][] from one point to another in your landscape. On each step, a new [span][]
-with a **span ID** is created and can additionally carry other useful bits of information like
-timing, [tags][], a status or other attributes.
+Here is an example of a single trace in [Jaeger][], that consists of **4** spans, passed **one**
+services and took **164.37ms** in total.
 
 ![image](/assets/images/20220115-jaeger_trace.png)
-
-In the example above you can see a single trace in [Jaeger][], that consists of 20 spans, passed
-three services and took 3.73s in total.
 
 #### Tracing with OpenTelemetry
 
@@ -242,8 +236,6 @@ to  [OpenTelemetry][] and I had to start from scratch. Poor me, but let us focus
 [Quarkus][] or rather [Smallrye][] comes with some nice defaults: All it takes is to add the
 necessary dependency and it happily creates a new trace for every incoming or outgoing HTTP
 request:
-
-
 
 ###### **TodoService.java**:
 ```java
@@ -270,23 +262,23 @@ public Optional<Todo> create(TodoBase base) {
 
 ## Example time
 
-As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
-to explain what this is about.
-
 ### Tell a Domainstory
 
+As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
+to explain what this is about.
 I hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
 well-suited to give you an overview about what is supposed to happen:
 
 ![image](/assets/images/20220115-overview.png)
 
-That is probably lots of information to the untrained eye, so let me break this down a bit.
+This is probably lots of information to the untrained eye, so let me break this down a bit.
 
 ### Get the whole story
 
 One of the main drivers of [Domain Storytelling][] is to convey information step-by-step in
-complete sentences. Each step is one action item of the story and normally just covers one
-specific path - the happy path here.
+complete sentences.
+Each step is one action item of the story and normally just covers one specific path - the happy
+path here.
 
 This is still probably difficult to grasp, so fire up your browser, it is time to see it for
 yourself:
@@ -391,6 +383,8 @@ Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344
 Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cde8e4
 ...
 ```
+
+
 
 ## Logging vs Tracing
 
