@@ -110,7 +110,7 @@ Unfortunately, the default logger of [Quarkus][] requires further configuration 
 quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
 ```
 
-But after this change the log dutifully includes our value:
+After this change the log dutifully includes our value:
 
 ###### **Log**:
 ```log
@@ -122,9 +122,9 @@ our values, but we are still using an unstructured format which cannot be parsed
 
 #### Structured logs
 
-Switching to a structured format further improves the searchability and allows to include
-additional meta information like the calling class or the host name and to add (business)
-analytics.
+Switching to a structured format further improves the searchability (is that even a word? and
+allows to include additional meta information like the calling class or the host name and to add
+(business) analytics.
 The defacto standard for structured logs is [JSON][] and supported widely.
 
 The [quarkus-logging-json][] extension adds this capability:
@@ -168,6 +168,39 @@ The first two are probably easy to understand, they just add the specific pair t
 The last one uses the concept of [field builders][] as formatter for your objects and with it you
 can define which attributes are included.
 If this sounds interesting head over to [Echopraxia][] and give it a spin.
+
+#### Central logging
+
+We probably don't win much, when we post the output just to stdout of the single application.
+One of the goals of central logging is to have everything aggregated in one place.
+There are multiple ways for to do that, so let us focus on [gelf][] and [Kibana][].
+
+[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
+configure it for our setup:
+
+###### **pom.xml**:
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-logging-gelf</artifactId>
+</dependency>
+```
+
+###### **application.properties**:
+```properties
+quarkus.log.handler.gelf.enabled=true
+#quarkus.log.handler.gelf.host=localhost <1>
+quarkus.log.handler.gelf.host=tcp:localhost
+quarkus.log.handler.gelf.port=12201
+quarkus.log.handler.gelf.include-full-mdc=true
+```
+
+**<1>** Noteworthy here is [gelf][] uses UDP by default, so if you want to use [Podman][] please
+keep in mind its [gvproxy][] doesn't support this yet.
+
+When everything goes well you should be able to see something like this in [Kibana][]:
+
+![image](/assets/images/20220115-kibana_log.png)
 
 Let us move on to **tracing** now.
 
@@ -220,6 +253,8 @@ public Optional<Todo> create(TodoBase base) {
 **<1>** Create a new span \
 **<2>** Add a logging event to the current span \
 **<3>** Set status code of the current span
+
+![image](/assets/images/20220115-jaeger_trace.png)
 
 ## Example time
 
@@ -344,76 +379,6 @@ Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344
 Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cde8e4
 ...
 ```
-
-#### Central logging
-
-This post is about the handling of **distributed** systems, so it is probably not much help to keep
-the logs on the respective machines.
-There are multiple ways for [central logging][], so in this example we are going to focus on
-[gelf][] and [Kibana][].
-
-[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
-configure it for our setup:
-
-###### **pom.xml**:
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-logging-gelf</artifactId>
-</dependency>
-```
-
-###### **application.properties**:
-```properties
-quarkus.log.handler.gelf.enabled=true
-#quarkus.log.handler.gelf.host=localhost <1>
-quarkus.log.handler.gelf.host=tcp:localhost
-quarkus.log.handler.gelf.port=12201
-quarkus.log.handler.gelf.include-full-mdc=true
-```
-
-**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
-forward UDP via its [gvproxy][] yet.
-
-When everything goes well you should be able to see something like this in [Kibana][]:
-
-![image](/assets/images/20220115-kibana_log.png)
-
-#### Central logs
-
-This post is about the handling of **distributed** systems, so it is probably not much help to keep
-the logs on the respective machines.
-There are multiple ways for [central logging][], so in this example we are going to focus on
-[gelf][] and [Kibana][].
-
-[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
-configure it for our setup:
-
-###### **pom.xml**:
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-logging-gelf</artifactId>
-</dependency>
-```
-
-###### **application.properties**:
-```properties
-quarkus.log.handler.gelf.enabled=true
-#quarkus.log.handler.gelf.host=localhost <1>
-quarkus.log.handler.gelf.host=tcp:localhost
-quarkus.log.handler.gelf.port=12201
-quarkus.log.handler.gelf.include-full-mdc=true
-```
-
-**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
-forward UDP via its [gvproxy][] yet.
-
-#### Central traces
-
-When everything goes well you should be able to see something like this in [Kibana][]:
-
-![image](/assets/images/20220115-kibana_log.png)
 
 ## Logging vs Tracing
 
