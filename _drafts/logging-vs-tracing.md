@@ -74,7 +74,7 @@ This new version of our log message allows to search for a particular object ID 
 used to correlate different messages; but what if we have more than one message?
 
 Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
-impossible to find this message:
+impossible to find:
 
 ###### **Logging.java**:
 ```java
@@ -169,40 +169,6 @@ The last one uses the concept of [field builders][] as formatter for your object
 can define which attributes are included.
 If this sounds interesting head over to [Echopraxia][] and give it a spin.
 
-#### Central logging
-
-This post is about the handling of **distributed** systems, so it is probably not much help to keep
-the logs on the respective machines.
-There are multiple ways for [central logging][], so in this example we are going to focus on
-[gelf][] and [Kibana][].
-
-[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
-configure it for our setup:
-
-###### **pom.xml**:
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-logging-gelf</artifactId>
-</dependency>
-```
-
-###### **application.properties**:
-```properties
-quarkus.log.handler.gelf.enabled=true
-#quarkus.log.handler.gelf.host=localhost <1>
-quarkus.log.handler.gelf.host=tcp:localhost
-quarkus.log.handler.gelf.port=12201
-quarkus.log.handler.gelf.include-full-mdc=true
-```
-
-**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
-forward UDP via its [gvproxy][] yet.
-
-When everything goes well you should be able to see something like this in [Kibana][]:
-
-![image](/assets/images/20220115-kibana_log.png)
-
 Let us move on to **tracing** now.
 
 ### Tracing
@@ -221,11 +187,6 @@ They include a **span ID**, specific timings and optionally other attributes, a 
 
 A **trace** can pass service boundaries via [context propagation][] and specific headers for e.g.
 HTTP or [Kafka][].
-
-Here is an example of a single trace in [Jaeger][], that consists of **4** spans, passed **one**
-services and took **164.37ms** in total.
-
-![image](/assets/images/20220115-jaeger_trace.png)
 
 #### Tracing with OpenTelemetry
 
@@ -384,7 +345,75 @@ Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cd
 ...
 ```
 
+#### Central logging
 
+This post is about the handling of **distributed** systems, so it is probably not much help to keep
+the logs on the respective machines.
+There are multiple ways for [central logging][], so in this example we are going to focus on
+[gelf][] and [Kibana][].
+
+[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
+configure it for our setup:
+
+###### **pom.xml**:
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-logging-gelf</artifactId>
+</dependency>
+```
+
+###### **application.properties**:
+```properties
+quarkus.log.handler.gelf.enabled=true
+#quarkus.log.handler.gelf.host=localhost <1>
+quarkus.log.handler.gelf.host=tcp:localhost
+quarkus.log.handler.gelf.port=12201
+quarkus.log.handler.gelf.include-full-mdc=true
+```
+
+**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
+forward UDP via its [gvproxy][] yet.
+
+When everything goes well you should be able to see something like this in [Kibana][]:
+
+![image](/assets/images/20220115-kibana_log.png)
+
+#### Central logs
+
+This post is about the handling of **distributed** systems, so it is probably not much help to keep
+the logs on the respective machines.
+There are multiple ways for [central logging][], so in this example we are going to focus on
+[gelf][] and [Kibana][].
+
+[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
+configure it for our setup:
+
+###### **pom.xml**:
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-logging-gelf</artifactId>
+</dependency>
+```
+
+###### **application.properties**:
+```properties
+quarkus.log.handler.gelf.enabled=true
+#quarkus.log.handler.gelf.host=localhost <1>
+quarkus.log.handler.gelf.host=tcp:localhost
+quarkus.log.handler.gelf.port=12201
+quarkus.log.handler.gelf.include-full-mdc=true
+```
+
+**<1>** Noteworthy here is [gelf][] uses UDP by default, but unfortunately [Podman][] cannot
+forward UDP via its [gvproxy][] yet.
+
+#### Central traces
+
+When everything goes well you should be able to see something like this in [Kibana][]:
+
+![image](/assets/images/20220115-kibana_log.png)
 
 ## Logging vs Tracing
 
@@ -415,3 +444,4 @@ https://quarkus.io/guides/centralized-log-management
 https://quarkus.io/guides/logging
 https://opentelemetry.lightstep.com/core-concepts/context-propagation/
 https://opentelemetry.lightstep.com/spans/
+https://www.morling.dev/blog/whats-in-a-good-error-message/
