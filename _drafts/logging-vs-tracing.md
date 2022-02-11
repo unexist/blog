@@ -171,11 +171,10 @@ If this sounds interesting head over to [Echopraxia][] and give it a spin.
 
 #### Central logging
 
-We probably don't win much, when we post the output just to stdout of the single application.
-One of the goals of central logging is to have everything aggregated in one place.
-There are multiple ways for to do that, so let us focus on [gelf][] and [Kibana][].
+One of the goals of central logging is to have everything aggregated in one place and there there
+are multiple ways for to do that, so let us focus on [gelf][] and [Kibana][].
 
-[Quarkus][] comes with an extension to do the bulk work for us, we just have to include it and
+[Quarkus][] comes with an extension that does the bulk work for us, we just have to include it and
 configure it for our setup:
 
 ###### **pom.xml**:
@@ -198,7 +197,8 @@ quarkus.log.handler.gelf.include-full-mdc=true
 **<1>** Noteworthy here is [gelf][] uses UDP by default, so if you want to use [Podman][] please
 keep in mind its [gvproxy][] doesn't support this yet.
 
-When everything goes well you should be able to see something like this in [Kibana][]:
+It might take a bit of time due to caching and latency, but ones everything reached [Kibana][]
+you should be able to see something like this:
 
 ![image](/assets/images/20220115-kibana_log.png)
 
@@ -254,7 +254,17 @@ public Optional<Todo> create(TodoBase base) {
 **<2>** Add a logging event to the current span \
 **<3>** Set status code of the current span
 
+
+###### **application.properties**:
+```properties
+quarkus.opentelemetry.enabled=true
+quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
+quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
+```
+
 ![image](/assets/images/20220115-jaeger_trace.png)
+
+![image](/assets/images/20220115-jaeger_graph.png)
 
 ## Example time
 
