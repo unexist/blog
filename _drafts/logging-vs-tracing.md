@@ -209,27 +209,26 @@ Let us move on to **tracing** now.
 ### What is a trace?
 
 A **trace** is a visualization of a request of its way through a complete microservice environment.
-When it is created it gets an unique **trace ID** assigned and collects **spans** on every step it
+When it is created, it gets an unique **trace ID** assigned and collects **spans** on every step it
 passes through.
 
 These **spans** are the smallest unit in the world of distributed tracing and represent any kind
 of workflow of your application like HTTP requests, calls of a database or even message handling
 in [eventing][].
-They include a **span ID**, specific timings and optionally other attributes, a status or even
-[log events][].
+They include a **span ID**, specific timings and optionally other attributes, [events][] or
+[status][].
 
-A **trace** can pass service boundaries via [context propagation][] and specific headers for e.g.
-HTTP or [Kafka][].
+Whenever a **trace** passes service boundaries, its context can be transferred via
+[context propagation][] and specific headers for e.g. HTTP or [Kafka][].
 
 #### Tracing with OpenTelemetry
 
 I originally started with [OpenTracing][] for this post, but [Quarkus][] finally made the switch
-to  [OpenTelemetry][] and I had to start from scratch. Poor me, but let us focus on
+to [OpenTelemetry][] and I had to start from scratch. Poor me, but let us focus on
 [OpenTelemetry][] then.
 
-[Quarkus][] or rather [Smallrye][] comes with some nice defaults: All it takes is to add the
-necessary dependency and it happily creates a new trace for every incoming or outgoing HTTP
-request:
+Analogues to [logging][], [Quarkus][] or rather [Smallrye][] comes with an extension to add tracing
+capabilities and to enable rudimentary tracing to all HTTP requests by default:
 
 ###### **TodoService.java**:
 ```java
