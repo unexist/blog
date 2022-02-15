@@ -3,7 +3,7 @@ layout: post
 title: Logging vs Tracing
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf domain-storytelling showcase
+tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf showcase
 categories: observability showcase
 toc: true
 ---
@@ -14,9 +14,8 @@ This can work pretty well for standalone applications, but what about more compl
 
 In this post I want to demonstrate the difference between **logging** and **tracing** and talk
 why and when I would prefer one over the other.
-So in the first part we are covering the basics and talk a bit about what both actually is.
-After that, I am going to present my really convoluted example just to prove my point and based on
-that we are going to do the actual comparison.
+To get us started we are covering the basics first and talk a bit about what both actually is and
+after that follows the actual comparison.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -264,130 +263,6 @@ quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
 ![image](/assets/images/20220115-jaeger_trace.png)
 
 ![image](/assets/images/20220115-jaeger_graph.png)
-
-## Example time
-
-### Tell a Domainstory
-
-As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
-to explain what this is about.
-I hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
-well-suited to give you an overview about what is supposed to happen:
-
-![image](/assets/images/20220115-overview.png)
-
-This is probably lots of information to the untrained eye, so let me break this down a bit.
-
-### Get the whole story
-
-One of the main drivers of [Domain Storytelling][] is to convey information step-by-step in
-complete sentences.
-Each step is one action item of the story and normally just covers one specific path - the happy
-path here.
-
-This is still probably difficult to grasp, so fire up your browser, it is time to see it for
-yourself:
-
-1. Download the [source file][] from the repository.
-2. Point your browser to <https://egon.io>.
-3. Import the downloaded file with the **up arrow icon** on the upper right.
-4. Click on the **play icon** and start the replay.
-
-### How to read it?
-
-When you press play, the modeler hides everything besides the first step:
-
-![image](/assets/images/20220115-step1.png)
-
-And when you are looking at it, try to read it like this:
-
-> A User sends a Todo to the todo-service-create
-
-Can you follow the story and understand the next step? Give it a try with either the **next icon**
-the **prev icon** from the toolbar.
-
-{% capture exclamation %}
-Before experts blame me: I admit this **digitalized** (includes technology; the preferred way is to
-omit it altogether) [Domainstory][] is really broad, but I will conclude on this later - promised.
-{% endcapture %}
-
-{% include exclamation.html content=question %}
-
-## Getting the stack ready
-
-During my journey from [Docker][] to [Podman][]
-([here]({% post_url 2021-12-01-migrating-to-podman %} and
-[here]({% post_url 2021-12-28-one-month-of-podman %}), I've laid down everything that is required
-for this scenario, so setting it up should be fairly easy:
-
-<https://github.com/unexist/showcase-logging-tracing-quarkus>
-
-### Docker
-
-If you want to start with [Docker][], just do the following and fire up [docker-compose][]:
-
-###### **Shell**:
-```shell
-$ svn export https://github.com/unexist/showcase-logging-tracing-quarkus/trunk/docker
-A    docker
-A    docker/Makefile
-A    docker/collector
-A    docker/collector/otel-collector-config.yaml
-A    docker/docker-compose.yaml
-A    docker/fluentd
-A    docker/fluentd/Dockerfile
-A    docker/fluentd/fluent.conf
-Exported revision 107.
-
-$ make -f docker/Makefile docker-compose
-Creating network "logtrace_default" with the default driver
-Pulling collector (otel/opentelemetry-collector:latest)...
-latest: Pulling from otel/opentelemetry-collector
-f6cc2adcc462: Pull complete
-08f620cbce51: Pull complete
-...
-```
-
-{% capture question %}
-Did you know you can check out stuff with [svn][] from [GitHub][]?
-{% endcapture %}
-
-{% include question.html content=question %}
-
-### Podman
-
-And if you prefer [Podman][], there are some [make][] targets waiting:
-
-###### **Shell**:
-```shell
-$ svn export https://github.com/unexist/showcase-logging-tracing-quarkus/trunk/podman
-A    podman
-A    podman/Makefile
-A    podman/collector
-A    podman/collector/Dockerfile
-A    podman/collector/otel-collector-config.yaml
-A    podman/fluentd
-A    podman/fluentd/Dockerfile
-A    podman/fluentd/fluent.conf
-Exported revision 107.
-
-$ make -f podman/Makefile pd-init
-Downloading VM image: fedora-coreos-35.20220131.2.0-qemu.x86_64.qcow2.xz: done
-Extracting compressed file
-Image resized.
-INFO[0000] waiting for clients...
-INFO[0000] listening tcp://127.0.0.1:7777
-INFO[0000] new connection from  to /var/folders/fb/k_q6yq7s0qvf0q_z971rdsjh0000gq/T/podman/qemu_podman-machine-default.sock
-Waiting for VM ...
-...
-
-$ make -f podman/Makefile pd-start
-Trying to pull docker.elastic.co/elasticsearch/elasticsearch:7.16.0...
-Getting image source signatures
-Copying blob sha256:5759d6bc2a4c089280ffbe75f0acd4126366a66ecdf052708514560ec344eba1
-Copying blob sha256:da847062c6f67740b8b3adadca2f705408f2ab96140dd19d41efeef880cde8e4
-...
-```
 
 ## Logging vs Tracing
 
