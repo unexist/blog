@@ -13,9 +13,9 @@ This can work pretty well for standalone applications, but what about more compl
 [distributed][] ones?
 
 In this post I want to demonstrate the difference between **logging** and **tracing** and talk
-why and when I would prefer one over the other.
-To get us started we are covering the basics first and talk a bit about what both actually is and
-after that follows the actual comparison.
+about why and when I prefer one over the other.
+In the first part we are going to cover some basics first and talk about what both actually is and
+then do the actual comparison in the second one.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -55,9 +55,8 @@ Useful information can be everything like request ID's, user ID's or other objec
 
 #### Adding context
 
-Knowing this and with a skeptical view at our previous example, there is an awful lack of any
-contextual information and we really should fix that.
-For single messages, this can be easily done by appending e.g. the object ID manually:
+If we consider our previous example, there is an awful lack of any context and we really should fix
+that:
 
 ###### **Logging.java**:
 ```java
@@ -69,11 +68,12 @@ LOGGER.info("Created todo: id={}", todo.getId());
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo: id=8659a492-1b3b-42f6-b25c-3f542ab11562
 ```
 
-This new version of our log message allows to search for a particular object ID and can also be
-used to correlate different messages; but what if we have more than one message?
+Adding the object ID to the messages allows to search for a particular object and can also be used
+to correlate different messages.
+This works for single messages, but what if we have more than one message?
 
 Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
-impossible to find:
+really difficult to find the message again:
 
 ###### **Logging.java**:
 ```java
@@ -121,9 +121,9 @@ our values, but we are still using an unstructured format which cannot be parsed
 
 #### Structured logs
 
-Switching to a structured format further improves the searchability (is that even a word? and
-allows to include additional meta information like the calling class or the host name and to add
-(business) analytics.
+Switching to a structured format further improves the *searchability* (is that even a word?) and
+allows to include additional meta information like the calling class or the host name and to feed
+it into (business) analytics.
 The defacto standard for structured logs is [JSON][] and supported widely.
 
 The [quarkus-logging-json][] extension adds this capability:
@@ -148,8 +148,9 @@ The [quarkus-logging-json][] extension adds this capability:
 }
 ```
 
-Advanced logging libraries also provide helpers to add key-value pairs conveniently to the
-[MDC][]:
+More advanced logging libraries also provide helpers to add key-value pairs conveniently to the
+[MDC][].
+Here are few noteworthy examples:
 
 ###### **Logging.java**:
 ```java
@@ -170,8 +171,10 @@ If this sounds interesting head over to [Echopraxia][] and give it a spin.
 
 #### Central logging
 
-One of the goals of central logging is to have everything aggregated in one place and there there
-are multiple ways for to do that, so let us focus on [gelf][] and [Kibana][].
+One of the goals of central logging is to have everything aggregated in one place and to provide
+some kind of facility to create complex search queries.
+There are hundreds of other posts about the different solutions, so let us focus on a simple
+[EFK][] stack with [gelf][].
 
 [Quarkus][] comes with an extension that does the bulk work for us, we just have to include it and
 configure it for our setup:
