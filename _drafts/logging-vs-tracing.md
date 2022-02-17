@@ -36,7 +36,7 @@ To keep them manageable, they are grouped into different categories (called [lev
 **Info**, **Warn** or **Error** (depending on their severity) and can be used to filter data
 or to create monitoring alarms.
 
-Here is an example of a simple informational log message:
+Here is an example of a message:
 
 ###### **Logging.java**:
 ```java
@@ -48,16 +48,14 @@ LOGGER.info("Created todo");
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
 ```
 
-Writing good log message can be difficult and there is usually lots of discussion what and
-especially when to log something.
-A good approach here is to consider the log as a kind of journal for your application and always
-provide enough contextual information to be able to reproduce what has happened.
-Useful information can be everything like request ID's, user ID's or other object identifiers.
-
 #### Adding context
 
-If we consider our previous example, there is an awful lack of any context and we really should fix
-that:
+Simple messages like this don't provide much contextual information and make it difficult to
+reproduce what has actually happened.
+Adding useful information like request-, user- or other object identifiers further improves your
+understanding and also makes it possible to correlate different messages.
+A good approach here is to consider the log as a journal of your application with details for all
+events.
 
 ###### **Logging.java**:
 ```java
@@ -69,12 +67,10 @@ LOGGER.info("Created todo: id={}", todo.getId());
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo: id=8659a492-1b3b-42f6-b25c-3f542ab11562
 ```
 
-Adding the object ID to the messages allows to search for a particular object and can also be used
-to correlate different messages.
 This works for single messages, but what if we have more than one message?
 
 Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
-really difficult to find the message again:
+really difficult to find the message:
 
 ###### **Logging.java**:
 ```java
@@ -83,11 +79,10 @@ LOGGER.info("Created todo: id ={}", todo.getId());
 
 #### Mapped Diagnostic Context
 
-Modern logging libraries support the usage of a [MDC][] to automate this e.g. via [filters][],
-[interceptors][] or even [aspect-oriented programming][].
-The [MDC][] allows to add information via static methods to a thread-based context and a properly
-configured logger is able to pick it up and include in the next log messages until you remove it
-again:
+Modern logging libraries support the usage of a [MDC][], which allows to add information via static
+methods to a thread-based context.
+If your logger is configured correctly, this information is automatically added to the next log
+messages until you remove it again:
 
 ###### **Logging.java**`
 ```java
@@ -102,8 +97,8 @@ try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
 }
 ```
 
-Unfortunately, the default logger of [Quarkus][] requires further configuration to actually include
-[MDC][] information:
+Unfortunately, the default logger of [Quarkus][] needs a bit of configuration until it actually
+picks up the [MDC][] information:
 
 ###### **application.properties**:
 ```properties
@@ -117,15 +112,17 @@ After this change the log dutifully includes our value:
 2022-01-19 16:46:14,298 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {todo_id=8659a492-1b3b-42f6-b25c-3f542ab11562} Created todo
 ```
 
-Adding all the parameters either manually or via [MDC][] allows to write better filter queries for
-our values, but we are still using an unstructured format which cannot be parsed easily.
+These parameters can either be added manually or automatically via [filters][],
+[interceptors][] or even with [aspect-oriented-programming][] and allow writing of better filter
+queries for our values.
+, but we are still using an unstructured format which cannot be parsed easily.
 
 #### Structured logs
 
-Switching to a structured format further improves the *searchability* (is that even a word?) and
-allows to include additional meta information like the calling class or the host name and to feed
-it into (business) analytics.
-The defacto standard for structured logs is [JSON][] and supported widely.
+To further improve the *searchability* (is that even a word?), switching from an **unstructured**
+to a **structured** format allows to parse the data more easily and to better include additional
+metadata like the calling class or the host name.
+The defacto standard for structured logs is [JSON][] and supported widely in (business) analytics.
 
 The [quarkus-logging-json][] extension adds this capability:
 
@@ -149,8 +146,8 @@ The [quarkus-logging-json][] extension adds this capability:
 }
 ```
 
-More advanced logging libraries also provide helpers to add key-value pairs conveniently to the
-[MDC][].
+More advanced logging libraries provide helpers based on the mechanism of the [MDC][] to add
+key-value pairs conveniently.
 Here are few noteworthy examples:
 
 ###### **Logging.java**:
@@ -165,17 +162,16 @@ LOGGER.info("Created todo", keyValue("todo_id", todo.getId()));
 LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
 ```
 
-The first two are probably easy to understand, they just add the specific pair to the log.
-The last one uses the concept of [field builders][] as formatter for your objects and with it you
-can define which attributes are included.
-If this sounds interesting head over to [Echopraxia][] and give it a spin.
+The first two are probably easy to understand and add the specific key-value pair to the log.
+[Echopraxia][] introduces the concept of [field builders][], which allow to define your own
+formatter for your objects and to programmatically include all the necessary attributes.
 
 #### Central logging
 
 One of the goals of central logging is to have everything aggregated in one place and to provide
 some kind of facility to create complex search queries.
-There are hundreds of other posts about the different solutions, so let us focus on a simple
-[EFK][] stack with [gelf][].
+There are literally hundreds of other posts about the different solutions, so let us focus on a
+simple [EFK][] stack with [gelf][].
 
 [Quarkus][] comes with an extension that does the bulk work for us, we just have to include it and
 configure it for our setup:
