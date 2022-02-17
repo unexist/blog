@@ -7,15 +7,17 @@ tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf sho
 categories: observability showcase
 toc: true
 ---
-If you talk to developers about what they need to figure out what is happening in an application,
-usually the single answer to this is logging or just logs.
-This can work pretty well for standalone applications, but what about more complex or even
-[distributed][] ones?
+Monitoring is one of the essential tasks to check how well your application is doing and to get
+some insights if there is a possible disaster coming in.
+Sifting through logs works perfectly well for standalone applications, but what about more complex
+scenarios or even [distributed][] ones?
 
 In this post I want to demonstrate the difference between **logging** and **tracing** and talk
-about why and when I prefer one over the other.
-In the first part we are going to cover some basics first and talk about what both actually is and
-then do the actual comparison in the second one.
+about why and when I'd prefer one over the other.
+We are going to cover some basics first and talk about what both actually is and about possible
+ways to enrich both.
+And after that, we are going to do a side-by-side comparison and talk about the strengths and
+weaknesses of both for specific usecases.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -25,17 +27,16 @@ Are you still with me? Great - let us move on to **logging**!
 
 Generally speaking, a **log** is some kind of output of an event that happened on an application
 on a specific system at a particular time.
-During the daily business logs can be pure informational, like when a user sends a request to your
-service, but when there is an application issue, they can deliver helpful bits of information
-for troubleshooting.
+And these logs can be pure informational, like when a user sends a request to your service, but can
+also turn the page and deliver helpful bits of information for troubleshooting during an outtake.
 
-One problem with log messages is the sheer amount of data that is generated every day, which makes
-it quite difficult to keep track of them and to find something specific.
-To keep them manageable, they are grouped into different categories (called levels) like **Info**,
-**Warn** or **Error**, depending on their severity.
-Theses log levels can be used to filter data and to create monitoring alarms.
+One problem with log messages is the sheer amount of data that is generated during daily business,
+which makes it quite difficult to keep track of them and to find something specific.
+To keep them manageable, they are grouped into different categories (called [levels][]) like
+**Info**, **Warn** or **Error** (depending on their severity) and can be used to filter data
+or to create monitoring alarms.
 
-Here is an example of a simple log message:
+Here is an example of a simple informational log message:
 
 ###### **Logging.java**:
 ```java
