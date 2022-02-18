@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Logging vs Tracing
-date: %%%DATE%%%
+date: 2022-02-18 20:30 +0100
 author: Christoph Kappel
 tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf showcase
 categories: observability showcase
