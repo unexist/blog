@@ -226,8 +226,8 @@ Whenever a **trace** passes service boundaries, its context can be transferred v
 When I originally started with this post, [Quarkus][] was about to make the switch from
 [OpenTracing][] to [OpenTelemetry][] and I had to start from scratch - poor me.
 
-Analogues to [logging][], [Quarkus][] or rather [Smallrye][] comes with an extension to bring
-tracing capabilities onto the table.
+Similar to [logging][], [Quarkus][] or rather [Smallrye][] comes with an extension to bring tracing
+capabilities onto the table.
 This also enables rudimentary tracing to all HTTP requests by default:
 
 ###### **TodoResource.java**:
@@ -398,7 +398,7 @@ public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
 }
 ```
 
-**<1>** Send the todo object as a message
+**<1>** Send the todo object as a message to the broker
 
 ###### **TodoSink.java**:
 ```java
@@ -442,20 +442,29 @@ And when finally everything comes together:
 
 (I am going to describe the exact scenario there in a follow-up post.)
 
-## Logging vs Tracing
-
 I think we have covered enough of the basics and seen both in action, so let us continue with the
 actual comparison of [logging][] and [tracing][].
 
-If you have a look at both images now, which one would you prefer for what situation?
+## Logging vs Tracing
 
-| Logging ([Kibana][])                        | Tracing ([Jaeger][])                         |
-|----------------------------------------------|----------------------------------------------|
-| ![image](/assets/images/20220115-kibana.png) | ![image](/assets/images/20220115-jaeger.png)
+If you consider both now, which one would you prefer for what situation?
+
+| Logging                                        | Tracing                                        |
+|------------------------------------------------|------------------------------------------------|
+| Provides insights into single applications     | Helps to track requests through applications   |
+| Captures the state of an application           | Tells request timings and component latencies  |
+| Can be easily applied to code                  | Adds more complexity to the code               |
+| Is easy to integrate into monoliths            | Makes more sense in microservice architectures |
+| Supports debugging and diagnoses               | Supports debugging and diagnoses               |
 
 ## Conclusion
 
-[Logging][] and [Tracing][] aren't mutual exclusive..
+[Logging][] and [Tracing][] aren't mutual exclusive, they both help to pinpoint problems and
+provide a different view of the same picture with a complementary set of information.
+If you have a microservice architecture it probably makes more sense to enable tracing, than in
+your typical monolith, especially when this kind of instrumentation increases the complexity.
+Logs, traces and metrics form the [Three Pillars of Observability][] and help your development
+teams to debug errors, diagnose issues and to build better systems.
 
 All of the examples can be found here:
 
