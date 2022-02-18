@@ -5,7 +5,6 @@ date: 2021-12-01 19:00 +0100
 author: Christoph Kappel
 tags: tools docker podman macos kibana elastic fluentd jaeger showcase
 categories: tech showcase
-follow_up: 2021-12-28-one-month-of-podman
 toc: true
 ---
 [Docker][2] is among the best-known container runtimes and probably only a few people (and sadly
