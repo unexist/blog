@@ -7,7 +7,7 @@ tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf sho
 categories: observability showcase
 toc: true
 ---
-Monitoring is one of the essential tasks to check how well your application is doing and to get
+Monitoring is one of the essential parts to check how well your application is doing and to get
 some insights if there is a possible disaster coming in.
 Sifting through logs works perfectly well for standalone applications, but what about more complex
 scenarios or even [distributed][] ones?
@@ -15,9 +15,9 @@ scenarios or even [distributed][] ones?
 In this post I want to demonstrate the difference between **logging** and **tracing** and talk
 about why and when I'd prefer one over the other.
 We are going to cover some basics first and talk about what both actually is and about possible
-ways to enrich both.
-And after that, we are going to do a side-by-side comparison and talk about the strengths and
-weaknesses of both for specific usecases.
+ways to enrich them.
+And after that, we are going to do a side-by-side comparison and talk about their strengths and
+weaknesses for specific usecases.
 
 Are you still with me? Great - let us move on to **logging**!
 
@@ -148,7 +148,7 @@ The [quarkus-logging-json][] extension adds this capability:
 
 More advanced logging libraries provide helpers based on the mechanism of the [MDC][] to add
 key-value pairs conveniently.
-Here are few noteworthy examples:
+Here are few examples:
 
 ###### **Logging.java**:
 ```java
@@ -162,19 +162,19 @@ LOGGER.info("Created todo", keyValue("todo_id", todo.getId()));
 LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
 ```
 
-The first two are probably easy to understand and add the specific key-value pair to the log.
+The first two use helpers to add the specific key-value pair to the log.
 [Echopraxia][] introduces the concept of [field builders][], which allow to define your own
-formatter for your objects and to programmatically include all the necessary attributes.
+formatters for your objects to programmatically include all the necessary attributes.
 
 #### Central logging
 
 One of the goals of central logging is to have everything aggregated in one place and to provide
 some kind of facility to create complex search queries.
-There are literally hundreds of other posts about the different solutions, so let us focus on a
-simple [EFK][] stack with [gelf][].
+There are literally hundreds of other posts about the different solutions and we are going to
+focus on [EFK][] and [gelf][].
 
-[Quarkus][] comes with an extension that does the bulk work for us, we just have to include it and
-configure it for our setup:
+[Quarkus][] comes with an extension, that does the bulk work for us.
+All we have to do is just to include it and configure it for our setup:
 
 ###### **pom.xml**:
 ```xml
@@ -196,38 +196,132 @@ quarkus.log.handler.gelf.include-full-mdc=true
 **<1>** Noteworthy here is [gelf][] uses UDP by default, so if you want to use [Podman][] please
 keep in mind its [gvproxy][] doesn't support this yet.
 
-It might take a bit of time due to caching and latency, but ones everything reached [Kibana][]
+It might take a bit of time due to caching and latency, but once everything has reached [Kibana][]
 you should be able to see something like this:
 
 ![image](/assets/images/20220115-kibana_log.png)
 
-Let us move on to **tracing** now.
+Another way to gather information is **tracing**, so let us have a look at it.
 
 ### Tracing
 
 ### What is a trace?
 
-A **trace** is a visualization of a request of its way through a complete microservice environment.
+Again at a high level, a **trace** is a visualization of a request of its way through a service or
+a complete microservice environment.
 When it is created, it gets an unique **trace ID** assigned and collects **spans** on every step it
 passes through.
 
 These **spans** are the smallest unit in the world of distributed tracing and represent any kind
-of workflow of your application like HTTP requests, calls of a database or even message handling
-in [eventing][].
+of workflow of your application, like HTTP requests, calls of a database or message handling in
+[eventing][].
 They include a **span ID**, specific timings and optionally other attributes, [events][] or
-[status][].
+[statuses][].
 
 Whenever a **trace** passes service boundaries, its context can be transferred via
 [context propagation][] and specific headers for e.g. HTTP or [Kafka][].
 
 #### Tracing with OpenTelemetry
 
-I originally started with [OpenTracing][] for this post, but [Quarkus][] finally made the switch
-to [OpenTelemetry][] and I had to start from scratch. Poor me, but let us focus on
-[OpenTelemetry][] then.
+When I originally started with this post, [Quarkus][] was about to make the switch from
+[OpenTracing][] to [OpenTelemetry][] and I had to start from scratch - poor me.
 
-Analogues to [logging][], [Quarkus][] or rather [Smallrye][] comes with an extension to add tracing
-capabilities and to enable rudimentary tracing to all HTTP requests by default:
+Analogues to [logging][], [Quarkus][] or rather [Smallrye][] comes with an extension to bring
+tracing capabilities onto the table.
+This also enables rudimentary tracing to all HTTP requests by default:
+
+###### **TodoResource.java**:
+```java
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Operation(summary = "Create new todo")
+@Tag(name = "Todo")
+@APIResponses({
+        @APIResponse(responseCode = "200", description = "Todo created")
+})
+public Response create(TodoBase todoBase) {
+    return Response.ok().build();
+}
+```
+
+Without some kind of visualization it is difficult to explain what **traces** actually look like,
+so we fast forward a bit and configure [OpenTelemetry][] and [Jaeger][].
+
+Again, [Quarkus][] comes with some handy extensions and all we have to do is to actually include
+them in our `pom.xml` and to update our properties:
+
+###### **pom.xml**:
+```xml
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-opentelemetry-exporter-otlp</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-extension-trace-propagators</artifactId>
+</dependency>
+```
+
+###### **application.properties**:
+```properties
+quarkus.opentelemetry.enabled=true
+quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
+quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
+```
+
+When set up properly your **trace** should look like this in [Jaeger][]:
+
+![image](/assets/images/20220115-jaeger_simple_trace.png)
+
+There is various meta information included like timing, client_ip or HTTP method and everything is
+provided automatically by the [OpenTelemetry][] integration.
+Getting this for free is nice, but a single **span** is nbo big help and we still need to see how
+we can enrich this even further.
+
+### Spans in action
+
+The next example adds another service call with its own **span** to the previous example,
+demonstrates how they can be connected to each other and how to add more details.
+
+###### **TodoResource.java**:
+```java
+@Inject
+TodoService todoService;
+
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+@Operation(summary = "Create new todo")
+@Tag(name = "Todo")
+@APIResponses({
+        @APIResponse(responseCode = "201", description = "Todo created"),
+})
+public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
+    Response.ResponseBuilder response;
+
+    Span.current()
+            .updateName("Received post request"); // <1>
+
+    Optional<Todo> todo = this.todoService.create(todoBase); // <2>
+
+    if (todo.isPresent()) {
+        Span.current()
+                .setStatus(StatusCode.OK, todo.get().getId()); // <3>
+
+        URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(todo.get().getId())
+                .build();
+
+        response = Response.created(uri);
+    }
+
+    return response.build();
+}
+```
+
+**<1>** Update the name of the current default span \
+**<2>** Create a new todo via service call \
+**<3>** Set status code of the current span
 
 ###### **TodoService.java**:
 ```java
@@ -236,8 +330,6 @@ public Optional<Todo> create(TodoBase base) {
     Todo todo = new Todo(base);
 
     todo.setId(UUID.randomUUID().toString());
-
-    await().between(Duration.ofSeconds(1), Duration.ofSeconds(10));
 
     Span.current()
             .addEvent("Added id to todo", Attributes.of(
@@ -248,26 +340,114 @@ public Optional<Todo> create(TodoBase base) {
 }
 ```
 
-**<1>** Create a new span \
-**<2>** Add a logging event to the current span \
+**<1>** Create a new span in the current context \
+**<2>** Add a logging event with the todo id to the current span \
 **<3>** Set status code of the current span
 
+Once sent to [Jaeger][] something like this can be seen there:
 
-###### **application.properties**:
-```properties
-quarkus.opentelemetry.enabled=true
-quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
-quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
+![image](/assets/images/20220115-jaeger_advanced_trace.png)
+
+[Jaeger][] also includes an experimental graph view to display the call graphs:
+
+![image](/assets/images/20220115-jaeger_advanced_graph.png)
+
+### Even more spans
+
+More complexity?
+Let us throw in a bit of [Kafka][], since I've already mentioned [context propagation][]:
+
+###### **TodoResource.java**:
+```java
+@Inject
+TodoService todoService;
+
+@Inject
+TodoSource todoSource;
+
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+@Operation(summary = "Create new todo")
+@Tag(name = "Todo")
+@APIResponses({
+        @APIResponse(responseCode = "201", description = "Todo created"),
+})
+public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
+    Response.ResponseBuilder response;
+
+    Span.current()
+            .updateName("Received post request");
+
+    Optional<Todo> todo = this.todoService.create(todoBase);
+
+    if (todo.isPresent()) {
+        Span.current()
+                .setStatus(StatusCode.OK, todo.get().getId());
+
+        this.todoSource.send(todo.get()); // <1>
+
+        URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(todo.get().getId())
+                .build();
+
+        response = Response.created(uri);
+    }
+
+    return response.build();
+}
 ```
 
-![image](/assets/images/20220115-jaeger_trace.png)
+**<1>** Send the todo object as a message
 
-![image](/assets/images/20220115-jaeger_graph.png)
+###### **TodoSink.java**:
+```java
+public class TodoSink {
+    @ConfigProperty(name = "quarkus.application.name")
+    String appName;
+
+    @Inject
+    TodoService todoService;
+
+    @Incoming("todo-stored")
+    public CompletionStage<Void> consumeStored(IncomingKafkaRecord<String, Todo> record) {
+        Optional<TracingMetadata> metadata = TracingMetadata.fromMessage(record); // <1>
+
+        if (metadata.isPresent()) {
+            try (Scope ignored = metadata.get().getCurrentContext().makeCurrent()) { // <2>
+                Span span = GlobalOpenTelemetry.getTracer(appName)
+                        .spanBuilder("Received message from todo-stored").startSpan(); // <3>
+
+                if (this.todoService.update(record.getPayload())) {
+                    span.addEvent("Updated todo", Attributes.of(
+                            AttributeKey.stringKey("id"), record.getPayload().getId())); // <4>
+                }
+
+                span.end();
+            }
+        }
+
+        return record.ack();
+    }
+```
+
+**<1>** Load metadata from current message \
+**<2>** Activate contect from metadata \
+**<3>** Create a span builder and start new span \
+**<3>** Set status code of the current span
+
+And when finally everything comes together:
+
+![image](/assets/images/20220115-jaeger_complex_trace.png)
+
+(I am going to describe the exact scenario there in a follow-up post.)
 
 ## Logging vs Tracing
 
-Now that we have a common understanding what this example is all about, let us get started with
-our comparison of [logging][] and [tracing][].
+I think we have covered enough of the basics and seen both in action, so let us continue with the
+actual comparison of [logging][] and [tracing][].
+
+If you have a look at both images now, which one would you prefer for what situation?
 
 | Logging ([Kibana][])                        | Tracing ([Jaeger][])                         |
 |----------------------------------------------|----------------------------------------------|
