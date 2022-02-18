@@ -205,7 +205,7 @@ Another way to gather information is **tracing**, so let us have a look at it.
 
 ### Tracing
 
-### What is a trace?
+#### What is a trace?
 
 Again at a high level, a **trace** is a visualization of a request of its way through a service or
 a complete microservice environment.
@@ -278,7 +278,7 @@ provided automatically by the [OpenTelemetry][9] integration.
 Getting this for free is nice, but a single **span** is nbo big help and we still need to see how
 we can enrich this even further.
 
-### Spans in action
+#### Spans in action
 
 The next example adds another service call with its own **span** to the previous example,
 demonstrates how they can be connected to each other and how to add more details.
@@ -352,7 +352,7 @@ Once sent to [Jaeger][4] something like this can be seen there:
 
 ![image](/assets/images/20220218-jaeger_advanced_graph.png)
 
-### Even more spans
+#### Even more spans
 
 More complexity?
 Let us throw in a bit of [Kafka][5], since I've already mentioned [context propagation][17]:
