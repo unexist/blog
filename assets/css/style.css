@@ -92,12 +92,6 @@ footer a:hover {
     text-align: left;
 }
 
-#content table th {
-    font-weight: bold;
-    border-right: var(--border);
-    padding: var(--padding);
-}
-
 #content table tr {
     border-bottom: var(--border);
 }
@@ -106,8 +100,13 @@ footer a:hover {
     border-bottom: none;
 }
 
+#content table th {
+    font-weight: bold;
+    border-right: var(--border);
+    padding: var(--padding);
+}
+
 #content table td {
-    border-bottom: var(--border);
     border-right: var(--border);
     padding: var(--padding);
 }
