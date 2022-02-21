@@ -89,13 +89,21 @@ footer a:hover {
 /* Table */
 #content table {
     border-collapse: collapse;
+    text-align: left;
 }
 
 #content table th {
     font-weight: bold;
-    border-bottom: var(--border);
     border-right: var(--border);
     padding: var(--padding);
+}
+
+#content table tr {
+    border-bottom: var(--border);
+}
+
+#content table tr:last-child {
+    border-bottom: none;
 }
 
 #content table td {
