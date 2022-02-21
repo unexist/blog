@@ -102,6 +102,7 @@ footer a:hover {
 
 #content table th {
     font-weight: bold;
+    border-bottom: var(--border);
     border-right: var(--border);
     padding: var(--padding);
 }
