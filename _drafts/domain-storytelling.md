@@ -3,10 +3,33 @@ layout: post
 title: Domain Storytelling
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: agile ddd
+tags: agile domainstory ddd
 categories: specification
 toc: true
 ---
+It took me quite a while to finish my blog post about
+[Logging vs Tracing]({% post_url 2022-02-18-logging-vs-tracing %})
+
+I originally wanted to include my showcase directly in my previous post about
+, but after many drafts of it I
+made the decision to postpone it to another one to keep topics separated.
+
+So in this post I want to demonstrate a visualization format named [Domain Storytelling][] based
+on the showcase about
+to
+There a few visual formats that really helpI usually try to create a showcase to have something at hand
+
+Visual formats can really help to convey information, especially when the thing you are talking
+about is really complex.
+
+I wrote about  in my previous
+post and also created a quite complex example in a showcase.
+
+When you try to explain something complex, it can be difficult for the listener to follow without
+some kind of visualization for support
+for the example to my previous post about
+
+When you are trying to explain a complex scenario to someone el
 As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
 to explain what this is about.
 I hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
