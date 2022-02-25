@@ -7,8 +7,17 @@ tags: agile domainstory ddd
 categories: specification
 toc: true
 ---
+My original plan for my post about
+[Logging vs Tracing]({% post_url 2022-02-18-logging-vs-tracing %}) was to explain the basics and
+demonstrate both on a kind of real world example afterwards.
+While writing the post, I had problems to describe the example textual and I need something more
+approachable.
+
+In this post I will demonstrate a visual way to
+
+
 It took me quite a while to finish my blog post about
-[Logging vs Tracing]({% post_url 2022-02-18-logging-vs-tracing %})
+
 
 I originally wanted to include my showcase directly in my previous post about
 , but after many drafts of it I
