@@ -3,36 +3,22 @@ layout: post
 title: Domain Storytelling
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: agile domainstory ddd
-categories: specification
+tags: domainstory ddd showcase
+categories: specification showcase
 toc: true
 ---
-My original plan for my post about
-[Logging vs Tracing]({% post_url 2022-02-18-logging-vs-tracing %}) was to explain the basics and
-demonstrate both on a kind of real world example afterwards.
-While writing the post, I had problems to describe the example textual and I need something more
-approachable.
+My previous post about [Logging vs Tracing]({% post_url 2022-02-18-logging-vs-tracing %} is
+probably the one with the most upfront preparation so far.
+I had ambitious plans for it and wanted to explain the general topic, cover the necessary basics
+and demonstrate the differences of both on a slightly contrived example later on.
 
-In this post I will demonstrate a visual way to
+I added more and more tech to it and quickly ran into trouble explaining how everything is set up
+and also what the actual usecase is supposed to do.
 
+So in this follow-up post I want to demonstrate the visualization format [Domain Storytelling][]
+based on my previous example and introduce you to its unique way of conveying information.
 
-It took me quite a while to finish my blog post about
-
-
-I originally wanted to include my showcase directly in my previous post about
-, but after many drafts of it I
-made the decision to postpone it to another one to keep topics separated.
-
-So in this post I want to demonstrate a visualization format named [Domain Storytelling][] based
-on the showcase about
-to
-There a few visual formats that really helpI usually try to create a showcase to have something at hand
-
-Visual formats can really help to convey information, especially when the thing you are talking
-about is really complex.
-
-I wrote about  in my previous
-post and also created a quite complex example in a showcase.
+### Get the whole story
 
 When you try to explain something complex, it can be difficult for the listener to follow without
 some kind of visualization for support
