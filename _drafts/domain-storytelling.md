@@ -20,15 +20,16 @@ based on my previous example and introduce you to its unique way of conveying in
 
 ### Get the whole story
 
-When you try to explain something complex, it can be difficult for the listener to follow without
-some kind of visualization for support
-for the example to my previous post about
+Every good story starts with a first step:
 
-When you are trying to explain a complex scenario to someone el
-As I've mentioned earlier, I've prepared a really convoluted example for this post, so let my try
-to explain what this is about.
-I hadn't had time to start with a post about [Domain Storytelling][], but I think this format is
-well-suited to give you an overview about what is supposed to happen:
+![image](/assets/images/20220115-step1.png)
+
+And when you are looking at it, try to read it like this:
+
+> A User sends a Todo to the todo-service-create
+
+![image](/assets/images/20220115-step2.png)
+
 
 ![image](/assets/images/20220115-overview.png)
 
@@ -53,11 +54,7 @@ yourself:
 
 When you press play, the modeler hides everything besides the first step:
 
-![image](/assets/images/20220115-step1.png)
 
-And when you are looking at it, try to read it like this:
-
-> A User sends a Todo to the todo-service-create
 
 Can you follow the story and understand the next step? Give it a try with either the **next icon**
 the **prev icon** from the toolbar.
