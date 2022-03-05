@@ -505,7 +505,7 @@ public class TodoSink {
 **<1>** Load metadata from current message \
 **<2>** Activate context from metadata \
 **<3>** Create a span builder and start new span \
-**<3>** Set status code of the current span
+**<4>** Set status code of the current span
 
 And when finally everything comes together:
 
