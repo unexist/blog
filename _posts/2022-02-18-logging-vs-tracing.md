@@ -21,9 +21,9 @@ weaknesses for specific usecases.
 
 Are you still with me? Great - let us move on to [logging][19]!
 
-### Logging
+## Logging
 
-#### What is a log?
+### What is a log?
 
 Generally speaking, a **log** is some kind of output of an event that happened on an application
 on a specific system at a particular time.
@@ -48,7 +48,7 @@ LOGGER.info("Created todo");
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
 ```
 
-#### Adding context
+### Adding context
 
 Simple messages, like this don't provide much contextual information and make it difficult to
 reproduce what has actually happened.
@@ -77,7 +77,7 @@ really difficult to find the message:
 LOGGER.info("Created todo: id ={}", todo.getId());
 ```
 
-#### Mapped Diagnostic Context
+### Mapped Diagnostic Context
 
 Modern [logging][19] libraries support the usage of a [MDC][20], which allows to add information via static
 methods to a thread-based context.
@@ -116,7 +116,7 @@ These parameters can either be added manually or automatically via [filters][9],
 [interceptors][12] or even with [aspect-oriented-programming][1] and allow writing of better filter
 queries for our values.
 
-#### Correlation between messages
+### Correlation between messages
 
 Another way to correlate between messages is to create an unique id or **correlation id** for each
 request and add it to all consecutive log messages.
@@ -188,7 +188,7 @@ something like this:
 2022-03-05 14:30:06,274 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {correlation_id=f825c6981cb0dc603eb509189ed141b6} Received post request
 ```
 
-#### Structured logs
+### Structured logs
 
 To further improve the *searchability* (is that even a word?), switching from an **unstructured**
 to a **structured** format allows to parse the data more easily and to better include additional
@@ -237,7 +237,7 @@ The first two use helpers to add the specific key-value pair to the log.
 [Echopraxia][4] introduces the concept of [field builders][8], which allow to define your own
 formatters for your objects to programmatically include all the necessary attributes.
 
-#### Central logging
+### Central logging
 
 One of the goals of central logging is to have everything aggregated in one place and to provide
 some kind of facility to create complex search queries.
@@ -274,9 +274,9 @@ you should be able to see something like this:
 
 Another way to gather information is **tracing**, so let us have a look at it.
 
-### Tracing
+## Tracing
 
-#### What is a trace?
+### What is a trace?
 
 Again at a high level, a **trace** is a visualization of a request of its way through a service or
 a complete microservice environment.
@@ -292,7 +292,7 @@ They include a **span ID**, specific timings and optionally other attributes, [e
 Whenever a **trace** passes service boundaries, its context can be transferred via
 [context propagation][2] and specific headers for e.g. HTTP or [Kafka][15].
 
-#### Tracing with OpenTelemetry
+### Tracing with OpenTelemetry
 
 When I originally started with this post, [Quarkus][25] was about to make the switch from
 [OpenTracing][22] to [OpenTelemetry][21] and I had to start from scratch - poor me.
@@ -349,7 +349,7 @@ provided automatically by the [OpenTelemetry][21] integration.
 Getting this for free is nice, but a single **span** is nbo big help and we still need to see how
 we can enrich this even further.
 
-#### Spans in action
+### Spans in action
 
 The next example adds another service call with its own **span** to the previous example,
 demonstrates how they can be connected to each other and how to add more details.
@@ -423,7 +423,7 @@ Once sent to [Jaeger][13] something like this can be seen there:
 
 ![image](/assets/images/20220218-jaeger_advanced_graph.png)
 
-#### Even more spans
+### Even more spans
 
 More complexity?
 Let us throw in a bit of [Kafka][15], since I've already mentioned [context propagation][2]:
