@@ -3,7 +3,7 @@ layout: post
 title: Logging vs Tracing
 date: 2022-02-18 20:30 +0100
 author: Christoph Kappel
-tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf showcase
+tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf showcase updated
 categories: observability showcase
 toc: true
 ---
@@ -12,14 +12,14 @@ some insights if there is a possible disaster coming in.
 Sifting through logs works perfectly well for standalone applications, but what about more complex
 scenarios or even [distributed][18] ones?
 
-In this post I want to demonstrate the difference between **logging** and **tracing** and talk
+In this post I want to demonstrate the difference between [logging][7] and [tracing][15] and talk
 about why and when I'd prefer one over the other.
 We are going to cover some basics first and talk about what both actually is and about possible
 ways to enrich them.
 And after that, we are going to do a side-by-side comparison and talk about their strengths and
 weaknesses for specific usecases.
 
-Are you still with me? Great - let us move on to **logging**!
+Are you still with me? Great - let us move on to [logging][7]!
 
 ### Logging
 
@@ -50,7 +50,7 @@ LOGGER.info("Created todo");
 
 #### Adding context
 
-Simple messages like this don't provide much contextual information and make it difficult to
+Simple messages, like this don't provide much contextual information and make it difficult to
 reproduce what has actually happened.
 Adding useful information like request-, user- or other object identifiers further improves your
 understanding and also makes it possible to correlate different messages.
@@ -115,7 +115,78 @@ After this change the log dutifully includes our value:
 These parameters can either be added manually or automatically via [filters][22],
 [interceptors][25] or even with [aspect-oriented-programming][16] and allow writing of better filter
 queries for our values.
-, but we are still using an unstructured format which cannot be parsed easily.
+
+#### Correlation between messages
+
+Another way to correlate between messages is to create an unique id or **correlation id** for each
+request and add it to all consecutive log messages.
+
+The combination of both [MDC][8] and [interceptors][25] make it really easy to add this to your
+existing applications:
+
+###### **Correlated.java**:
+```java
+@Target({ METHOD })
+@Retention(RUNTIME)
+@Documented
+@InterceptorBinding
+public @interface Correlated { // <1>
+}
+```
+
+**<1>** Create an annotation for the actual binding of our interceptor
+
+###### **CorrelatedInterceptor.java**:
+```java
+@Correlated
+@Priority(10)
+@Interceptor
+public class CorrelatedInterceptor {
+
+    @AroundInvoke
+    public Object correlate(InvocationContext context) throws Exception {
+        Object result = null;
+
+        try (MDC.MDCCloseable closable = MDC.putCloseable("correlation_id",
+                UUID.randomUUID().toString())) // <1>
+        {
+            result = context.proceed(); // <2>
+        }
+
+        return result;
+    }
+}
+```
+
+**<1>** Create a new ID here and put it into the MDC \
+**<2>** Actual call the intercepted method and pass down our new id
+
+###### **TodoResource.java**:
+```java
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+@Operation(summary = "Create new todo")
+@Tag(name = "Todo")
+@APIResponses({
+        @APIResponse(responseCode = "200", description = "Todo created")
+}
+@Correlated // <1>
+public Response create(TodoBase todoBase) {
+    LOGGER.log("Received post request");
+
+    return Response.ok().build();
+}
+```
+
+**<1>** And this finally marks the method for being intercepted
+
+Once we restart our service and fire a POST request against our service the log should include
+something like this:
+
+###### **Log**:
+```log
+2022-03-05 14:30:06,274 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {correlation_id=f825c6981cb0dc603eb509189ed141b6} Received post request
+```
 
 #### Structured logs
 
@@ -226,8 +297,8 @@ Whenever a **trace** passes service boundaries, its context can be transferred v
 When I originally started with this post, [Quarkus][12] was about to make the switch from
 [OpenTracing][10] to [OpenTelemetry][9] and I had to start from scratch - poor me.
 
-Similar to [logging][27], [Quarkus][12] or rather [Smallrye][13] comes with an extension to bring
-[tracing][30] capabilities onto the table.
+Similar to [logging][7], [Quarkus][12] or rather [Smallrye][13] comes with an extension to bring
+[tracing][15] capabilities onto the table.
 This also enables rudimentary tracing to all HTTP requests by default:
 
 ###### **TodoResource.java**:
@@ -432,7 +503,7 @@ public class TodoSink {
 ```
 
 **<1>** Load metadata from current message \
-**<2>** Activate contect from metadata \
+**<2>** Activate context from metadata \
 **<3>** Create a span builder and start new span \
 **<3>** Set status code of the current span
 
@@ -443,11 +514,45 @@ And when finally everything comes together:
 (I am going to describe the exact scenario there in a follow-up post.)
 
 I think we have covered enough of the basics and seen both in action, so let us continue with the
-actual comparison of [logging][27] and [tracing][30].
+actual comparison of [logging][7] and [tracing][15].
 
-## Logging vs Tracing
+### Combining logging and tracing
 
-If you consider both now, which one would you prefer for what situation?
+Currently, there is no easy way in [OpenTelemetry][9] to add a trace or span id to your logs,
+but in general both can be used like **correlation id** from the logging example with
+[interceptors][].
+
+When we fetch the **trace id** from the current context, we can append it to the [MDC][8] and et
+voila:
+
+###### **TracedInterceptor.java**:
+```java
+@Traced
+@Priority(10)
+@Interceptor
+public class TracedInterceptor {
+
+    @AroundInvoke
+    public Object trace(InvocationContext context) throws Exception {
+        Object result = null;
+
+        try (MDC.MDCCloseable closable = MDC.putCloseable("trace_id",
+                Span.current().getSpanContext().getTraceId())) // <1>
+        {
+            result = context.proceed()
+        }
+
+        return result;
+    }
+}
+```
+
+**<1>** Fetch the trace id from the context
+
+## Conclusion
+
+[Logging][7] and [tracing][15] aren't mutual exclusive, they both help to pinpoint problems and
+provide a different view of the same picture with a complementary set of information.
 
 | Logging                                        | Tracing                                        |
 |------------------------------------------------|------------------------------------------------|
@@ -457,14 +562,13 @@ If you consider both now, which one would you prefer for what situation?
 | Is easy to integrate into monoliths            | Makes more sense in microservice architectures |
 | Supports debugging and diagnoses               | Supports debugging and diagnoses               |
 
-## Conclusion
+If you have a microservice architecture it probably makes more sense to enable [tracing][15], than
+in your typical monolith, especially when this kind of instrumentation increases the overall
+complexity.
+[Logging][7] and [tracing][15] are two third of [Three Pillars of Observability][14] and help your
+development teams to debug errors, diagnose issues and to build better systems.
 
-[Logging][7] and [Tracing][15] aren't mutual exclusive, they both help to pinpoint problems and
-provide a different view of the same picture with a complementary set of information.
-If you have a microservice architecture it probably makes more sense to enable tracing, than in
-your typical monolith, especially when this kind of instrumentation increases the complexity.
-Logs, traces and metrics form the [Three Pillars of Observability][14] and help your development
-teams to debug errors, diagnose issues and to build better systems.
+If you consider both now, which one would you prefer for what situation?
 
 All of the examples can be found here:
 
@@ -498,4 +602,3 @@ All of the examples can be found here:
 [27]: https://en.wikipedia.org/wiki/Logging
 [28]: https://github.com/quarkiverse/quarkus-logging-json
 [29]: https://opentelemetry.lightstep.com/spans/
-[30]: https://en.wikipedia.org/wiki/Tracing_(software)
