@@ -10,16 +10,16 @@ toc: true
 Monitoring is one of the essential parts to check how well your application is doing and to get
 some insights if there is a possible disaster coming in.
 Sifting through logs works perfectly well for standalone applications, but what about more complex
-scenarios or even [distributed][18] ones?
+scenarios or even [distributed][3] ones?
 
-In this post I want to demonstrate the difference between [logging][7] and [tracing][15] and talk
+In this post I want to demonstrate the difference between [logging][19] and [tracing][29] and talk
 about why and when I'd prefer one over the other.
 We are going to cover some basics first and talk about what both actually is and about possible
 ways to enrich them.
 And after that, we are going to do a side-by-side comparison and talk about their strengths and
 weaknesses for specific usecases.
 
-Are you still with me? Great - let us move on to [logging][7]!
+Are you still with me? Great - let us move on to [logging][19]!
 
 ### Logging
 
@@ -32,7 +32,7 @@ also turn the page and deliver helpful bits of information for troubleshooting d
 
 One problem with log messages is the sheer amount of data that is generated during daily business,
 which makes it quite difficult to keep track of them and to find something specific.
-To keep them manageable, they are grouped into different categories (called [levels][26]) like
+To keep them manageable, they are grouped into different categories (called [levels][17]) like
 **Info**, **Warn** or **Error** (depending on their severity) and can be used to filter data
 or to create monitoring alarms.
 
@@ -79,7 +79,7 @@ LOGGER.info("Created todo: id ={}", todo.getId());
 
 #### Mapped Diagnostic Context
 
-Modern logging libraries support the usage of a [MDC][8], which allows to add information via static
+Modern [logging][19] libraries support the usage of a [MDC][20], which allows to add information via static
 methods to a thread-based context.
 If your logger is configured correctly, this information is automatically added to the next log
 messages until you remove it again:
@@ -97,8 +97,8 @@ try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
 }
 ```
 
-Unfortunately, the default logger of [Quarkus][12] needs a bit of configuration until it actually
-picks up the [MDC][8] information:
+Unfortunately, the default logger of [Quarkus][25] needs a bit of configuration until it actually
+picks up the [MDC][20] information:
 
 ###### **application.properties**:
 ```properties
@@ -112,8 +112,8 @@ After this change the log dutifully includes our value:
 2022-01-19 16:46:14,298 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {todo_id=8659a492-1b3b-42f6-b25c-3f542ab11562} Created todo
 ```
 
-These parameters can either be added manually or automatically via [filters][22],
-[interceptors][25] or even with [aspect-oriented-programming][16] and allow writing of better filter
+These parameters can either be added manually or automatically via [filters][9],
+[interceptors][12] or even with [aspect-oriented-programming][1] and allow writing of better filter
 queries for our values.
 
 #### Correlation between messages
@@ -121,7 +121,7 @@ queries for our values.
 Another way to correlate between messages is to create an unique id or **correlation id** for each
 request and add it to all consecutive log messages.
 
-The combination of both [MDC][8] and [interceptors][25] make it really easy to add this to your
+The combination of both [MDC][20] and [interceptors][12] make it really easy to add this to your
 existing applications:
 
 ###### **Correlated.java**:
@@ -193,9 +193,9 @@ something like this:
 To further improve the *searchability* (is that even a word?), switching from an **unstructured**
 to a **structured** format allows to parse the data more easily and to better include additional
 metadata like the calling class or the host name.
-The defacto standard for structured logs is [JSON][3] and supported widely in (business) analytics.
+The defacto standard for structured logs is [JSON][14] and supported widely in (business) analytics.
 
-The [quarkus-logging-json][28] extension adds this capability:
+The [quarkus-logging-json][24] extension adds this capability:
 
 ###### **Structured log**:
 ```json
@@ -217,8 +217,8 @@ The [quarkus-logging-json][28] extension adds this capability:
 }
 ```
 
-More advanced logging libraries provide helpers based on the mechanism of the [MDC][8] to add
-key-value pairs conveniently.
+More advanced [logging][19] libraries provide helpers based on the mechanism of the [MDC][20] to
+add key-value pairs conveniently.
 Here are few examples:
 
 ###### **Logging.java**:
@@ -234,7 +234,7 @@ LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
 ```
 
 The first two use helpers to add the specific key-value pair to the log.
-[Echopraxia][2] introduces the concept of [field builders][21], which allow to define your own
+[Echopraxia][4] introduces the concept of [field builders][8], which allow to define your own
 formatters for your objects to programmatically include all the necessary attributes.
 
 #### Central logging
@@ -242,9 +242,9 @@ formatters for your objects to programmatically include all the necessary attrib
 One of the goals of central logging is to have everything aggregated in one place and to provide
 some kind of facility to create complex search queries.
 There are literally hundreds of other posts about the different solutions and we are going to
-focus on [EFK][1] and [gelf][23].
+focus on [EFK][5] and [gelf][10].
 
-[Quarkus][12] comes with an extension, that does the bulk work for us.
+[Quarkus][25] comes with an extension, that does the bulk work for us.
 All we have to do is just to include it and configure it for our setup:
 
 ###### **pom.xml**:
@@ -264,10 +264,10 @@ quarkus.log.handler.gelf.port=12201
 quarkus.log.handler.gelf.include-full-mdc=true
 ```
 
-**<1>** Noteworthy here is [gelf][23] uses UDP by default, so if you want to use [Podman][11] please
-keep in mind its [gvproxy][24] doesn't support this yet.
+**<1>** Noteworthy here is [gelf][10] uses UDP by default, so if you want to use [Podman][23] please
+keep in mind its [gvproxy][11] doesn't support this yet.
 
-It might take a bit of time due to caching and latency, but once everything has reached [Kibana][6]
+It might take a bit of time due to caching and latency, but once everything has reached [Kibana][16]
 you should be able to see something like this:
 
 ![image](/assets/images/20220218-kibana_log.png)
@@ -285,20 +285,20 @@ passes through.
 
 These **spans** are the smallest unit in the world of distributed tracing and represent any kind
 of workflow of your application, like HTTP requests, calls of a database or message handling in
-[eventing][19].
-They include a **span ID**, specific timings and optionally other attributes, [events][20] or
-[statuses][29].
+[eventing][6].
+They include a **span ID**, specific timings and optionally other attributes, [events][7] or
+[statuses][27].
 
 Whenever a **trace** passes service boundaries, its context can be transferred via
-[context propagation][17] and specific headers for e.g. HTTP or [Kafka][5].
+[context propagation][2] and specific headers for e.g. HTTP or [Kafka][15].
 
 #### Tracing with OpenTelemetry
 
-When I originally started with this post, [Quarkus][12] was about to make the switch from
-[OpenTracing][10] to [OpenTelemetry][9] and I had to start from scratch - poor me.
+When I originally started with this post, [Quarkus][25] was about to make the switch from
+[OpenTracing][22] to [OpenTelemetry][21] and I had to start from scratch - poor me.
 
-Similar to [logging][7], [Quarkus][12] or rather [Smallrye][13] comes with an extension to bring
-[tracing][15] capabilities onto the table.
+Similar to [logging][19], [Quarkus][25] or rather [Smallrye][26] comes with an extension to bring
+[tracing][29] capabilities onto the table.
 This also enables rudimentary tracing to all HTTP requests by default:
 
 ###### **TodoResource.java**:
@@ -316,9 +316,9 @@ public Response create(TodoBase todoBase) {
 ```
 
 Without some kind of visualization it is difficult to explain what **traces** actually look like,
-so we fast forward a bit and configure [OpenTelemetry][9] and [Jaeger][4].
+so we fast forward a bit and configure [OpenTelemetry][21] and [Jaeger][13].
 
-Again, [Quarkus][12] comes with some handy extensions and all we have to do is to actually include
+Again, [Quarkus][25] comes with some handy extensions and all we have to do is to actually include
 them in our `pom.xml` and to update our properties:
 
 ###### **pom.xml**:
@@ -340,12 +340,12 @@ quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
 quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
 ```
 
-When set up properly your **trace** should look like this in [Jaeger][4]:
+When set up properly your **trace** should look like this in [Jaeger][13]:
 
 ![image](/assets/images/20220218-jaeger_simple_trace.png)
 
 There is various meta information included like timing, client_ip or HTTP method and everything is
-provided automatically by the [OpenTelemetry][9] integration.
+provided automatically by the [OpenTelemetry][21] integration.
 Getting this for free is nice, but a single **span** is nbo big help and we still need to see how
 we can enrich this even further.
 
@@ -415,18 +415,18 @@ public Optional<Todo> create(TodoBase base) {
 **<2>** Add a logging event with the todo id to the current span \
 **<3>** Set status code of the current span
 
-Once sent to [Jaeger][4] something like this can be seen there:
+Once sent to [Jaeger][13] something like this can be seen there:
 
 ![image](/assets/images/20220218-jaeger_advanced_trace.png)
 
-[Jaeger][4] also includes an experimental graph view to display the call graphs:
+[Jaeger][13] also includes an experimental graph view to display the call graphs:
 
 ![image](/assets/images/20220218-jaeger_advanced_graph.png)
 
 #### Even more spans
 
 More complexity?
-Let us throw in a bit of [Kafka][5], since I've already mentioned [context propagation][17]:
+Let us throw in a bit of [Kafka][15], since I've already mentioned [context propagation][2]:
 
 ###### **TodoResource.java**:
 ```java
@@ -514,15 +514,15 @@ And when finally everything comes together:
 (I am going to describe the exact scenario there in a follow-up post.)
 
 I think we have covered enough of the basics and seen both in action, so let us continue with the
-actual comparison of [logging][7] and [tracing][15].
+actual comparison of [logging][19] and [tracing][29].
 
 ### Combining logging and tracing
 
-Currently, there is no easy way in [OpenTelemetry][9] to add a trace or span id to your logs,
+Currently, there is no easy way in [OpenTelemetry][21] to add a trace or span id to your logs,
 but in general both can be used like **correlation id** from the logging example with
-[interceptors][].
+[interceptors][12].
 
-When we fetch the **trace id** from the current context, we can append it to the [MDC][8] and et
+When we fetch the **trace id** from the current context, we can append it to the [MDC][20] and et
 voila:
 
 ###### **TracedInterceptor.java**:
@@ -551,7 +551,7 @@ public class TracedInterceptor {
 
 ## Conclusion
 
-[Logging][7] and [tracing][15] aren't mutual exclusive, they both help to pinpoint problems and
+[Logging][19] and [tracing][29] aren't mutual exclusive, they both help to pinpoint problems and
 provide a different view of the same picture with a complementary set of information.
 
 | Logging                                        | Tracing                                        |
@@ -562,10 +562,10 @@ provide a different view of the same picture with a complementary set of informa
 | Is easy to integrate into monoliths            | Makes more sense in microservice architectures |
 | Supports debugging and diagnoses               | Supports debugging and diagnoses               |
 
-If you have a microservice architecture it probably makes more sense to enable [tracing][15], than
+If you have a microservice architecture it probably makes more sense to enable [tracing][29], than
 in your typical monolith, especially when this kind of instrumentation increases the overall
 complexity.
-[Logging][7] and [tracing][15] are two third of [Three Pillars of Observability][14] and help your
+[Logging][19] and [tracing][29] are two third of [Three Pillars of Observability][28] and help your
 development teams to debug errors, diagnose issues and to build better systems.
 
 If you consider both now, which one would you prefer for what situation?
@@ -574,31 +574,32 @@ All of the examples can be found here:
 
 <https://github.com/unexist/showcase-logging-vs-tracing-quarkus>
 
-[1]: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-elasticsearch-fluentd-and-kibana-efk-logging-stack-on-kubernetes
-[2]: https://github.com/tersesystems/echopraxia
-[3]: https://www.innoq.com/en/blog/structured-logging/
-[4]: https://www.jaegertracing.io/
-[6]: https://www.elastic.co/kibana/
-[7]: https://en.wikipedia.org/wiki/Logging
-[8]: https://logback.qos.ch/manual/mdc.hml
-[9]: https://opentelemetry.io
-[10]: https://opentracing.io/
-[11]: https://podman.io/
-[12]: https://quarkus.io/
-[13]: https://smallrye.io/
-[14]: https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html
-[15]: https://en.wikipedia.org/wiki/Tracing_(software)
-[16]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
-[17]: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation
-[18]: https://en.wikipedia.org/wiki/Distributed_computing
-[19]: https://wikidiff.com/messaging/eventing
-[20]: https://opentelemetry.io/docs/concepts/data-sources/#logs
-[21]: https://github.com/tersesystems/echopraxia#custom-field-builders
-[22]: https://blog.adamgamboa.dev/understanding-jax-rs-filters/
-[23]: https://www.graylog.org/features/gelf
-[24]: https://github.com/containers/gvisor-tap-vsock
-[25]: https://www.baeldung.com/cdi-interceptor-vs-spring-aspectj
-[26]: https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
-[27]: https://en.wikipedia.org/wiki/Logging
-[28]: https://github.com/quarkiverse/quarkus-logging-json
-[29]: https://opentelemetry.lightstep.com/spans/
+[1]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
+[2]: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation
+[3]: https://en.wikipedia.org/wiki/Distributed_computing
+[4]: https://github.com/tersesystems/echopraxia
+[5]: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-elasticsearch-fluentd-and-kibana-efk-logging-stack-on-kubernetes
+[6]: https://wikidiff.com/messaging/eventing
+[7]: https://opentelemetry.io/docs/reference/specification/trace/api/#add-events
+[8]: https://github.com/tersesystems/echopraxia#custom-field-builders
+[9]: https://blog.adamgamboa.dev/understanding-jax-rs-filters/
+[10]: https://www.graylog.org/features/gelf
+[11]: https://github.com/containers/gvisor-tap-vsock
+[12]: https://www.baeldung.com/cdi-interceptor-vs-spring-aspectj
+[13]: https://www.jaegertracing.io/
+[14]: https://reflectoring.io/structured-logging/
+[15]: https://kafka.apache.org/
+[16]: https://www.elastic.co/kibana/
+[17]: https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
+[18]: https://en.wikipedia.org/wiki/Logging
+[19]: https://en.wikipedia.org/wiki/Logging
+[20]: https://logback.qos.ch/manual/mdc.hml
+[21]: https://opentelemetry.io
+[22]: https://opentracing.io/
+[23]: https://podman.io/
+[24]: https://github.com/quarkiverse/quarkus-logging-json
+[25]: https://quarkus.io/
+[26]: https://smallrye.io/
+[27]: https://opentelemetry.lightstep.com/spans/
+[28]: https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html
+[29]: https://en.wikipedia.org/wiki/Tracing_(software)
