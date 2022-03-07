@@ -12,13 +12,29 @@ probably the one with the most upfront preparation so far.
 I had ambitious plans for it and wanted to explain the general topic, cover the necessary basics
 and demonstrate the differences of both on a slightly contrived example later on.
 
-I added more and more tech to it and quickly ran into trouble explaining how everything is set up
+I added more and more tech to it and quickly ran into trouble explaining, how everything is set up
 and also what the actual usecase is supposed to do.
 
-So in this follow-up post I want to demonstrate the visualization format [Domain Storytelling][]
-based on my previous example and introduce you to its unique way of conveying information.
+So in this follow-up post I want to demonstrate a visualization format, that breaks down a story
+into steps and also provides a nice interface to step through the each of them.
+
+Let us say hello to [Domain Storytelling][].
 
 ### Get the whole story
+
+Conveying information is always difficult.
+
+When you start with a textual format, you have to make assumptions about what the targeted audience
+already knows and usually just end up with they are your equal.
+
+> If I Had More Time, I Would Have Written a Shorter Letter
+<cite>Blaise Pascal</cite>
+
+Selecting the right amount of information either you need lots of pages and people are kist afraid
+of reading your whole spec or you provide some kin do diagram, which is really difficult to
+understand, when you didn't participate in its creation.
+
+Conveying information textual is sometimes difficult based on my previous example and introduce you to its unique way of conveying information.
 
 Every good story starts with a first step:
 
