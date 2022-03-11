@@ -22,10 +22,10 @@ Let us say hello to [Domain Storytelling][].
 
 ### Get the whole story
 
-Conveying information is always difficult.
-
 When you start with a textual format, you have to make assumptions about what the targeted audience
 already knows and usually just end up with they are your equal.
+
+Conveying information is always difficult.
 
 > If I Had More Time, I Would Have Written a Shorter Letter
 <cite>Blaise Pascal</cite>
