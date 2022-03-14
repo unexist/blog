@@ -46,7 +46,7 @@ There aren't many examples available, so it took me quite a while to get the eng
 that and when I refreshed my knowledge how to actually create a BPMN diagram, I got a small and
 totally exciting example working:
 
-![image](/assets/images/20210721-camunda_modeler.png)
+![image](/assets/images/workflow_engines_on_quarkus/camunda_modeler.png)
 
 _On the pro sides, the [Camunda Modeler][6] is quite usable now (but still looks like a Java
 applet). I had different memories and ultimately generated the diagram by code, to avoid some of
@@ -158,7 +158,7 @@ With the help of their web-based and *colorful* [online modeler][13], it was qui
 initial workflow. Apparently, playing with it is quite funny and even CDI works out-of-the-box, so
 after a while I ended with up this:
 
-![image](/assets/images/20210721-kogito_modeler.png)
+![image](/assets/images/workflow_engines_on_quarkus/kogito_modeler.png)
 
 ### Rules engine
 
@@ -218,7 +218,7 @@ not pulled automatically:
 That out of the way, we can finally start modelling a new workflow with a message consumer and
 producer:
 
-![image](/assets/images/20210721-kogito_modeler_messaging.png)
+![image](/assets/images/workflow_engines_on_quarkus/kogito_modeler_messaging.png)
 
 ### Problems
 
@@ -259,7 +259,7 @@ Another thing, that is easy to miss: The message name inside of the properties o
 `start message` or `end message` *must to be* the name of topic the message should be read from or
 respectively send to:
 
-![image](/assets/images/20210721-kogito_modeler_messaging_config.png)
+![image](/assets/images/workflow_engines_on_quarkus/kogito_modeler_messaging_config.png)
 
 ## Benchmark
 
