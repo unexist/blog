@@ -144,7 +144,7 @@ Let us check how [FitNesse][17] tries to solve these problems.
 access to the test cases, definitions and results in a unique way: It comes bundled with a
 standalone [wiki engine][18] and can be accessed with any browser:
 
-![image](/assets/images/20210909-fitnesse_wiki_before.png)
+![image](/assets/images/specification_by_example/fitnesse_wiki_before.png)
 
 Before you ask, yes you can also run it headless in case you want to integrate it into a CI
 pipeline. *We all know that you want to do that, right?*
@@ -244,7 +244,7 @@ Back to your browser: When you click on the test button at the top, [FitNesse][1
 runs the tests on the selected page - or the entire suite and updates the colors according to the
 results:
 
-![image](/assets/images/20210909-fitnesse_wiki_after.png)
+![image](/assets/images/specification_by_example/fitnesse_wiki_after.png)
 
 Let us talk about the problems I've mentioned before:
 
@@ -309,7 +309,7 @@ public class TodoConcordionFixture {
 
 When the test runner runs this test it creates following report:
 
-![image](/assets/images/20210909-concordion_simple_test.png)
+![image](/assets/images/specification_by_example/concordion_simple_test.png)
 
 Since adding all the link instrumentation directly into the text makes its source kind of difficult
 to read and follow, therefore there is a slighty extended way of creating them:
@@ -330,7 +330,7 @@ This example utilizes another way of defining links inside of [markdown][25], wh
 for me because I usually do it that way in my blog as well. Once the runner writes the report it
 can be opened in your browser:
 
-![image](/assets/images/20210909-concordion_simple_test_modified.png)
+![image](/assets/images/specification_by_example/concordion_simple_test_modified.png)
 
 All the other examples use a table, so here is a small example with a table as well:
 
@@ -355,7 +355,7 @@ To ease the writing of the tests, we just have to instrument the names of the co
 quite possible to do this in every row. The initial `createWithDate` is a special case and runs
 before each row. If we task our test runner again to get the report we end up with this:
 
-![image](/assets/images/20210909-concordion_table_test.png)
+![image](/assets/images/specification_by_example/concordion_table_test.png)
 
 Time for talk about the usual points:
 
