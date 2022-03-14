@@ -18,7 +18,7 @@ violates the contract between both services?
 For the ease of the discussion, let us say team A is responsible for the **consumer** of the public
 API and team B takes care of the **producer**.
 
-![image](/assets/images/20210824-pact_normal_flow.png)
+![image](/assets/images/consumer_driven_contracts/pact_normal_flow.png)
 
 This scenario has lots of problems, but let us talk about two in detail:
 
@@ -30,7 +30,7 @@ This scenario has lots of problems, but let us talk about two in detail:
 This whole problem isn't new and we have a perfect hammer for this particular nail: We just create
 a **mock** or even better a **fake** from the **producer** and test the **consumer** against it:
 
-![image](/assets/images/20210824-pact_mock_flow.png)
+![image](/assets/images/consumer_driven_contracts/pact_mock_flow.png)
 
 ..but how does this help to validate assumptions? Or even worse: Who is responsible for updating the
 mock or fake, when the API really changes?
@@ -127,7 +127,7 @@ void todoCheckPactTest(MockServer mockServer) throws IOException {
 The [broker][6] allows to uncouple **consumer** and **producer**, so that instead of talking
 directly to each other during tests the communication looks like this:
 
-![image](/assets/images/20210824-pact_broker_flow.png)
+![image](/assets/images/consumer_driven_contracts/pact_broker_flow.png)
 
 This makes it possible for both sides to work independently on their services without interrupting
 other teams.
@@ -155,7 +155,7 @@ via `make docker`.
 And with a call of `mvn pact:publish` or `make pact-publish` the contract should be visible in the
 broker:
 
-![image](/assets/images/20210824-pact_broker_publish.png)
+![image](/assets/images/consumer_driven_contracts/pact_broker_publish.png)
 
 #### Test the provider
 
@@ -218,7 +218,7 @@ Verifying a pact between Todo-Consumer (0.1) and Todo-Provider
 
 And the verification result should also be visible in an updated listing:
 
-![image](/assets/images/20210824-pact_broker_verify.png)
+![image](/assets/images/consumer_driven_contracts/pact_broker_verify.png)
 
 ### Problems
 
