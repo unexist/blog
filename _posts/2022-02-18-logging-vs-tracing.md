@@ -270,7 +270,7 @@ keep in mind its [gvproxy][11] doesn't support this yet.
 It might take a bit of time due to caching and latency, but once everything has reached [Kibana][16]
 you should be able to see something like this:
 
-![image](/assets/images/20220218-kibana_log.png)
+![image](/assets/images/logging_vs_tracing/kibana_log.png)
 
 Another way to gather information is **tracing**, so let us have a look at it.
 
@@ -342,7 +342,7 @@ quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
 
 When set up properly your **trace** should look like this in [Jaeger][13]:
 
-![image](/assets/images/20220218-jaeger_simple_trace.png)
+![image](/assets/images/logging_vs_tracing/jaeger_simple_trace.png)
 
 There is various meta information included like timing, client_ip or HTTP method and everything is
 provided automatically by the [OpenTelemetry][21] integration.
@@ -417,11 +417,11 @@ public Optional<Todo> create(TodoBase base) {
 
 Once sent to [Jaeger][13] something like this can be seen there:
 
-![image](/assets/images/20220218-jaeger_advanced_trace.png)
+![image](/assets/images/logging_vs_tracing/jaeger_advanced_trace.png)
 
 [Jaeger][13] also includes an experimental graph view to display the call graphs:
 
-![image](/assets/images/20220218-jaeger_advanced_graph.png)
+![image](/assets/images/logging_vs_tracing/jaeger_advanced_graph.png)
 
 ### Even more spans
 
@@ -509,7 +509,7 @@ public class TodoSink {
 
 And when finally everything comes together:
 
-![image](/assets/images/20220218-jaeger_complex_trace.png)
+![image](/assets/images/logging_vs_tracing/jaeger_complex_trace.png)
 
 (I am going to describe the exact scenario there in a follow-up post.)
 
