@@ -22,32 +22,25 @@ Let us say hello to [Domain Storytelling][].
 
 ### Get the whole story
 
-When you start with a textual format, you have to make assumptions about what the targeted audience
-already knows and usually just end up with they are your equal.
+Before we start with our story, let us prepare the table and define what we are up to:
+We want to create a simple todo service, that receives entries and provides a rudimentary interface
+([REST][]) and format ([JSON][]) to manage and access them.
 
-Conveying information is always difficult.
+In the visual language of [Domain Storytelling][] the first step to create a todo entry can be
+displayed like this:
 
-> If I Had More Time, I Would Have Written a Shorter Letter
-<cite>Blaise Pascal</cite>
-
-Selecting the right amount of information either you need lots of pages and people are kist afraid
-of reading your whole spec or you provide some kin do diagram, which is really difficult to
-understand, when you didn't participate in its creation.
-
-Conveying information textual is sometimes difficult based on my previous example and introduce you to its unique way of conveying information.
-
-Every good story starts with a first step:
-
-![image](/assets/images/20220115-step1.png)
-
-And when you are looking at it, try to read it like this:
+![image](/assets/images/domain_storytelling/step1.png)
 
 > A User sends a Todo to the todo-service-create
 
-![image](/assets/images/20220115-step2.png)
+
+And when you are looking at it, try to read it like this:
 
 
-![image](/assets/images/20220115-overview.png)
+![image](/assets/images/domain_storytelling/step2.png)
+
+
+![image](/assets/images/domain_storytelling/overview.png)
 
 This is probably lots of information to the untrained eye, so let me break this down a bit.
 
