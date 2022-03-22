@@ -519,7 +519,7 @@ actual comparison of [logging][19] and [tracing][29].
 ### Combining logging and tracing
 
 Currently, there is no easy way in [OpenTelemetry][21] to add a trace or span id to your logs,
-but in general both can be used like **correlation id** from the logging example with
+but in general both can be used like a **correlation id** from the logging example with
 [interceptors][12].
 
 When we fetch the **trace id** from the current context, we can append it to the [MDC][20] and et
@@ -572,7 +572,7 @@ If you consider both now, which one would you prefer for what situation?
 
 All of the examples can be found here:
 
-<https://github.com/unexist/showcase-logging-vs-tracing-quarkus>
+<https://github.com/unexist/showcase-logging-tracing-quarkus>
 
 [1]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
 [2]: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation
