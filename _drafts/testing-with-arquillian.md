@@ -1,16 +1,14 @@
 ---
 layout: post
-title: Arquillian vs Testcontainers
+title: Testing with Arquillian
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tech archquillian testcontainers showcase
+tags: tech archquillian pact postman showcase
 categories: tech showcase
 toc: true
 ---
 ## Arquillian
 
-## Testcontainers
-
 ## Conclusion
 
-<https://github.com/unexist/showcase-arquillian-testcontainers-quarkus>
+<https://github.com/unexist/showcase-arquillian-quarkus>
