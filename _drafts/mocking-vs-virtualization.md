@@ -28,6 +28,31 @@ message[1]          : Unable to make field jdk.internal.ref.PhantomCleanable jdk
 -------------------------------
 ```
 
+```log
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9 (file:/Users/christoph.kappel/.m2/repository/org/codehaus/groovy/groovy/3.0.8/groovy-3.0.8.jar) to constructor java.lang.AssertionError(java.lang.String)
+WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.vmplugin.v9.Java9
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+```
+
+## Problems
+
+- TestRessource is always started
+```java
+@QuarkusTestResource(value = HoverflyResource.class, restrictToAnnotatedClass = true)
+```
+
 ## Conclusion
 
-<https://github.com/unexist/showcase-arquillian-quarkus>
+<https://github.com/unexist/showcase-testing-quarkus>
+
+```
+https://github.com/quarkusio/quarkus/issues/9884
+https://issues.apache.org/jira/browse/GROOVY-8339
+
+https://github.com/quarkusio/quarkus/pull/14821
+https://github.com/quarkusio/quarkus/issues/14823
+
+https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.htm`
+```
