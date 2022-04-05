@@ -134,7 +134,7 @@ public @interface Correlated { // <1>
 }
 ```
 
-**<1>** Create an annotation for the actual binding of our interceptor
+**<1>** Create a marker annotation for the actual binding of our interceptor
 
 ###### **CorrelatedInterceptor.java**:
 ```java
@@ -148,9 +148,9 @@ public class CorrelatedInterceptor {
         Object result = null;
 
         try (MDC.MDCCloseable closable = MDC.putCloseable("correlation_id",
-                UUID.randomUUID().toString())) // <1>
+                UUID.randomUUID().toString())) // <2>
         {
-            result = context.proceed(); // <2>
+            result = context.proceed(); // <3>
         }
 
         return result;
@@ -158,8 +158,8 @@ public class CorrelatedInterceptor {
 }
 ```
 
-**<1>** Create a new ID here and put it into the MDC \
-**<2>** Actual call the intercepted method and pass down our new id
+**<2>** Create a new ID here and put it into the MDC. \
+**<3>** Actual call the intercepted method and pass down our new id.
 
 ###### **TodoResource.java**:
 ```java
@@ -170,7 +170,7 @@ public class CorrelatedInterceptor {
 @APIResponses({
         @APIResponse(responseCode = "200", description = "Todo created")
 }
-@Correlated // <1>
+@Correlated // <4>
 public Response create(TodoBase todoBase) {
     LOGGER.log("Received post request");
 
@@ -178,7 +178,7 @@ public Response create(TodoBase todoBase) {
 }
 ```
 
-**<1>** And this finally marks the method for being intercepted
+**<4>** And this finally marks the method for being intercepted
 
 Once we restart our service and fire a POST request against our service the log should include
 something like this:
@@ -396,7 +396,7 @@ public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
 
 ###### **TodoService.java**:
 ```java
-@WithSpan("Create todo") // <1>
+@WithSpan("Create todo") // <5>
 public Optional<Todo> create(TodoBase base) {
     Todo todo = new Todo(base);
 
@@ -404,16 +404,16 @@ public Optional<Todo> create(TodoBase base) {
 
     Span.current()
             .addEvent("Added id to todo", Attributes.of(
-                    AttributeKey.stringKey("id"), todo.getId())) // <2>
-            .setStatus(StatusCode.OK); // <3>
+                    AttributeKey.stringKey("id"), todo.getId())) // <5>
+            .setStatus(StatusCode.OK); // <6>
 
     return Optional.of(todo);
 }
 ```
 
-**<1>** Create a new span in the current context \
-**<2>** Add a logging event with the todo id to the current span \
-**<3>** Set status code of the current span
+**<4>** Create a new span in the current context \
+**<5>** Add a logging event with the todo id to the current span \
+**<6>** Set status code of the current span
 
 Once sent to [Jaeger][13] something like this can be seen there:
 
