@@ -178,7 +178,7 @@ public Response create(TodoBase todoBase) {
 }
 ```
 
-**<4>** And this finally marks the method for being intercepted
+**<4>** And this finally marks the method for being intercepted.
 
 Once we restart our service and fire a POST request against our service the log should include
 something like this:
@@ -390,9 +390,9 @@ public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
 }
 ```
 
-**<1>** Update the name of the current default span \
-**<2>** Create a new todo via service call \
-**<3>** Set status code of the current span
+**<1>** Update the name of the current default span. \
+**<2>** Create a new todo via service call. \
+**<3>** Set status code of the current span.
 
 ###### **TodoService.java**:
 ```java
@@ -411,9 +411,9 @@ public Optional<Todo> create(TodoBase base) {
 }
 ```
 
-**<4>** Create a new span in the current context \
-**<5>** Add a logging event with the todo id to the current span \
-**<6>** Set status code of the current span
+**<4>** Create a new span in the current context. \
+**<5>** Add a logging event with the todo id to the current span. \
+**<6>** Set status code of the current span.
 
 Once sent to [Jaeger][13] something like this can be seen there:
 
@@ -482,19 +482,19 @@ public class TodoSink {
 
     @Incoming("todo-stored")
     public CompletionStage<Void> consumeStored(IncomingKafkaRecord<String, Todo> record) {
-        Optional<TracingMetadata> metadata = TracingMetadata.fromMessage(record); // <1>
+        Optional<TracingMetadata> metadata = TracingMetadata.fromMessage(record); // <2>
 
         if (metadata.isPresent()) {
-            try (Scope ignored = metadata.get().getCurrentContext().makeCurrent()) { // <2>
+            try (Scope ignored = metadata.get().getCurrentContext().makeCurrent()) { // <3>
                 Span span = GlobalOpenTelemetry.getTracer(appName)
-                        .spanBuilder("Received message from todo-stored").startSpan(); // <3>
+                        .spanBuilder("Received message from todo-stored").startSpan(); // <4>
 
                 if (this.todoService.update(record.getPayload())) {
                     span.addEvent("Updated todo", Attributes.of(
-                            AttributeKey.stringKey("id"), record.getPayload().getId())); // <4>
+                            AttributeKey.stringKey("id"), record.getPayload().getId())); // <5>
                 }
 
-                span.end();
+                span.end(); // <6>
             }
         }
 
@@ -502,10 +502,11 @@ public class TodoSink {
     }
 ```
 
-**<1>** Load metadata from current message \
-**<2>** Activate context from metadata \
-**<3>** Create a span builder and start new span \
-**<4>** Set status code of the current span
+**<2>** Load metadata from current message \
+**<3>** Activate context from metadata \
+**<4>** Create a span builder and start new span \
+**<5>** Set status code of the current span \
+**<6>** And close the span at the end.
 
 And when finally everything comes together:
 
@@ -539,7 +540,7 @@ public class TracedInterceptor {
         try (MDC.MDCCloseable closable = MDC.putCloseable("trace_id",
                 Span.current().getSpanContext().getTraceId())) // <1>
         {
-            result = context.proceed()
+            result = context.proceed();
         }
 
         return result;
