@@ -580,7 +580,7 @@ All of the examples can be found here:
 [3]: https://en.wikipedia.org/wiki/Distributed_computing
 [4]: https://github.com/tersesystems/echopraxia
 [5]: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-elasticsearch-fluentd-and-kibana-efk-logging-stack-on-kubernetes
-[6]: https://wikidiff.com/messaging/eventing
+[6]: https://docs.microsoft.com/en-us/events/dotnetconf-focus-on-microservices/beyond-rest-and-rpc-asynchronous-eventing-and-messaging-patterns
 [7]: https://opentelemetry.io/docs/reference/specification/trace/api/#add-events
 [8]: https://github.com/tersesystems/echopraxia#custom-field-builders
 [9]: https://blog.adamgamboa.dev/understanding-jax-rs-filters/
