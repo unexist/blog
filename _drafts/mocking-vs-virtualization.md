@@ -54,5 +54,8 @@ https://issues.apache.org/jira/browse/GROOVY-8339
 https://github.com/quarkusio/quarkus/pull/14821
 https://github.com/quarkusio/quarkus/issues/14823
 
-https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.htm`
+https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.htm
+
+https://www.testcontainers.org/features/configuration/
+https://quarkus.io/guides/maven-tooling#uber-jar-maven
 ```
