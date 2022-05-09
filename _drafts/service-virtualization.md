@@ -8,6 +8,12 @@ categories: testing showcase
 toc: true
 ---
 
+## Arquillian
+
+```log
+2022-05-03 13:11:22,452 ERROR [co.gi.do.ap.as.ResultCallbackTemplate] (docker-java-stream-1783542465) {} Error during callback: javax.ws.rs.ProcessingException: RESTEASY004655: Unable to invoke request: javax.ws.rs.ProcessingException: RESTEASY003215: could not find writer for content-type application/json type: com.github.dockerjava.core.dockerfile.Dockerfile$ScannedResult$1
+```
+
 ## Mockito
 
 ## Hoverfly
@@ -45,7 +51,7 @@ WARNING: All illegal access operations will be denied in a future release
 
 ## Conclusion
 
-<https://github.com/unexist/showcase-testing-quarkus>
+<https://github.com/unexist/showcase-integration-testing-quarkus>
 
 ```
 https://github.com/quarkusio/quarkus/issues/9884
