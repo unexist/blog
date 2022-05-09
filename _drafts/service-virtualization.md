@@ -1,46 +1,23 @@
 ---
 layout: post
-title: Mocking vs virtualization
+title: Service virtualization
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tech hoverfly mockito showcase
+tags: tech hoverfly testcontainers podman showcase
 categories: testing showcase
 toc: true
 ---
+One of the many things developers never tend to agree on is:
+What is the right amount of tests?
 
-## Arquillian
+A quick look at the [testing pyramid][] should give us the answer, **if** we are both looking at
+the same same pyramid, with the same [orientation][] and actually the same shape.
+Does the the [testing diamond][] ring a bell?
 
-```log
-2022-05-03 13:11:22,452 ERROR [co.gi.do.ap.as.ResultCallbackTemplate] (docker-java-stream-1783542465) {} Error during callback: javax.ws.rs.ProcessingException: RESTEASY004655: Unable to invoke request: javax.ws.rs.ProcessingException: RESTEASY003215: could not find writer for content-type application/json type: com.github.dockerjava.core.dockerfile.Dockerfile$ScannedResult$1
-```
-
-## Mockito
+Still, what we can gather from all of the **testing shapes** is that integration testing is
+something with probably higher costs in time than unit tests.
 
 ## Hoverfly
-
-```log
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by com.thoughtworks.xstream.converters.reflection.FieldDictionary (file:/Users/christoph.kappel/.m2/repository/com/thoughtworks/xstream/xstream/1.4.19/xstream-1.4.19.jar) to field java.util.AbstractCollection.MAX_ARRAY_SIZE
-WARNING: Please consider reporting this to the maintainers of com.thoughtworks.xstream.converters.reflection.FieldDictionary
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-
-com.thoughtworks.xstream.converters.ConversionException: No converter available
----- Debugging information ----
-message             : No converter available
-type                : java.net.SocketCleanable
-converter           : com.thoughtworks.xstream.converters.reflection.ReflectionConverter
-message[1]          : Unable to make field jdk.internal.ref.PhantomCleanable jdk.internal.ref.PhantomCleanable.prev accessible: module java.base does not "opens jdk.internal.ref" to unnamed module @e4bb10b
--------------------------------
-```
-
-```log
-WARNING: An illegal reflective access operation has occurred
-WARNING: Illegal reflective access by org.codehaus.groovy.vmplugin.v9.Java9 (file:/Users/christoph.kappel/.m2/repository/org/codehaus/groovy/groovy/3.0.8/groovy-3.0.8.jar) to constructor java.lang.AssertionError(java.lang.String)
-WARNING: Please consider reporting this to the maintainers of org.codehaus.groovy.vmplugin.v9.Java9
-WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
-WARNING: All illegal access operations will be denied in a future release
-```
 
 ## Problems
 
@@ -64,4 +41,9 @@ https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.ht
 
 https://www.testcontainers.org/features/configuration/
 https://quarkus.io/guides/maven-tooling#uber-jar-maven
+
+
+https://martinfowler.com/articles/practical-test-pyramid.html
+https://sqa.stackexchange.com/questions/37623/is-an-inverted-test-pyramid-really-an-anti-pattern
+https://engineering.atspotify.com/2018/01/testing-of-microservices/
 ```
