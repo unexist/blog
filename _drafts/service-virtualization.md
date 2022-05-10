@@ -9,14 +9,19 @@ toc: true
 ---
 If you've even written a test for software, that wasn't designed to be tested, you probably know the
 problem of mixed up business logic through-out the layers.
-This is especially hard, when your business case isn't isolated to a single services and relies
-on some kind of communication with other ones.
+And it gets even worse, when your use case isn't isolated to a single services and relies on some
+kind of communication with other ones.
 
-Nowadays, our the best shot is containerization e.g. via [Podman][] and just run an instance of
-the required service along with our service in a messed up integration test.
+Containerization e.g. via [Podman][] eases the pain and allows to run instances of all required
+services along with our service in a complex integration test.
+Alas, this solution doesn't scale well, especially when the required services have further
+requirements themselves and you basically have to start up a whole landscape.
 
-In this post I want to demonstrate another option called *service virtualization*, when you really
-just need the reply of a service and can keep it as a black box.
+In this post I want to demonstrate another option namely **service virtualization**, which allows
+to consider these kind of requirements as a blackbox and (to further stretch this metaphor) to
+record and playback requests.
+
+Sounds interesting? Please follow me.
 
 ## Hoverfly
 
