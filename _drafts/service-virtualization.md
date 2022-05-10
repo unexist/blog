@@ -30,7 +30,38 @@ Simply speaking, [Hoverfly][] acts like a transparent proxy and can be easily ho
 [JVM][] via the [JUnit5][] extension lifecycle.
 From there, it can record requests, simulate them or even do both at once, when the destination
 address isn't reachable.
-And it is also possible to define replies to requests with a [DSL][].
+
+This is probably easier to understand with a simple example:
+
+```java
+public class IdServiceTest {
+    private static String SERVICE_URL = "localhost:8085";
+
+    @ClassRule
+    public static HoverflyRule hoverfly = hoverfly.inSimulationMode( // <1>
+        dsl( // <2>
+            service(SERVICE_URL)
+                .get("/id")
+                .willReturn(success(UUID.randomUUID().toString(), MediaType.APPLICATION_JSON)) // <3>
+        )
+    );
+
+    @Test
+    public void shouldGetId() {
+        given()
+            .spec(new RequestSpecBuilder().setBaseUri("http://" + SERVICE_URL).build())
+        .when()
+            .get("/id")
+        .then()
+            .statusCode(200); // <4>
+    }
+}
+```
+
+**<1>** Start [Hoverfly][] in simulation mode. \
+**<2>** Use the [DSL][] to configure the reply. \
+**<3>** Return a new [UUID][] on a request to `/id`. \
+**<4>** Stupidly check the status code.
 
 
 
