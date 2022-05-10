@@ -12,7 +12,7 @@ the problem of mixed up business logic through-out the layers.
 And it gets even worse, when your use case isn't isolated into a single service and relies on some
 external communication with other ones.
 
-Containerization e.g. via [Podman][] eases the pain and allows to run instances of all required
+Containerization e.g. via [Podman][6] eases the pain and allows to run instances of all required
 services along with our service in a complex integration test.
 Alas, this solution doesn't scale well, especially when the required services have further
 requirements themselves and you basically have to start up a whole landscape or are really
@@ -22,12 +22,12 @@ In this post I want to demonstrate another option namely **service virtualizatio
 to consider these kind of requirements as a blackbox and (to further stretch this metaphor) to
 record and playback requests.
 
-Sounds interesting? Let me introduce you to [Hoverfly][].
+Sounds interesting? Let me introduce you to [Hoverfly][3].
 
 ## Hoverfly
 
-Simply speaking, [Hoverfly][] acts like a transparent proxy and can be easily hooked up into the
-[JVM][] via the [JUnit5][] extension lifecycle.
+Simply speaking, [Hoverfly][3] acts like a transparent proxy and can be easily hooked up into the
+[JVM][5] via the [JUnit5][4] extension lifecycle.
 From there, it can record requests, simulate them or even do both at once, when the destination
 address isn't reachable.
 
@@ -61,16 +61,16 @@ public class IdServiceTest {
 }
 ```
 
-**<1>** Start [Hoverfly][] in simulation mode. \
-**<2>** Use the [DSL][] to configure the reply. \
-**<3>** Return a new [UUID][] on a request to `/id`. \
+**<1>** Start [Hoverfly][3] in simulation mode. \
+**<2>** Use the [DSL][1] to configure the reply. \
+**<3>** Return a new [UUID][9] on a request to `/id`. \
 **<4>** Stupidly check the status code.
 
 ### Integration in Quarkus
 
-The general test setup in [Quarkus][] is a bit different and can be greatly eased by using a test
+The general test setup in [Quarkus][7] is a bit different and can be greatly eased by using a test
 lifecycle manager:
-(If you are interested into the why, please see [this][] issues on [GitHub][].)
+(If you are interested into the why, please see [this][8] issues on [GitHub][2].)
 
 ```java
 public class HoverflyResource implements QuarkusTestResourceLifecycleManager {
@@ -106,8 +106,8 @@ public class HoverflyResource implements QuarkusTestResourceLifecycleManager {
 }
 ```
 
-**<1>** Configure [Hoverfly][] to run in simulation mode. \
-**<2>** Also define a [UUID][] for a reply. \
+**<1>** Configure [Hoverfly][3] to run in simulation mode. \
+**<2>** Also define a [UUID][9] for a reply. \
 **<3>** Expose the service url for convenience.
 
 ```java
@@ -135,10 +135,10 @@ public class TestIdServiceHoverfly {
 
 ## Conclusion
 
-Both examples demonstrate, how [Hoverfly][] can easily be used to simulate requests sent to
+Both examples demonstrate, how [Hoverfly][3] can easily be used to simulate requests sent to
 specific addresses and allows easier testing of tightly coupled services, without firing them up.
 
-There is a plethora of other cool features bundled into [Hoverfly][] which I haven't mentioned
+There is a plethora of other cool features bundled into [Hoverfly][3] which I haven't mentioned
 here, like verification of messages or even to act a standalone webserver, so please check it
 out for yourself.
 
@@ -146,8 +146,12 @@ As always, here is my showcase with some more examples:
 
 <https://github.com/unexist/showcase-integration-testing-quarkus>
 
-```
-https://hoverfly.io/
-https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.htm
-https://github.com/quarkusio/quarkus/issues/9884
-```
+[1]: https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/corefunctionality/dsl.html
+[2]: https://github.com/
+[3]: https://hoverfly.io
+[4]: https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.htm
+[5]: https://en.wikipedia.org/wiki/Java_virtual_machine
+[6]: https://podman.io/
+[7]: https://quarkus.io/
+[8]: https://github.com/quarkusio/quarkus/issues/9884
+[9]: https://en.wikipedia.org/wiki/Universally_unique_identifier
