@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Service virtualization
-date: %%%DATE%%%
+date: 2022-05-10 18:15 +0100
 author: Christoph Kappel
 tags: tech hoverfly podman showcase
 categories: testing showcase
