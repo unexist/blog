@@ -3,7 +3,7 @@ layout: post
 title: Service virtualization
 date: %%%DATE%%%
 author: Christoph Kappel
-tags: tech hoverfly testcontainers podman showcase
+tags: tech hoverfly podman showcase
 categories: testing showcase
 toc: true
 ---
