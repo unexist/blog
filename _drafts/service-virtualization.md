@@ -7,15 +7,16 @@ tags: tech hoverfly testcontainers podman showcase
 categories: testing showcase
 toc: true
 ---
-One of the many things developers never tend to agree on is:
-What is the right amount of tests?
+If you've even written a test for software, that wasn't designed to be tested, you probably know the
+problem of mixed up business logic through-out the layers.
+This is especially hard, when your business case isn't isolated to a single services and relies
+on some kind of communication with other ones.
 
-A quick look at the [testing pyramid][] should give us the answer, **if** we are both looking at
-the same same pyramid, with the same [orientation][] and actually the same shape.
-Does the the [testing diamond][] ring a bell?
+Nowadays, our the best shot is containerization e.g. via [Podman][] and just run an instance of
+the required service along with our service in a messed up integration test.
 
-Still, what we can gather from all of the **testing shapes** is that integration testing is
-something with probably higher costs in time than unit tests.
+In this post I want to demonstrate another option called *service virtualization*, when you really
+just need the reply of a service and can keep it as a black box.
 
 ## Hoverfly
 
@@ -41,7 +42,6 @@ https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/junit5/junit5.ht
 
 https://www.testcontainers.org/features/configuration/
 https://quarkus.io/guides/maven-tooling#uber-jar-maven
-
 
 https://martinfowler.com/articles/practical-test-pyramid.html
 https://sqa.stackexchange.com/questions/37623/is-an-inverted-test-pyramid-really-an-anti-pattern
