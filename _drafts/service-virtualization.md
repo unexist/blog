@@ -69,7 +69,7 @@ public class IdServiceTest {
 ### Integration in Quarkus
 
 The general test setup in [Quarkus][] is a bit different and can be greatly eased by using a test
-lifecycle manager.
+lifecycle manager:
 (If you are interested into the why, please see [this][] issues on [GitHub][].)
 
 ```java
@@ -133,8 +133,16 @@ public class TestIdServiceHoverfly {
 **<5>** Fetch the service url from config. \
 **<6>** And do our stupid test again.
 
-
 ## Conclusion
+
+Both examples demonstrate, how [Hoverfly][] can easily be used to simulate requests sent to
+specific addresses and allows easier testing of tightly coupled services, without firing them up.
+
+There is a plethora of other cool features bundled into [Hoverfly][] which I haven't mentioned
+here, like verification of messages or even to act a standalone webserver, so please check it
+out for yourself.
+
+As always, here is my showcase with some more examples:
 
 <https://github.com/unexist/showcase-integration-testing-quarkus>
 
