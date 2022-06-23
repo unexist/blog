@@ -14,6 +14,7 @@ books like the [Mystery Man-Month][] from the 80s wouldn't have aged so well.
 
 Communication is hard, especially when you try to explain something to another human being or try
 to explore a completely new domain on your own.
+
 ```
 https://www.agile-academy.com/en/agile-dictionary/persona/
 https://martinfowler.com/bliki/UbiquitousLanguage.html
