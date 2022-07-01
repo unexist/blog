@@ -7,15 +7,11 @@ layout: default
         <div class="post-meta">
             Written by <a href="/about">{{ page.author }}</a> on <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
             {% if page.last_modified_at %}
-                (Updated: <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">
-                    {{ page.last_modified_at | date_to_long_string }}</time>)
+                and updated lastly on <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">
+                    {{ page.last_modified_at | date_to_long_string }}</time>
             {% endif %}
             {% if page.tags != nil %}
-                {% if page.follow_up != nil %}
-                    , tagged as {{ page | tags }}
-                {% else %}
-                    and tagged as {{ page | tags }}
-                {% endif %}
+                <div>Tagged as {{ page | tags }}</div>
             {% endif %}
         </div>
     </div>
