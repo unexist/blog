@@ -5,20 +5,17 @@ layout: default
     <div>
         <h1>{{ page.title }}</h1>
         <div class="post-meta">
-            Written by <a href="/about">{{ page.author }}</a> on <span>{{ page.date | date_to_long_string }}</span>
+            Written by <a href="/about">{{ page.author }}</a> on <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
+            {% if page.last_modified_at %}
+                (Updated: <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">
+                    {{ page.last_modified_at | date_to_long_string }}</time>)
+            {% endif %}
             {% if page.tags != nil %}
                 {% if page.follow_up != nil %}
                     , tagged as {{ page | tags }}
                 {% else %}
                     and tagged as {{ page | tags }}
                 {% endif %}
-            {% endif %}
-            {% if page.follow_up != nil %}
-                {% capture url %}
-                    {{ page.follow_up }}
-                {% endcapture %}
-
-                and follow-up {{ url }}
             {% endif %}
         </div>
     </div>
