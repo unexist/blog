@@ -18,7 +18,7 @@ layout: default
                     on <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_long_string }}</time>
                 {% endif %}
                 {% if post.tags != nil %}
-                    and tagged as {{ post | tags }}</div>
+                    and tagged as {{ post | tags }}
                 {% endif %}
             </div>
         </p>
