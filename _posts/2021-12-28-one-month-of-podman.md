@@ -2,7 +2,7 @@
 layout: post
 title: One month of Podman
 date: 2021-12-28 22:45 +0100
-last_modified_at: 2022-01-01 15:00 +0100
+last_modified_at: 2022-07-01 15:00 +0100
 author: Christoph Kappel
 tags: tools docker podman jaeger quarkus opentracing opentelemetry gelf fluentd showcase
 categories: tech showcase
