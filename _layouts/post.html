@@ -7,7 +7,7 @@ layout: default
         <div class="post-meta">
             Written by <a href="/about">{{ page.author }}</a>
             {% if page.last_modified_at %}
-                and updated on <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">
+                , updated on <time datetime="{{ page.last_modified_at | date_to_xmlschema }}">
                 {{ page.last_modified_at | date_to_long_string }}</time>
             {% else %}
                 on <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
