@@ -2,6 +2,7 @@
 layout: post
 title: First things first
 date: 2020-08-12 16:05:48 +0200
+last_updated: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
 tags: myself
 categories: myself

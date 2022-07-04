@@ -2,6 +2,7 @@
 layout: post
 title: Microstream on Helidon
 date: 2021-07-24 17:01 +0200
+last_updated: 2021-07-24 17:01 +0200
 author: Christoph Kappel
 tags: tools microstream helidon showcase
 categories: tech showcase frameworks

@@ -2,6 +2,7 @@
 layout: post
 title: Idiosyncrasy of the Docker CLI
 date: 2021-07-23 10:53 +0200
+last_updated: 2021-07-23 10:53 +0200
 tags: tools docker cli quarkus kafka redpanda
 categories: tech
 toc: false

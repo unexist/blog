@@ -2,6 +2,7 @@
 layout: post
 title: ADR and jqAssistant
 date: 2021-03-15 17:45 +0100
+last_updated: 2021-03-15 17:45 +0100
 author: Christoph Kappel
 tags: tools architecture validation adr showcase
 categories: architecture testing showcase

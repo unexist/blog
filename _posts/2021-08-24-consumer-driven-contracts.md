@@ -2,6 +2,7 @@
 layout: post
 title: Consumer-driven contracts
 date: 2021-08-24 12:14 +0200
+last_updated: 2021-08-24 12:14 +0200
 author: Christoph Kappel
 tags: tools testing consumer-driven-contracts pact showcase
 categories: testing showcase

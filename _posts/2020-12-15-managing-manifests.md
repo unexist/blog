@@ -2,6 +2,7 @@
 layout: post
 title: Managing manifests
 date: 2020-12-15 16:53 +0100
+last_updated: 2020-12-15 16:53 +0100
 author: Christoph Kappel
 tags: tools kubernetes ansible make helm helmfile to-be-continued
 categories: tech

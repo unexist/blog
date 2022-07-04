@@ -2,6 +2,7 @@
 layout: post
 title: Cucumber reports
 date: 2021-10-16 15:57 +0200
+last_updated: 2021-10-16 15:57 +0200
 author: Christoph Kappel
 tags: tools testing specification-by-example cucumber showcase
 categories: testing showcase

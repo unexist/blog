@@ -2,6 +2,7 @@
 layout: post
 title: Workflow engines on Quarkus
 date: 2021-07-21 17:15 +0200
+last_updated: 2021-07-21 17:15 +0200
 author: Christoph Kappel
 tags: tools workflow-engine rules-engine camunda kogito quarkus kafka redpanda messaging showcase
 categories: tech showcase

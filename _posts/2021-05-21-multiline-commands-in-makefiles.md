@@ -2,6 +2,7 @@
 layout: post
 title: Multiline commands in makefiles
 date: 2021-05-21 16:27 +0200
+last_updated: 2021-05-21 16:27 +0200
 author: Christoph Kappel
 tags: tools makefile
 categories: tech

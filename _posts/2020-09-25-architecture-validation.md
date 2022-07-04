@@ -2,6 +2,7 @@
 layout: post
 title: Architecture validation
 date: 2020-09-25 11:00:00 +0200
+last_updated: 2020-09-25 11:00:00 +0200
 author: Christoph Kappel
 tags: tools architecture validation ddd showcase
 categories: architecture testing showcase

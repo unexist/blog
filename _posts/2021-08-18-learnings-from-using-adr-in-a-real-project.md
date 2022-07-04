@@ -2,6 +2,7 @@
 layout: post
 title: Learnings from using ADR in a real project
 date: 2021-08-18 17:07 +0200
+last_updated: 2021-08-18 17:07 +0200
 author: Christoph Kappel
 tags: tools architecture adr
 categories: architecture warstory

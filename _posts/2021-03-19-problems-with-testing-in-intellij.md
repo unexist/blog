@@ -2,6 +2,7 @@
 layout: post
 title: Problems with testing in IntelliJ
 date: 2021-03-19 08:40 +0100
+last_updated: 2021-03-19 08:40 +0100
 author: Christoph Kappel
 tags: tools intellij
 categories: testing

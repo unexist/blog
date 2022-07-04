@@ -2,6 +2,7 @@
 layout: post
 title: Minikube with hyperkit
 date: 2021-03-29 07:29 +0200
+last_updated: 2021-03-29 07:29 +0200
 author: Christoph Kappel
 tags: tools minikube hyperkit virtualbox dns macos
 categories: tech

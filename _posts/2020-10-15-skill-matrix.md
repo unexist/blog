@@ -2,6 +2,7 @@
 layout: post
 title: Skill matrix
 date: 2020-10-15 16:00:00 +0200
+last_updated: 2020-10-15 16:00:00 +0200
 author: Christoph Kappel
 tags: tools people soft-skills management
 categories: warstory

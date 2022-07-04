@@ -2,6 +2,7 @@
 layout: post
 title: AsciiDoctor, Maven and IntelliJ
 date: 2021-04-29 17:37 +0200
+last_updated: 2021-04-29 17:37 +0200
 author: Christoph Kappel
 tags: tools intellij maven asciidoc
 categories: tech

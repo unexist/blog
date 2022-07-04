@@ -2,6 +2,7 @@
 layout: post
 title: Specification by example
 date: 2021-09-09 14:17 +0200
+last_updated: 2021-09-09 14:17 +0200
 author: Christoph Kappel
 tags: tools testing specification-by-example cucumber concordion fitnesse showcase updated
 categories: testing specification showcase

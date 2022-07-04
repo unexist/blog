@@ -2,6 +2,7 @@
 layout: post
 title: Migrating to Podman
 date: 2021-12-01 19:00 +0100
+last_updated: 2021-12-01 19:00 +0100
 author: Christoph Kappel
 tags: tools docker podman macos kibana elastic fluentd jaeger showcase
 categories: tech showcase

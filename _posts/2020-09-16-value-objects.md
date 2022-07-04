@@ -2,6 +2,7 @@
 layout: post
 title: Value objects
 date: 2020-09-16 12:00:00 +0200
+last_updated: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
 tags: tools ddd frameworks
 categories: software-design

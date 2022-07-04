@@ -2,6 +2,7 @@
 layout: post
 title: Setting up Bookwyrm
 date: 2021-09-13 15:32 +0200
+last_updated: 2021-09-13 15:32 +0200
 author: Christoph Kappel
 tags: myself tech books bookwyrm social
 categories: myself
