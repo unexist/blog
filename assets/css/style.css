@@ -316,6 +316,10 @@ hr {
     text-overflow: ellipsis;
 }
 
+.post-content h2 {
+    clear: both;
+}
+
 .post-content article {
     padding-right: var(--padding);
 }
