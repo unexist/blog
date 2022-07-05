@@ -2,7 +2,7 @@
 layout: post
 title: One month of Podman
 date: 2021-12-28 22:45 +0100
-last_updated: 2022-07-04 12:00 +0100
+last_updated: 2022-07-05 16:00 +0100
 author: Christoph Kappel
 tags: tools docker podman jaeger quarkus opentracing opentelemetry gelf fluentd showcase
 categories: tech showcase
@@ -55,7 +55,7 @@ been discontinued.)
 
 Yes, I went the obvious way and just started [Jaeger][12] first, worked like a charm..
 
-## No support for UDP
+## No support for UDP yet
 
 [Tracing][24] finally running, I discoverd that my [Quarkus][21] instances couldn't connect to
 [Fluentd][6] on port 12201 anymore:
@@ -91,14 +91,13 @@ point you to the source code:
 
 <https://github.com/MerlinDMC/fluent-plugin-input-gelf/blob/master/lib/fluent/plugin/in_gelf.rb>
 
-## Local mounts
+## Access to local filesystems
 
-[Podman][19] needs the [cgroups][2] feature from [Linux][13] to properly run your containers and since
-the likes of [macOS][14] doesn't support this natively, the workaround here is to use some kind of
-virtualization.
+[Podman][19] needs the [cgroups][2] feature from [Linux][13] to properly run your containers and
+since [macOS][14] doesn't support this natively, some kind of virtualization is used a a workaround.
 
-This virtualization causes problems, when the container shim expects the paths inside of the guest
-machine to be the same as on the host machine.
+This virtualization causes problems, when the container shim expects paths inside of the guest
+machine to be the same as on the underlying host machine.
 
 To bypass this, [Docker][5] automatically mounts the user home into the guest machine, so all access
 can be done like the container runs on the same host.
