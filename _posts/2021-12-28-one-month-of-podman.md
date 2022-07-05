@@ -11,9 +11,8 @@ toc: true
 In my previous post [Migrating to Poadman]({% post_url 2021-12-01-migrating-to-podman %}) you
 basically accompanied me on my migration from a [docker-compose][4] file to a more CLI-based
 approach with [Podman][19].
-I am still working on the **logging-vs-tracing** showcase, but there
-were a few surprises and I just wanted to write a follow-up instead of just modifying my original
-post.
+I am still working on my [logging-vs-tracing][25] showcase, but there were a few surprises and I
+just wanted to write a follow-up instead of just modifying my original post.
 
 ## Container ports
 
@@ -146,3 +145,4 @@ I know I don't have to remind you, but my logging-vs-tracing showcase can still 
 [22]: https://github.com/rootless-containers/slirp4netns
 [23]: https://github.com/open-telemetry/opentelemetry-collector/discussions/2558
 [24]: https://en.wikipedia.org/wiki/Tracing_(software)
+[25]: https://github.com/unexist/showcase-logging-vs-tracing-quarkus
