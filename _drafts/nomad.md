@@ -13,17 +13,32 @@ With its massive ecosystem and all the different companies, that provide even mo
 a big solution to ~~even bigger~~ *enterprisy* problems.
 
 On multiple occasions I thought about setting up a small [Kubernetes][] cluster on my own, but to
-be honst the initial drag to get it running usually beat my original usecase *and* bits of
+be honest the initial drag to get it running usually beat my original usecase *and* every bit of
 motivation.
 
 Isn't there something more lightweight?
 
 ## What is Nomad?
 
-[Nomad][] is a small task scheduler and orchestrator from [HashiCorp][].
-It relies on plugins to run nearly anything - given that there is a proper task driver.
+[Nomad][] is a small and pluggable task scheduler and orchestrator from [HashiCorp][] and relies on
+plugins to run nearly anything - given that there is a proper task driver.
 
-Some of these task drivers are community driven
+There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [fork/exec][]) to
+name a few and some of them are community-driven.
+Docs [how to provide new ones][] are also available, so expect this list to grow even further.
+
+### Configuration without YAML
+
+In contrast to the descriptive approach of [Kubernetes][], [Nomad][] utilizes [HCL][]
+(Hashicorp Configuration Language) for its config.
+It was initially introduced for [Terraform][] and brings some declarative logic to mix.
+
+```hcl
+```
+
+### Task drivers
+
+One of the simplest ones is the java task driver:
 
 
 ```hcl
@@ -78,4 +93,5 @@ todo-java  service  50        running  2022-07-06T16:56:43+02:00
 
 ```log
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
+https://github.com/hashicorp/hcl
 ```
