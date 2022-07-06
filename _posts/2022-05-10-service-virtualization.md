@@ -36,6 +36,7 @@ address isn't reachable.
 
 This is probably easier to understand with a simple example:
 
+###### **Java**
 ```java
 public class IdServiceTest {
     private static final String SERVICE_URL = "localhost:8085";
@@ -73,6 +74,7 @@ The general test setup in [Quarkus][7] is a bit different and can be greatly eas
 lifecycle manager:
 (If you are interested into the why, please see [this][8] issues on [GitHub][2].)
 
+###### **Java**
 ```java
 public class HoverflyResource implements QuarkusTestResourceLifecycleManager {
     private static final String SERVICE_URL = "localhost:8085";
@@ -111,6 +113,7 @@ public class HoverflyResource implements QuarkusTestResourceLifecycleManager {
 **<2>** Also define a [UUID][9] for a reply. \
 **<3>** Expose the service url for convenience.
 
+###### **Java**
 ```java
 @QuarkusTest
 @QuarkusTestResource(value = HoverflyResource.class, restrictToAnnotatedClass = true) // <4>
