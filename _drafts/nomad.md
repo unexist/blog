@@ -2,20 +2,80 @@
 layout: post
 title: Nomad
 date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: nomad orchestration showcase
 categories: showcase
 toc: true
 ---
+When I think about orchestration, [Kubernetes][] is something that easily comes up to my mind.
+With its massive ecosystem and all the different companies, that provide even more services, it is
+a big solution to ~~even bigger~~ *enterprisy* problems.
 
-```log
-    2022-06-24T14:05:40.965+0200 [DEBUG] agent.plugin_loader.nomad-driver-podman: http baseurl: plugin_dir=/Users/christoph.kappel/Projects/showcase-nomad-quarkus/deployment/nomad/plugins url=unix://Users/christoph.kappel/.local/share/containers/podman/machine/podman-machine-default/podman.sock @module=podman timestamp="2022-06-24T14:05:40.965+0200"
-    2022-06-24T14:05:40.965+0200 [DEBUG] agent.plugin_loader.nomad-driver-podman: http baseurl: plugin_dir=/Users/christoph.kappel/Projects/showcase-nomad-quarkus/deployment/nomad/plugins @module=podman url=unix://Users/christoph.kappel/.local/share/containers/podman/machine/podman-machine-default/podman.sock timestamp="2022-06-24T14:05:40.965+0200"
-    2022-06-24T14:05:40.966+0200 [DEBUG] agent.plugin_loader.stdio: received EOF, stopping recv loop: plugin_dir=/Users/christoph.kappel/Projects/showcase-nomad-quarkus/deployment/nomad/plugins err="rpc error: code = Unavailable desc = error reading from server: EOF"
+On multiple occasions I thought about setting up a small [Kubernetes][] cluster on my own, but to
+be honst the initial drag to get it running usually beat my original usecase *and* bits of
+motivation.
+
+Isn't there something more lightweight?
+
+## What is Nomad?
+
+[Nomad][] is a small task scheduler and orchestrator from [HashiCorp][].
+It relies on plugins to run nearly anything - given that there is a proper task driver.
+
+Some of these task drivers are community driven
+
+
+```hcl
+job "todo-java" {
+  datacenters = ["dc1"]
+  type        = "service"
+
+  group "web" {
+    count = 1
+
+    task "service" {
+      driver = "java"
+
+      config {
+        jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+        jvm_options = ["-Xmx2048m", "-Xms256m"]
+      }
+    }
+  }
+}
+```
+
+```shell
+$ nomad job run jobs/todo-java.nomad
+==> 2022-07-06T16:56:43+02:00: Monitoring evaluation "15d0134b"
+    2022-07-06T16:56:43+02:00: Evaluation triggered by job "todo-java"
+==> 2022-07-06T16:56:44+02:00: Monitoring evaluation "15d0134b"
+    2022-07-06T16:56:44+02:00: Evaluation within deployment: "0f144847"
+    2022-07-06T16:56:44+02:00: Allocation "85fd5897" created: node "25817ed6", group "web"
+    2022-07-06T16:56:44+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-06T16:56:44+02:00: Evaluation "15d0134b" finished with status "complete"
+==> 2022-07-06T16:56:44+02:00: Monitoring deployment "0f144847"
+  ✓ Deployment "0f144847" successful
+
+    2022-07-06T16:56:55+02:00
+    ID          = 0f144847
+    Job ID      = todo-java
+    Job Version = 0
+    Status      = successful
+    Description = Deployment completed successfully
+
+    Deployed
+    Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    web         1        1       1        0          2022-07-06T17:06:53+02:00
+```
+
+```shell
+$ nomad job status
+ID         Type     Priority  Status   Submit Date
+todo-java  service  50        running  2022-07-06T16:56:43+02:00
 ```
 
 ```log
-  | rpc error: code = Unknown desc = failed to start task, could not create container: unknown error, status code: 500: {"cause":"statfs /Users/christoph.kappel/Projects/showcase-nomad-quarkus/deployment/nomad/data/alloc/23ffe1ac-bc8d-2000-6fae-3b3e452c7f1a/alloc: no such file or directory","message":"statfs /Users/christoph.kappel/Projects/showcase-nomad-quarkus/deployment/nomad/data/alloc/23ffe1ac-bc8d-2000-6fae-3b3e452c7f1a/alloc: no such file or directory","response":500}
-  ```
-
-```log
+https://www.nomadproject.io/docs/internals/plugins/task-drivers
+```
