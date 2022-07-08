@@ -35,10 +35,19 @@ To add a bit of logic you either need to rely on tools like [helm][] or [kustomi
 on your own.
 In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][].
 It was initially introduced for [Terraform][] and adds declarative logic to mix, without the
-syntactic weirdness of [jsonnet][] or [CUE][].
+syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
 
 ```hcl
 ```
+
+### Comparison of objects
+
+- job
+- system
+- periodic
+- deployment
+- allocation
+- namespace
 
 ### Task drivers
 
@@ -98,5 +107,6 @@ todo-java  service  50        running  2022-07-06T16:56:43+02:00
 ```log
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
+https://jsonnet.org/
 https://docs.dagger.io/1215/what-is-cue/
 ```
