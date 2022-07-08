@@ -4,7 +4,7 @@ title: Nomad
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: nomad orchestration showcase
+tags: nomad kubernetes orchestration showcase
 categories: showcase
 toc: true
 ---
@@ -20,8 +20,8 @@ Isn't there something more lightweight?
 
 ## What is Nomad?
 
-[Nomad][] is a small and pluggable task scheduler and orchestrator from [HashiCorp][] and relies on
-plugins to run nearly anything - given that there is a proper task driver.
+[Nomad][] is a small and task scheduler and orchestrator from [HashiCorp][] and relies on plugins
+to run nearly anything - given that there is a proper task driver.
 
 There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [fork/exec][]) to
 name a few and some of them are community-driven.
@@ -29,9 +29,13 @@ Docs [how to provide new ones][] are also available, so expect this list to grow
 
 ### Configuration without YAML
 
-In contrast to the descriptive approach of [Kubernetes][], [Nomad][] utilizes [HCL][]
-(Hashicorp Configuration Language) for its config.
-It was initially introduced for [Terraform][] and brings some declarative logic to mix.
+By design, [Kubernetes][] follows a declarative approach and allows to specify the desired outcome
+of your objects in a [yaml][] file.
+To add a bit of logic you either need to rely on tools like [helm][] or [kustomize][] or script it
+on your own.
+In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][].
+It was initially introduced for [Terraform][] and adds declarative logic to mix, without the
+syntactic weirdness of [jsonnet][] or [CUE][].
 
 ```hcl
 ```
@@ -94,4 +98,5 @@ todo-java  service  50        running  2022-07-06T16:56:43+02:00
 ```log
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
+https://docs.dagger.io/1215/what-is-cue/
 ```
