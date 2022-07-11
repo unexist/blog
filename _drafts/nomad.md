@@ -20,7 +20,7 @@ Isn't there something more lightweight?
 
 ## What is Nomad?
 
-[Nomad][] is a small and task scheduler and orchestrator from [HashiCorp][] and relies on plugins
+[Nomad][] is a small task scheduler and orchestrator from [HashiCorp][] and relies on plugins
 to run nearly anything - given that there is a proper task driver.
 
 There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [fork/exec][]) to
@@ -31,14 +31,20 @@ Docs [how to provide new ones][] are also available, so expect this list to grow
 
 By design, [Kubernetes][] follows a declarative approach and allows to specify the desired outcome
 of your objects in a [yaml][] file.
-To add a bit of logic you either need to rely on tools like [helm][] or [kustomize][] or script it
-on your own.
+And if ever you need a bit of logic you can either use tools like [helm][] or [kustomize][] or
+script it on your own.
 In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][].
-It was initially introduced for [Terraform][] and adds declarative logic to mix, without the
+It was initially introduced for [Terraform][] and adds logic to mix, without the
 syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
+
+Here is a quick example, more can be found on the [official page][]:
 
 ```hcl
 ```
+
+### Working with tasks
+
+A task is the smallest unit in the world of [nomad][]:
 
 ### Comparison of objects
 
@@ -109,4 +115,5 @@ https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
 https://jsonnet.org/
 https://docs.dagger.io/1215/what-is-cue/
+https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 ```
