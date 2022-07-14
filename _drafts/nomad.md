@@ -20,19 +20,22 @@ Isn't there something more lightweight?
 
 ## What is Nomad?
 
-[Nomad][] is a small task scheduler and orchestrator from [HashiCorp][] and relies on plugins
+[Nomad][] is a small job scheduler and orchestrator from [HashiCorp][] and relies on plugins
 to run nearly anything - given that there is a proper task driver.
 
 There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [fork/exec][]) to
 name a few and some of them are community-driven.
 Docs [how to provide new ones][] are also available, so expect this list to grow even further.
 
+Before we can start playing with the actual objects, we have to talk about configuration.
+
 ### Configuration without YAML
 
 By design, [Kubernetes][] follows a declarative approach and allows to specify the desired outcome
-of your objects in a [yaml][] file.
-And if ever you need a bit of logic you can either use tools like [helm][] or [kustomize][] or
-script it on your own.
+of your objects in a [YAML][] file.
+Iif you have to change something than programmatically you can either use the API directly and patch
+your objects or rely on tools like [helm][] or [kustomize][].
+
 In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][].
 It was initially introduced for [Terraform][] and adds logic to mix, without the
 syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
@@ -41,6 +44,10 @@ Here is a quick example, more can be found on the [official page][]:
 
 ```hcl
 ```
+
+### Working with jobs
+
+
 
 ### Working with tasks
 
