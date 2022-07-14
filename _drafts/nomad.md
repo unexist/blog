@@ -12,11 +12,11 @@ When I think about orchestration, [Kubernetes][] is something that easily comes 
 With its massive ecosystem and all the different companies, that provide even more services, it is
 a big solution to ~~even bigger~~ *enterprisy* problems.
 
-On multiple occasions I thought about setting up a small [Kubernetes][] cluster on my own, but to
-be honest the initial drag to get it running usually beat my original usecase *and* every bit of
+On multiple occasions, I thought about setting up a small [Kubernetes][] cluster on my own, but to
+be honest the initial drag to get it running usually beats my original usecase *and* every bit of
 motivation.
 
-Isn't there something more lightweight?
+Isn't there something lightweight?
 
 ## What is Nomad?
 
@@ -31,19 +31,35 @@ Before we can start playing with the actual objects, we have to talk about confi
 
 ### Configuration without YAML
 
-By design, [Kubernetes][] follows a declarative approach and allows to specify the desired outcome
-of your objects in a [YAML][] file.
-Iif you have to change something than programmatically you can either use the API directly and patch
-your objects or rely on tools like [helm][] or [kustomize][].
+By design, [Kubernetes][] follows a [declarative approach][] and allows to specify the desired
+outcome of your objects in a [YAML][] file.
+If you want to change something programmatically or even parameterize you can either use the API
+directly and patch your objects or rely on tools like [helm][] or [kustomize][].
 
-In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][].
-It was initially introduced for [Terraform][] and adds logic to mix, without the
-syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
+In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][], which
+adds logic to the mix without the syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
+It was initially introduced for [Terraform][]
 
-Here is a quick example, more can be found on the [official page][]:
+Here is a quick example, but more about it can be found on the [official page][]:
 
 ```hcl
+name = "test"
+message = "Name: ${name}"
+loud_message = upper(message)
+options = {
+  color: "red",
+  amount: 100
+}
+
+configuration {
+  service "greeter" {
+    message = loud_message
+    options = var.overrider_options ? var.override_options : var.options
+  }
+}
 ```
+
+Keep that in mind, we might need it later.
 
 ### Working with jobs
 
@@ -120,7 +136,9 @@ todo-java  service  50        running  2022-07-06T16:56:43+02:00
 ```log
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
+https://yaml.org/
 https://jsonnet.org/
 https://docs.dagger.io/1215/what-is-cue/
 https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
+https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
 ```
