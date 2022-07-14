@@ -42,8 +42,9 @@ It was initially introduced for [Terraform][]
 
 Here is a quick example, but more about it can be found on the [official page][]:
 
+###### **HCL**
 ```hcl
-name = "test"
+name = "unexist"
 message = "Name: ${name}"
 loud_message = upper(message)
 options = {
@@ -63,26 +64,15 @@ Keep that in mind, we might need it later.
 
 ### Working with jobs
 
+When you want to run something on [Nomad][] you normally start with a job.
+A job or rather a job file is the primary work horse and describes in a declarative way what tasks
+you want to run.
 
+Once a job is submitted, [Nomad][] evaluates it and determines all necessary steps for this
+workload.
+When this is done a new **allocation** is created and scheduled on a client.
 
-### Working with tasks
-
-A task is the smallest unit in the world of [nomad][]:
-
-### Comparison of objects
-
-- job
-- system
-- periodic
-- deployment
-- allocation
-- namespace
-
-### Task drivers
-
-One of the simplest ones is the java task driver:
-
-
+###### **HCL**
 ```hcl
 job "todo-java" {
   datacenters = ["dc1"]
@@ -102,6 +92,8 @@ job "todo-java" {
   }
 }
 ```
+
+### How to start a job
 
 ```shell
 $ nomad job run jobs/todo-java.nomad
