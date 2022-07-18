@@ -220,7 +220,7 @@ $ nomad job stop todo-java
     web         1        1       1        0          2022-07-18T18:12:24+02:00
 ```
 
-###
+### Advanced topics
 
 ## Conclusion
 
