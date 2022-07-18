@@ -172,6 +172,23 @@ Or just use [curl][] to access our services directly:
 
 ###### **Shell**
 ```shell
+$ curl -H "Accept: application/json" http://localhost:8080/todo -v
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> GET /todo HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: application/json
+>
+< HTTP/1.1 204 No Content
+<
+* Connection #0 to host localhost left intact
+* Closing connection 0
+```
+
+###### **Shell**
+```shell
 ```
 
 ## Conclusion
