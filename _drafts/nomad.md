@@ -108,7 +108,13 @@ at the [great resources here][].
 
 ### How to start a job
 
-Like many other [Hashicorp][] products, [Nomad][] is API-based
+There are multiple ways to interact with [Nomad][]:
+
+- There is a nice web-interface available after start: <http://localhost:4646>
+- For the commandline-savy, there is nice [CLI][] shipped within the same package.
+- And for more hardcore users, you can access the API with e.g. [curl][] directly.
+
+The probably easiest way to run a job is via commandline:
 
 ```shell
 $ nomad job run jobs/todo-java.nomad
