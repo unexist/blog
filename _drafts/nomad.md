@@ -70,7 +70,7 @@ tasks you want to run.
 
 Behind the scene, whenever a job is submitted, [Nomad][] evaluates it and determines all necessary
 steps for this workload.
-Once this is done a new **allocation** is created and scheduled on a client.
+Once this is done a new **allocation** is created and scheduled on a client node.,
 
 There are many different objects, but it is probably easier just to start with a concrete
 example and we are going to step through it line by line:
@@ -79,15 +79,14 @@ example and we are going to step through it line by line:
 ```hcl
 job "todo-java" {
   datacenters = ["dc1"] # <1>
-  type        = "service" # <2>
 
-  group "web" { # <3>
-    count = 1 # <4>
+  group "web" { # <2>
+    count = 1 # <3>
 
-    task "service" { # <5>
-      driver = "java" # <6>
+    task "todo-java" { # <4>
+      driver = "java" # <5>
 
-      config { # <7>
+      config { # <6>
         jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
         jvm_options = ["-Xmx2048m", "-Xms256m"]
       }
@@ -96,8 +95,12 @@ job "todo-java" {
 }
 ```
 
-**<1>** [Nomad][] allows to group clients - in so called datacenters. \
-**<2>**
+**<1>** Sets of multiple client nodes are called a datacenter in [Nomad][]. \
+**<2>** Group consist of multiple tasks that must be run together ont he same client node. \
+**<3>** Start at most one instance of this group. \
+**<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
+**<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
+**<6>** The actual config options for the driver.
 
 ### How to start a job
 
@@ -130,6 +133,12 @@ $ nomad job status
 ID         Type     Priority  Status   Submit Date
 todo-java  service  50        running  2022-07-06T16:56:43+02:00
 ```
+
+## Conclusion
+
+As always, here is my showcase with some more examples:
+
+<https://github.com/unexist/showcase-nomad-quarkus>
 
 ```log
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
