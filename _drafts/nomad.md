@@ -110,25 +110,26 @@ at the [great resources here][].
 
 There are multiple ways to interact with [Nomad][]:
 
-- There is a nice web-interface available after start: <http://localhost:4646>
+- There is a small web-interface available right after start: <http://localhost:4646>
 - For the commandline-savy, there is nice [CLI][] shipped within the same package.
 - And for more hardcore users, you can access the API with e.g. [curl][] directly.
 
 The probably easiest way to run a job is via commandline:
 
+###### **Shell**
 ```shell
 $ nomad job run jobs/todo-java.nomad
-==> 2022-07-06T16:56:43+02:00: Monitoring evaluation "15d0134b"
-    2022-07-06T16:56:43+02:00: Evaluation triggered by job "todo-java"
-==> 2022-07-06T16:56:44+02:00: Monitoring evaluation "15d0134b"
-    2022-07-06T16:56:44+02:00: Evaluation within deployment: "0f144847"
-    2022-07-06T16:56:44+02:00: Allocation "85fd5897" created: node "25817ed6", group "web"
-    2022-07-06T16:56:44+02:00: Evaluation status changed: "pending" -> "complete"
-==> 2022-07-06T16:56:44+02:00: Evaluation "15d0134b" finished with status "complete"
-==> 2022-07-06T16:56:44+02:00: Monitoring deployment "0f144847"
+==> 2022-07-18T16:56:43+02:00: Monitoring evaluation "15d0134b"
+    2022-07-18T16:56:43+02:00: Evaluation triggered by job "todo-java"
+==> 2022-07-18T16:56:44+02:00: Monitoring evaluation "15d0134b"
+    2022-07-18T16:56:44+02:00: Evaluation within deployment: "0f144847"
+    2022-07-18T16:56:44+02:00: Allocation "85fd5897" created: node "25817ed6", group "web"
+    2022-07-18T16:56:44+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-18T16:56:44+02:00: Evaluation "15d0134b" finished with status "complete"
+==> 2022-07-18T16:56:44+02:00: Monitoring deployment "0f144847"
   ✓ Deployment "0f144847" successful
 
-    2022-07-06T16:56:55+02:00
+    2022-07-18T16:56:55+02:00
     ID          = 0f144847
     Job ID      = todo-java
     Job Version = 0
@@ -137,13 +138,15 @@ $ nomad job run jobs/todo-java.nomad
 
     Deployed
     Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
-    web         1        1       1        0          2022-07-06T17:06:53+02:00
+    web         1        1       1        0          2022-07-18T17:06:53+02:00
 ```
+
+This launches the
 
 ```shell
 $ nomad job status
 ID         Type     Priority  Status   Submit Date
-todo-java  service  50        running  2022-07-06T16:56:43+02:00
+todo-java  service  50        running  2022-07-18T16:56:43+02:00
 ```
 
 ## Conclusion
