@@ -89,7 +89,11 @@ job "todo-java" {
 
       config { # <6>
         jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
-        jvm_options = ["-Xmx2048m", "-Xms256m"]
+        jvm_options = ["-Xmx256m", "-Xms256m"]
+      }
+
+      resources { # <7>
+        memory = 256
       }
     }
   }
@@ -101,7 +105,8 @@ job "todo-java" {
 **<3>** Start at most one instance of this group. \
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
-**<6>** The actual config options for the driver.
+**<6>** The actual config options for the driver. \
+**<7>** Additionally, [resource limits][] for tasks can be set as well.
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
 at the [great resources here][].
@@ -112,25 +117,25 @@ There are multiple ways to interact with [Nomad][]:
 
 - There is a small web-interface available right after start: <http://localhost:4646>
 - For the commandline-savy, there is nice [CLI][] shipped within the same package.
-- And for more hardcore users, you can access the API with e.g. [curl][] directly.
+- And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly.
 
 The probably easiest way to run a job is via commandline:
 
 ###### **Shell**
 ```shell
 $ nomad job run jobs/todo-java.nomad
-==> 2022-07-18T16:56:43+02:00: Monitoring evaluation "15d0134b"
-    2022-07-18T16:56:43+02:00: Evaluation triggered by job "todo-java"
-==> 2022-07-18T16:56:44+02:00: Monitoring evaluation "15d0134b"
-    2022-07-18T16:56:44+02:00: Evaluation within deployment: "0f144847"
-    2022-07-18T16:56:44+02:00: Allocation "85fd5897" created: node "25817ed6", group "web"
-    2022-07-18T16:56:44+02:00: Evaluation status changed: "pending" -> "complete"
-==> 2022-07-18T16:56:44+02:00: Evaluation "15d0134b" finished with status "complete"
-==> 2022-07-18T16:56:44+02:00: Monitoring deployment "0f144847"
-  ✓ Deployment "0f144847" successful
+==> 2022-07-18T17:48:36+02:00: Monitoring evaluation "2c21d49b"
+    2022-07-18T17:48:36+02:00: Evaluation triggered by job "todo-java"
+==> 2022-07-18T17:48:37+02:00: Monitoring evaluation "2c21d49b"
+    2022-07-18T17:48:37+02:00: Evaluation within deployment: "83abca16"
+    2022-07-18T17:48:37+02:00: Allocation "d9ec1c42" created: node "d419df0b", group "web"
+    2022-07-18T17:48:37+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-18T17:48:37+02:00: Evaluation "2c21d49b" finished with status "complete"
+==> 2022-07-18T17:48:37+02:00: Monitoring deployment "83abca16"
+  ✓ Deployment "83abca16" successful
 
-    2022-07-18T16:56:55+02:00
-    ID          = 0f144847
+    2022-07-18T17:48:47+02:00
+    ID          = 83abca16
     Job ID      = todo-java
     Job Version = 0
     Status      = successful
@@ -138,15 +143,35 @@ $ nomad job run jobs/todo-java.nomad
 
     Deployed
     Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
-    web         1        1       1        0          2022-07-18T17:06:53+02:00
+    web         1        1       1        0          2022-07-18T17:58:46+02:00
 ```
 
-This launches the
+###### **Shell**
+```shell
+$ curl \
+  --request POST \
+  --data @jobs/todo-java.nomad \
+  https://localhost:4646/v1/jobs
+```
 
+Both sends the job [Nomad][] and starts a single instance on clients that belong to the datacenter
+aptly named `dc1`.
+
+### Check the status
+
+The status of our job can be queries in a similar way:
+
+###### **Shell**
 ```shell
 $ nomad job status
 ID         Type     Priority  Status   Submit Date
-todo-java  service  50        running  2022-07-18T16:56:43+02:00
+todo-java  service  50        running  2022-07-18T17:48:36+02:00
+```
+
+Or just use [curl][] to access our services directly:
+
+###### **Shell**
+```shell
 ```
 
 ## Conclusion
@@ -157,6 +182,7 @@ As always, here is my showcase with some more examples:
 
 ```log
 https://learn.hashicorp.com/tutorials/nomad/get-started-intro
+https://www.nomadproject.io/api-docs/jobs
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
 https://yaml.org/
@@ -164,4 +190,5 @@ https://jsonnet.org/
 https://docs.dagger.io/1215/what-is-cue/
 https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
+https://www.nomadproject.io/docs/job-specification/resources
 ```
