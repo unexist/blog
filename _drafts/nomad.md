@@ -55,7 +55,7 @@ options = {
 configuration {
   service "greeter" {
     message = loud_message
-    options = var.overrider_options ? var.override_options : var.options
+    options = var.override_options ? var.override_options : var.options
   }
 }
 ```
@@ -65,7 +65,7 @@ Keep that in mind, we might need it later.
 ### Working with jobs
 
 When you want to run something on [Nomad][] you normally start with a job.
-A job - or rather a job file - is the primary work horse and describes in a declarative way what
+A job - or rather a job file - is the primary work horse and describes in a declarative way the
 tasks you want to run.
 
 Behind the scene, whenever a job is submitted, [Nomad][] evaluates it and determines all necessary
@@ -95,6 +95,9 @@ job "todo-java" {
   }
 }
 ```
+
+**<1>** [Nomad][] allows to group clients - in so called datacenters. \
+**<2>**
 
 ### How to start a job
 
