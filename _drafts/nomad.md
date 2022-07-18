@@ -111,11 +111,12 @@ job "todo-java" {
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
 at the [great resources here][].
 
-### How to start a job
+#### How to start a job
 
 There are multiple ways to interact with [Nomad][]:
 
 - There is a small web-interface available right after start: <http://localhost:4646>
+![image](/assets/images/nomad/webinterface.png)
 - For the commandline-savy, there is nice [CLI][] shipped within the same package.
 - And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly.
 
@@ -157,7 +158,7 @@ $ curl \
 Both sends the job [Nomad][] and starts a single instance on clients that belong to the datacenter
 aptly named `dc1`.
 
-### Check the status
+#### Check status of a job
 
 The status of our job can be queries in a similar way:
 
@@ -190,6 +191,36 @@ $ curl -H "Accept: application/json" http://localhost:8080/todo -v
 ###### **Shell**
 ```shell
 ```
+
+#### Stop jobs again
+
+And without more trappings, jobs can be stopped like this:
+
+###### **Shell**
+```shell
+$ nomad job stop todo-java
+==> 2022-07-18T18:04:55+02:00: Monitoring evaluation "efe42497"
+    2022-07-18T18:04:55+02:00: Evaluation triggered by job "todo-java"
+==> 2022-07-18T18:04:56+02:00: Monitoring evaluation "efe42497"
+    2022-07-18T18:04:56+02:00: Evaluation within deployment: "577c3e71"
+    2022-07-18T18:04:56+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-18T18:04:56+02:00: Evaluation "efe42497" finished with status "complete"
+==> 2022-07-18T18:04:56+02:00: Monitoring deployment "577c3e71"
+  ✓ Deployment "577c3e71" successful
+
+    2022-07-18T18:04:56+02:00
+    ID          = 577c3e71
+    Job ID      = todo-java
+    Job Version = 2
+    Status      = successful
+    Description = Deployment completed successfully
+
+    Deployed
+    Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    web         1        1       1        0          2022-07-18T18:12:24+02:00
+```
+
+###
 
 ## Conclusion
 
