@@ -116,7 +116,6 @@ at the [great resources here][].
 There are multiple ways to interact with [Nomad][]:
 
 - There is a small web-interface available right after start: <http://localhost:4646>
-![image](/assets/images/nomad/webinterface.png)
 - For the commandline-savy, there is nice [CLI][] shipped within the same package.
 - And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly.
 
@@ -147,6 +146,8 @@ $ nomad job run jobs/todo-java.nomad
     web         1        1       1        0          2022-07-18T17:58:46+02:00
 ```
 
+..but there is usually a way to do it the hard way:
+
 ###### **Shell**
 ```shell
 $ curl \
@@ -155,12 +156,12 @@ $ curl \
   https://localhost:4646/v1/jobs
 ```
 
-Both sends the job [Nomad][] and starts a single instance on clients that belong to the datacenter
-aptly named `dc1`.
+Anyway, both sends the job [Nomad][] and starts a single instance on clients that belong to the
+datacenter aptly named `dc1`.
 
 #### Check status of a job
 
-The status of our job can be queries in a similar way:
+The status of our job can be queried in similar fashion:
 
 ###### **Shell**
 ```shell
@@ -194,7 +195,7 @@ $ curl -H "Accept: application/json" http://localhost:8080/todo -v
 
 #### Stop jobs again
 
-And without more trappings, jobs can be stopped like this:
+And without more further ado -  jobs can be stopped like this:
 
 ###### **Shell**
 ```shell
@@ -221,6 +222,20 @@ $ nomad job stop todo-java
 ```
 
 ### Advanced topics
+
+So far we have covered the plain basics and know how to set up, check and stop jobs.
+
+Let us talk about the interesting parts now - I wouldn't have dared to make a comparison with
+[Kubernetes][] if there wasn't more in the sleeve of [Nomad][].
+
+#### Scaling up
+
+#### Load balancing
+
+#### Canary deployments
+
+#### Service discovery
+
 
 ## Conclusion
 
