@@ -105,7 +105,7 @@ job "todo-java" {
 **<3>** Start at most one instance of this group. \
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
-**<6>** The actual config options for the driver. \
+**<6>** Config options for the chosen task driver. \
 **<7>** Additionally, [resource limits][] for tasks can be set as well.
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
@@ -228,7 +228,7 @@ So far we have covered the plain basics and know how to set up, check and stop j
 Let us talk about the interesting parts now - I wouldn't have dared to make a comparison with
 [Kubernetes][] if there wasn't more in the sleeve of [Nomad][].
 
-#### Scaling up
+#### Scaling up and down
 
 #### Load balancing
 
