@@ -65,26 +65,29 @@ Keep that in mind, we might need it later.
 ### Working with jobs
 
 When you want to run something on [Nomad][] you normally start with a job.
-A job or rather a job file is the primary work horse and describes in a declarative way what tasks
-you want to run.
+A job - or rather a job file - is the primary work horse and describes in a declarative way what
+tasks you want to run.
 
-Once a job is submitted, [Nomad][] evaluates it and determines all necessary steps for this
-workload.
-When this is done a new **allocation** is created and scheduled on a client.
+Behind the scene, whenever a job is submitted, [Nomad][] evaluates it and determines all necessary
+steps for this workload.
+Once this is done a new **allocation** is created and scheduled on a client.
+
+There are many different objects, but it is probably easier just to start with a concrete
+example and we are going to step through it line by line:
 
 ###### **HCL**
 ```hcl
 job "todo-java" {
-  datacenters = ["dc1"]
-  type        = "service"
+  datacenters = ["dc1"] # <1>
+  type        = "service" # <2>
 
-  group "web" {
-    count = 1
+  group "web" { # <3>
+    count = 1 # <4>
 
-    task "service" {
-      driver = "java"
+    task "service" { # <5>
+      driver = "java" # <6>
 
-      config {
+      config { # <7>
         jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
         jvm_options = ["-Xmx2048m", "-Xms256m"]
       }
