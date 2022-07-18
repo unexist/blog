@@ -47,8 +47,9 @@ Here is a quick example, but more about it can be found on the [official page][]
 name = "unexist"
 message = "Name: ${name}"
 loud_message = upper(message)
+colors = [ "red", "blue" ]
 options = {
-  color: "red",
+  color: element(colors, 1),
   amount: 100
 }
 
@@ -60,11 +61,11 @@ configuration {
 }
 ```
 
-Keep that in mind, we might need it later.
+Keep that in mind, might be handy sometime.
 
 ### Working with jobs
 
-When you want to run something on [Nomad][] you normally start with a job.
+When you want to run something on [Nomad][], you normally start with a job.
 A job - or rather a job file - is the primary work horse and describes in a declarative way the
 tasks you want to run.
 
@@ -72,8 +73,8 @@ Behind the scene, whenever a job is submitted, [Nomad][] evaluates it and determ
 steps for this workload.
 Once this is done a new **allocation** is created and scheduled on a client node.,
 
-There are many different objects, but it is probably easier just to start with a concrete
-example and we are going to step through it line by line:
+There are many different object types, but it is probably easier just to start with a concrete
+example and explain it line by line as we go:
 
 ###### **HCL**
 ```hcl
@@ -102,7 +103,12 @@ job "todo-java" {
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
 **<6>** The actual config options for the driver.
 
+The next steps assume you've successfully set up and started [Nomad][], if not please have a look
+at the [great resources here][].
+
 ### How to start a job
+
+Like many other [Hashicorp][] products, [Nomad][] is API-based
 
 ```shell
 $ nomad job run jobs/todo-java.nomad
@@ -141,6 +147,7 @@ As always, here is my showcase with some more examples:
 <https://github.com/unexist/showcase-nomad-quarkus>
 
 ```log
+https://learn.hashicorp.com/tutorials/nomad/get-started-intro
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
 https://github.com/hashicorp/hcl
 https://yaml.org/
