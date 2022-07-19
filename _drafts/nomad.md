@@ -296,6 +296,8 @@ And finally after a press of **Run** with another success and five running insta
 
 ![image](/assets/images/nomad/update_success.png)
 
+Getting the actual ports of the instances is a bit tedious, let us just move on how to put all of
+them behind a load balancer.
 
 #### Load balancing
 
