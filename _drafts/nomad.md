@@ -253,7 +253,7 @@ Running only one instance doesn't really justify the use of an orchestrator at a
 might come a point when you really want to scale out.
 
 If you paid attention to our previous example, you may have noticed there is a `count` parameter
-and let's us easily increase the designed number from e.g. 1 to 5 instances:
+and with it we can easily increase the designed number from e.g. 1 to 5 instances:
 
 ###### **HCL**
 ```hcl
@@ -261,34 +261,41 @@ group "web" {
   count = 5
 ```
 
+When we start another dry-run, [Nomad][] dutiful informs us, that we have port clash and cannot
+run five instances on the same port:
 
 ![image](/assets/images/nomad/plan_failure.png)
 
+A simple solution here is probably to configure different instances and set a fixed port for each,
+but we can also use the [dynamic port][] feature of [Nomad][]:
 
+We first have to remove the static port from our job definition, so it does look like this to let
+[Nomad][] pick the ports for us:
 
 ###### **HCL**
 ```hcl
-job "todo-java" {
-datacenters = ["dc1"] # <1>
+network {
+  port "http" {}
+```
 
-group "web" { # <2>
-  count = 1 # <3>
+And secondly we update the driver config to include some of the logic mentioned before in [HCL][]:
 
-    task "todo-java" { # <4>
-      driver = "java" # <5>
-
-      config { # <6>
-        jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
-        jvm_options = ["-Xmx256m", "-Xms256m", "-Dquarkus.http.port=]
-      }
-
-      resources { # <7>
-        memory = 256
-      }
-    }
-  }
+###### **HCL**
+```hcl
+config {
+  jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+  jvm_options = ["-Xmx256m", "-Xms256m", "-Dquarkus.http.port=${NOMAD_PORT_http}"]
 }
 ```
+
+And if we dry-run this again we are greeted with following:
+
+![image](/assets/images/nomad/plan_update.png)
+
+And finally after a press of **Run** with another success and five running instances:
+
+![image](/assets/images/nomad/update_success.png)
+
 
 #### Load balancing
 
@@ -314,4 +321,5 @@ https://docs.dagger.io/1215/what-is-cue/
 https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
 https://www.nomadproject.io/docs/job-specification/resources
+https://www.nomadproject.io/docs/job-specification/network#dynamic-ports=
 ```
