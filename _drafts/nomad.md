@@ -292,7 +292,7 @@ And if we dry-run this again we are greeted with following:
 
 ![image](/assets/images/nomad/plan_update.png)
 
-And finally after a press of **Run** with another success and five running instances:
+And finally after a final press of **Run** we can see another success and five running instances:
 
 ![image](/assets/images/nomad/update_success.png)
 
