@@ -29,7 +29,7 @@ Docs [how to provide new ones][] are also available, so expect this list to grow
 
 Before we can start playing with the actual objects, we have to talk about configuration.
 
-### Configuration without YAML
+## Configuration without YAML
 
 By design, [Kubernetes][] follows a [declarative approach][] and allows to specify the desired
 outcome of your objects in a [YAML][] file.
@@ -61,9 +61,9 @@ configuration {
 }
 ```
 
-Keep that in mind, might be handy sometime.
+Keep that in mind, might be handy later.
 
-### Working with jobs
+## Working with jobs
 
 When you want to run something on [Nomad][], you normally start with a job.
 A job - or rather a job file - is the primary work horse and describes in a declarative way the
@@ -106,20 +106,38 @@ job "todo-java" {
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
 **<6>** Config options for the chosen task driver. \
-**<7>** Additionally, [resource limits][] for tasks can be set as well.
+**<7>** [Resource limits][] can be set for tasks as well.
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
 at the [great resources here][].
 
-#### How to start a job
+### How to start a job
 
 There are multiple ways to interact with [Nomad][]:
 
-- There is a small web-interface available right after start: <http://localhost:4646>
-- For the commandline-savy, there is nice [CLI][] shipped within the same package.
-- And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly.
+#### Browser
 
-The probably easiest way to run a job is via commandline:
+1. There is a small web-interface available right after start: <http://localhost:4646>
+
+![image](/assets/images/nomad/web_job1.png)
+
+2. After pressing the **Run Job** button in the right upper corner, you can paste your job
+definition either in [HCL][] or in [JSON][]:
+
+![image](/assets/images/nomad/web_job2.png)
+
+3. The **Plan** button starts a dry-run and [Nomad][] prints the result - which is pretty neat
+in comparison to the other options.
+
+![image](/assets/images/nomad/web_job3.png)
+
+4. And a final press on **Run** starts the actual deployment.
+
+![image](/assets/images/nomad/web_job4.png)
+
+#### Commandline
+
+For the commandline-savy, there is nice [CLI][] shipped within the same package:
 
 ###### **Shell**
 ```shell
@@ -146,20 +164,20 @@ $ nomad job run jobs/todo-java.nomad
     web         1        1       1        0          2022-07-18T17:58:46+02:00
 ```
 
-..but there is usually a way to do it the hard way:
+#### API
+
+And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly:
 
 ###### **Shell**
 ```shell
-$ curl \
-  --request POST \
-  --data @jobs/todo-java.nomad \
-  https://localhost:4646/v1/jobs
+$ curl --request POST --data @jobs/todo-java.json http://localhost:4646/v1/jobs
+{"EvalCreateIndex":228,"EvalID":"bd809b77-e2c6-c336-c5ca-0d1c15ff6cce","Index":228,"JobModifyIndex":228,"KnownLeader":false,"LastContact":0,"NextToken":"","Warnings":""}
 ```
 
-Anyway, both sends the job [Nomad][] and starts a single instance on clients that belong to the
+All three ways send the job to [Nomad][] and start a single instance on clients that belong to the
 datacenter aptly named `dc1`.
 
-#### Check status of a job
+### Check status of a job
 
 The status of our job can be queried in similar fashion:
 
@@ -189,11 +207,7 @@ $ curl -H "Accept: application/json" http://localhost:8080/todo -v
 * Closing connection 0
 ```
 
-###### **Shell**
-```shell
-```
-
-#### Stop jobs again
+### Stop jobs again
 
 And without more further ado -  jobs can be stopped like this:
 
@@ -223,12 +237,47 @@ $ nomad job stop todo-java
 
 ### Advanced topics
 
-So far we have covered the plain basics and know how to set up, check and stop jobs.
+So far we have covered the plain basics and we know how to set up, check and stop jobs now.
 
-Let us talk about the interesting parts now - I wouldn't have dared to make a comparison with
-[Kubernetes][] if there wasn't more in the sleeve of [Nomad][].
+It is time to talk about the interesting parts now - otherwise the whole comparison with
+[Kubernetes][] would be quite pointless.
 
 #### Scaling up and down
+
+###### **HCL**
+```hcl
+job "todo-java" {
+datacenters = ["dc1"]
+
+group "web" {
+  count = 5 # <1>
+```
+
+
+
+###### **HCL**
+```hcl
+job "todo-java" {
+datacenters = ["dc1"] # <1>
+
+group "web" { # <2>
+  count = 1 # <3>
+
+    task "todo-java" { # <4>
+      driver = "java" # <5>
+
+      config { # <6>
+        jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+        jvm_options = ["-Xmx256m", "-Xms256m", "-Dquarkus.http.port=]
+      }
+
+      resources { # <7>
+        memory = 256
+      }
+    }
+  }
+}
+```
 
 #### Load balancing
 
