@@ -94,6 +94,12 @@ job "todo-java" {
 
       resources { # <7>
         memory = 256
+
+        network { # <8>
+          port "http" {
+            static = 8080
+          }
+        }
       }
     }
   }
@@ -106,7 +112,8 @@ job "todo-java" {
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
 **<6>** Config options for the chosen task driver. \
-**<7>** [Resource limits][] can be set for tasks as well.
+**<7>** [Resource limits][] can be set for cpu and memory.. \
+**<8>** ..as well as for network and ports. (We need the port definition later)
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
 at the [great resources here][].
@@ -119,21 +126,19 @@ There are multiple ways to interact with [Nomad][]:
 
 1. There is a small web-interface available right after start: <http://localhost:4646>
 
-![image](/assets/images/nomad/web_job1.png)
+![image](/assets/images/nomad/web.png)
 
 2. After pressing the **Run Job** button in the right upper corner, you can paste your job
-definition either in [HCL][] or in [JSON][]:
-
-![image](/assets/images/nomad/web_job2.png)
+definition either in [HCL][] or in [JSON][].
 
 3. The **Plan** button starts a dry-run and [Nomad][] prints the result - which is pretty neat
-in comparison to the other options.
+in comparison to the other options:
 
-![image](/assets/images/nomad/web_job3.png)
+![image](/assets/images/nomad/plan_success.png)
 
 4. And a final press on **Run** starts the actual deployment.
 
-![image](/assets/images/nomad/web_job4.png)
+![image](/assets/images/nomad/job_success.png)
 
 #### Commandline
 
@@ -242,16 +247,22 @@ So far we have covered the plain basics and we know how to set up, check and sto
 It is time to talk about the interesting parts now - otherwise the whole comparison with
 [Kubernetes][] would be quite pointless.
 
-#### Scaling up and down
+#### Scaling out
+
+Running only one instance doesn't really justify the use of an orchestrator at all and there
+might come a point when you really want to scale out.
+
+If you paid attention to our previous example, you may have noticed there is a `count` parameter
+and let's us easily increase the designed number from e.g. 1 to 5 instances:
 
 ###### **HCL**
 ```hcl
-job "todo-java" {
-datacenters = ["dc1"]
-
 group "web" {
-  count = 5 # <1>
+  count = 5
 ```
+
+
+![image](/assets/images/nomad/plan_failure.png)
 
 
 
