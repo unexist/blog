@@ -271,8 +271,8 @@ run five instances on the same port:
 A simple solution here is probably to configure different instances and set a fixed port for each,
 but we can also use the [dynamic port][] feature of [Nomad][]:
 
-We first have to remove the static port from our job definition, so it does look like this to let
-[Nomad][] pick the ports for us:
+We first have to remove the static port from our job definition, so by basically removing all static
+configuration [Nomad][] picks the ports for us now:
 
 ###### **HCL**
 ```hcl
@@ -310,22 +310,20 @@ of our instances to it and call it a day.
 This involves lots of manual tasks and also invites problems like changes of addresses and/or ports,
 whenever [Nomad][] has to make a new allocation for an instance.
 
-Alas, this is pretty common problem already solved for us.
+Alas, this is pretty common problem and already solved for us.
 
 #### Service discovery
 
-[Service discovery][] allows us to define services, let them register themselves in a central
-catalog and also query other known services.
-There are multiple options available, but since we are already using a product from [HashiCorp][]
-we can go full-circle and profit from the good and tight integration.
+[Service discovery][] is basically a central catalog and every interested service can register
+itself and fetch information about other registered services.
 
-Let me introduce you to [Consul][], a service discovery tool from the same vendor and I'd say one
-of the more popular picks.
+One of the many options is [Consul][], another product from [HashiCorp][] with obviously pretty
+good integration and probably our best pick.
 
-Assuming [Consul][] is already installed on your machine, we can facilitate [Nomad][] to start
-[Consul][] via the [raw/exec][] task driver.
+Since we don't want to install [Consul][] on our machine, we facilitate [Nomad][]'s [artifact][]
+stanza in combination with the [raw/exec][] task driver.
 
-There should be big surprises, the job definition is pretty easy:
+This allows us to load the package from the internet and execute it directly:
 
 ###### **HCL**
 ```hcl
@@ -350,6 +348,9 @@ job "consul" {
   }
 }
 ```
+
+**<1>** Here we selected the [raw/exec][] task driver. \
+**<2>** This defines the source for the [artifact][] we want to execute.
 
 And easy as that is the deployment:
 
@@ -377,25 +378,27 @@ $ nomad job run jobs/consul.nomad
     consul      1        1       1        0          2022-07-20T12:25:34+02:00
 ```
 
-[Consul][] also provide a small web-interface which can be found here after start:
-<http://localhost:8500>
+After a few seconds [Consul][] is ready and we can have a look at the web-interface at
+<http://localhost:8500>:
 
 ![image](/assets/images/nomad/consul_services_nomad.png)
 
-The service tabs shows all registered services and here we can see [Nomad][] and [Consul][] are
-automatically registered and listed as healthy.
+The service tab shows all currently registered services and we can already see [Nomad][] and
+[Consul][] are automatically registered and listed.
+
+In order for our services to appear, we need to add the [service][] stanza to our example:
 
 ###### **HCL**
 ```hcl
 service {
-  name = "todo-java"
+  name = "todo"
   port = "http"
 
   tags = [
-    "urlprefix-/todo-java",
+    "urlprefix-/todo", # <1>
   ]
 
-  check {
+  check { # <2>
     type     = "http"
     path     = "/"
     interval = "2s"
@@ -403,6 +406,9 @@ service {
   }
 }
 ```
+
+**<1>** [Nomad][] allows to set tags to service - we need this specific tag in the next section. \
+**<2>** The [check][] stanza describes how [Nomad][] shall check, if this service is healthy.
 
 ![image](/assets/images/nomad/plan_update_service.png)
 
@@ -461,7 +467,27 @@ nomad job run jobs/fabio.nomad
 
 ![image](/assets/images/nomad/consul_services_fabio.png)
 
-#### Deployment options
+###### **HCL**
+```hcl
+config { # <6>
+  jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+  jvm_options = [
+    "-Xmx256m", "-Xms256m",
+    "-Dquarkus.http.port=${NOMAD_PORT_http}",
+    "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}",
+    "-Dquarkus.http.header.TodoServer.path=/todo",
+    "-Dquarkus.http.header.TodoServer.methods=GET"
+  ]
+}
+```
+
+![image](/assets/images/nomad/loadbalancer.gif)
+
+#### Update strategies
+
+- Rolling upgrades
+- Blue/green deployments
+- Canary deployments
 
 ###### **HCL**
 ```hcl
@@ -470,6 +496,10 @@ update {
   max_parallel = 5
 }
 ```
+
+![image](/assets/images/nomad/plan_update_canary.png)
+
+![image](/assets/images/nomad/promote_canary.png)
 
 
 ## Conclusion
@@ -490,6 +520,8 @@ https://docs.dagger.io/1215/what-is-cue/
 https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
 https://www.nomadproject.io/docs/job-specification/resources
+https://www.nomadproject.io/docs/job-specification/service
+https://www.nomadproject.io/docs/job-specification/update
 https://www.nomadproject.io/docs/job-specification/network#dynamic-ports=
 https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/todo-java.json
 https://fabiolb.net/
