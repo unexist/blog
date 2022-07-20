@@ -65,11 +65,11 @@ Keep that in mind, might be handy later.
 
 ## Working with jobs
 
-When you want to run something on [Nomad][], you normally start with a job.
-A job - or rather a job file - is the primary work horse and describes in a declarative way the
+When you want to run something on [Nomad][], you normally start with a [job][].
+A [job][] - or rather a job file - is the primary work horse and describes in a declarative way the
 tasks you want to run.
 
-Behind the scene, whenever a job is submitted, [Nomad][] evaluates it and determines all necessary
+Behind the scene, whenever a [job][] is submitted, [Nomad][] evaluates it and determines all necessary
 steps for this workload.
 Once this is done a new **allocation** is created and scheduled on a client node.,
 
@@ -129,7 +129,7 @@ There are multiple ways to interact with [Nomad][]:
 
 ![image](/assets/images/nomad/web.png)
 
-2. After pressing the **Run Job** button in the right upper corner, you can paste your job
+2. After pressing the **Run Job** button in the right upper corner, you can paste your [job][]
 definition either in [HCL][] or in [JSON][].
 
 3. The **Plan** button starts a dry-run and [Nomad][] prints the result - which is pretty neat
@@ -181,12 +181,12 @@ $ curl --request POST --data @jobs/todo-java.json http://localhost:4646/v1/jobs
 {"EvalCreateIndex":228,"EvalID":"bd809b77-e2c6-c336-c5ca-0d1c15ff6cce","Index":228,"JobModifyIndex":228,"KnownLeader":false,"LastContact":0,"NextToken":"","Warnings":""}
 ```
 
-All three ways send the job to [Nomad][] and start a single instance on clients that belong to the
+All three ways send the [job][] to [Nomad][] and start a single instance on clients that belong to the
 datacenter aptly named `dc1`.
 
 ### Check status of a job
 
-The status of our job can be queried in similar fashion:
+The status of our [job][] can be queried in similar fashion:
 
 ###### **Shell**
 ```shell
@@ -216,7 +216,7 @@ $ curl -v -H "Accept: application/json" http://localhost:8080/todo
 
 ### Stop jobs again
 
-And without more further ado -  jobs can be stopped like this:
+And without more further ado -  [jobs][] can be stopped like this:
 
 ###### **Shell**
 ```shell
@@ -271,7 +271,7 @@ run five instances on the same port:
 A simple solution here is probably to configure different instances and set a fixed port for each,
 but we can also use the [dynamic port][] feature of [Nomad][]:
 
-We first have to remove the static port from our job definition, so by basically removing all static
+We first have to remove the static port from our [job][] definition, so by basically removing all
 configuration [Nomad][] picks the ports for us now:
 
 ###### **HCL**
@@ -410,7 +410,11 @@ service {
 **<1>** [Nomad][] allows to set tags to service - we need this specific tag in the next section. \
 **<2>** The [check][] stanza describes how [Nomad][] shall check, if this service is healthy.
 
+A quick check after our modification of the [job][]:
+
 ![image](/assets/images/nomad/plan_update_service.png)
+
+
 
 ![image](/assets/images/nomad/consul_services_todo.png)
 
@@ -519,6 +523,7 @@ https://jsonnet.org/
 https://docs.dagger.io/1215/what-is-cue/
 https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
+https://www.nomadproject.io/docs/job-specification/job
 https://www.nomadproject.io/docs/job-specification/resources
 https://www.nomadproject.io/docs/job-specification/service
 https://www.nomadproject.io/docs/job-specification/update
