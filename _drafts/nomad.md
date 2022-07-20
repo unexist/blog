@@ -23,7 +23,7 @@ Isn't there something lightweight?
 [Nomad][] is a small job scheduler and orchestrator from [HashiCorp][] and relies on plugins
 to run nearly anything - given that there is a proper task driver.
 
-There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [fork/exec][]) to
+There is an exhaustive list of provided task drivers like [Docker][], [Java][] or [raw/exec][]) to
 name a few and some of them are community-driven.
 Docs [how to provide new ones][] are also available, so expect this list to grow even further.
 
@@ -78,13 +78,13 @@ example and explain it line by line as we go:
 
 ###### **HCL**
 ```hcl
-job "todo-java" {
+job "todo" {
   datacenters = ["dc1"] # <1>
 
   group "web" { # <2>
     count = 1 # <3>
 
-    task "todo-java" { # <4>
+    task "todo" { # <4>
       driver = "java" # <5>
 
       config { # <6>
@@ -113,7 +113,7 @@ job "todo-java" {
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
 **<6>** Config options for the chosen task driver. \
 **<7>** [Resource limits][] can be set for cpu and memory. \
-**<8>** And additionally network and ports can be set for the whole group.
+**<8>** And additionally network settings for the whole task-group.
  (We need the port definition later)
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
@@ -149,7 +149,7 @@ For the commandline-savy, there is nice [CLI][] shipped within the same package:
 ```shell
 $ nomad job run jobs/todo-java.nomad
 ==> 2022-07-18T17:48:36+02:00: Monitoring evaluation "2c21d49b"
-    2022-07-18T17:48:36+02:00: Evaluation triggered by job "todo-java"
+    2022-07-18T17:48:36+02:00: Evaluation triggered by job "todo"
 ==> 2022-07-18T17:48:37+02:00: Monitoring evaluation "2c21d49b"
     2022-07-18T17:48:37+02:00: Evaluation within deployment: "83abca16"
     2022-07-18T17:48:37+02:00: Allocation "d9ec1c42" created: node "d419df0b", group "web"
@@ -160,7 +160,7 @@ $ nomad job run jobs/todo-java.nomad
 
     2022-07-18T17:48:47+02:00
     ID          = 83abca16
-    Job ID      = todo-java
+    Job ID      = todo
     Job Version = 0
     Status      = successful
     Description = Deployment completed successfully
@@ -172,7 +172,8 @@ $ nomad job run jobs/todo-java.nomad
 
 #### API
 
-And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly:
+And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly and send
+the [example job in JSON][]:
 
 ###### **Shell**
 ```shell
@@ -190,15 +191,15 @@ The status of our job can be queried in similar fashion:
 ###### **Shell**
 ```shell
 $ nomad job status
-ID         Type     Priority  Status   Submit Date
-todo-java  service  50        running  2022-07-18T17:48:36+02:00
+ID    Type     Priority  Status   Submit Date
+todo  service  50        running  2022-07-18T17:48:36+02:00
 ```
 
 Or just use [curl][] to access our services directly:
 
 ###### **Shell**
 ```shell
-$ curl -H "Accept: application/json" http://localhost:8080/todo -v
+$ curl -v -H "Accept: application/json" http://localhost:8080/todo
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 8080 (#0)
@@ -219,9 +220,9 @@ And without more further ado -  jobs can be stopped like this:
 
 ###### **Shell**
 ```shell
-$ nomad job stop todo-java
+$ nomad job stop todo
 ==> 2022-07-18T18:04:55+02:00: Monitoring evaluation "efe42497"
-    2022-07-18T18:04:55+02:00: Evaluation triggered by job "todo-java"
+    2022-07-18T18:04:55+02:00: Evaluation triggered by job "todo"
 ==> 2022-07-18T18:04:56+02:00: Monitoring evaluation "efe42497"
     2022-07-18T18:04:56+02:00: Evaluation within deployment: "577c3e71"
     2022-07-18T18:04:56+02:00: Evaluation status changed: "pending" -> "complete"
@@ -231,7 +232,7 @@ $ nomad job stop todo-java
 
     2022-07-18T18:04:56+02:00
     ID          = 577c3e71
-    Job ID      = todo-java
+    Job ID      = todo
     Job Version = 2
     Status      = successful
     Description = Deployment completed successfully
@@ -280,32 +281,195 @@ network {
 }
 ```
 
-And secondly we update the driver config to include some of the logic mentioned before in [HCL][]:
+Secondly, we update the driver config to include some of the logic mentioned before in [HCL][]:
 
 ###### **HCL**
 ```hcl
 config {
   jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
-  jvm_options = ["-Xmx256m", "-Xms256m", "-Dquarkus.http.port=${NOMAD_PORT_http}"]
+  jvm_options = [
+    "-Xmx256m", "-Xms256m",
+    "-Dquarkus.http.port=${NOMAD_PORT_http}" # <1>
+  ]
 }
 ```
 
+**<1>** We use a magic variable of [Nomad][] to assign a dynamic port to [Quarkus][].
+
 And if we dry-run this again we are greeted with following:
 
-![image](/assets/images/nomad/plan_update.png)
+![image](/assets/images/nomad/plan_update_scale.png)
 
-And finally after a final press of **Run** we can see another success and five running instances:
+After final press of **Run** we can see another success and five running instances after a few
+seconds:
 
 ![image](/assets/images/nomad/update_success.png)
 
-Getting the actual dynamic ports of the instances is a bit tedious, let us just move on how to put all of
-them behind a load balancer.
+Normally, our next step should be to install some kind of load balancer, add ports and addresses
+of our instances to it and call it a day.
+This involves lots of manual tasks and also invites problems like changes of addresses and/or ports,
+whenever [Nomad][] has to make a new allocation for an instance.
+
+Alas, this is pretty common problem already solved for us.
+
+#### Service discovery
+
+[Service discovery][] allows us to define services, let them register themselves in a central
+catalog and also query other known services.
+There are multiple options available, but since we are already using a product from [HashiCorp][]
+we can go full-circle and profit from the good and tight integration.
+
+Let me introduce you to [Consul][], a service discovery tool from the same vendor and I'd say one
+of the more popular picks.
+
+Assuming [Consul][] is already installed on your machine, we can facilitate [Nomad][] to start
+[Consul][] via the [raw/exec][] task driver.
+
+There should be big surprises, the job definition is pretty easy:
+
+###### **HCL**
+```hcl
+job "consul" {
+  datacenters = ["dc1"]
+
+  group "consul" {
+    count = 1
+
+    task "consul" {
+      driver = "raw_exec" # <1>
+
+      config {
+        command = "consul"
+        args    = ["agent", "-dev"]
+      }
+
+      artifact { # <2>
+        source = "https://releases.hashicorp.com/consul/1.12.3/consul_1.12.3_darwin_amd64.zip"
+      }
+    }
+  }
+}
+```
+
+And easy as that is the deployment:
+
+###### **Shell**
+```shell
+$ nomad job run jobs/consul.nomad
+==> 2022-07-20T12:15:24+02:00: Monitoring evaluation "eb0330c5"
+    2022-07-20T12:15:24+02:00: Evaluation triggered by job "consul"
+    2022-07-20T12:15:24+02:00: Evaluation within deployment: "c16677f8"
+    2022-07-20T12:15:24+02:00: Allocation "7d9626b8" created: node "68168a84", group "consul"
+    2022-07-20T12:15:24+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-20T12:15:24+02:00: Evaluation "eb0330c5" finished with status "complete"
+==> 2022-07-20T12:15:24+02:00: Monitoring deployment "c16677f8"
+  ✓ Deployment "c16677f8" successful
+
+    2022-07-20T12:15:36+02:00
+    ID          = c16677f8
+    Job ID      = consul
+    Job Version = 0
+    Status      = successful
+    Description = Deployment completed successfully
+
+    Deployed
+    Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    consul      1        1       1        0          2022-07-20T12:25:34+02:00
+```
+
+[Consul][] also provide a small web-interface which can be found here after start:
+<http://localhost:8500>
+
+![image](/assets/images/nomad/consul_services_nomad.png)
+
+The service tabs shows all registered services and here we can see [Nomad][] and [Consul][] are
+automatically registered and listed as healthy.
+
+###### **HCL**
+```hcl
+service {
+  name = "todo-java"
+  port = "http"
+
+  tags = [
+    "urlprefix-/todo-java",
+  ]
+
+  check {
+    type     = "http"
+    path     = "/"
+    interval = "2s"
+    timeout  = "2s"
+  }
+}
+```
+
+![image](/assets/images/nomad/plan_update_service.png)
+
+![image](/assets/images/nomad/consul_services_todo.png)
 
 #### Load balancing
 
-#### Canary deployments
+###### **HCL**
+```hcl
+job "fabio" {
+  datacenters = ["dc1"]
 
-#### Service discovery
+  group "fabio" {
+    count = 1
+
+    task "fabio" {
+      driver = "raw_exec"
+      config {
+        command = "fabio"
+        args    = ["-proxy.strategy=rr"] # <1>
+      }
+      artifact {
+        source      = "https://github.com/fabiolb/fabio/releases/download/v1.6.1/fabio-1.6.1-darwin_amd64"
+        destination = "local/fabio"
+        mode        = "file"
+      }
+    }
+  }
+}
+```
+
+###### **Shell**
+```shell
+nomad job run jobs/fabio.nomad
+==> 2022-07-19T15:53:33+02:00: Monitoring evaluation "eb13753c"
+    2022-07-19T15:53:33+02:00: Evaluation triggered by job "fabio"
+    2022-07-19T15:53:33+02:00: Allocation "d923c41d" created: node "dd051c02", group "fabio"
+==> 2022-07-19T15:53:34+02:00: Monitoring evaluation "eb13753c"
+    2022-07-19T15:53:34+02:00: Evaluation within deployment: "2c0db725"
+    2022-07-19T15:53:34+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-19T15:53:34+02:00: Evaluation "eb13753c" finished with status "complete"
+==> 2022-07-19T15:53:34+02:00: Monitoring deployment "2c0db725"
+  ✓ Deployment "2c0db725" successful
+
+    2022-07-19T15:53:46+02:00
+    ID          = 2c0db725
+    Job ID      = fabio
+    Job Version = 0
+    Status      = successful
+    Description = Deployment completed successfully
+
+    Deployed
+    Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    fabio       1        1       1        0          2022-07-19T16:03:45+02:00
+```
+
+![image](/assets/images/nomad/consul_services_fabio.png)
+
+#### Deployment options
+
+###### **HCL**
+```hcl
+update {
+  canary       = 1
+  max_parallel = 5
+}
+```
 
 
 ## Conclusion
@@ -318,6 +482,7 @@ As always, here is my showcase with some more examples:
 https://learn.hashicorp.com/tutorials/nomad/get-started-intro
 https://www.nomadproject.io/api-docs/jobs
 https://www.nomadproject.io/docs/internals/plugins/task-drivers
+https://www.nomadproject.io/docs/drivers/raw_exec
 https://github.com/hashicorp/hcl
 https://yaml.org/
 https://jsonnet.org/
@@ -326,4 +491,7 @@ https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
 https://www.nomadproject.io/docs/job-specification/resources
 https://www.nomadproject.io/docs/job-specification/network#dynamic-ports=
+https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/todo-java.json
+https://fabiolb.net/
+https://www.consul.io/
 ```
