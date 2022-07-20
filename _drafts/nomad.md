@@ -94,12 +94,12 @@ job "todo-java" {
 
       resources { # <7>
         memory = 256
+      }
+    }
 
-        network { # <8>
-          port "http" {
-            static = 8080
-          }
-        }
+    network { # <8>
+      port "http" {
+        static = 8080
       }
     }
   }
@@ -112,8 +112,9 @@ job "todo-java" {
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
 **<6>** Config options for the chosen task driver. \
-**<7>** [Resource limits][] can be set for cpu and memory.. \
-**<8>** ..as well as for network and ports. (We need the port definition later)
+**<7>** [Resource limits][] can be set for cpu and memory. \
+**<8>** And additionally network and ports can be set for the whole group.
+ (We need the port definition later)
 
 The next steps assume you've successfully set up and started [Nomad][], if not please have a look
 at the [great resources here][].
@@ -276,6 +277,7 @@ We first have to remove the static port from our job definition, so it does look
 ```hcl
 network {
   port "http" {}
+}
 ```
 
 And secondly we update the driver config to include some of the logic mentioned before in [HCL][]:
@@ -296,7 +298,7 @@ And finally after a final press of **Run** we can see another success and five r
 
 ![image](/assets/images/nomad/update_success.png)
 
-Getting the actual ports of the instances is a bit tedious, let us just move on how to put all of
+Getting the actual dynamic ports of the instances is a bit tedious, let us just move on how to put all of
 them behind a load balancer.
 
 #### Load balancing
