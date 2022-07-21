@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Orchestration with Nomad
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2022-07-21 16:30 +0100
+last_updated: 2022-07-21 16:30 +0100
 author: Christoph Kappel
 tags: nomad consul fabio load-balancer kubernetes orchestration showcase
 categories: showcase
