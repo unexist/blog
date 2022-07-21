@@ -1,10 +1,10 @@
 ---
 layout: post
-title: Nomad
+title: Orchestration with Nomad
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: nomad kubernetes orchestration showcase
+tags: nomad consul fabio load-balancer kubernetes orchestration showcase
 categories: showcase
 toc: true
 ---
@@ -531,7 +531,7 @@ $ curl -v -H "Accept: application/json" http://localhost:9999/todo
 Well, we can repeat the command from above and see the same result over and over again without
 a chance to verify, if it really uses different instances.
 
-A quick hack here is to add a custom header to our instances and display IP and port:
+A quick hack here is to add a custom header to our instances with IP and port:
 
 ###### **HCL**
 ```hcl
@@ -540,12 +540,14 @@ config { # <6>
   jvm_options = [
     "-Xmx256m", "-Xms256m",
     "-Dquarkus.http.port=${NOMAD_PORT_http}",
-    "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}",
+    "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}", # <1>
     "-Dquarkus.http.header.TodoServer.path=/todo",
     "-Dquarkus.http.header.TodoServer.methods=GET"
   ]
 }
 ```
+
+**<1>** The added header combining IP and port.
 
 ###### **Shell**
 ```shell
@@ -596,34 +598,162 @@ And if we repeat the commands now:
 If you wonder why this even works in the first place without any kind of configuration:
 
 One of the nice features of [Fabio][] is, that routes can be stored in [service tags][] and if you
-have a closer look at our example you can see the tag `urlprefix-/todo`.
+have a closer look we already did that in our example with the tag `urlprefix-/todo`.
 
-This tells [Fabio][] to redirect traffic to this prefix to instances by the same name.
-
-Please have a look at the [quickstart][] if you want to see what else is possible here.
+This tells [Fabio][] to redirect traffic to this prefix to instances by the same name, but there
+are multiple other options best described in the [quickstart guide][].
 
 #### Update strategies
 
-- Rolling upgrades
-- Blue/green deployments
-- Canary deployments
+At this point our example application is successfully running on our single node [Nomad][] cluster.
+And we added a bit of fault tolerance and work distribution by putting each of the five instances
+into an automatic load balanced group.
+
+How do we proceed with updates of our application?
+
+There are multiple strategies, one of the easiest is to update all instances in the same batch, but
+that probably negates some of our previous efforts.
+Another one is to update instances one by one, check if the update succeeds and proceed with the
+next.
+A third one is to update just one instance, verify this works as intended and update the remaining
+ones.
+
+All of the named strategies can be archived with the config options of the [update][] stanza and
+[Nomad][] does a [rolling update][] by default and updates one after another until the desired size
+is reached:
 
 ###### **HCL**
 ```hcl
 update {
-  canary       = 1
-  max_parallel = 5
+  canary       = 1 # <1>
+  max_parallel = 5 # <2>
 }
 ```
 
-![image](/assets/images/nomad/plan_update_canary.png)
+**<1>** Defines how many instances should be included in a [canary update][]. \
+**<2>** This sets the actual batch size for updates.
+
+As a quick example, let us give a [canary update][] a try, but first we have to consider what will
+happen once we start it:
+
+A [canary update][] with `canary = 1` means, that our orchestrator starts one new instance and
+waits, until we tell it to processed.
+So conversely, we need means to check if the instance really works as expected **and** have a clear
+way to distinguish it from the other instances in our group.
+
+The previous trick with the header worked so well, why shouldn't we use it again?
+That said, we just add another header to our [job][]:
+
+###### **HCL**
+```hcl
+config { # <6>
+  jar_path = "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+  jvm_options = [
+    "-Xmx256m", "-Xms256m",
+    "-Dquarkus.http.port=${NOMAD_PORT_http}",
+    "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}",
+    "-Dquarkus.http.header.TodoServer.path=/todo",
+    "-Dquarkus.http.header.TodoServer.methods=GET",
+    "-Dquarkus.http.header.TodoServerCanary.value=yes", # <1>
+    "-Dquarkus.http.header.TodoServer.path=/todo",
+    "-Dquarkus.http.header.TodoServer.methods=GET"
+  ]
+}
+```
+
+**<1>** The new header.
+
+Again a quick glance at the plan and the deployment can start:
+
+###### **Shell**
+```shell
+$ nomad job plan jobs/todo-java-scaled-service-header-canary.nomad
++/- Job: "todo"
++/- Task Group: "web" (1 canary, 5 ignore)
+  +/- Update {
+        AutoPromote:      "false"
+        AutoRevert:       "false"
+    +/- Canary:           "0" => "1"
+        HealthCheck:      "checks"
+        HealthyDeadline:  "300000000000"
+    +/- MaxParallel:      "1" => "5"
+        MinHealthyTime:   "10000000000"
+        ProgressDeadline: "600000000000"
+      }
+  +/- Task: "todo" (forces create/destroy update)
+    +/- Config {
+        jar_path:       "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+        jvm_options[0]: "-Xmx256m"
+        jvm_options[1]: "-Xms256m"
+        jvm_options[2]: "-Dquarkus.http.port=${NOMAD_PORT_http}"
+        jvm_options[3]: "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}"
+        jvm_options[4]: "-Dquarkus.http.header.TodoServer.path=/todo"
+        jvm_options[5]: "-Dquarkus.http.header.TodoServer.methods=GET"
+      + jvm_options[6]: "-Dquarkus.http.header.TodoServerCanary.value=yes"
+      + jvm_options[7]: "-Dquarkus.http.header.TodoServer.path=/todo"
+      + jvm_options[8]: "-Dquarkus.http.header.TodoServer.methods=GET"
+        }
+
+Scheduler dry-run:
+- All tasks successfully allocated.
+
+$ nomad job run jobs/todo-java-scaled-service-header-canary.nomad
+==> 2022-07-20T17:11:53+02:00: Monitoring evaluation "43bdfab2"
+    2022-07-20T17:11:53+02:00: Evaluation triggered by job "todo"
+    2022-07-20T17:11:53+02:00: Allocation "4963b7fc" created: node "9293fb2f", group "web"
+==> 2022-07-20T17:11:54+02:00: Monitoring evaluation "43bdfab2"
+    2022-07-20T17:11:54+02:00: Evaluation within deployment: "a0c1e782"
+    2022-07-20T17:11:54+02:00: Allocation "4963b7fc" status changed: "pending" -> "running" (Tasks are running)
+    2022-07-20T17:11:54+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-20T17:11:54+02:00: Evaluation "43bdfab2" finished with status "complete"
+==> 2022-07-20T17:11:54+02:00: Monitoring deployment "a0c1e782"
+  ⠇ Deployment "a0c1e782" in progress...
+
+    2022-07-21T15:12:10+02:00
+    ID          = a0c1e782
+    Job ID      = todo
+    Job Version = 6
+    Status      = running
+    Description = Deployment is running but requires manual promotion
+
+    Deployed
+    Task Group  Promoted  Desired  Canaries  Placed  Healthy  Unhealthy  Progress Deadline
+    web         false     5        1         1       1        0          2022-07-20T17:22:06+02:00
+```
+
+The interesting part here is deployment actually stops and we have time to check, if our new
+version works properly.
+
+No new tricks - we just re-do the [curl][] check:
+
+![image](/assets/images/nomad/canary.gif)
+
+This works perfectly well, time to tell [Nomad][] to continue with the deployment.
+Again, there are multiple options like the [CLI][] [job promote][] call, but since we still have
+a nice web-interface running:
 
 ![image](/assets/images/nomad/promote_canary.png)
+
+After a quick press on **Promote Canary**, [Nomad][] continues with the update and concludes our
+interrupted deployment.
+
+![image](/assets/images/nomad/promote_canary_success.png)
 
 
 ## Conclusion
 
-As always, here is my showcase with some more examples:
+[Nomad][] is a really easy to use and flexible scheduler and there a multiple benefits from the
+tight integration in other products - especially from direct [HashiCorp][] products.
+
+I think it shouldn't shy away from a comparison with [Kubernetes][] and offers solutions to many
+of the daily problems like:
+
+- Service discovery
+- Healthchecks and failover
+- Load balancing
+- Update strategies
+
+Most of the examples in this post can be found in my showcase:
 
 <https://github.com/unexist/showcase-nomad-quarkus>
 
@@ -647,4 +777,5 @@ https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/to
 https://fabiolb.net/
 https://www.consul.io/
 https://fabiolb.net/quickstart/
+https://www.nomadproject.io/docs/commands/job/promote
 ```
