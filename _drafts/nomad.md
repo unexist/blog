@@ -36,9 +36,9 @@ outcome of your objects in a [YAML][] file.
 If you want to change something programmatically or even parameterize you can either use the API
 directly and patch your objects or rely on tools like [helm][] or [kustomize][].
 
-In contrast to that, [Nomad][] utilizes [Hashicorp][]'s own configuration language [HCL][], which
-adds logic to the mix without the syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
-It was initially introduced for [Terraform][]
+[Nomad][] follows a similar approach, but utilizes [HashiCorp][]'s own configuration language
+[HCL][], which was initially introduced for [Terraform][] to add logic to the mix without the
+syntactic weirdness of [jsonnet][] or [Docker][]'s [CUE][].
 
 Here is a quick example, but more about it can be found on the [official page][]:
 
@@ -61,7 +61,7 @@ configuration {
 }
 ```
 
-Keep that in mind, might be handy later.
+Keep that in mind, this might be handy later.
 
 ## Working with jobs
 
@@ -69,9 +69,9 @@ When you want to run something on [Nomad][], you normally start with a [job][].
 A [job][] - or rather a job file - is the primary work horse and describes in a declarative way the
 tasks you want to run.
 
-Behind the scene, whenever a [job][] is submitted, [Nomad][] evaluates it and determines all necessary
-steps for this workload.
-Once this is done a new **allocation** is created and scheduled on a client node.,
+Behind the scene, whenever a [job][] is submitted, [Nomad][] starts with an [evaluation][] to
+determine necessary steps for this workload.
+Once this is done, [Nomad][] maps this [job][]  a new [allocation][] is created - this is basically a mapping of a job to and scheduled on a client node.
 
 There are many different object types, but it is probably easier just to start with a concrete
 example and explain it line by line as we go:
@@ -132,8 +132,7 @@ There are multiple ways to interact with [Nomad][]:
 2. After pressing the **Run Job** button in the right upper corner, you can paste your [job][]
 definition either in [HCL][] or in [JSON][].
 
-3. The **Plan** button starts a dry-run and [Nomad][] prints the result - which is pretty neat
-in comparison to the other options:
+3. The **Plan** button starts a dry-run and [Nomad][] prints the result:
 
 ![image](/assets/images/nomad/plan_success.png)
 
@@ -147,6 +146,14 @@ For the commandline-savy, there is nice [CLI][] shipped within the same package:
 
 ###### **Shell**
 ```shell
+$ nomad job plan jobs/todo-java.nomad
++ Job: "todo"
++ Task Group: "web" (1 create)
+  + Task: "todo" (forces create)
+
+Scheduler dry-run:
+- All tasks successfully allocated.
+
 $ nomad job run jobs/todo-java.nomad
 ==> 2022-07-18T17:48:36+02:00: Monitoring evaluation "2c21d49b"
     2022-07-18T17:48:36+02:00: Evaluation triggered by job "todo"
@@ -172,8 +179,7 @@ $ nomad job run jobs/todo-java.nomad
 
 #### API
 
-And for more hardcore users, you can access the [job API][] with e.g. [curl][] directly and send
-the [example job in JSON][]:
+More hardcore users can also access the [job API][] with e.g. [curl][] directly:
 
 ###### **Shell**
 ```shell
@@ -181,8 +187,10 @@ $ curl --request POST --data @jobs/todo-java.json http://localhost:4646/v1/jobs
 {"EvalCreateIndex":228,"EvalID":"bd809b77-e2c6-c336-c5ca-0d1c15ff6cce","Index":228,"JobModifyIndex":228,"KnownLeader":false,"LastContact":0,"NextToken":"","Warnings":""}
 ```
 
-All three ways send the [job][] to [Nomad][] and start a single instance on clients that belong to the
-datacenter aptly named `dc1`.
+**Note**: You can find the example in JSON here: <https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/todo-java.json>
+
+All three ways send the [job][] to [Nomad][] and start a single instance on clients that belong to
+the datacenter aptly named `dc1`.
 
 ### Check status of a job
 
@@ -255,7 +263,7 @@ Running only one instance doesn't really justify the use of an orchestrator at a
 might come a point when you really want to scale out.
 
 If you paid attention to our previous example, you may have noticed there is a `count` parameter
-and with it we can easily increase the designed number from e.g. 1 to 5 instances:
+and with it we can easily increase the designated number from e.g. 1 to 5 instances:
 
 ###### **HCL**
 ```hcl
@@ -268,11 +276,11 @@ run five instances on the same port:
 
 ![image](/assets/images/nomad/plan_failure.png)
 
-A simple solution here is probably to configure different instances and set a fixed port for each,
-but we can also use the [dynamic port][] feature of [Nomad][]:
+A simple solution here is to configure different instances and set a fixed port for each, but we
+can also use the [dynamic port][] feature of [Nomad][]:
 
-We first have to remove the static port from our [job][] definition, so by basically removing all
-configuration [Nomad][] picks the ports for us now:
+We first have to remove the static port number from our [job][] definition - by basically removing
+the configuration and force [Nomad][] to ports for us now:
 
 ###### **HCL**
 ```hcl
@@ -294,7 +302,7 @@ config {
 }
 ```
 
-**<1>** We use a magic variable of [Nomad][] to assign a dynamic port to [Quarkus][].
+**<1>** This is a magic variable of [Nomad][] to assign a dynamic port to [Quarkus][].
 
 And if we dry-run this again we are greeted with following:
 
@@ -317,13 +325,11 @@ Alas, this is pretty common problem and already solved for us.
 [Service discovery][] is basically a central catalog and every interested service can register
 itself and fetch information about other registered services.
 
-One of the many options is [Consul][], another product from [HashiCorp][] with obviously pretty
-good integration and probably our best pick.
+Our best pick from the many options is [Consul][], another product from [HashiCorp][], with an
+obviously pretty good integration.
 
-Since we don't want to install [Consul][] on our machine, we facilitate [Nomad][]'s [artifact][]
-stanza in combination with the [raw/exec][] task driver.
-
-This allows us to load the package from the internet and execute it directly:
+We can facilitate [Nomad][]'s [artifact][] stanza in combination with the [raw/exec][] task driver
+to fetch [Consul][] and run it directly from the internet:
 
 ###### **HCL**
 ```hcl
@@ -352,7 +358,7 @@ job "consul" {
 **<1>** Here we selected the [raw/exec][] task driver. \
 **<2>** This defines the source for the [artifact][] we want to execute.
 
-And easy as that is the deployment:
+The deployment is pretty much self-explanatory:
 
 ###### **Shell**
 ```shell
@@ -378,12 +384,12 @@ $ nomad job run jobs/consul.nomad
     consul      1        1       1        0          2022-07-20T12:25:34+02:00
 ```
 
-After a few seconds [Consul][] is ready and we can have a look at the web-interface at
+After a few seconds [Consul][] is ready and we can have a look at its web-interface at
 <http://localhost:8500>:
 
 ![image](/assets/images/nomad/consul_services_nomad.png)
 
-The service tab shows all currently registered services and we can already see [Nomad][] and
+The service tab shows all currently registered services and we can already see that [Nomad][] and
 [Consul][] are automatically registered and listed.
 
 In order for our services to appear, we need to add the [service][] stanza to our example:
