@@ -23,8 +23,8 @@ Isn't there something lightweight?
 [Nomad][30] is a small job scheduler and orchestrator from [HashiCorp][15] and relies on plugins
 to run nearly anything - given that there is a proper task driver.
 
-There is an exhaustive list of provided task drivers like [Docker][10], [Java][19] or [raw/exec][34]) to
-name a few and some of them are community-driven.
+There is an exhaustive list of provided task drivers like [Docker][10], [Java][19] or
+[raw/exec][34]) to name a few and some of them are community-driven.
 Docs [how to provide new ones][18] are also available, so expect this list to grow even further.
 
 Before we can start playing with the actual objects, we have to talk about configuration.
@@ -66,13 +66,13 @@ Keep that in mind, this might be handy later.
 ## Working with jobs
 
 When you want to run something on [Nomad][30], you normally start with a [job][24].
-A [job][24] - or rather a job file - is the primary work horse and describes in a declarative way the
-tasks you want to run.
+A [job][24] - or rather a job file - is the primary work horse and describes in a declarative way
+the tasks you want to run.
 
 Behind the scene, whenever a [job][24] is submitted, [Nomad][30] starts with an [evaluation][12] to
 determine necessary steps for this workload.
-Once this is done, [Nomad][30] maps the [task group][40] of our [job][24] to a client node and schedules
-it there - this is called an [allocation][1].
+Once this is done, [Nomad][30] maps the [task group][40] of our [job][24] to a client node and
+schedules it there - this is called an [allocation][1].
 
 There are many different object types, but it is probably easier just to start with a concrete
 example and explain it line by line as we go:
@@ -190,8 +190,8 @@ $ curl --request POST --data @jobs/todo-java.json http://localhost:4646/v1/jobs
 
 **Note**: You can find the example in JSON here: <https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/todo-java.json>
 
-All three ways send the [job][24] to [Nomad][30] and start a single instance on clients that belong to
-the datacenter aptly named `dc1`.
+All three ways send the [job][24] to [Nomad][30] and start a single instance on clients that belong
+to the datacenter aptly named `dc1`.
 
 ### Check status of a job
 
@@ -330,8 +330,8 @@ itself and fetch information about other registered services.
 Our best pick from the many options is [Consul][6], another product from [HashiCorp][15], with an
 obviously pretty good integration.
 
-We can facilitate [Nomad][30]'s [artifact][2] stanza in combination with the [raw/exec][34] task driver
-to fetch [Consul][6] and run it directly from the internet:
+We can facilitate [Nomad][30]'s [artifact][2] stanza in combination with the [raw/exec][34] task
+driver to fetch [Consul][6] and run it directly from the internet:
 
 ###### **HCL**
 ```hcl
@@ -597,8 +597,8 @@ And if we repeat the commands now:
 
 If you wonder why this even works in the first place without any kind of configuration:
 
-One of the nice features of [Fabio][13] is, that routes can be stored in [service tags][38] and if you
-have a closer look we already did that in our example with the tag `urlprefix-/todo`.
+One of the nice features of [Fabio][13] is, that routes can be stored in [service tags][38] and if
+you have a closer look we already did that in our example with the tag `urlprefix-/todo`.
 
 This tells [Fabio][13] to redirect traffic to this prefix to instances by the same name, but there
 are multiple other options best described in the [quickstart guide][33].
@@ -619,8 +619,8 @@ A third one is to update just one instance, verify this works as intended and up
 ones.
 
 All of the named strategies can be archived with the config options of the [update][42] stanza and
-[Nomad][30] does a [rolling update][36] by default and updates one after another until the desired size
-is reached:
+[Nomad][30] does a [rolling update][36] by default and updates one after another until the desired
+size is reached:
 
 ###### **HCL**
 ```hcl
