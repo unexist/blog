@@ -71,7 +71,8 @@ tasks you want to run.
 
 Behind the scene, whenever a [job][] is submitted, [Nomad][] starts with an [evaluation][] to
 determine necessary steps for this workload.
-Once this is done, [Nomad][] maps this [job][]  a new [allocation][] is created - this is basically a mapping of a job to and scheduled on a client node.
+Once this is done, [Nomad][] maps the [task group][] of our [job][] to a client node and schedules
+it there - this is called an [allocation][].
 
 There are many different object types, but it is probably easier just to start with a concrete
 example and explain it line by line as we go:
@@ -107,7 +108,7 @@ job "todo" {
 ```
 
 **<1>** Sets of multiple client nodes are called a datacenter in [Nomad][]. \
-**<2>** Group consist of multiple tasks that must be run together ont he same client node. \
+**<2>** Group consist of multiple tasks tha` must be run together ont he same client node. \
 **<3>** Start at most one instance of this group. \
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][]. \
 **<5>** The [Java][] task driver allows to run a jar inside of a [JVM][]. \
@@ -269,6 +270,7 @@ and with it we can easily increase the designated number from e.g. 1 to 5 instan
 ```hcl
 group "web" {
   count = 5
+}
 ```
 
 When we start another dry-run, [Nomad][] dutiful informs us, that we have port clash and cannot
@@ -304,7 +306,7 @@ config {
 
 **<1>** This is a magic variable of [Nomad][] to assign a dynamic port to [Quarkus][].
 
-And if we dry-run this again we are greeted with following:
+And if we dry-run this again, we are greeted with following:
 
 ![image](/assets/images/nomad/plan_update_scale.png)
 
@@ -315,7 +317,7 @@ seconds:
 
 Normally, our next step should be to install some kind of load balancer, add ports and addresses
 of our instances to it and call it a day.
-This involves lots of manual tasks and also invites problems like changes of addresses and/or ports,
+This involves lots of manual labor and also invites problems like changes of addresses and/or ports,
 whenever [Nomad][] has to make a new allocation for an instance.
 
 Alas, this is pretty common problem and already solved for us.
@@ -413,18 +415,35 @@ service {
 }
 ```
 
-**<1>** [Nomad][] allows to set tags to service - we need this specific tag in the next section. \
-**<2>** The [check][] stanza describes how [Nomad][] shall check, if this service is healthy.
+**<1>** [Nomad][] allows to tags services - more about this specific tag in the next section. \
+**<2>** The [check][] stanza describes how [Nomad][] verifies, if this service is healthy.
 
-A quick check after our modification of the [job][]:
+A quick check after our modification before we run the [job][] to avoid surprises:
 
 ![image](/assets/images/nomad/plan_update_service.png)
 
+The [job plan][] summarizes all options and sometimes gives good clues what else is possible in
+the configuration.
 
+After we've verified everything's alright, we run the [job][] and can see our instances in
+[Consul]] shortly after:
 
 ![image](/assets/images/nomad/consul_services_todo.png)
 
+**Note**: Here we can also see the port bindings of the instances quite easily.
+
+And how do we route traffic to our instances?
+
 #### Load balancing
+
+Glad that you've asked: Unfortunately, [Nomad][] cannot do that directly and it needs again help
+from another tool.
+
+One of the easiest options here with also a splendid integration of [Consul][] is the proxy
+[Fabio][], but first things first.
+
+Having a task scheduler at hand is really helping, so there are no surprises when we let [Nomad][]
+do the work:
 
 ###### **HCL**
 ```hcl
@@ -450,9 +469,19 @@ job "fabio" {
 }
 ```
 
+**<1>**:
+
 ###### **Shell**
 ```shell
-nomad job run jobs/fabio.nomad
+$ nomad job plan jobs/fabio.nomad
++ Job: "fabio"
++ Task Group: "fabio" (1 create)
+  + Task: "fabio" (forces create)
+
+Scheduler dry-run:
+- All tasks successfully allocated.
+
+$ nomad job run jobs/fabio.nomad
 ==> 2022-07-19T15:53:33+02:00: Monitoring evaluation "eb13753c"
     2022-07-19T15:53:33+02:00: Evaluation triggered by job "fabio"
     2022-07-19T15:53:33+02:00: Allocation "d923c41d" created: node "dd051c02", group "fabio"
@@ -475,7 +504,34 @@ nomad job run jobs/fabio.nomad
     fabio       1        1       1        0          2022-07-19T16:03:45+02:00
 ```
 
+There is no admin interface or anything, but we can see [Fabio][] listed in [Consul][] after
+some seconds:
+
 ![image](/assets/images/nomad/consul_services_fabio.png)
+
+The default port of [Fabio][] is `9999` and if we fire up again we see the expected result:
+
+###### **Shell**
+```shell
+$ curl -v -H "Accept: application/json" http://localhost:9999/todo
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 9999 (#0)
+> GET /todo HTTP/1.1
+> Host: localhost:9999
+> User-Agent: curl/7.64.1
+> Accept: application/json
+>
+< HTTP/1.1 204 No Content
+<
+* Connection #0 to host localhost left intact
+* Closing connection 0
+```
+
+Well, we can repeat the command from above and see the same result over and over again without
+a chance to verify, if it really uses different instances.
+
+A quick hack here is to add a custom header to our instances and display IP and port:
 
 ###### **HCL**
 ```hcl
@@ -491,7 +547,60 @@ config { # <6>
 }
 ```
 
+###### **Shell**
+```shell
+$ nomad job plan jobs/todo-java-scaled-service-header.nomad
++/- Job: "todo"
++/- Task Group: "web" (1 create/destroy update, 4 ignore)
+  +/- Task: "todo" (forces create/destroy update)
+    +/- Config {
+        jar_path:       "/Users/christoph.kappel/Projects/showcase-nomad-quarkus/target/showcase-nomad-quarkus-0.1-runner.jar"
+        jvm_options[0]: "-Xmx256m"
+        jvm_options[1]: "-Xms256m"
+        jvm_options[2]: "-Dquarkus.http.port=${NOMAD_PORT_http}"
+      + jvm_options[3]: "-Dquarkus.http.header.TodoServer.value=${NOMAD_IP_http}:${NOMAD_PORT_http}"
+      + jvm_options[4]: "-Dquarkus.http.header.TodoServer.path=/todo"
+      + jvm_options[5]: "-Dquarkus.http.header.TodoServer.methods=GET"
+        }
+
+$ nomad job run jobs/todo-java-scaled-service-header.nomad
+==> 2022-07-20T17:03:39+02:00: Monitoring evaluation "909df36e"
+    2022-07-20T17:03:39+02:00: Evaluation triggered by job "todo"
+==> 2022-07-20T17:03:40+02:00: Monitoring evaluation "909df36e"
+    2022-07-20T17:03:40+02:00: Evaluation within deployment: "409e814e"
+    2022-07-20T17:03:40+02:00: Allocation "03e95d99" created: node "9293fb2f", group "web"
+    2022-07-20T17:03:40+02:00: Evaluation status changed: "pending" -> "complete"
+==> 2022-07-20T17:03:40+02:00: Evaluation "909df36e" finished with status "complete"
+==> 2022-07-20T17:03:40+02:00: Monitoring deployment "409e814e"
+  ✓ Deployment "409e814e" successful
+
+    2022-07-21T14:38:50+02:00
+    ID          = 409e814e
+    Job ID      = todo
+    Job Version = 2
+    Status      = successful
+    Description = Deployment completed successfully
+
+    Deployed
+    Task Group  Desired  Placed  Healthy  Unhealthy  Progress Deadline
+    web         5        5       5        0          2022-07-20T17:14:49+02:00
+
+Scheduler dry-run:
+- All tasks successfully allocated.
+```
+
+And if we repeat the commands now:
+
 ![image](/assets/images/nomad/loadbalancer.gif)
+
+If you wonder why this even works in the first place without any kind of configuration:
+
+One of the nice features of [Fabio][] is, that routes can be stored in [service tags][] and if you
+have a closer look at our example you can see the tag `urlprefix-/todo`.
+
+This tells [Fabio][] to redirect traffic to this prefix to instances by the same name.
+
+Please have a look at the [quickstart][] if you want to see what else is possible here.
 
 #### Update strategies
 
@@ -537,4 +646,5 @@ https://www.nomadproject.io/docs/job-specification/network#dynamic-ports=
 https://github.com/unexist/showcase-nomad-quarkus/blob/master/deployment/jobs/todo-java.json
 https://fabiolb.net/
 https://www.consul.io/
+https://fabiolb.net/quickstart/
 ```
