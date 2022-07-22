@@ -177,7 +177,13 @@ footer a:hover {
 
 @media screen and (max-width: 899px) {
     #headline, #split, nav, footer {
-        width: 100%;
+        width: auto;
+    }
+
+    nav, footer {
+        border-radius: 0;
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
     }
 }
 
@@ -365,7 +371,6 @@ hr {
 
 .post-content pre {
     text-align: left;
-    margin-bottom: var(--margin);
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
