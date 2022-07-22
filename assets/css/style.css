@@ -419,4 +419,8 @@ hr {
         display: block;
         padding-left: 0;
     }
+
+    #split {
+        flex-direction: column;
+    }
 }
