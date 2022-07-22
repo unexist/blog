@@ -81,8 +81,9 @@ footer a:hover {
 /* Content */
 #content {
     width: 100%;
-    flex-basis: 0;
-    flex-grow: 999;
+    flex-basis: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 #content img {
@@ -156,8 +157,9 @@ footer a:hover {
 
 /* Sidebar */
 #sidebar {
-    flex-basis: 10rem;
+    flex-basis: 175px;
     flex-grow: 0;
+    flex-shrink: 0;
 }
 
 #sidebar a {
@@ -401,7 +403,7 @@ hr {
 }
 
 /* Responsiveness */
-@media screen and (max-width: 899px) {
+@media screen and (max-width: 990px) {
 
     #headline, #split, nav, footer {
         width: auto;
