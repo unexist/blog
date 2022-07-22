@@ -251,14 +251,14 @@ $ nomad job stop todo
     web         1        1       1        0          2022-07-18T18:12:24+02:00
 ```
 
-### Advanced topics
+## Advanced topics
 
 So far we have covered the plain basics and we know how to set up, check and stop jobs now.
 
 It is time to talk about the interesting parts now - otherwise the whole comparison with
 [Kubernetes][28] would be quite pointless.
 
-#### Scaling out
+### Scaling out
 
 Running only one instance doesn't really justify the use of an orchestrator at all and there
 might come a point when you really want to scale out.
@@ -322,7 +322,7 @@ whenever [Nomad][30] has to make a new allocation for an instance.
 
 Alas, this is pretty common problem and already solved for us.
 
-#### Service discovery
+### Service discovery
 
 [Service discovery][37] is basically a central catalog and every interested service can register
 itself and fetch information about other registered services.
@@ -434,7 +434,7 @@ After we've verified everything's alright, we run the [job][24] and can see our 
 
 And how do we route traffic to our instances?
 
-#### Load balancing
+### Load balancing
 
 Glad that you've asked: Unfortunately, [Nomad][30] cannot do that directly and it needs again help
 from another tool.
@@ -603,7 +603,7 @@ you have a closer look we already did that in our example with the tag `urlprefi
 This tells [Fabio][13] to redirect traffic to this prefix to instances by the same name, but there
 are multiple other options best described in the [quickstart guide][33].
 
-#### Update strategies
+### Update strategies
 
 At this point our example application is successfully running on our single node [Nomad][30] cluster.
 And we added a bit of fault tolerance and work distribution by putting each of the five instances
