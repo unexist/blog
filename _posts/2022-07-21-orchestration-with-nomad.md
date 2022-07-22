@@ -24,7 +24,7 @@ Isn't there something lightweight?
 to run nearly anything - given that there is a proper task driver.
 
 There is an exhaustive list of provided task drivers like [Docker][10], [Java][19] or
-[raw/exec][34]) to name a few and some of them are community-driven.
+[raw/exec][34] to name a few and some of them are community-driven.
 Docs [how to provide new ones][18] are also available, so expect this list to grow even further.
 
 Before we can start playing with the actual objects, we have to talk about configuration.
@@ -766,7 +766,7 @@ Most of the examples in this post can be found in my showcase:
 [7]: https://docs.dagger.io/1215/what-is-cue/
 [8]: https://curl.se/
 [9]: https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/
-[10]: https://docker.com
+[10]: https://www.nomadproject.io/docs/drivers/docker
 [11]: https://www.nomadproject.io/docs/job-specification/network#dynamic-ports=
 [12]: https://www.nomadproject.io/docs/concepts/scheduling/scheduling
 [13]: https://fabiolb.net/
@@ -775,7 +775,7 @@ Most of the examples in this post can be found in my showcase:
 [16]: https://github.com/hashicorp/hcl
 [17]: https://helm.se
 [18]: https://www.nomadproject.io/docs/internals/plugins/task-drivers
-[19]: https://www.java.com/
+[19]: https://www.nomadproject.io/docs/drivers/java
 [20]: https://www.nomadproject.io/api-docs/jobs
 [21]: https://www.nomadproject.io/docs/commands/job/plan
 [22]: https://www.nomadproject.io/docs/commands/job/promote
@@ -786,7 +786,7 @@ Most of the examples in this post can be found in my showcase:
 [27]: https://en.wikipedia.org/wiki/Java_virtual_machine
 [28]: https://kubernetes.io/
 [29]: https://kustomize.io/
-[30]: https://.www.nomadproject.io
+[30]: https://www.nomadproject.io
 [31]: https://github.com/hashicorp/hcl/blob/main/hclsyntax/spec.md
 [32]: https://quarkus.io
 [33]: https://fabiolb.net/quickstart/
