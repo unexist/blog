@@ -185,6 +185,11 @@ footer a:hover {
         border-left: var(--border);
         border-right: var(--border);
     }
+
+    #headline h1, #headline h2 {
+        display: block;
+        padding-left: 0;
+    }
 }
 
 #headline h1 {
