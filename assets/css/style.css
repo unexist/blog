@@ -68,7 +68,7 @@ footer a:hover {
 #split {
     display: flex;
     justify-content: flex-end;
-    gap: 5rem;
+    gap: 3rem;
     padding-top: var(--padding);
     border-left: var(--border);
     border-right: var(--border);
@@ -83,7 +83,6 @@ footer a:hover {
     width: 100%;
     flex-basis: 0;
     flex-grow: 999;
-    padding-right: var(--padding);
 }
 
 #content img {
@@ -312,9 +311,6 @@ hr {
 
 .post-content {
     text-align:  justify;
-    width: 90%;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .post-content h2 {
