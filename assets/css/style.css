@@ -364,7 +364,6 @@ hr {
 }
 
 .post-content pre {
-    white-space: pre-wrap;
     text-align: left;
     margin-bottom: var(--margin);
     padding: var(--padding);
