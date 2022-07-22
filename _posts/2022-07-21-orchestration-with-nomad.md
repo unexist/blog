@@ -124,7 +124,7 @@ at the [great resources here][14].
 
 There are multiple ways to interact with [Nomad][30]:
 
-#### Browser
+#### Via browser
 
 1. There is a small web-interface available right after start: <http://localhost:4646>
 
@@ -141,7 +141,7 @@ definition either in [HCL][16] or in [JSON][26].
 
     ![image](/assets/images/nomad/job_success.png)
 
-#### Commandline
+#### Via commandline
 
 For the commandline-savy, there is nice [CLI][5] shipped within the same package:
 
@@ -178,7 +178,7 @@ $ nomad job run jobs/todo-java.nomad
     web         1        1       1        0          2022-07-18T17:58:46+02:00
 ```
 
-#### API
+#### Via API
 
 More hardcore users can also access the [job API][20] with e.g. [curl][8] directly:
 
