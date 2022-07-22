@@ -349,6 +349,10 @@ hr {
     padding-right: 5px;
 }
 
+.post-content div.highlighter-rouge {
+    width: 100%;
+}
+
 .post-content p code.highlighter-rouge {
     color: var(--code-color);
 }
