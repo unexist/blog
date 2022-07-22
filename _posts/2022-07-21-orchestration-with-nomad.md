@@ -128,18 +128,18 @@ There are multiple ways to interact with [Nomad][30]:
 
 1. There is a small web-interface available right after start: <http://localhost:4646>
 
-![image](/assets/images/nomad/web.png)
+    ![image](/assets/images/nomad/web.png)
 
 2. After pressing the **Run Job** button in the right upper corner, you can paste your [job][24]
 definition either in [HCL][16] or in [JSON][26].
 
 3. The **Plan** button starts a dry-run and [Nomad][30] prints the result:
 
-![image](/assets/images/nomad/plan_success.png)
+    ![image](/assets/images/nomad/plan_success.png)
 
 4. And a final press on **Run** starts the actual deployment.
 
-![image](/assets/images/nomad/job_success.png)
+    ![image](/assets/images/nomad/job_success.png)
 
 #### Commandline
 
