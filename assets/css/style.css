@@ -182,8 +182,8 @@ footer a:hover {
 
     nav, footer {
         border-radius: 0;
-        border-left: 1px solid var(--border);
-        border-right: 1px solid var(--border);
+        border-left: var(--border);
+        border-right: var(--border);
     }
 }
 
