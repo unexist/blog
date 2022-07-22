@@ -175,23 +175,6 @@ footer a:hover {
     padding: var(--padding);
 }
 
-@media screen and (max-width: 899px) {
-    #headline, #split, nav, footer {
-        width: auto;
-    }
-
-    nav, footer {
-        border-radius: 0;
-        border-left: var(--border);
-        border-right: var(--border);
-    }
-
-    #headline h1, #headline h2 {
-        display: block;
-        padding-left: 0;
-    }
-}
-
 #headline h1 {
     display: inline-block;
     text-decoration: none;
@@ -415,4 +398,23 @@ hr {
 
 #sidebar .set-5 {
     font-size: 140%;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 899px) {
+
+    #headline, #split, nav, footer {
+        width: auto;
+    }
+
+    nav, footer {
+        border-radius: 0;
+        border-left: var(--border);
+        border-right: var(--border);
+    }
+
+    #headline h1, #headline h2 {
+        display: block;
+        padding-left: 0;
+    }
 }
