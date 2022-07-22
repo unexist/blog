@@ -61,12 +61,14 @@ footer a:hover {
     text-decoration: none;
 }
 
-#container {
+#container, #main {
     width: 100%;
 }
 
 #split {
-    display: table;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5rem;
     padding-top: var(--padding);
     border-left: var(--border);
     border-right: var(--border);
@@ -76,8 +78,11 @@ footer a:hover {
     margin-bottom: var(--margin);
 }
 
+/* Content */
 #content {
-    display: table-cell;
+    width: 100%;
+    flex-basis: 0;
+    flex-grow: 999;
     padding-right: var(--padding);
 }
 
@@ -87,7 +92,6 @@ footer a:hover {
     object-fit: contain;
 }
 
-/* Table */
 #content table {
     border-collapse: collapse;
     text-align: left;
@@ -151,10 +155,10 @@ footer a:hover {
     padding-right: 0.2em;
 }
 
+/* Sidebar */
 #sidebar {
-    display: table-cell;
-    width: 175px;
-    padding-left: var(--padding);
+    flex-basis: 10rem;
+    flex-grow: 0;
 }
 
 #sidebar a {
@@ -170,13 +174,10 @@ footer a:hover {
     width: 50%;
     margin: 0px auto;
     padding: var(--padding);
-
-    /* Stupid hack */
-    min-width: 844px;
 }
 
 @media screen and (max-width: 899px) {
-    #header, #headline, #split, nav, footer {
+    #headline, #split, nav, footer {
         width: 100%;
     }
 }
