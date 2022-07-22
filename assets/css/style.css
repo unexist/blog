@@ -375,6 +375,8 @@ hr {
     border: var(--border);
     background-color: #000;
     overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
 }
 
 .post-content pre.highlight code {
