@@ -369,9 +369,8 @@ hr {
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
-
 
 .post-content pre.highlight code {
     color: var(--font-color2) !important;
