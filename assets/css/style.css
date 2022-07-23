@@ -357,7 +357,6 @@ hr {
 
 .post-content .highlighter-rouge > div.highlight {
     display: grid;
-    overflow-x: auto;
 }
 
 .post-content p code.highlighter-rouge {
@@ -365,11 +364,14 @@ hr {
 }
 
 .post-content pre {
+    display: grid;
     text-align: left;
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
+    overflow-x: scroll;
 }
+
 
 .post-content pre.highlight code {
     color: var(--font-color2) !important;
