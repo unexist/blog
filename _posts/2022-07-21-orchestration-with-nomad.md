@@ -281,8 +281,8 @@ run five instances on the same port:
 A simple solution here is to configure different instances and set a fixed port for each, but we
 can also use the [dynamic port][11] feature of [Nomad][30]:
 
-We first have to remove the static port number from our [job][24] definition - by basically removing
-the configuration and force [Nomad][30] to ports for us now:
+We just have to remove the static port number from our [job][24] definition - by basically removing
+the configuration and force [Nomad][30] to assign ports for us now:
 
 ###### **HCL**
 ```hcl
@@ -316,7 +316,7 @@ seconds:
 ![image](/assets/images/nomad/update_success.png)
 
 Normally, our next step should be to install some kind of load balancer, add ports and addresses
-of our instances to it and call it a day.
+of our instances and call it a day.
 This involves lots of manual labor and also invites problems like changes of addresses and/or ports,
 whenever [Nomad][30] has to make a new allocation for an instance.
 
@@ -415,7 +415,7 @@ service {
 }
 ```
 
-**<1>** [Nomad][30] allows to tags services - more about this specific tag in the next section. \
+**<1>** [Nomad][30] allows to tag services - more about this specific tag in the next section. \
 **<2>** The [check][4] stanza describes how [Nomad][30] verifies, if this service is healthy.
 
 A quick check after our modification before we run the [job][24] to avoid surprises:
