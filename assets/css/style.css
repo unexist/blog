@@ -345,18 +345,23 @@ hr {
     padding-right: 5px;
 }
 
-.post-content div.highlighter-rouge {
-    width: 100%;
-}
-
-.post-content p code.highlighter-rouge {
-    color: var(--code-color);
-}
-
 .post-content li {
     margin-left: 40px;
     padding: 0px 0px var(--padding) 0px;
     color: var(--font-color2);
+}
+
+.post-content .highlighter-rouge {
+    width: 100%;
+}
+
+.post-content .highlighter-route > div.highlight {
+    display: grid;
+    overflow-x: auto;
+}
+
+.post-content p code.highlighter-rouge {
+    color: var(--code-color);
 }
 
 .post-content pre {
@@ -364,9 +369,6 @@ hr {
     padding: var(--padding);
     border: var(--border);
     background-color: #000;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
 }
 
 .post-content pre.highlight code {
