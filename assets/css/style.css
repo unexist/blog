@@ -355,7 +355,7 @@ hr {
     width: 100%;
 }
 
-.post-content .highlighter-route > div.highlight {
+.post-content .highlighter-rouge > div.highlight {
     display: grid;
     overflow-x: auto;
 }
