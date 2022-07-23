@@ -406,7 +406,7 @@ hr {
 }
 
 /* Responsiveness */
-@media screen and (max-width: 990px) {
+@media screen and (max-width: 1090px) {
 
     #headline, #split, nav, footer {
         width: auto;
