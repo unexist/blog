@@ -204,7 +204,7 @@ ID    Type     Priority  Status   Submit Date
 todo  service  50        running  2022-07-18T17:48:36+02:00
 ```
 
-Or just use [curl][8] to access our services directly:
+Or just use [curl][8] to access our service directly:
 
 ###### **Shell**
 ```shell
