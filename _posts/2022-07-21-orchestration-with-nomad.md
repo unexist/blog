@@ -108,12 +108,12 @@ job "todo" {
 ```
 
 **<1>** Sets of multiple client nodes are called a datacenter in [Nomad][30]. \
-**<2>** Group consist of multiple tasks tha` must be run together ont he same client node. \
+**<2>** Groups consist of multiple tasks that are run together on the same client node. \
 **<3>** Start at most one instance of this group. \
 **<4>** This is the actual task definition and the smallest unit inside of [Nomad][30]. \
 **<5>** The [Java][19] task driver allows to run a jar inside of a [JVM][27]. \
 **<6>** Config options for the chosen task driver. \
-**<7>** [Resource limits][35] can be set for cpu and memory. \
+**<7>** [Resource limits][35] can also be set - here we stick with limits for memory. \
 **<8>** And additionally network settings for the whole task-group.
  (We need the port definition later)
 
