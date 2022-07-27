@@ -225,7 +225,7 @@ $ curl -v -H "Accept: application/json" http://localhost:8080/todo
 
 ### Stop jobs again
 
-And without more further ado -  [jobs][23] can be stopped like this:
+And without more further ado - [jobs][23] can be stopped like this:
 
 ###### **Shell**
 ```shell
@@ -255,8 +255,8 @@ $ nomad job stop todo
 
 So far we have covered the plain basics and we know how to set up, check and stop jobs now.
 
-It is time to talk about the interesting parts now - otherwise the whole comparison with
-[Kubernetes][28] would be quite pointless.
+It is time to talk about the interesting parts now - otherwise the whole mention of
+[Kubernetes][28] would be quite pointless, right?
 
 ### Scaling out
 
