@@ -66,8 +66,8 @@ Keep that in mind, this might be handy later.
 ## Working with jobs
 
 When you want to run something on [Nomad][30], you normally start with a [job][24].
-A [job][24] - or rather a job file - is the primary work horse and describes in a declarative way
-the tasks you want to run.
+A [job][24] - or rather a job file - is the primary work horse and describes the tasks you want to
+run in a declarative way.
 
 Behind the scene, whenever a [job][24] is submitted, [Nomad][30] starts with an [evaluation][12] to
 determine necessary steps for this workload.
