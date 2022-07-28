@@ -422,6 +422,7 @@ span.icon>.fa {
 .admonitionblock {
     margin-top: var(--margin-top);
     margin-bottom: var(--margin-top);
+    overflow-x: auto;
 }
 
 .admonitionblock td.icon {
