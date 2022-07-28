@@ -1,0 +1,90 @@
+---
+layout: post
+title: AsciiDoctor, Maven and IntelliJ
+date: 2021-04-29 17:37 +0200
+last_updated: 2021-04-29 17:37 +0200
+author: Christoph Kappel
+tags: tools intellij maven asciidoc
+categories: tech
+toc: true
+---
+:1: https://asciidoctor.org/
+:2: https://arc42.org/
+:3: https://asciidoctor.org/docs/asciidoc-writers-guide/
+:4: https://daringfireball.net/projects/markdown/
+:5: https://www.php.net/
+:6: https://maven.apache.org/
+:7: https://maven.apache.org/pom.html
+:8: https://www.jetbrains.com/idea/
+:9: https://plugins.jetbrains.com/plugin/7391-asciidoc
+:10: https://intellij-asciidoc-plugin.ahus1.de/docs/users-guide/features/advanced/asciidoctorconfig-file.html
+
+{1}[AsciiDoc] is one of my favorite text processors for anything related to
+**Documentation-as-Code**.
+
+I use it quite excessively in my current project, for documentation on service level but also for
+architecture documentation based on {2}[ARC42].
+
+TIP: If you really want to look into it I suggest to have a look at the documentation
+{3}[Asciidoc Writer's Guide].
+
+It is as convenient as {4}[Markdown] and has a few other tricks up its sleeve like support for
+images and a proper way to use a hierarchy of documents.
+The only thing that kind of annoys me is the import idiocy - a few of you probably know from
+{5}[PHP]:
+
+If you include something from a subdirectory, all other other includes are relative
+to this new root now.
+This leads to interesting issues, especially if you want to deal with images.
+
+== Images
+
+One of the few things that you commonly see is basically to prefix every image include with the
+**:imagedir:** attribute:
+
+[source,asciidoc]
+----
+:imagedir: ./images
+image::foobar.png[caption=Test]
+----
+
+This leads to lots of redundancy and makes a change of this quite nasty, once you are dealing
+with a large document.
+
+== Maven
+
+When you are using {6}[maven], there is another way just to set the
+**imagedir** attribute inside of your {7}[pom]:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.asciidoctor</groupId>
+    <artifactId>asciidoctor-maven-plugin</artifactId>
+    <version>${asciidoctor.maven.plugin.version}</version>
+
+    <configuration>
+        <attributes>
+            <imagesdir>./images</imagesdir>
+        </attributes>
+    </configuration>
+</plugin>
+----
+
+== IntelliJ
+
+There seems to be some kind of unwritten rule, that {8}[IntelliJ] **always** has to fail for
+something that works quite nicely with {6}[maven] even when you install the {9}[asciidoc plugin] -
+so no surprises here.
+
+After some digging around, I discovered {10}[this config file]:
+
+The plugin supports the usage of a config file, that can be placed in the root level of your
+document and gets prefixed automatically to every {1}[AsciiDoc] file that
+is below this paths:
+
+[source,asciidoc]
+----
+:icons: font
+:imagesdir: {asciidoctorconfigdir}/images
+----
