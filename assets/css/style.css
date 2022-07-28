@@ -504,6 +504,7 @@ b.conum * {
 
 .colist {
     margin-top: var(--margin-top);
+    margin-bottom: var(--margin-top);
 }
 
 /* Responsiveness */
