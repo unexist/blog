@@ -8,15 +8,15 @@ tags: tools streams processor to-be-continued
 categories: tech frameworks
 toc: false
 ---
+:1: https://www.benthos.dev/
+
 Sometimes you discover tools, that sound really awesome, but still after a while of thinking, you
 cannot find a good use for it.
 
-Let me introduce you to [Benthos][1], a tool to basically knit an input to an output, optionally
+Let me introduce you to {1}[Benthos], a tool to basically knit an input to an output, optionally
 with one or many plug-able content processor.
 
 From my understanding, it behaves like a pipe, just for everything that can have and/or consume any
 content.
 
 To be continued.
-
-[1]: https://www.benthos.dev/
