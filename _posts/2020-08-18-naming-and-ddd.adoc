@@ -11,8 +11,8 @@ toc: false
 Starters like the one in the linked article always hook me, I probably don't have to actually
 suggest to read this series and pray for any successor in our lifetime.
 
-Still, naming things is difficult, especially in a changing world like ours. When you settle for a
-name, you sometimes end adding stuff to justify the given name.
+Still, naming things is difficult, especially in a changing world like ours.
+When you settle for a name, you sometimes end adding stuff to justify the given name.
 
 Ever built a manager, that wasn't actually managing anything?
 
