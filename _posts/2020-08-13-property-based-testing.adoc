@@ -6,7 +6,7 @@ last_updated: 2020-08-13 12:10:00 +0200
 author: Christoph Kappel
 tags: java testing showcase
 categories: testing showcase
-toc: true
+toc: false
 ---
 :1: https://hypothesis.readthedocs.io/en/latest/
 :2: https://jqwik.net/
@@ -69,8 +69,8 @@ public class TodoTest {
 
         todo.setDueDate(dueDate);
 
-        /* Arbitrary and contrived test <3> */
-        Condition<Todo> cond1 = new Condition<>(t ->
+        /* Arbitrary and contrived test */
+        Condition<Todo> cond1 = new Condition<>(t -> // <3>
                 t.getDueDate().getStart().isBefore(t.getDueDate().getDue()),
                 "Start date is before due date");
         Condition<Todo> cond2 = new Condition<>(TodoBase::getDone,
@@ -86,7 +86,7 @@ public class TodoTest {
 
 == Conclusion
 
-During my tests I've found some interesting bug, mostly related to empty string and some weird
+During my tests I've found some interesting bugs, mostly related to empty string and some weird
 combination of unicode characters.
 I think the handling is pretty easy and generators can be a huge help to avoid some kind of errors.
 
