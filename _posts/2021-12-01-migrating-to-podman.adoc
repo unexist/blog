@@ -8,75 +8,98 @@ tags: tools docker podman macos kibana elastic fluentd jaeger showcase
 categories: tech showcase
 toc: true
 ---
-[Docker][2] is among the best-known container runtimes and probably only a few people (and sadly
-that didn't include me) considered some of the [other available options][20]. When [Kubernetes][5]
-announced they want to phase-out the [Dockershim][4], there was a bit of an uproar, but it probably
-took the recent [license change][18] for people to really want to move on.
+:1: https://www.docker.com/products/docker-desktop
+:2: https://www.docker.com/
+:3: https://docs.docker.com/engine/reference/builder/
+:4: https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
+:5: https://kubernetes.io/
+:6: https://podman.io/
+:7: https://www.qemu.org/
+:8: https://docs.podman.io/en/latest/markdown/podman-build.1.html
+:9: https://docs.docker.com/compose/
+:10: https://www.elastic.co/
+:11: https://docs.podman.io/en/latest/markdown/podman-run.1.html
+:12: https://www.fluentd.org/
+:13: https://github.com/junegunn/fzf
+:14: https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users
+:15: https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
+:16: https://podman.io/getting-started/installation
+:17: https://github.com/jesseduffield/lazydocker
+:18: https://www.docker.com/blog/updating-product-subscriptions/
+:19: https://github.com/halturin/multitail
+:20: https://www.capitalone.com/tech/cloud/container-runtime/
+:21: https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
+:22: https://github.com/containers/podman-compose
+:23: https://github.com/heyvito/podman-macos
+
+{2}[Docker] is among the best-known container runtimes and probably only a few people (and sadly
+that didn't include me) considered some of the {20}[other available options]. When {5}[Kubernetes]
+announced they want to phase-out the {4}[Dockershim], there was a bit of an uproar, but it probably
+took the recent {18}[license change] for people to really want to move on.
 
 I see these signals as a great opportunity for other runtimes to get more attention and also think
-the time is right to give them a try. One of them, [Podman][6] has been on my list for a pretty long
+the time is right to give them a try. One of them, {6}[Podman] has been on my list for a pretty long
 time, but due to their limitation to run on Linux systems only, this poor macOS user never had the
-chance to really look into it. Gladly, they've found a workaround with [Qemu][7] - so let us give it
+chance to really look into it. Gladly, they've found a workaround with {7}[Qemu] - so let us give it
 a spin now.
 
 I am currently working on a showcase for logging-vs-tracing, which needs a bit of infrastructure
 components, so this sounds like a nice exercise: In this post we are going to migrate from
-[Docker][2] and [docker-compose][9] to something that works properly with [Podman][6].
+{2}[Docker] and {9}[docker-compose] to something that works properly with {6}[Podman].
 
-And for completeness, here is the [docker-compose][9] file upfront:
+And for completeness, here is the {9}[docker-compose] file upfront:
 
 <https://github.com/unexist/showcase-logtraceability-quarkus/blob/master/docker/docker-compose.yaml>
 
-## Podman
+== Podman
 
-Before we start with the actual infrastructure services, let us talk a bit about [Podman][6] and
+Before we start with the actual infrastructure services, let us talk a bit about {6}[Podman] and
 cover the base installation and also some things that are good to know from the start.
 
-### Installation
+=== Installation
 
-[Podman][6] comes with a pretty good [install guide][16], the essential part for us is:
+{6}[Podman] comes with a pretty good {16}[install guide], the essential part for us is:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ brew install podman
-```
+----
 
 Right after the installation is complete we need to init and start our new machine:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman machine init --memory=8192 --cpus=2
 $ podman machine start
-```
+----
 
-### Is there an UI?
+=== Is there an UI?
 
-If you come from [Docker for Desktop][1] you will probably wonder if there is some kind of UI.
+If you come from {1}[Docker for Desktop] you will probably wonder if there is some kind of UI.
 
-[podman-macos][23] deals with all the nooks and crannies and provides some basic interface to start
+{23}[podman-macos] deals with all the nooks and crannies and provides some basic interface to start
 and stop the machine and also a limited control over running containers. It works perfectly, but
-one of my personal problems with [Docker for Desktop][1] is I am so used to rely on the UI, I never
+one of my personal problems with {1}[Docker for Desktop] is I am so used to rely on the UI, I never
 got fluent in using it from the CLI, which actually hurts my heart as a long time console user.
 
-### Can I compose?
+=== Can I compose?
 
 Although I've made the decision to run all commands in this post via CLI, there still is the open
-question if there is something like [docker-compose][9] for [Podman][6].
+question if there is something like {9}[docker-compose] for {6}[Podman].
 
-[podman-compose][22] can help to translate your [docker-compose][9] file to the commands required
-for [Podman][6], but has some drawbacks:
+{22}[podman-compose] can help to translate your {9}[docker-compose] file to the commands required
+for {6}[Podman], but has some drawbacks:
 
 1. It directly runs all of them and mixes the outputs.
 2. It starts all containers in a new pod.
 3. Ports of the container aren't properly exposed to the host.
 4. And why the heck are people still using absolute paths in a shebang? Please use **env**.
-5. The output is quite messy, if you are used to something like [lazydocker][17].
+5. The output is quite messy, if you are used to something like {17}[lazydocker].
 
-Unfortunately there isn't support for [Podman][6] in [lazydocker][17] yet:
-
+NOTE: Unfortunately there isn't support for {6}[Podman] in {17}[lazydocker] yet:
 <https://github.com/jesseduffield/lazydocker/issues/4>
 
-### What about networking?
+=== What about networking?
 
 Naturally, containers can be started with different privileges and this greatly impacts how
 networking is handled internally in default configuration:
@@ -90,125 +113,125 @@ The only way to access others containers is via host ports.
 
 For all practical means, both modes behave quite similar for a standalone container. If you require
 a group of them, which must be able to connect to each other, it gets complicated. To ease this,
-[Podman][6] allows the creation of a [pod][21].
+{6}[Podman] allows the creation of a {21}[pod].
 
-### What is a pod?
+=== What is a pod?
 
-The concept of a [pod][21] was originally introduced within [Kubernetes][5]:
+The concept of a {21}[pod] was originally introduced within {5}[Kubernetes]:
 
-> Pods are the smallest, most basic deployable objects in Kubernetes. A Pod represents a single
+[quote,https://cloud.google.com/kubernetes-engine/docs/concepts/pod]
+Pods are the smallest, most basic deployable objects in Kubernetes. A Pod represents a single
 instance of a running process in your cluster. Pods contain one or more containers, such as Docker
 containers. When a Pod runs multiple containers, the containers are managed as a single entity and
 share the Pod's resources.
-<cite><https://cloud.google.com/kubernetes-engine/docs/concepts/pod></cite>
 
-So generally speaking, a [pod][21] is a group of containers, that share the same network, process id
-and also the ipc namespaces and this is true for both [Podman][6] and [Kubernetes][5].
+So generally speaking, a {21}[pod] is a group of containers, that share the same network, process id
+and also the ipc namespaces and this is true for both {6}[Podman] and {5}[Kubernetes].
 
 Due to this conceptual resemblance it shoudln't surprise anyone, that we can easily convert a
-[Podman][6] pod to something, that can be deployed directly to [Kubernetes][5]:
+{6}[Podman] pod to something, that can be deployed directly to {5}[Kubernetes]:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman generate kube my-pod >> my-pod.yaml
-```
+----
 
-### How can I start a container?
+=== How can I start a container?
 
 If you need to start a single container either **rootfull** or **rootless** should work, so let us
-focus on examples with and without a [pod][21].
+focus on examples with and without a {21}[pod].
 
-#### Rootless without a pod
+==== Rootless without a pod
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dt -p 8080:80 nginx
 21ee82cae8b8e0e2744426c3a2f57d7274779b71370e242532e26d3e301124ca
-```
+----
 
 Once the container is running you can reach it with curl:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
-```
+----
 
-#### Rootless within a pod
+==== Rootless within a pod
 
-Let us do the same again, but this time within a [pod][21]. The first thing we have to do is to
-create the actual [pod][21]:
+Let us do the same again, but this time within a {21}[pod]. The first thing we have to do is to
+create the actual {21}[pod]:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman pod create -n mypod -p 8080:80
 41983bfdf2e1c13d209cf9d114abe6dc298fffc24b7385d353edabbbc9890792
-```
+----
 
 This looks good, let us see what we've got:
 
-###### **Shell**:
-```shell
-$ podman ps -a --pod --format {% raw %}"table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=3]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Ports}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                 STATUS      PORTS                 NAMES               PODNAME
 67b89dbd6e21  k8s.gcr.io/pause:3.5  Created     0.0.0.0:8080->80/tcp  b6548bd64e31-infra  mypod
-```
+----
 
-Noteworthy here is we need to publish the ports on [pod][21]-level and that [Podman][6] creates an
-[infrastructure container][15] for us.
+Noteworthy here is we need to publish the ports on {21}[pod]-level and that {6}[Podman] creates an
+{15}[infrastructure container] for us.
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dt --pod mypod nginx
 e2182dec80aa1fb42a06a01337fe86e951b13d89f9b600c50b39678d25a24301
-```
+----
 
-**Hint**: There is handy shortcut to directly start a container in a new [pod][21]:
+**Hint**: There is handy shortcut to directly start a container in a new {21}[pod]:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dt --pod new:mypod -p 8080:80 nginx
 309d7f33bf472d790a13cc1a1cc7fff432d026e4c26c3844731b5c448b1b100a
-```
+----
 
 In a previous section about [networking](#what-about-networking), I've mentioned that containers
 are isolated in this mode, here you can see it in action:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ curl localhost:8080
 curl: (7) Failed to connect to localhost port 8080: Connection refused
-```
+----
 
 This can be avoided by creating a new network or by just using the **bridge**:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dt --pod new:mypod -p 8080:80 --network bridge nginx
 54d6d488edad06477286e579fd255981761e5881b0d9a5eda1d5d7a14c016559
-```
+----
 
 And just for the sake of completeness:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ curl -s localhost:8080 | htmlq --text h1
 Welcome to nginx!
-```
+----
 
-### How can I build a container?
+=== How can I build a container?
 
-Building container is also piece of cake. [Podman][6] uses [buildah][8] (or rather code from it) to
-actually build the container, which is better explained [here][14]. The interesting part for us is
-that [Dockerfile][3] is also supported and heads up to a quick and pointless example:
+Building container is also piece of cake. {6}[Podman] uses {8}[buildah] (or rather code from it) to
+actually build the container, which is better explained {14}[here]. The interesting part for us is
+that {3}[Dockerfile] is also supported and heads up to a quick and pointless example:
 
-###### **Dockerfile**:
-```dockerfile
+[source,dockerfile]
+----
 FROM nginx
-```
+----
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman build --format docker -t mynginx .
 STEP 1/1: FROM nginx
 COMMIT mynginx
@@ -216,70 +239,70 @@ COMMIT mynginx
 Successfully tagged localhost/mynginx:latest
 Successfully tagged docker.io/library/nginx:latest
 ea335eea17ab984571cd4a3bcf90a0413773b559c75ef4cda07d0ce952b00291
-```
+----
 
 Equipped with this we should be able to start our services now.
 
-## Services
+== Services
 
-In this section we are going to create each service from my [docker-compose][9] file and start
-it via [Podman][6]. Since we are doing it manually, we ignore the dependencies between the services
+In this section we are going to create each service from my {9}[docker-compose] file and start
+it via {6}[Podman]. Since we are doing it manually, we ignore the dependencies between the services
 and just start everything in correct order.
 
-### Create a pod
+=== Create a pod
 
-No surprises here: We need a new [pod][21], which also does the port handling on our bridge:
+No surprises here: We need a new {21}[pod], which also does the port handling on our bridge:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman pod create -n logtrace --network bridge -p 6831:6831/udp -p 16686:16686 \
 		-p 9200:9200 -p 9300:9300 -p 12201:12201/udp -p 5601:5601 -p 9092:9092
 ee627e6718c19e707eb03c97b5cf86e8280c91cce9b031fea000ff180fac3c28
-```
+----
 
 A quick check if everything is well:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  logtrace
-```
+----
 
-### Deploy Jaeger
+=== Deploy Jaeger
 
-###### **docker-compose.yaml**:
-```yaml
+[source,yaml]
+----
 # Install jaeger
 jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
         - "6831:6831/udp"
         - "16686:16686"
-```
+----
 
 This is going to be easy:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dit --name jaeger --pod=logtrace jaegertracing/all-in-one:latest
 7f5a083ece1ee60e9d8b394bf25bd361aa98afa987a6840f0d5b2b5929b44b72
-```
+----
 
 Checking time:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=4]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                    STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                     Up 3 days ago           ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest                Up 3 days ago           jaeger              logtrace
-```
+----
 
-### Deploy Elastic
+=== Deploy Elastic
 
-###### **docker-compose.yaml**:
-```yaml
+[source,yaml]
+----
 # Install elastic
 elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
@@ -288,70 +311,70 @@ elasticsearch:
         - "9300:9300"
     environment:
         ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-```
+----
 
-Besides the [environment][11] there is also no magic involved:
+Besides the {11}[environment] there is also no magic involved:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dit --name elastic --pod=logtrace -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
     docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 2d81acbf527a3f2c26b4c66133b4826c460f719124d2ff1d71005127994c77a7
-```
+----
 
 Checking time:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=5]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                 STATUS                  NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago           ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago           jaeger              logtrace
 2d81acbf527a  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Exited (78) 3 days ago  elastic             logtrace
-```
+----
 
 Something obviously went wrong. Unfortunate, but let us check what is wrong here:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman logs 2d81acbf527a | grep -A 2 ERROR
 ERROR: [1] bootstrap checks failed
 
-[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
-```
+[1] max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+----
 
-Looks like we have some problems within [Qemu][7], that didn't happen in [Docker][2]. The problem is
+Looks like we have some problems within {7}[Qemu], that didn't happen in {2}[Docker]. The problem is
 well explained here - including a solution:
 
 <https://stackoverflow.com/questions/51445846/elasticsearch-max-virtual-memory-areas-vm-max-map-count-65530-is-too-low-inc>
 
 Even easier than dealing with `systcl` inside of a container, let us just bump to the current
-version of [elasticsearch][10], which seems to ignore this error altogether:
+version of {10}[elasticsearch], which seems to ignore this error altogether:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman rm 2d81acbf527a
 2d81acbf527a
 $ podman run -it --name elastic --pod=logtrace -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" \
     -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.14.2
 847f303ffa7562778ea8b15fb83f8a6f6beec949af78edfc31f060a1cb50469b
-```
+----
 
 Checking time:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=5]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
 847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
-```
+----
 
-### Deploy Fluentd
+=== Deploy Fluentd
 
-###### **docker-compose.yaml**:
-```yaml
+[source,yaml]
+----
 # Install fluentd
 fluentd:
     build: .
@@ -363,20 +386,20 @@ fluentd:
         type: bind
     depends_on:
         - elasticsearch
-```
+----
 
-Next on our list is [fluentd][12]. For this service we need to mount and bind a host path into the
+Next on our list is {12}[fluentd]. For this service we need to mount and bind a host path into the
 running container. Unfortunately, this is no easy task on macOS and there is a pending issue:
 
 <https://github.com/containers/podman/issues/8016>
 
 Alas, we don't need to be able to change the config on-the-fly, copying the config directly into
-the container also does the trick here. So we are going to change the [Dockerfile][3] from my
+the container also does the trick here. So we are going to change the {3}[Dockerfile] from my
 project a bit here:
 
 
-###### **Dockerfile**:
-```dockerfile
+[source,dockerfile]
+----
 FROM fluent/fluentd:v1.14-debian-1
 
 USER root
@@ -387,10 +410,10 @@ RUN ["gem", "install", "fluent-plugin-elasticsearch"]
 RUN ["gem", "install", "fluent-plugin-input-gelf"]
 
 USER fluent
-```
+----
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ cd docker
 $ podman build --format docker -t fluent .
 STEP 1/6: FROM fluent/fluentd:v1.14-debian-1
@@ -402,32 +425,32 @@ STEP 6/6: USER fluent
 ..
 Successfully tagged localhost/fluent:latest
 215d4b1979f362ec4ce38c4ef57da8e16c3261d7060f07ec403e2d86941c6c61
-```
+----
 
 And after that we just need to start the container:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dit --name fluent --pod=logtrace fluent
 a76a5ecb32efb2ef5d22447d1cacce369ef6639afaadd3a8f41b1b6653c01852
-```
+----
 
 Checking time again:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=6]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
 847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
 a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
-```
+----
 
-### Deploy Kibana
+=== Deploy Kibana
 
-###### **docker-compose.yaml**:
-```yaml
+[source,yaml]
+----
 # Kibana
 kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.8.2
@@ -435,35 +458,35 @@ kibana:
         - "5601:5601"
     depends_on:
         - elasticsearch
-```
+----
 
 I think you get it and know the drill. The only thing we need to take care of is the hostname of
-[elasticsearch][10], since networking works a bit different in [Podman][6]:
+{10}[elasticsearch], since networking works a bit different in {6}[Podman]:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dit --name kibana --pod=logtrace -e "ELASTICSEARCH_HOSTS=http://localhost:9200" \
     docker.elastic.co/kibana/kibana:7.14.2
 cad125873b438efea4b549e51edc00981bf88bb3ed78c8bdf54aecb43fba64d8
-```
+----
 
 More checking time:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=7]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
 847f303ffa75  docker.elastic.co/elasticsearch/elasticsearch:7.14.2  Up 3 days ago  elastic             logtrace
 a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
 cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              logtrace
-```
+----
 
-### Deploy Redpanda
+=== Deploy Redpanda
 
-###### **docker-compose.yaml**:
-```yaml
+[source,yaml]
+----
 # Install redpanda
 redpanda:
     container_name: redpanda
@@ -471,21 +494,21 @@ redpanda:
     hostname: redpanda
     ports:
         - "9092:9092"
-```
+----
 
 One more - last time - promised:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ podman run -dit --name redpanda --pod=logtrace vectorized/redpanda
 b728da318549cca15ddd0019eec1cddff4e3e388cacbc0dcc1f7ea38480c81fc
-```
+----
 
 And final checking time:
 
-###### **Shell**:
-```shell
-{% raw %}$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"{% endraw %}
+[source,shell,highlight=8]
+----
+$ podman ps -a --pod --format "table {{.ID}} {{.Image}} {{.Status}} {{.Names}} {{.PodName}}"
 CONTAINER ID  IMAGE                                                 STATUS         NAMES               PODNAME
 443c40c601ee  k8s.gcr.io/pause:3.5                                  Up 3 days ago  ee627e6718c1-infra  logtrace
 7f5a083ece1e  docker.io/jaegertracing/all-in-one:latest             Up 3 days ago  jaeger              logtrace
@@ -493,51 +516,28 @@ CONTAINER ID  IMAGE                                                 STATUS      
 a76a5ecb32ef  localhost/fluent:latest                               Up 3 days ago  fluent              logtrace
 cad125873b43  docker.elastic.co/kibana/kibana:7.14.2                Up 3 days ago  kibana              logtrace
 b728da318549  docker.io/vectorized/redpanda:latest                  Up 3 days ago  redpanda            logtrace
-```
+----
 
-## Conclusion
+== Conclusion
 
-[Podman][6] is a nice replacement for [Docker][2], but not every workflow and especially not every
-[docker-compose][9] file works out of the box. Network handling is quite different, but that might
+{6}[Podman] is a nice replacement for {2}[Docker], but not every workflow and especially not every
+{9}[docker-compose] file works out of the box. Network handling is quite different, but that might
 just be true on macOS.
 
 While writing this post I enjoyed playing with it, learning the commands and also the way this can
 be scripted and added some handy aliases to my zsh file like this goodie:
 
-###### **Shell**:
-```shell
+[source,shell]
+----
 $ eval `podman ps -a | fzf --multi --tac --no-sort | cut -d ' ' -f1 | sed -nE "s#(.*)#-l \'podman logs -f \1\'#gp" | xargs -r -0 -n10 -d'\n' echo multitail -C`
-```
+----
 
-This basically displays the running container via [fzf][13], allows multiselect and displays logs of
-the selected container in [multitail][19].
+This basically displays the running container via {13}[fzf], allows multiselect and displays logs of
+the selected container in {19}[multitail].
 
-I never did something like this with [Docker][2], would have saved me quite some headaches I suppose.
+I never did something like this with {2}[Docker], would have saved me quite some headaches I suppose.
 
 My logging-vs-tracing showcase can be found here:
 
 <https://github.com/unexist/showcase-logging-tracing-quarkus>
 
-[1]: https://www.docker.com/products/docker-desktop
-[2]: https://www.docker.com/
-[3]: https://docs.docker.com/engine/reference/builder/
-[4]: https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/
-[5]: https://kubernetes.io/
-[6]: https://podman.io/
-[7]: https://www.qemu.org/
-[8]: https://docs.podman.io/en/latest/markdown/podman-build.1.html
-[9]: https://docs.docker.com/compose/
-[10]: https://www.elastic.co/
-[11]: https://docs.podman.io/en/latest/markdown/podman-run.1.html
-[12]: https://www.fluentd.org/
-[13]: https://github.com/junegunn/fzf
-[14]: https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users
-[15]: https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
-[16]: https://podman.io/getting-started/installation
-[17]: https://github.com/jesseduffield/lazydocker
-[18]: https://www.docker.com/blog/updating-product-subscriptions/
-[19]: https://github.com/halturin/multitail
-[20]: https://www.capitalone.com/tech/cloud/container-runtime/
-[21]: https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
-[22]: https://github.com/containers/podman-compose
-[23]: https://github.com/heyvito/podman-macos
