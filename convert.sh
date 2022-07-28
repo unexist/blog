@@ -10,7 +10,7 @@ sed -i -e "s/\[\([^]]*\)\]\[\([^]]*\)\]/{\2}[\1]/g" $NEWFILE
 sed -i -e "s/^\[\([0-9]*\)\]:/:\1:/g" $NEWFILE
 
 # Convert source
-for KIND in java shell hcl log json yaml xml dockerfile cypher ruby; do
+for KIND in java shell hcl log json yaml xml dockerfile cypher ruby lua drl gherkin sql; do
     sed -i -e "s/^\`\`\`$KIND/[source,$KIND]\n----/g" $NEWFILE
 done
 
