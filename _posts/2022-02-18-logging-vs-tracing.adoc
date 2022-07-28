@@ -8,23 +8,55 @@ tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf sho
 categories: observability showcase
 toc: true
 ---
+:imagesdir: /assets/images/logging_vs_tracing/
+
+:1: https://en.wikipedia.org/wiki/Aspect-oriented_programming
+:2: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation
+:3: https://en.wikipedia.org/wiki/Distributed_computing
+:4: https://github.com/tersesystems/echopraxia
+:5: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-elasticsearch-fluentd-and-kibana-efk-logging-stack-on-kubernetes
+:6: https://docs.microsoft.com/en-us/events/dotnetconf-focus-on-microservices/beyond-rest-and-rpc-asynchronous-eventing-and-messaging-patterns
+:7: https://opentelemetry.io/docs/reference/specification/trace/api/#add-events
+:8: https://github.com/tersesystems/echopraxia#custom-field-builders
+:9: https://blog.adamgamboa.dev/understanding-jax-rs-filters/
+:10: https://www.graylog.org/features/gelf
+:11: https://github.com/containers/gvisor-tap-vsock
+:12: https://www.baeldung.com/cdi-interceptor-vs-spring-aspectj
+:13: https://www.jaegertracing.io/
+:14: https://reflectoring.io/structured-logging/
+:15: https://kafka.apache.org/
+:16: https://www.elastic.co/kibana/
+:17: https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
+:18: https://en.wikipedia.org/wiki/Logging
+:19: https://en.wikipedia.org/wiki/Logging
+:20: https://logback.qos.ch/manual/mdc.hml
+:21: https://opentelemetry.io
+:22: https://opentracing.io/
+:23: https://podman.io/
+:24: https://github.com/quarkiverse/quarkus-logging-json
+:25: https://quarkus.io/
+:26: https://smallrye.io/
+:27: https://opentelemetry.lightstep.com/spans/
+:28: https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html
+:29: https://en.wikipedia.org/wiki/Tracing_(software)
+
 Monitoring is one of the essential parts to check how well your application is doing and to get
 some insights if there is a possible disaster coming in.
 Sifting through logs works perfectly well for standalone applications, but what about more complex
-scenarios or even [distributed][3] ones?
+scenarios or even {3}[distributed] ones?
 
-In this post I want to demonstrate the difference between [logging][19] and [tracing][29] and talk
+In this post I want to demonstrate the difference between {19}[logging] and {29}[tracing] and talk
 about why and when I'd prefer one over the other.
 We are going to cover some basics first and talk about what both actually is and about possible
 ways to enrich them.
 And after that, we are going to do a side-by-side comparison and talk about their strengths and
 weaknesses for specific usecases.
 
-Are you still with me? Great - let us move on to [logging][19]!
+Are you still with me? Great - let us move on to {19}[logging]!
 
-## Logging
+== Logging
 
-### What is a log?
+=== What is a log?
 
 Generally speaking, a **log** is some kind of output of an event that happened on an application
 on a specific system at a particular time.
@@ -33,23 +65,23 @@ also turn the page and deliver helpful bits of information for troubleshooting d
 
 One problem with log messages is the sheer amount of data that is generated during daily business,
 which makes it quite difficult to keep track of them and to find something specific.
-To keep them manageable, they are grouped into different categories (called [levels][17]) like
+To keep them manageable, they are grouped into different categories (called {17}[levels]) like
 **Info**, **Warn** or **Error** (depending on their severity) and can be used to filter data
 or to create monitoring alarms.
 
 Here is an example of a message:
 
-###### **Logging.java**:
-```java
+[source,java]
+----
 LOGGER.info("Created todo");
-```
+----
 
-###### **Log**:
-```log
+[source,log]
+----
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo
-```
+----
 
-### Adding context
+=== Adding context
 
 Simple messages, like this don't provide much contextual information and make it difficult to
 reproduce what has actually happened.
@@ -58,35 +90,35 @@ understanding and also makes it possible to correlate different messages.
 A good approach here is to consider the log as a journal of your application with details for all
 events.
 
-###### **Logging.java**:
-```java
+[source,java]
+----
 LOGGER.info("Created todo: id={}", todo.getId());
-```
+----
 
-###### **Log**:
-```log
+[source,log]
+----
 2022-01-19 16:46:14,298 INFO  [dev.une.sho.tod.ada.TodoResource] (executor-thread-0) Created todo: id=8659a492-1b3b-42f6-b25c-3f542ab11562
-```
+----
 
 This works for single messages, but what if we have more than one message?
 
 Doing this manually can be a labor intensive and error-prone task and a single deviation makes it
 really difficult to find the message:
 
-###### **Logging.java**:
-```java
+[source,java]
+----
 LOGGER.info("Created todo: id ={}", todo.getId());
-```
+----
 
-### Mapped Diagnostic Context
+=== Mapped Diagnostic Context
 
-Modern [logging][19] libraries support the usage of a [MDC][20], which allows to add information via static
+Modern {19}[logging] libraries support the usage of a {20}[MDC], which allows to add information via static
 methods to a thread-based context.
 If your logger is configured correctly, this information is automatically added to the next log
 messages until you remove it again:
 
-###### **Logging.java**`
-```java
+[source,java]
+----
 /* Manual MDC handling */
 MDC.put("todo_id", todo.getId());
 LOGGER.info("Created todo");
@@ -96,49 +128,48 @@ MDC.remove("todo_id");
 try (MDC.MDCCloseable closable = MDC.putCloseable("todo_id", toto.getId())) {
     LOGGER.info("Created todo");
 }
-```
+----
 
-Unfortunately, the default logger of [Quarkus][25] needs a bit of configuration until it actually
-picks up the [MDC][20] information:
+Unfortunately, the default logger of {25}[Quarkus] needs a bit of configuration until it actually
+picks up the {20}[MDC] information:
 
-###### **application.properties**:
-```properties
+[source,properties]
+----
 quarkus.log.console.format=%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{2.}] (%t) %X %s%e%n
-```
+----
 
 After this change the log dutifully includes our value:
 
-###### **Log**:
-```log
+[source,log]
+----
 2022-01-19 16:46:14,298 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {todo_id=8659a492-1b3b-42f6-b25c-3f542ab11562} Created todo
-```
+----
 
-These parameters can either be added manually or automatically via [filters][9],
-[interceptors][12] or even with [aspect-oriented-programming][1] and allow writing of better filter
+These parameters can either be added manually or automatically via {9}[filters],
+{12}[interceptors] or even with {1}[aspect-oriented-programming] and allow writing of better filter
 queries for our values.
 
-### Correlation between messages
+=== Correlation between messages
 
 Another way to correlate between messages is to create an unique id or **correlation id** for each
 request and add it to all consecutive log messages.
 
-The combination of both [MDC][20] and [interceptors][12] make it really easy to add this to your
+The combination of both {20}[MDC] and {12}[interceptors] make it really easy to add this to your
 existing applications:
 
-###### **Correlated.java**:
-```java
+[source,java]
+----
 @Target({ METHOD })
 @Retention(RUNTIME)
 @Documented
 @InterceptorBinding
 public @interface Correlated { // <1>
 }
-```
+----
+<1> Create a marker annotation for the actual binding of our interceptor
 
-**<1>** Create a marker annotation for the actual binding of our interceptor
-
-###### **CorrelatedInterceptor.java**:
-```java
+[source,java]
+----
 @Correlated
 @Priority(10)
 @Interceptor
@@ -149,21 +180,20 @@ public class CorrelatedInterceptor {
         Object result = null;
 
         try (MDC.MDCCloseable closable = MDC.putCloseable("correlation_id",
-                UUID.randomUUID().toString())) // <2>
+                UUID.randomUUID().toString())) // <1>
         {
-            result = context.proceed(); // <3>
+            result = context.proceed(); // <2>
         }
 
         return result;
     }
 }
-```
+----
+<1> Create a new ID here and put it into the MDC.
+<2> Actual call the intercepted method and pass down our new id.
 
-**<2>** Create a new ID here and put it into the MDC. \
-**<3>** Actual call the intercepted method and pass down our new id.
-
-###### **TodoResource.java**:
-```java
+[source,java]
+----
 @POST
 @Consumes(MediaType.APPLICATION_JSON)
 @Operation(summary = "Create new todo")
@@ -171,35 +201,34 @@ public class CorrelatedInterceptor {
 @APIResponses({
         @APIResponse(responseCode = "200", description = "Todo created")
 }
-@Correlated // <4>
+@Correlated // <1>
 public Response create(TodoBase todoBase) {
     LOGGER.log("Received post request");
 
     return Response.ok().build();
 }
-```
-
-**<4>** And this finally marks the method for being intercepted.
+----
+<1> And this finally marks the method for being intercepted.
 
 Once we restart our service and fire a POST request against our service the log should include
 something like this:
 
-###### **Log**:
-```log
+[source,log]
+----
 2022-03-05 14:30:06,274 INFO  [de.un.sh.to.ad.TodoResource] (executor-thread-0) {correlation_id=f825c6981cb0dc603eb509189ed141b6} Received post request
-```
+----
 
-### Structured logs
+=== Structured logs
 
 To further improve the *searchability* (is that even a word?), switching from an **unstructured**
 to a **structured** format allows to parse the data more easily and to better include additional
 metadata like the calling class or the host name.
-The defacto standard for structured logs is [JSON][14] and supported widely in (business) analytics.
+The defacto standard for structured logs is {14}[JSON] and supported widely in (business) analytics.
+:
+The {24}[quarkus-logging-json] extension adds this capability:
 
-The [quarkus-logging-json][24] extension adds this capability:
-
-###### **Structured log**:
-```json
+[source,json]
+----
 {
   "timestamp": "2022-02-04T17:23:34.674+01:00",
   "sequence": 1987,
@@ -216,14 +245,15 @@ The [quarkus-logging-json][24] extension adds this capability:
   "processName": "todo-service-create-dev.jar",
   "processId": 97284
 }
-```
+----
 
-More advanced [logging][19] libraries provide helpers based on the mechanism of the [MDC][20] to
+TIP: More advanced {19}[logging] libraries provide helpers based on the mechanism of the {20}[MDC] to
 add key-value pairs conveniently.
+
 Here are few examples:
 
-###### **Logging.java**:
-```java
+[source,java]
+----
 /* quarkus-logging-json */
 LOGGER.info("Created todo", kv("todo_id", todo.getId()));
 
@@ -232,52 +262,51 @@ LOGGER.info("Created todo", keyValue("todo_id", todo.getId()));
 
 /* Echopraxia */
 LOGGER.info("Created todo", fb -> fb.onlyTodo("todo", todo));
-```
+----
 
 The first two use helpers to add the specific key-value pair to the log.
-[Echopraxia][4] introduces the concept of [field builders][8], which allow to define your own
+{4}[Echopraxia] introduces the concept of {8}[field builders], which allow to define your own
 formatters for your objects to programmatically include all the necessary attributes.
 
-### Central logging
+=== Central logging
 
 One of the goals of central logging is to have everything aggregated in one place and to provide
 some kind of facility to create complex search queries.
 There are literally hundreds of other posts about the different solutions and we are going to
-focus on [EFK][5] and [gelf][10].
+focus on {5}[EFK] and {10}[gelf].
 
-[Quarkus][25] comes with an extension, that does the bulk work for us.
+{25}[Quarkus] comes with an extension, that does the bulk work for us.
 All we have to do is just to include it and configure it for our setup:
 
-###### **pom.xml**:
-```xml
+[source,xml]
+----
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-logging-gelf</artifactId>
 </dependency>
-```
+----
 
-###### **application.properties**:
-```properties
+[source,properties]
+----
 quarkus.log.handler.gelf.enabled=true
 #quarkus.log.handler.gelf.host=localhost <1>
 quarkus.log.handler.gelf.host=tcp:localhost
 quarkus.log.handler.gelf.port=12201
 quarkus.log.handler.gelf.include-full-mdc=true
-```
+----
+<1> Noteworthy here is {10}[gelf] uses UDP by default, so if you want to use {23}[Podman] please
+keep in mind its {11}[gvproxy] doesn't support this yet.
 
-**<1>** Noteworthy here is [gelf][10] uses UDP by default, so if you want to use [Podman][23] please
-keep in mind its [gvproxy][11] doesn't support this yet.
-
-It might take a bit of time due to caching and latency, but once everything has reached [Kibana][16]
+It might take a bit of time due to caching and latency, but once everything has reached {16}[Kibana]
 you should be able to see something like this:
 
 ![image](/assets/images/logging_vs_tracing/kibana_log.png)
 
 Another way to gather information is **tracing**, so let us have a look at it.
 
-## Tracing
+== Tracing
 
-### What is a trace?
+=== What is a trace?
 
 Again at a high level, a **trace** is a visualization of a request of its way through a service or
 a complete microservice environment.
@@ -286,24 +315,24 @@ passes through.
 
 These **spans** are the smallest unit in the world of distributed tracing and represent any kind
 of workflow of your application, like HTTP requests, calls of a database or message handling in
-[eventing][6].
-They include a **span ID**, specific timings and optionally other attributes, [events][7] or
-[statuses][27].
+{6}[eventing].
+They include a **span ID**, specific timings and optionally other attributes, {7}[events] or
+{27}[statuses].
 
 Whenever a **trace** passes service boundaries, its context can be transferred via
-[context propagation][2] and specific headers for e.g. HTTP or [Kafka][15].
+{2}[context propagation] and specific headers for e.g. HTTP or {15}[Kafka].
 
-### Tracing with OpenTelemetry
+=== Tracing with OpenTelemetry
 
-When I originally started with this post, [Quarkus][25] was about to make the switch from
-[OpenTracing][22] to [OpenTelemetry][21] and I had to start from scratch - poor me.
+When I originally started with this post, {25}[Quarkus] was about to make the switch from
+{22}[OpenTracing] to {21}[OpenTelemetry] and I had to start from scratch - poor me.
 
-Similar to [logging][19], [Quarkus][25] or rather [Smallrye][26] comes with an extension to bring
-[tracing][29] capabilities onto the table.
+Similar to {19}[logging], {25}[Quarkus] or rather {26}[Smallrye] comes with an extension to bring
+{29}[tracing] capabilities onto the table.
 This also enables rudimentary tracing to all HTTP requests by default:
 
-###### **TodoResource.java**:
-```java
+[source,java]
+----
 @POST
 @Consumes(MediaType.APPLICATION_JSON)
 @Operation(summary = "Create new todo")
@@ -314,16 +343,16 @@ This also enables rudimentary tracing to all HTTP requests by default:
 public Response create(TodoBase todoBase) {
     return Response.ok().build();
 }
-```
+----
 
 Without some kind of visualization it is difficult to explain what **traces** actually look like,
-so we fast forward a bit and configure [OpenTelemetry][21] and [Jaeger][13].
+so we fast forward a bit and configure {21}[OpenTelemetry] and {13}[Jaeger].
 
-Again, [Quarkus][25] comes with some handy extensions and all we have to do is to actually include
+Again, {25}[Quarkus] comes with some handy extensions and all we have to do is to actually include
 them in our `pom.xml` and to update our properties:
 
-###### **pom.xml**:
-```xml
+[source,xml]
+----
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-opentelemetry-exporter-otlp</artifactId>
@@ -332,31 +361,31 @@ them in our `pom.xml` and to update our properties:
     <groupId>io.opentelemetry</groupId>
     <artifactId>opentelemetry-extension-trace-propagators</artifactId>
 </dependency>
-```
+----
 
-###### **application.properties**:
-```properties
+[source,properties]
+----
 quarkus.opentelemetry.enabled=true
 quarkus.opentelemetry.tracer.exporter.otlp.endpoint=http://localhost:4317
 quarkus.opentelemetry.propagators=tracecontext,baggage,jaeger
-```
+----
 
-When set up properly your **trace** should look like this in [Jaeger][13]:
+When set up properly your **trace** should look like this in {13}[Jaeger]:
 
-![image](/assets/images/logging_vs_tracing/jaeger_simple_trace.png)
+image::jaeger_simple_trace.png[]
 
 There is various meta information included like timing, client_ip or HTTP method and everything is
-provided automatically by the [OpenTelemetry][21] integration.
+provided automatically by the {21}[OpenTelemetry] integration.
 Getting this for free is nice, but a single **span** is nbo big help and we still need to see how
 we can enrich this even further.
 
-### Spans in action
+=== Spans in action
 
 The next example adds another service call with its own **span** to the previous example,
 demonstrates how they can be connected to each other and how to add more details.
 
-###### **TodoResource.java**:
-```java
+[source,java]
+----
 @Inject
 TodoService todoService;
 
@@ -389,15 +418,14 @@ public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
 
     return response.build();
 }
-```
+----
+<1> Update the name of the current default span.
+<2> Create a new todo via service call.
+<3> Set status code of the current span.
 
-**<1>** Update the name of the current default span. \
-**<2>** Create a new todo via service call. \
-**<3>** Set status code of the current span.
-
-###### **TodoService.java**:
-```java
-@WithSpan("Create todo") // <5>
+[source,java]
+----
+@WithSpan("Create todo") // <1>
 public Optional<Todo> create(TodoBase base) {
     Todo todo = new Todo(base);
 
@@ -405,32 +433,31 @@ public Optional<Todo> create(TodoBase base) {
 
     Span.current()
             .addEvent("Added id to todo", Attributes.of(
-                    AttributeKey.stringKey("id"), todo.getId())) // <5>
-            .setStatus(StatusCode.OK); // <6>
+                    AttributeKey.stringKey("id"), todo.getId())) // <2>
+            .setStatus(StatusCode.OK); // <3>
 
     return Optional.of(todo);
 }
-```
+----
+<1> Create a new span in the current context.
+<2> Add a logging event with the todo id to the current span.
+<3> Set status code of the current span.
 
-**<4>** Create a new span in the current context. \
-**<5>** Add a logging event with the todo id to the current span. \
-**<6>** Set status code of the current span.
+Once sent to {13}[Jaeger] something like this can be seen there:
 
-Once sent to [Jaeger][13] something like this can be seen there:
+image::jaeger_advanced_trace.png[]
 
-![image](/assets/images/logging_vs_tracing/jaeger_advanced_trace.png)
+{13}[Jaeger] also includes an experimental graph view to display the call graphs:
 
-[Jaeger][13] also includes an experimental graph view to display the call graphs:
+image::jaeger_advanced_graph.png[]
 
-![image](/assets/images/logging_vs_tracing/jaeger_advanced_graph.png)
-
-### Even more spans
+=== Even more spans
 
 More complexity?
-Let us throw in a bit of [Kafka][15], since I've already mentioned [context propagation][2]:
+Let us throw in a bit of {15}[Kafka], since I\'ve already mentioned {2}[context propagation]:
 
-###### **TodoResource.java**:
-```java
+[source,java]
+----
 @Inject
 TodoService todoService;
 
@@ -468,12 +495,11 @@ public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
 
     return response.build();
 }
-```
+----
+<1> Send the todo object as a message to the broker.
 
-**<1>** Send the todo object as a message to the broker
-
-###### **TodoSink.java**:
-```java
+[source,java]
+----
 public class TodoSink {
     @ConfigProperty(name = "quarkus.application.name")
     String appName;
@@ -483,52 +509,51 @@ public class TodoSink {
 
     @Incoming("todo-stored")
     public CompletionStage<Void> consumeStored(IncomingKafkaRecord<String, Todo> record) {
-        Optional<TracingMetadata> metadata = TracingMetadata.fromMessage(record); // <2>
+        Optional<TracingMetadata> metadata = TracingMetadata.fromMessage(record); // <1>
 
         if (metadata.isPresent()) {
-            try (Scope ignored = metadata.get().getCurrentContext().makeCurrent()) { // <3>
+            try (Scope ignored = metadata.get().getCurrentContext().makeCurrent()) { // <2>
                 Span span = GlobalOpenTelemetry.getTracer(appName)
-                        .spanBuilder("Received message from todo-stored").startSpan(); // <4>
+                        .spanBuilder("Received message from todo-stored").startSpan(); // <3>
 
                 if (this.todoService.update(record.getPayload())) {
                     span.addEvent("Updated todo", Attributes.of(
-                            AttributeKey.stringKey("id"), record.getPayload().getId())); // <5>
+                            AttributeKey.stringKey("id"), record.getPayload().getId())); // <4>
                 }
 
-                span.end(); // <6>
+                span.end(); // <5>
             }
         }
 
         return record.ack();
     }
-```
-
-**<2>** Load metadata from current message \
-**<3>** Activate context from metadata \
-**<4>** Create a span builder and start new span \
-**<5>** Set status code of the current span \
-**<6>** And close the span at the end.
+----
+<1> Load metadata from current message.
+<2> Activate context from metadata.
+<3> Create a span builder and start new span.
+<4> Set status code of the current span.
+<5> And close the span at the end.
 
 And when finally everything comes together:
 
-![image](/assets/images/logging_vs_tracing/jaeger_complex_trace.png)
+image::jaeger_complex_trace.png[]
 
-(I am going to describe the exact scenario there in a follow-up post.)
+NOTE: I am going to describe the exact scenario there in a follow-up post.
 
 I think we have covered enough of the basics and seen both in action, so let us continue with the
-actual comparison of [logging][19] and [tracing][29].
+actual comparison of {19}[logging] and {29}[tracing].
 
-### Combining logging and tracing
+=== Combining logging and tracing
 
-Currently, there is no easy way in [OpenTelemetry][21] to add a trace or span id to your logs,
+Currently, there is no easy way in {21}[OpenTelemetry] to add a trace or span id to your logs,
 but in general both can be used like a **correlation id** from the logging example with
-[interceptors][12].
+{12}[interceptors].
 
-When we fetch the **trace id** from the current context, we can append it to the [MDC][20] and et
+When we fetch the **trace id** from the current context, we can append it to the {20}[MDC] and et
 voila:
 
-###### **TracedInterceptor.java**:
-```java
+[source,java]
+----
 @Traced
 @Priority(10)
 @Interceptor
@@ -547,27 +572,36 @@ public class TracedInterceptor {
         return result;
     }
 }
-```
+----
+<1> Fetch the trace id from the context
 
-**<1>** Fetch the trace id from the context
+== Conclusion
 
-## Conclusion
-
-[Logging][19] and [tracing][29] aren't mutual exclusive, they both help to pinpoint problems and
+{19}[Logging] and {29}[tracing] aren't mutual exclusive, they both help to pinpoint problems and
 provide a different view of the same picture with a complementary set of information.
 
-| Logging                                        | Tracing                                        |
-|------------------------------------------------|------------------------------------------------|
-| Provides insights into single applications     | Helps to track requests through applications   |
-| Captures the state of an application           | Tells request timings and component latencies  |
-| Can be easily applied to code                  | Adds more complexity to the code               |
-| Is easy to integrate into monoliths            | Makes more sense in microservice architectures |
-| Supports debugging and diagnoses               | Supports debugging and diagnoses               |
+|===
+| Logging | Tracing
+| Provides insights into single applications
+| Helps to track requests through applications
 
-If you have a microservice architecture it probably makes more sense to enable [tracing][29], than
+| Captures the state of an application
+| Tells request timings and component latencies
+
+| Can be easily applied to code
+| Adds more complexity to the code
+
+| Is easy to integrate into monoliths
+| Makes more sense in microservice architectures
+
+| Supports debugging and diagnoses
+| Supports debugging and diagnoses
+|===
+
+If you have a microservice architecture it probably makes more sense to enable {29}[tracing], than
 in your typical monolith, especially when this kind of instrumentation increases the overall
 complexity.
-[Logging][19] and [tracing][29] are two third of [Three Pillars of Observability][28] and help your
+{19}[Logging] and {29}[tracing] are two third of {28}[Three Pillars of Observability] and help your
 development teams to debug errors, diagnose issues and to build better systems.
 
 If you consider both now, which one would you prefer for what situation?
@@ -575,33 +609,3 @@ If you consider both now, which one would you prefer for what situation?
 All of the examples can be found here:
 
 <https://github.com/unexist/showcase-logging-tracing-quarkus>
-
-[1]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
-[2]: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation
-[3]: https://en.wikipedia.org/wiki/Distributed_computing
-[4]: https://github.com/tersesystems/echopraxia
-[5]: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-elasticsearch-fluentd-and-kibana-efk-logging-stack-on-kubernetes
-[6]: https://docs.microsoft.com/en-us/events/dotnetconf-focus-on-microservices/beyond-rest-and-rpc-asynchronous-eventing-and-messaging-patterns
-[7]: https://opentelemetry.io/docs/reference/specification/trace/api/#add-events
-[8]: https://github.com/tersesystems/echopraxia#custom-field-builders
-[9]: https://blog.adamgamboa.dev/understanding-jax-rs-filters/
-[10]: https://www.graylog.org/features/gelf
-[11]: https://github.com/containers/gvisor-tap-vsock
-[12]: https://www.baeldung.com/cdi-interceptor-vs-spring-aspectj
-[13]: https://www.jaegertracing.io/
-[14]: https://reflectoring.io/structured-logging/
-[15]: https://kafka.apache.org/
-[16]: https://www.elastic.co/kibana/
-[17]: https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
-[18]: https://en.wikipedia.org/wiki/Logging
-[19]: https://en.wikipedia.org/wiki/Logging
-[20]: https://logback.qos.ch/manual/mdc.hml
-[21]: https://opentelemetry.io
-[22]: https://opentracing.io/
-[23]: https://podman.io/
-[24]: https://github.com/quarkiverse/quarkus-logging-json
-[25]: https://quarkus.io/
-[26]: https://smallrye.io/
-[27]: https://opentelemetry.lightstep.com/spans/
-[28]: https://www.oreilly.com/library/view/distributed-systems-observability/9781492033431/ch04.html
-[29]: https://en.wikipedia.org/wiki/Tracing_(software)
