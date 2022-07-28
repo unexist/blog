@@ -35,7 +35,7 @@ remote-control a web browser.
 That said, I had a few glances at this stack again.
 And after some more reading, I settled on {2}[watir]: and {3}[chromedriver].
 
-=== Watir
+== Watir
 
 The API of {2}[watir] is really amazing and easy to use:
 
@@ -61,7 +61,7 @@ browser.link(visible_text: /GitHub/).when_present.click
 The above example looks for a link with *GitHub* in its visible text and click it, when present.
 Easy as that.
 
-=== Headless?
+== Headless?
 
 One problem solved, this runs nicely on my *local* machine. Now it would be best, if I can just
 deploy it on a server without installing the whole docker stack.

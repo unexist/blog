@@ -88,7 +88,7 @@ work:
     <groupId>io.helidon.build-tools</groupId>
     <artifactId>helidon-cli-maven-plugin</artifactId>
     <version>${helidon-cli-plugin.version}</version>
-    <extensions>true</extensions> <!-- 1 -->
+    <extensions>true</extensions> <!--1-->
 </plugin>
 ----
 <1> This is all that is required.
