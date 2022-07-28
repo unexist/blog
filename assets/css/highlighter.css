@@ -1,6 +1,6 @@
 /*! darkrobot; http://bytefluent.com/devify/ */
 .highlight, .highlight pre, .highlight table { background: #000000 !important; color: #FFFFFF !important; }
-.highlight .hll { background-color: #ffffcc !important; }
+.highlight .hll { background-color: #ffffcc; }
 .highlight .c { color: #B8B8B8 !important; } /* Comment */
 .highlight .err { color: #FFFFFF !important; } /* Error */
 .highlight .g { color: #FFFFFF !important; } /* Generic */

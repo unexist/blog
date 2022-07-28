@@ -4,7 +4,8 @@
     --font-color2: #aaa;
     --link-color: #8cf;
     --link-visited: #dac5ff;
-    --highlight-color: #ff8000;
+    --hover-color: #ffffcc;
+    --highlight-color: #ffffcc;
     --border-color: #446979;
     --top-color: #313536;
     --bottom-color: #1D2021;
@@ -250,7 +251,7 @@ a:link, a:visited {
 }
 
 a:hover {
-    color: var(--highlight-color);
+    color: var(--hover-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -509,6 +510,11 @@ b.conum * {
 
 p.tableblock {
     margin: 0px;
+}
+
+.highlight .hll {
+    background-color: transparent !important;
+    color: var(--highlight-color);
 }
 
 /* Responsiveness */
