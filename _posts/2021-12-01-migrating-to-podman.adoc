@@ -540,4 +540,3 @@ I never did something like this with {2}[Docker], would have saved me quite some
 My logging-vs-tracing showcase can be found here:
 
 <https://github.com/unexist/showcase-logging-tracing-quarkus>
-
