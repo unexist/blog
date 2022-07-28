@@ -168,7 +168,6 @@ footer a:hover {
 
 /* Sidebar */
 #sidebar {
-    flex-basis: 175px;
     flex-grow: 0;
     flex-shrink: 0;
 }
