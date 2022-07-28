@@ -577,7 +577,7 @@ public class TracedInterceptor {
 
 == Conclusion
 
-{19}[Logging] and {29}[tracing] aren't mutual exclusive, they both help to pinpoint problems and
+{19}[Logging] and {29}[tracing] aren\'t mutual exclusive, they both help to pinpoint problems and
 provide a different view of the same picture with a complementary set of information.
 
 |===
