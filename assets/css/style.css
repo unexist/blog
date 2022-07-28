@@ -507,6 +507,10 @@ b.conum * {
     margin-bottom: var(--margin-top);
 }
 
+p.tableblock {
+    margin: 0px;
+}
+
 /* Responsiveness */
 @media screen and (max-width: 1090px) {
 
