@@ -21,10 +21,12 @@ layout: default
         </div>
     </div>
 
+    {% if page.toc %}
     <div id="table-of-contents">
         <span id="toc-header">In this article</span>
         {% toc %}
     </div>
+    {% endif %}
 
     {{ content }}
 </div>
