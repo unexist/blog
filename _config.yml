@@ -30,8 +30,14 @@ github_username:  unexist
 theme: minima
 highlighter: rouge
 plugins:
+  - jekyll-asciidoc
   - jekyll-feed
   - jekyll-toc
+
+asciidoctor:
+  attributes:
+    - icons=font
+    - source-highlighter=rouge
 
 category_page_layout: category_page
 category_page_dir: category
