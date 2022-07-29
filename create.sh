@@ -1,7 +1,6 @@
 #!/bin/zsh
-
 TITLE="$*"
-FILE="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`.md"
+FILE="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`.adoc"
 
 cat > "_drafts/$FILE" <<EOF
 ---
@@ -14,4 +13,5 @@ tags: showcase
 categories: showcase
 toc: true
 ---
+:imagesdir: /assets/images/${FILE}
 EOF
