@@ -8,7 +8,8 @@ categories: tech showcase
 toc: true
 ---
 
-```xml
+[source,xml]
+----
 <dependency>
     <groupId>io.micronaut</groupId>
     <artifactId>micronaut-inject</artifactId>
@@ -26,7 +27,7 @@ toc: true
     <version>${micronaut-jaxrs-processor.version}</version>
     <scope>compile</scope>
 </dependency>
-```
+----
 
 Response => HttpResponse
 
@@ -45,19 +46,22 @@ The parameters 'mainClass' for goal io.micronaut.build:micronaut-maven-plugin:3.
 
 Caused by: java.lang.RuntimeException: java.lang.NoClassDefFoundError: javax/annotation/Nullable
 
-```xml
+[source,xml]
+----
 <dependency>
     <groupId>javax.annotation</groupId>
     <artifactId>javax.annotation-api</artifactId>
     <scope>compile</scope>
 </dependency>
-```
+----
 
-```log
+[source,log]
+----
 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
 ````
 
-```xml
+[source,xml]
+----
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-shade-plugin</artifactId>
@@ -73,4 +77,4 @@ Caused by: java.lang.RuntimeException: java.lang.NoClassDefFoundError: javax/ann
         </filters>
     </configuration>
 </plugin>
-```
+----
