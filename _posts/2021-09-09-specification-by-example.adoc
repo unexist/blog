@@ -182,7 +182,7 @@ Let us check how {17}[FitNesse] tries to solve these problems.
 access to the test cases, definitions and results in a unique way:
 It comes bundled with a standalone {18}[wiki engine] and can be accessed with any browser:
 
-![image](/assets/images/specification_by_example/fitnesse_wiki_before.png)
+image::fitnesse_wiki_before.png[]
 
 Before you ask, yes you can also run it headless in case you want to integrate it into a CI
 pipeline. *We all know that you want to do that, right?*
