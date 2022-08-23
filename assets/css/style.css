@@ -302,6 +302,10 @@ hr {
     border-style: solid;
 }
 
+.line-through {
+    text-decoration-line: line-through;
+}
+
 /* Jekyll */
 .post-list li {
     padding-top: var(--padding);
