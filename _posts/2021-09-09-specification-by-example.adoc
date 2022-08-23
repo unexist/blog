@@ -54,8 +54,9 @@ Here I want to write about something that I also found interesting, namely {2}[A
 So what do we have here? After reading the second linked {3}[Wikipedia] article you should be pretty
 much covered, but let me still explain it in layman's terms:
 
-Acceptance tests are tests, that help to ~~prove~~ verify, that a story or more in general some
-feature is ready for production and this unit of work is done. So far, so good.
+Acceptance tests are tests, that help to [line-through]#prove# verify, that a story or more in
+general some feature is ready for production and this unit of work is done.
+So far, so good.
 
 Now the tricky question: **When are these tests defined and by whom actually?**
 
