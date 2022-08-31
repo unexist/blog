@@ -10,6 +10,195 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
+=== Cucumber
+
+[source,cucumber]
+----
+Feature: Create a todo
+
+  Scenario Outline: Create a todo with title and description and check the id.
+    Given I create a todo
+    When its title is "<title>"
+    And its description is "<description>"
+    Then its id should be <id>
+
+    Examples:
+      | title  | description  | id |
+      | title1 | description1 | 1  |
+      | title2 | description2 | 2  |
+----
+
+[source,cucumber]
+----
+  Scenario Outline: Create a todo with start and due dates and check the status.
+    Given I create a todo
+    When it starts on "<start>"
+    And it ends on "<due>"
+    Then it should be marked as <status>
+
+    Examples:
+      | start      | due        | status  |
+      | 2021-09-10 | 2022-09-10 | undone  |
+      | 2021-09-10 | 2021-09-09 | done    |
+----
+
+[source,java]
+----
+public class TodoSteps {
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private RequestSpecification requestSpec;
+    private TodoBase todoBase;
+    private DueDate dueDate;
+
+    @Before
+    public void beforeScenario() {
+        this.requestSpec = new RequestSpecBuilder()
+                .setPort(8081)
+                .setContentType(ContentType.JSON)
+                .setAccept(ContentType.JSON)
+                .build();
+    }
+
+    @Given("I create a todo")
+    public void given_create_todo() {
+        this.todoBase = new TodoBase();
+        this.dueDate = new DueDate();
+    }
+
+    /* Scenario 1 */
+
+    @When("its title is {string}")
+    public void when_set_title(String title) {
+        this.todoBase.setTitle(title);
+    }
+
+    @And("its description is {string}")
+    public void and_set_description(String description) {
+        this.todoBase.setDescription(description);
+    }
+
+    @Then("its id should be {int}")
+    public void then_get_id(int id) {
+        String location = given(this.requestSpec)
+            .when()
+                .body(this.todoBase)
+                .post("/todo")
+            .then()
+                .statusCode(201)
+            .and()
+                .extract().header("location");
+
+        assertThat(location.substring(location.lastIndexOf("/") + 1))
+                .isEqualTo(Integer.toString(id));
+    }
+
+    /* Scenario 2 */
+
+    @When("it starts on {string}")
+    public void when_set_start_date(String datestr) {
+        if (StringUtils.isNotEmpty(datestr)) {
+            this.dueDate.setStart(LocalDate.parse(datestr, this.dtf));
+        }
+    }
+
+    @And("it ends on {string}")
+    public void and_set_due_date(String datestr) {
+        if (StringUtils.isNotEmpty(datestr)) {
+            this.dueDate.setDue(LocalDate.parse(datestr, this.dtf));
+        }
+    }
+
+    @Then("it should be marked as {status}")
+    public void then_get_status(boolean status) {
+        this.todoBase.setDueDate(this.dueDate);
+
+        assertThat(status).isEqualTo(this.todoBase.getDone());
+    }
+
+    @ParameterType("done|undone")
+    public boolean status(String status) {
+        return "done".equalsIgnoreCase(status);
+    }
+}
+----
+
+=== Karate
+
+[source,cucumber]
+----
+Feature: Create a todo
+
+  Background:
+    * url 'http://localhost:8081'
+
+  Scenario Outline: Create a todo with title and description and check the id.
+    Given path 'todo'
+    And request
+    """
+    {
+      "description": <description>,
+      "done": true,
+      "dueDate": {
+        "due": "2021-05-07",
+        "start": "2021-05-07"
+      },
+      "title": <title>
+    }
+    """
+    When method post
+    Then match header location ==  "#regex .*/todo/<id>"
+
+    Examples:
+      | title    | description    | id |
+      | 'title1' | 'description1' | 1  |
+      | 'title2' | 'description2' | 2  |
+----
+
+[source,cucumber]
+----
+  Scenario Outline: Create a todo with start and due dates and check the status.
+    Given def createTodo =
+    """
+    function(args) {
+      var TodoType = Java.type("dev.unexist.showcase.todo.domain.todo.Todo");
+      var DueDateType = Java.type("dev.unexist.showcase.todo.domain.todo.DueDate");
+      var DateTimeFormatterType = Java.type("java.time.format.DateTimeFormatter");
+      var LocalDateType = Java.type("java.time.LocalDate");
+
+      var dtf = DateTimeFormatterType.ofPattern("yyyy-MM-dd");
+
+      var dueDate = new DueDateType();
+
+      dueDate.setStart(LocalDateType.parse(args.startDate, dtf));
+      dueDate.setDue(LocalDateType.parse(args.dueDate, dtf));
+
+      var todo = new TodoType();
+
+      todo.setDueDate(dueDate);
+
+      return todo.getDone() ? "done" : "undone";
+    }
+    """
+    When def result = call createTodo { startDate: <start>, dueDate: <due> }
+    Then match result == "<status>"
+
+    Examples:
+      | start      | due        | status |
+      | 2021-09-10 | 2022-09-10 | undone |
+      | 2021-09-10 | 2021-09-09 | done   |
+----
+
+[source,java]
+----
+public class TodoKarateFixture {
+
+    @Karate.Test
+    Karate shouldValidateTodo() {
+        return Karate.run("todo").relativeTo(getClass());
+    }
+}
+----
+
 [source,log]
 ----
 01: undone
@@ -24,7 +213,7 @@ classpath:dev/unexist/showcase/todo/domain/todo/todo.feature:52
 
 == Conclusion
 
-I've added [Karate][] to my showcase about acceptance testing and you can find it int he usual
-place:
+I've added all the mentioned [Karate][] examples to my acceptance testing showcase and you can find
+it in the usual place:
 
 <https://github.com/unexist/showcase-acceptance-testing-quarkus>
