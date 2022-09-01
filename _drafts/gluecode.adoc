@@ -1,6 +1,6 @@
 ---
 layout: post
-title: gluecode
+title: Gluecode?
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -10,7 +10,20 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
-=== Cucumber
+[Acceptance testing][] is one of the things I am highly interested in and if you browse through the
+posts of this blog you are going to find one or another post about the whole idea, some
+noteworthy tools and of course, reporting.
+
+One aspect I barely touched so far is how do we bring the actual behavioral tests and the software
+under test (SUT) together?
+
+I'd say with glue - but let us talk about [gluecode][] first.
+
+== What is gluecode?
+
+[Gluecode][]
+
+== Cucumber
 
 [source,gherkin]
 ----
@@ -122,7 +135,7 @@ public class TodoSteps {
 }
 ----
 
-=== Karate
+== Karate
 
 [source,gherkin]
 ----
