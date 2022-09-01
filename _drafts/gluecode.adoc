@@ -30,7 +30,7 @@ allow knowledge about the internals of the **SUT**.
 
 All of my showcases use the same (I wonder if it is a [kata][] already?) application
 slightly modified for the specific thing I want to explain - so I bet you've seen your share of
-little todo applications already there should be few suprirses:
+little todo applications already and there should be few surprises:
 
 [source,gherkin]
 ----
@@ -48,12 +48,59 @@ Feature: Create a todo
       | title2 | description2 | 2  |
 ----
 
+CAUTION: Here we assume the ids are related to the domain and not technically at all..
+
 == Where is the glue?
 
-[Gluecode][]
+[source,java]
+----
+public class TodoSteps {
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private RequestSpecification requestSpec;
+    private TodoBase todoBase;
+    private DueDate dueDate;
 
-== Cucumber
+    @Before
+    public void beforeScenario() {
+        this.requestSpec = new RequestSpecBuilder()
+                .setPort(8081)
+                .setContentType(ContentType.JSON)
+                .setAccept(ContentType.JSON)
+                .build();
+    }
 
+    @Given("I create a todo")
+    public void given_create_todo() {
+        this.todoBase = new TodoBase();
+        this.dueDate = new DueDate();
+    }
+
+    @When("its title is {string}")
+    public void when_set_title(String title) {
+        this.todoBase.setTitle(title);
+    }
+
+    @And("its description is {string}")
+    public void and_set_description(String description) {
+        this.todoBase.setDescription(description);
+    }
+
+    @Then("its id should be {int}")
+    public void then_get_id(int id) {
+        String location = given(this.requestSpec)
+            .when()
+                .body(this.todoBase)
+                .post("/todo")
+            .then()
+                .statusCode(201)
+            .and()
+                .extract().header("location");
+
+        assertThat(location.substring(location.lastIndexOf("/") + 1))
+                .isEqualTo(Integer.toString(id));
+    }
+}
+----
 
 
 [source,gherkin]
