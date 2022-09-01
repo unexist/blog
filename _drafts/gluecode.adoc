@@ -60,6 +60,9 @@ Now it is time for the glue.
 [Gluecode][] is basically every line of code, that is required to combine the [Gherkin][] from above
 in a meaningful way with our software.
 
+The [JVM bindings][] provide annotations, which can be used to define handling methods for the
+keywords.
+
 [source,java]
 ----
 public class TodoSteps {
