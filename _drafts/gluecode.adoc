@@ -12,7 +12,7 @@ toc: true
 
 === Cucumber
 
-[source,cucumber]
+[source,gherkin]
 ----
 Feature: Create a todo
 
@@ -28,7 +28,7 @@ Feature: Create a todo
       | title2 | description2 | 2  |
 ----
 
-[source,cucumber]
+[source,gherkin]
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
     Given I create a todo
@@ -124,7 +124,7 @@ public class TodoSteps {
 
 === Karate
 
-[source,cucumber]
+[source,gherkin]
 ----
 Feature: Create a todo
 
@@ -154,7 +154,7 @@ Feature: Create a todo
       | 'title2' | 'description2' | 2  |
 ----
 
-[source,cucumber]
+[source,gherkin]
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
     Given def createTodo =
