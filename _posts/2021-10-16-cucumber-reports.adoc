@@ -5,7 +5,7 @@ date: 2021-10-16 15:57 +0200
 last_updated: 2021-10-16 15:57 +0200
 author: Christoph Kappel
 tags: tools testing specification-by-example cucumber showcase
-categories: testing showcase
+categories: testing bdd showcase
 toc: true
 ---
 :imagesdir: /assets/images/cucumber_reports/

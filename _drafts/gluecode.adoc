@@ -5,7 +5,7 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: cucumber karate showcase
-categories: showcase
+categories: testing bdd showcase
 toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
