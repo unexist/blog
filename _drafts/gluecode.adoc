@@ -17,13 +17,20 @@ noteworthy tools and of course, reporting.
 One aspect I barely touched so far is how do we bring the actual behavioral tests and the software
 under test (SUT) together?
 
-I'd say with glue - but let us talk about [gluecode][] first.
+I'd say with glue - but let us set the stage first and talk about what we going to do.
 
-== What is gluecode?
+== Set the stage
 
-[Gluecode][]
+The general idea of [behavior-driven design][] is to develop a [domain-specific language][], which
+allows us to describe and verify our direct use case, without further knowledge of the technology
+behind it.
 
-== Cucumber
+NOTE: This is also called a **blackbox test** - in contrast to **whitebox tests**, that explicitly
+allow knowledge about the internals of the **SUT**.
+
+All of my showcases use the same (I wonder if it is a [kata][] already?) application
+slightly modified for the specific thing I want to explain - so I bet you've seen your share of
+little todo applications already there should be few suprirses:
 
 [source,gherkin]
 ----
@@ -40,6 +47,14 @@ Feature: Create a todo
       | title1 | description1 | 1  |
       | title2 | description2 | 2  |
 ----
+
+== Where is the glue?
+
+[Gluecode][]
+
+== Cucumber
+
+
 
 [source,gherkin]
 ----
