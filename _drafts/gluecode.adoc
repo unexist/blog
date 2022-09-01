@@ -57,6 +57,9 @@ Now it is time for the glue.
 
 == Where is the glue?
 
+[Gluecode][] is basically every line of code, that is required to combine the [Gherkin][] from above
+in a meaningful way with our software.
+
 [source,java]
 ----
 public class TodoSteps {
