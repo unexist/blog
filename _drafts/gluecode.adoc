@@ -50,6 +50,11 @@ Feature: Create a todo
 
 CAUTION: Here we assume the ids are related to the domain and not technically at all..
 
+The [Gherkin][] language comes with a few keywords and with it we can create meaningful sentences
+and some syntactically nicer additions like tables with examples.
+
+Now it is time for the glue.
+
 == Where is the glue?
 
 [source,java]
