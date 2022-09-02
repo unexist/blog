@@ -21,21 +21,21 @@ I'd say with glue - but let us set the stage first and talk about what we going 
 
 == Set the stage
 
-The general idea of [behavior-driven design][] is to develop a [domain-specific language][], which
-allows us to describe and verify our direct use case, without further knowledge of the technology
-behind it.
+The general idea of [behavior-driven design][] is to define and later verify the behavior of a
+software component without further knowledge of the technology and internal workings behind it.
 
 This is also called a **blackbox test** - in contrast to **whitebox tests**, that explicitly
 allow knowledge about the internals of the **SUT**.
 
 That's the theory, let us apply this to an example.
 
-== First use case
+== Use case: Create a todo
 
 All of my showcases follow an overarching scheme - a simple todo application that is accessible
-via a [REST][] endpoint and allows the creation of todo entries.
+via a [REST][] endpoint and allows the creation of todo entries - so we are going to look into the
+first use case how to create a new todo entry.
 
-So our first use case is the creation of todo entries based on a given `title` and a `description`:
+When we pass a `title` and a `description` to our service it responds to use with a new `id`:
 
 [source,gherkin]
 ----
@@ -55,8 +55,8 @@ Feature: Create a todo
 
 CAUTION: Here we assume the ids are related to the domain and not technically at all..
 
-The [Gherkin][] language comes with a few keywords and with it we can create meaningful sentences
-and some syntactically nicer additions like tables with examples.
+The example above uses the [Gherkin][] syntax and allows use to create meaningful sentences
+and comes with other niceties like example tables.
 
 Now it is time for the glue.
 
