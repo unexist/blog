@@ -14,8 +14,8 @@ toc: true
 posts of this blog you are going to find one or another post about the whole idea, some
 noteworthy tools and of course, reporting.
 
-One aspect I barely touched so far is how do we bring the actual behavioral tests and the software
-under test (SUT) together?
+One aspect I barely touched so far is how do we bring the actual behavioral tests and the
+[system under test][] (SUT) together?
 
 I'd say with glue - but let us set the stage first and talk about what we going to do.
 
@@ -25,12 +25,17 @@ The general idea of [behavior-driven design][] is to develop a [domain-specific 
 allows us to describe and verify our direct use case, without further knowledge of the technology
 behind it.
 
-NOTE: This is also called a **blackbox test** - in contrast to **whitebox tests**, that explicitly
+This is also called a **blackbox test** - in contrast to **whitebox tests**, that explicitly
 allow knowledge about the internals of the **SUT**.
 
-All of my showcases use the same (I wonder if it is a [kata][] already?) application
-slightly modified for the specific thing I want to explain - so I bet you've seen your share of
-little todo applications already and there should be few surprises:
+That's the theory, let us apply this to an example.
+
+== First use case
+
+All of my showcases follow an overarching scheme - a simple todo application that is accessible
+via a [REST][] endpoint and allows the creation of todo entries.
+
+So our first use case is the creation of todo entries based on a given `title` and a `description`:
 
 [source,gherkin]
 ----
@@ -57,8 +62,8 @@ Now it is time for the glue.
 
 == Where is the glue?
 
-[Gluecode][] is basically every line of code, that is required to combine the [Gherkin][] from above
-in a meaningful way with our software.
+[Gluecode][] is basically every line of code, that is required to combine the [Gherkin][] code from
+above in a meaningful way with our software.
 
 The [JVM bindings][] provide annotations, which can be used to define handling methods for the
 keywords.
