@@ -21,11 +21,10 @@ I'd say with glue - but let us set the stage first and talk about what we going 
 
 == Set the stage
 
-The general idea of [behavior-driven design][] is to define and later verify the behavior of a
-software component without further knowledge of the technology and internal workings behind it.
-
-This is also called a **blackbox test** - in contrast to **whitebox tests**, that explicitly
-allow knowledge about the internals of the **SUT**.
+The general idea of [behavior-driven design][] is to consider a software component as a
+**blackbox** and describe (and later verify) the observable behavior without any knowledge of
+its internal workings or the chosen technology - this is in contrast to other tests, which use
+a **whiebox** approach.
 
 That's the theory, let us apply this to an example.
 
