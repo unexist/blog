@@ -39,8 +39,6 @@ The first use case we are going to look into is the creation of a new entry.
 In order to do that, we have to pass a `title` and a `description` over to our endpoint and verify,
 if we receive the `id` of a newly created entry.
 
-NOTE: Here we assume the id is related to the domain and not technically at all.
-
 [source,gherkin]
 ----
 Feature: Create a todo
@@ -62,6 +60,7 @@ It uses [Gherkin][] to create a natural language and allows some niceties like e
 a really easy format.
 
 Here we stumble upon our first problem - how do we actually verify, if our request succeeded?
+
 It is time for the glue now!
 
 == Where is the glue?
