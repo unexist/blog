@@ -19,26 +19,25 @@ One aspect I barely touched so far is how do we bring the actual behavioral test
 
 I'd say with glue - but let us set the stage first and talk about what we going to do.
 
-== Set the stage
+== A bit of theory
 
 The general idea of [behavior-driven design][] is to consider a software component as a
 **blackbox** and describe (and later verify) the observable behavior without any knowledge of
-its internal workings or the chosen technology - this is in contrast to other tests, which use
+its internal workings or the chosen technology - this is in contrast to other tests, which follow
 a **whitebox** approach.
 
 That's the theory, let us apply this to an example.
 
 == Use case: Create a todo
 
-My showcases usually follow an overarching scheme - so if you haven't seen one of them you can
-basically expect the same simple application in each of them.
-
+My showcases usually follow the same overarching scheme - so if you haven't seen one of them you
+can basically expect the same simple application in each of them.
 This simple application provides a [REST][] endpoint to create todo entries and also offers some
 other methods of interacting with them.
 
-The first use case we are going to look into is the creation of the entries by passing a `title`
-and a `description` over to our endpoint and verify, if we somehow receive the `id` of the newly
-created entry.
+The first use case we are going to look into is the creation of a new entry.
+In order to do that, we have to pass a `title` and a `description` over to our endpoint and verify,
+if we receive the `id` of a newly created entry.
 
 NOTE: Here we assume the id is related to the domain and not technically at all.
 
