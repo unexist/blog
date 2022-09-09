@@ -61,11 +61,11 @@ niceties like example tables in a really easy format.
 
 Here we stumble upon our first problem - how do we actually verify, if our request succeeded?
 
-It is time for the glue now!
+== Time for glue
 
-== Where is the glue?
+[Gluecode][] is the layer between the steps and the actual line of code of our domain,
 
-[Gluecode][] is basically every line of code, that is required to combine the [Gherkin][] code from
+ line of code, that is required to combine the [Gherkin][] code from
 above in a meaningful way with our software.
 
 The [JVM bindings][] provide annotations, which can be used to define handling methods for the
@@ -88,23 +88,23 @@ public class TodoSteps {
                 .build();
     }
 
-    @Given("I create a todo")
+    @Given("I create a todo") // <1>
     public void given_create_todo() {
         this.todoBase = new TodoBase();
         this.dueDate = new DueDate();
     }
 
-    @When("its title is {string}")
+    @When("its title is {string}") // <2>
     public void when_set_title(String title) {
         this.todoBase.setTitle(title);
     }
 
-    @And("its description is {string}")
+    @And("its description is {string}") // <3>
     public void and_set_description(String description) {
         this.todoBase.setDescription(description);
     }
 
-    @Then("its id should be {int}")
+    @Then("its id should be {int}") // <4>
     public void then_get_id(int id) {
         String location = given(this.requestSpec)
             .when()
