@@ -19,19 +19,23 @@ One aspect I barely touched so far is how do we bring the actual behavioral test
 
 I'd say with glue - but let us set the stage first and talk about what we going to do.
 
-== A bit of theory
+== A small recap
 
 The general idea of [behavior-driven design][] is to consider a software component as a
 **blackbox** and describe (and later verify) the observable behavior without any knowledge of
 its internal workings or the chosen technology - this is in contrast to other tests, which follow
 a **whitebox** approach.
 
-That's the theory, let us apply this to an example.
+Naturally, a [test-driven development][] approach works well here, but there really is no hard
+requirement for this.
+So even if our code already exists and/or we try to cover the behavior of our existing legacy
+application, there it is still beneficial to explore its behavior and even more important to create
+a document, that describes what a piece of code is supposed to - supported by actual examples.
+
+The next few examples are taken from my showcase, which follows the same overarching scheme.
 
 == Use case: Create a todo
 
-My showcases usually follow the same overarching scheme - so if you haven't seen one of them you
-can basically expect the same simple application in each of them.
 This simple application provides a [REST][] endpoint to create todo entries and also offers some
 other methods of interacting with them.
 
@@ -56,12 +60,14 @@ Feature: Create a todo
 ----
 
 The example above uses [Gherkin][] to create a natural language for our domain.
-It consists of easy to understand steps like `given`, `when` and `then` and also allows other
-niceties like example tables in a really easy format.
+It comes with helpers to match some given steps like `given`, `when` and `then`
+and also allows other niceties like example tables in a really easy format.
 
-Here we stumble upon our first problem - how do we actually verify, if our request succeeded?
+So far so gut - how do we actually verify, if our request succeeded?
 
 == Time for glue
+
+Under the hood, [Cucumber][] is
 
 [Gluecode][] is the layer between the steps and the actual line of code of our domain,
 
