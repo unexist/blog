@@ -10,8 +10,6 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
-
-
 [Acceptance testing][] is one of the things I am highly interested in and if you browse through the
 posts of this blog you are going to find one or another post about the whole idea, some
 noteworthy tools and of course, reporting.
@@ -42,17 +40,18 @@ So far the theory - let us apply that to an example.
 
 == Use case: Create a todo
 
-We start with a simple todo application, which provides a simple [REST][] endpoint to create todo
-entries and to interact with them.
+We start with a simple todo application and a [REST][] endpoint to create todo entries and to
+interact with them.
 
 The creation is pretty easy, we just have to pass a `title` and a `description` over to our
 endpoint and verify, if we receive the `id` of a newly created entry.
 
 === Cucumber
 
-The example above uses [Gherkin][] to create a natural language for our domain.
-It comes with helpers to match some given steps like `given`, `when` and `then`
-and also allows other niceties like example tables in a really easy format.
+In our first example we are going to use [Gherkin][], to create a natural language for our domain
+for our domain experts and developers to understand each other.
+
+NOTE: This concept is also called [Ubiquitous Language][] in the context of [Domain-driven Design][].
 
 [source,gherkin]
 ----
@@ -70,9 +69,11 @@ Feature: Create a todo
       | title2 | description2 | 2  |
 ----
 
+I think this is pretty straight forward and in this post we want to focus on the overall idea
+of gluecode and not the actual [Gherkin][] format.
+So if you struggle to understand the lines above, please have a look at this [primer][] first.
 
-
-So far so gut - how do we actually verify, if our request succeeded?
+So far so gut - but where is the actual work done?
 
 == Time for glue
 
