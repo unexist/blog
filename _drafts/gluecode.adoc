@@ -38,15 +38,15 @@ NOTE: These kind of tests are called [characterization tests][] in the book
 
 So far the theory - let us apply that to an example.
 
-== Use case: Create a todo
+== Use cases
 
 We start with a simple todo application and a [REST][] endpoint to create todo entries and to
 interact with them.
 
+=== Use case #1: Create a todo with title and description
+
 The creation is pretty easy, we just have to pass a `title` and a `description` over to our
 endpoint and verify, if we receive the `id` of a newly created entry.
-
-=== Cucumber
 
 In our first example we are going to use [Gherkin][], to create a natural language for our domain
 for our domain experts and developers to understand each other.
@@ -73,19 +73,15 @@ I think this is pretty straight forward and in this post we want to focus on the
 of gluecode and not the actual [Gherkin][] format.
 So if you struggle to understand the lines above, please have a look at this [primer][] first.
 
-So far so gut - but where is the actual work done?
+==== Cucumber
 
-== Time for glue
+Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
+matters it is exactly that.
+In your code you basically tell it, what method has to be called whenever a given line appears in
+your feature files.
 
-Under the hood, [Cucumber][] is
-
-[Gluecode][] is the layer between the steps and the actual line of code of our domain,
-
- line of code, that is required to combine the [Gherkin][] code from
-above in a meaningful way with our software.
-
-The [JVM bindings][] provide annotations, which can be used to define handling methods for the
-keywords.
+There are many different [language bindings][] available, but again let us focus on the one for
+the [JVM][]:
 
 [source,java]
 ----
@@ -137,102 +133,7 @@ public class TodoSteps {
 }
 ----
 
-
-[source,gherkin]
-----
-  Scenario Outline: Create a todo with start and due dates and check the status.
-    Given I create a todo
-    When it starts on "<start>"
-    And it ends on "<due>"
-    Then it should be marked as <status>
-
-    Examples:
-      | start      | due        | status  |
-      | 2021-09-10 | 2022-09-10 | undone  |
-      | 2021-09-10 | 2021-09-09 | done    |
-----
-
-[source,java]
-----
-public class TodoSteps {
-    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private RequestSpecification requestSpec;
-    private TodoBase todoBase;
-    private DueDate dueDate;
-
-    @Before
-    public void beforeScenario() {
-        this.requestSpec = new RequestSpecBuilder()
-                .setPort(8081)
-                .setContentType(ContentType.JSON)
-                .setAccept(ContentType.JSON)
-                .build();
-    }
-
-    @Given("I create a todo")
-    public void given_create_todo() {
-        this.todoBase = new TodoBase();
-        this.dueDate = new DueDate();
-    }
-
-    /* Scenario 1 */
-
-    @When("its title is {string}")
-    public void when_set_title(String title) {
-        this.todoBase.setTitle(title);
-    }
-
-    @And("its description is {string}")
-    public void and_set_description(String description) {
-        this.todoBase.setDescription(description);
-    }
-
-    @Then("its id should be {int}")
-    public void then_get_id(int id) {
-        String location = given(this.requestSpec)
-            .when()
-                .body(this.todoBase)
-                .post("/todo")
-            .then()
-                .statusCode(201)
-            .and()
-                .extract().header("location");
-
-        assertThat(location.substring(location.lastIndexOf("/") + 1))
-                .isEqualTo(Integer.toString(id));
-    }
-
-    /* Scenario 2 */
-
-    @When("it starts on {string}")
-    public void when_set_start_date(String datestr) {
-        if (StringUtils.isNotEmpty(datestr)) {
-            this.dueDate.setStart(LocalDate.parse(datestr, this.dtf));
-        }
-    }
-
-    @And("it ends on {string}")
-    public void and_set_due_date(String datestr) {
-        if (StringUtils.isNotEmpty(datestr)) {
-            this.dueDate.setDue(LocalDate.parse(datestr, this.dtf));
-        }
-    }
-
-    @Then("it should be marked as {status}")
-    public void then_get_status(boolean status) {
-        this.todoBase.setDueDate(this.dueDate);
-
-        assertThat(status).isEqualTo(this.todoBase.getDone());
-    }
-
-    @ParameterType("done|undone")
-    public boolean status(String status) {
-        return "done".equalsIgnoreCase(status);
-    }
-}
-----
-
-== Karate
+==== Karate
 
 [source,gherkin]
 ----
@@ -263,6 +164,77 @@ Feature: Create a todo
       | 'title1' | 'description1' | 1  |
       | 'title2' | 'description2' | 2  |
 ----
+
+=== Use case #2: Create a todo with start and due date
+
+[source,gherkin]
+----
+  Scenario Outline: Create a todo with start and due dates and check the status.
+    Given I create a todo
+    When it starts on "<start>"
+    And it ends on "<due>"
+    Then it should be marked as <status>
+
+    Examples:
+      | start      | due        | status  |
+      | 2021-09-10 | 2022-09-10 | undone  |
+      | 2021-09-10 | 2021-09-09 | done    |
+----
+
+==== Cucumber
+
+[source,java]
+----
+public class TodoSteps {
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private RequestSpecification requestSpec;
+    private TodoBase todoBase;
+    private DueDate dueDate;
+
+    @Before
+    public void beforeScenario() {
+        this.requestSpec = new RequestSpecBuilder()
+                .setPort(8081)
+                .setContentType(ContentType.JSON)
+                .setAccept(ContentType.JSON)
+                .build();
+    }
+
+    @Given("I create a todo")
+    public void given_create_todo() {
+        this.todoBase = new TodoBase();
+        this.dueDate = new DueDate();
+    }
+
+    @When("it starts on {string}")
+    public void when_set_start_date(String datestr) {
+        if (StringUtils.isNotEmpty(datestr)) {
+            this.dueDate.setStart(LocalDate.parse(datestr, this.dtf));
+        }
+    }
+
+    @And("it ends on {string}")
+    public void and_set_due_date(String datestr) {
+        if (StringUtils.isNotEmpty(datestr)) {
+            this.dueDate.setDue(LocalDate.parse(datestr, this.dtf));
+        }
+    }
+
+    @Then("it should be marked as {status}")
+    public void then_get_status(boolean status) {
+        this.todoBase.setDueDate(this.dueDate);
+
+        assertThat(status).isEqualTo(this.todoBase.getDone());
+    }
+
+    @ParameterType("done|undone")
+    public boolean status(String status) {
+        return "done".equalsIgnoreCase(status);
+    }
+}
+----
+
+==== Karate
 
 [source,gherkin]
 ----
@@ -296,29 +268,6 @@ Feature: Create a todo
       | start      | due        | status |
       | 2021-09-10 | 2022-09-10 | undone |
       | 2021-09-10 | 2021-09-09 | done   |
-----
-
-[source,java]
-----
-public class TodoKarateFixture {
-
-    @Karate.Test
-    Karate shouldValidateTodo() {
-        return Karate.run("todo").relativeTo(getClass());
-    }
-}
-----
-
-[source,log]
-----
-01: undone
-<<<<
-org.graalvm.polyglot.PolyglotException: ReferenceError: "undone" is not defined
-- <js>.:program(Unnamed:1)
-
-classpath:dev/unexist/showcase/todo/domain/todo/todo.feature:52
-2022-08-31 14:47:33,699 WARNING [org.jun.pla.lau.cor.CompositeTestExecutionListener] (main) TestExecutionListener [org.apache.maven.surefire.junitplatform.RunListenerAdapter] threw exception for method: executionFinished(TestIdentifier [uniqueId = [engine:junit-platform-suite]/[suite:dev.unexist.showcase.todo.TestSuite]/[engine:junit-jupiter]/[class:dev.unexist.showcase.todo.domain.todo.TodoKarateFixture]/[test-factory:shouldValidateTodo()]/[dynamic-container:#1]/[dynamic-test:#3], parentId = [engine:junit-platform-suite]/[suite:dev.unexist.showcase.todo.TestSuite]/[engine:junit-jupiter]/[class:dev.unexist.showcase.todo.domain.todo.TodoKarateFixture]/[test-factory:shouldValidateTodo()]/[dynamic-container:#1], displayName = '[2.1:56] Create a todo with start and due dates and check the status.', legacyReportingName = 'shouldValidateTodo()[1][3]', source = FileSource [file = /Users/christoph.kappel/Projects/showcase-acceptance-testing-quarkus/todo-service-karate/target/test-classes/dev/unexist/showcase/todo/domain/todo/todo.feature, filePosition = FilePosition [line = 56, column = -1]], tags = [], type = TEST], TestExecutionResult [status = FAILED, throwable = org.opentest4j.AssertionFailedError: js failed:
->>>>
 ----
 
 ```
