@@ -10,14 +10,15 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
-[Acceptance testing][] is one of the things I am highly interested in and if you browse through the
-posts of this blog you are going to find one or another post about the whole idea, some
-noteworthy tools and of course, reporting.
+ I am lately more and more interested in [acceptance testing][] and if you browse through the
+posts of this blog you are going to find one or another post about the whole idea along with some
+noteworthy tooling.
 
-One aspect I barely touched so far is how do we bring the actual behavioral tests and the
-[system under test][] (SUT) together?
+One aspect I barely touched so far is how do we bring the actual tests and the
+[system under test][] (SUT) together and where should this code reside?
 
-I'd say with glue - but let us set the stage first and talk about what we going to do.
+So let us start with a small recap in case you have forgotten all about this - if not please head
+directly to the next chapter.
 
 == A small recap
 
