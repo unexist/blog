@@ -10,12 +10,12 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
- I am lately more and more interested in [acceptance testing][] and if you browse through the
+I am lately more and more interested in [acceptance testing][] and if you browse through the
 posts of this blog you are going to find one or another post about the whole idea along with some
 noteworthy tooling.
 
-One aspect I barely touched so far is how do we bring the actual tests and the
-[system under test][] (SUT) together and where should this code reside?
+One aspect I haven't touched so far far is how do we bring the actual tests and the
+[system under test][] (SUT) together and if we use code, where should it reside?
 
 So let us start with a small recap in case you have forgotten all about this - if not please head
 directly to the next chapter.
@@ -30,11 +30,11 @@ a **whitebox** approach.
 Naturally, a [test-driven development][] approach works pretty well here, but there really is no
 requirement to this or to start from scratch - on a green field.
 
-So even if our code already exists and you try to discover the behavior of our existing legacy
-application, it is still beneficial to explore this behavior and even more important to create
-a document, that describes what a piece of code is supposed to - supported by actual examples.
+On the other hand, when you are sitting in front of a huge pile of [line-through]#shi# code and
+are desperately trying to figure out what it should do exactly, it is still beneficial to explore
+the behavior and even more important to create a document supported by actual examples.
 
-NOTE: These kind of tests are called [characterization tests][] in the book
+NOTE: [Robert C. Martin][] calls these tests [characterization tests][] in his book
 [Working Effectively With Legacy Code][].
 
 So far the theory - let us apply that to an example.
