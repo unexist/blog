@@ -37,22 +37,20 @@ the behavior and even more important to create a document supported by actual ex
 NOTE: [Robert C. Martin][] calls these tests [characterization tests][] in his book
 [Working Effectively With Legacy Code][].
 
-So far the theory - let us apply that to an example.
+So far the theory - let us apply to examples.
 
 == Use cases
 
-We start with a simple todo application and a [REST][] endpoint to create todo entries and to
-interact with them.
+Our example is again just a simple todo application with a [REST][] endpoint to create and manage
+todo entries - bonus points if you are interested in an [OpenAPI][] documentation - so have a look
+[here][].
 
 === Use case #1: Create a todo with title and description
 
-The creation is pretty easy, we just have to pass a `title` and a `description` over to our
-endpoint and verify, if we receive the `id` of a newly created entry.
+The creation is pretty straight forward, we just have to pass a `title` and a `description` over
+to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-In our first example we are going to use [Gherkin][], to create a natural language for our domain
-for our domain experts and developers to understand each other.
-
-NOTE: This concept is also called [Ubiquitous Language][] in the context of [Domain-driven Design][].
+This can be easily translated to a [Gherkin][]-based feature file in _almost_ natural language:
 
 [source,gherkin]
 ----
@@ -70,14 +68,13 @@ Feature: Create a todo
       | title2 | description2 | 2  |
 ----
 
-I think this is pretty straight forward and in this post we want to focus on the overall idea
-of gluecode and not the actual [Gherkin][] format.
-So if you struggle to understand the lines above, please have a look at this [primer][] first.
+Equipped with this, let us compare how this can be done with [Cucumber][] and [Karate][].
 
 ==== Cucumber
 
 Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
-matters it is exactly that.
+matters it is exactly that. (Trust me on that - you can replace `given/when/then` with a
+simple `*` and it still works)
 In your code you basically tell it, what method has to be called whenever a given line appears in
 your feature files.
 
