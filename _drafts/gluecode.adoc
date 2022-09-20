@@ -50,7 +50,12 @@ todo entries - bonus points if you are interested in an [OpenAPI][] documentatio
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-This can be easily translated to a [Gherkin][]-based feature file in _almost_ natural language:
+Equipped with this, let us compare how this can be done with [Cucumber][] and [Karate][].
+
+==== Cucumber
+
+This feature be easily translated to a [Gherkin][]-based feature file in _almost_ natural
+language:
 
 [source,gherkin]
 ----
@@ -68,15 +73,9 @@ Feature: Create a todo
       | title2 | description2 | 2  |
 ----
 
-Equipped with this, let us compare how this can be done with [Cucumber][] and [Karate][].
-
-==== Cucumber
-
 Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
-matters it is exactly that. (Trust me on that - you can replace `given/when/then` with a
-simple `*` and it still works)
-In your code you basically tell it, what method has to be called whenever a given line appears in
-your feature files.
+matters it is exactly that. (__Trust me on that - you can replace each of `given/when/then` with a
+simple `*` and it still works__)
 
 There are many different [language bindings][] available, but again let us focus on the one for
 the [JVM][]:
@@ -130,6 +129,12 @@ public class TodoSteps {
     }
 }
 ----
+<1> On a match here create a new Todo object.
+<2> Set the title of our Todo object.
+<3> Also set its description.
+<4> And finally call the endpoint and assert whatever comes back.
+
+There are probably no surprises here - so let's jump to my solution for [Karate][].
 
 ==== Karate
 
@@ -165,6 +170,8 @@ Feature: Create a todo
 
 === Use case #2: Create a todo with start and due date
 
+==== Cucumber
+
 [source,gherkin]
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
@@ -178,8 +185,6 @@ Feature: Create a todo
       | 2021-09-10 | 2022-09-10 | undone  |
       | 2021-09-10 | 2021-09-09 | done    |
 ----
-
-==== Cucumber
 
 [source,java]
 ----
