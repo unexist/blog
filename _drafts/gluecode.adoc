@@ -50,6 +50,13 @@ todo entries - bonus points if you are interested in an [OpenAPI][] documentatio
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
+If we rephrase this to the lovely [Connextra][] format it could be something like this:
+
+----
+As a user, I want to create a new todo entry with title and description, so that it is stored
+with an unique ID for later retrieval.
+----
+
 Equipped with this, let us compare how this can be done with [Cucumber][] and [Karate][].
 
 ==== Cucumber
@@ -62,10 +69,10 @@ language:
 Feature: Create a todo
 
   Scenario Outline: Create a todo with title and description and check the id.
-    Given I create a todo
-    When its title is "<title>"
-    And its description is "<description>"
-    Then its id should be <id>
+    Given I create a todo # <1>
+    When its title is "<title>" # <2>
+    And its description is "<description>" # <3>
+    Then its id should be <id> # <4>
 
     Examples:
       | title  | description  | id |
@@ -134,9 +141,14 @@ public class TodoSteps {
 <3> Also set its description.
 <4> And finally call the endpoint and assert whatever comes back.
 
-There are probably no surprises here - so let's jump to my solution for [Karate][].
+There are probably no surprises here - so let's see how this can be done in [Karate][].
 
 ==== Karate
+
+[Karate][] also relies on [Gherkin][] and I am most certain you will see similarities here.
+
+Still, a big difference here is that we don't have to write [Java][] at all to get this running.
+Under the hood [Karate][] uses a [html engine][] and [JavaScript][] to run the actual tests:
 
 [source,gherkin]
 ----
