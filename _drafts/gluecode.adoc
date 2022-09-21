@@ -153,8 +153,8 @@ There are probably no surprises here - so let's see how this can be done in [Kar
 here.
 In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
 to get this running.
-Under the hood, [Karate][] uses a full-fledged [html engine][] to run the actual tests and provides
-many built-in tools for our tests:
+Under the hood, [Karate][] uses a full-fledged [html engine][] provides built-ins and keywords for
+our actual tests:
 
 [source,gherkin]
 ----
@@ -164,8 +164,8 @@ Feature: Create a todo
     * url 'http://localhost:8081' # <1>
 
   Scenario Outline: Create a todo with title and description and check the id.
-    Given path 'todo'
-    And request
+    Given path 'todo' # <2>
+    And request # <3>
     """
     {
       "description": <description>,
@@ -177,14 +177,22 @@ Feature: Create a todo
       "title": <title>
     }
     """
-    When method post
-    Then match header location ==  "#regex .*/todo/<id>"
+    When method post # <4>
+    Then match header location ==  "#regex .*/todo/<id>" # <5>
 
     Examples:
       | title    | description    | id |
       | 'title1' | 'description1' | 1  |
       | 'title2' | 'description2' | 2  |
 ----
+
+<1> Points the internal engine to the given [url][]
+<2> Update the [path][] of the current location.
+<3> Define the actual body that is send in the [request][].
+<4> Set the [method][] and fire the request.
+<5> And finally compare whatever comes back - here the [header][].
+
+What about another example, that relies less on materials on board?
 
 === Use case #2: Create a todo with start and due date
 
@@ -293,6 +301,9 @@ public class TodoSteps {
 
 ```
 https://www.goodreads.com/en/book/show/44919
+
+https://karatelabs.github.io/karate/#url
+https://karatelabs.github.io/karate/#path
 ```
 
 == Conclusion
