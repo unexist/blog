@@ -28,16 +28,16 @@ its internal workings or the chosen technology - this is in contrast to other te
 a **whitebox** approach.
 
 Naturally, a [test-driven development][] approach works pretty well here, but there really is no
-requirement to this or to start from scratch - on a green field.
+requirement to this or even to be standing on a green field.
 
-On the other hand, when you are sitting in front of a huge pile of [line-through]#shi# code and
-are desperately trying to figure out what it should do exactly, it is still beneficial to explore
-the behavior and even more important to create a document supported by actual examples.
+When you are sitting in front of a huge pile of [line-through]#shi# code and are desperately
+trying to figure out what it should do exactly, it even morel beneficial to explore the behavior
+and document it - supported by actual examples.
 
 NOTE: [Robert C. Martin][] calls these tests [characterization tests][] in his book
 [Working Effectively With Legacy Code][].
 
-So far the theory - let us apply to examples.
+So far the theory - example time!
 
 == Use cases
 
