@@ -50,7 +50,8 @@ create and manage todo entries - a complete description along with [OpenAPI][] c
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-If we rephrase this to the lovely [Connextra][] format, we end up with something like this:
+If we rephrase this to the lovely [Three R][] format (coined by [Connextra][]), we end up with
+something like this:
 
 ----
 As a user, I want to create a new todo entry with title and description, so that it is stored
@@ -61,8 +62,8 @@ Equipped with this, let us dive into how this can be done with [Cucumber][] and 
 
 ==== Cucumber
 
-This feature be easily translated to a [Gherkin][]-based feature file in _almost_ natural
-language:
+A [Gherkin][] feature intentionally resembles the [Three R][] and can be easily translated into
+_almost_ natural language:
 
 [source,gherkin]
 ----
@@ -71,20 +72,23 @@ Feature: Create a todo
   Scenario Outline: Create a todo with title and description and check the id.
     Given I create a todo # <1>
     When its title is "<title>" # <2>
-    And its description is "<description>" # <3>
-    Then its id should be <id> # <4>
+    And its description is "<description>"
+    Then its id should be <id> # <3>
 
     Examples:
       | title  | description  | id |
       | title1 | description1 | 1  |
       | title2 | description2 | 2  |
 ----
+<1> This describes who wants to do something. (`Role`)
+<2> Next up is what is needed. (`Requirements`)
+<3> And finally why.. (`Reason`)
 
 Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
 matters it is exactly that. (__Trust me on that - you can replace each of `given/when/then` with a
-simple `*` and it still works__)
+simple `*` and it still magically works__)
 
-There are many different [language bindings][] available, but again let us focus on the one for
+There are many different [language bindings][] available, but here we want to focus on the one for
 the [JVM][]:
 
 [source,java]
@@ -136,26 +140,28 @@ public class TodoSteps {
     }
 }
 ----
-<1> On a match here create a new Todo object.
-<2> Set the title of our Todo object.
-<3> Also set its description.
+<1> On a match create a new Todo object.
+<2> Set a title of our Todo object.
+<3> Also set a description.
 <4> And finally call the endpoint and assert whatever comes back.
 
 There are probably no surprises here - so let's see how this can be done in [Karate][].
 
 ==== Karate
 
-[Karate][] also relies on [Gherkin][] and I am most certain you will see similarities here.
-
-Still, a big difference here is that we don't have to write [Java][] at all to get this running.
-Under the hood [Karate][] uses a [html engine][] and [JavaScript][] to run the actual tests:
+[Karate][] also relies on the [Gherkin][] language and I am most certain you will see similarities
+here.
+In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
+to get this running.
+Under the hood [Karate][] uses full-fledged [html engine][] to run the actual tests and provides
+many built-in tools for our tests:
 
 [source,gherkin]
 ----
 Feature: Create a todo
 
   Background:
-    * url 'http://localhost:8081'
+    * url 'http://localhost:8081' # <1>
 
   Scenario Outline: Create a todo with title and description and check the id.
     Given path 'todo'
