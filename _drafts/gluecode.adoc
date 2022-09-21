@@ -153,7 +153,7 @@ There are probably no surprises here - so let's see how this can be done in [Kar
 here.
 In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
 to get this running.
-Under the hood [Karate][] uses full-fledged [html engine][] to run the actual tests and provides
+Under the hood, [Karate][] uses a full-fledged [html engine][] to run the actual tests and provides
 many built-in tools for our tests:
 
 [source,gherkin]
