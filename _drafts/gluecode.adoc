@@ -41,8 +41,8 @@ So far the theory - example time!
 
 == Use cases
 
-Our example is again just a simple todo application with a [REST][] endpoint to create and manage
-todo entries - bonus points if you are interested in an [OpenAPI][] documentation - so have a look
+The following use cases are again based on a simple todo application with a [REST][] endpoint to
+create and manage todo entries - a complete description along with [OpenAPI][] can be found
 [here][].
 
 === Use case #1: Create a todo with title and description
@@ -50,14 +50,14 @@ todo entries - bonus points if you are interested in an [OpenAPI][] documentatio
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-If we rephrase this to the lovely [Connextra][] format it could be something like this:
+If we rephrase this to the lovely [Connextra][] format, we end up with something like this:
 
 ----
 As a user, I want to create a new todo entry with title and description, so that it is stored
 with an unique ID for later retrieval.
 ----
 
-Equipped with this, let us compare how this can be done with [Cucumber][] and [Karate][].
+Equipped with this, let us dive into how this can be done with [Cucumber][] and [Karate][].
 
 ==== Cucumber
 
