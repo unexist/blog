@@ -196,6 +196,21 @@ What about another example, that relies less on materials on board?
 
 === Use case #2: Create a todo with start and due date
 
+Instead of sending a real request to our backend, we just want to verify the internal logic of our
+domain object this time.
+The logic here is whenever the `due date` is *after* the given `start date`, the entry should be
+marked as `done`.
+(__I also think this is a really strange requirement, but sometimes stakeholders are like that.__)
+
+Converted to our [Three R][] it could be like:
+
+----
+As a user, I want to create a new todo entry that starts and ends on a given time,
+, so that
+with an unique ID for later retrieval.
+----
+
+
 ==== Cucumber
 
 [source,gherkin]
