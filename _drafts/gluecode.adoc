@@ -10,15 +10,15 @@ toc: true
 ---
 :imagesdir: /assets/images/gluecode.adoc
 
-I am lately more and more interested in [acceptance testing][] and if you browse through the
+I am more and more interested in [acceptance testing][] lately and if you browse through the
 posts of this blog you are going to find one or another post about the whole idea along with some
 noteworthy tooling.
 
-One aspect I haven't touched so far far is how do we bring the actual tests and the
+One aspect I haven't touched so far far is how do we bring the actual tests *and* the
 [system under test][] (SUT) together and if we use code, where should it reside?
 
-So let us start with a small recap in case you have forgotten all about this - if not please head
-directly to the next chapter.
+Let us start with a small recap, so we all are on the same page and than move on to the sparking
+bits after that.
 
 == A small recap
 
