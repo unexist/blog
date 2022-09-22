@@ -141,8 +141,8 @@ public class TodoSteps {
 }
 ----
 <1> On a match create a new Todo object.
-<2> Set a title of our Todo object.
-<3> Also set a description.
+<2> Set a title to our Todo object.
+<3> ..and also set a description.
 <4> And finally call the endpoint and assert whatever comes back.
 
 There are probably no surprises here - so let's see how this can be done in [Karate][].
@@ -153,8 +153,8 @@ There are probably no surprises here - so let's see how this can be done in [Kar
 here.
 In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
 to get this running.
-Under the hood, [Karate][] uses a full-fledged [html engine][] provides built-ins and keywords for
-our actual tests:
+Under the hood, [Karate][] uses a full-fledged [html engine][] and provides built-ins and keywords
+for the actual tests:
 
 [source,gherkin]
 ----
@@ -188,26 +188,24 @@ Feature: Create a todo
 
 <1> Points the internal engine to the given [url][]
 <2> Update the [path][] of the current location.
-<3> Define the actual body that is send in the [request][].
-<4> Set the [method][] and fire the request.
-<5> And finally compare whatever comes back - here the [header][].
+<3> Define the actual [request][] [JSON][] body.
+<4> Set the HTTP [method][] and fire the request.
+<5> And again - compare whatever comes back - here the [header][].
 
 What about another example, that relies less on materials on board?
 
 === Use case #2: Create a todo with start and due date
 
-Instead of sending a real request to our backend, we just want to verify the internal logic of our
-domain object this time.
-The logic here is whenever the `due date` is *after* the given `start date`, the entry should be
-marked as `done`.
-(__I also think this is a really strange requirement, but sometimes stakeholders are like that.__)
+Instead of sending a real request to our backend, this time we want to verify the internal logic of
+our domain object this time.
+Mentioned logic here is, that a todo entry should be marked as `done`, whenever the `due date` is
+*after* the given `start date`. (__Honestly I also think this is a really strange requirement, but
+sometimes requirements are like that.__)
 
-Converted to our [Three R][] it could be like:
+To get some practice here, let's convert it to [Three R][] as well:
 
 ----
 As a user, I want to create a new todo entry that starts and ends on a given time,
-, so that
-with an unique ID for later retrieval.
 ----
 
 
