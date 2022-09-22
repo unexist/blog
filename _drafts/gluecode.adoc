@@ -50,8 +50,8 @@ create and manage todo entries - a complete description along with [OpenAPI][] c
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-If we rephrase this to the lovely [Three R][] format (coined by [Connextra][]), we end up with
-something like this:
+If we rephrase this to the [Three R][] format (coined by [Connextra][]) used for stories in many
+agile teams, we end up with something like this:
 
 ----
 As a user, I want to create a new todo entry with title and description, so that it is stored
@@ -85,11 +85,12 @@ Feature: Create a todo
 <3> And finally why.. (`Reason`)
 
 Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
-matters it is exactly that. (__Trust me on that - you can replace each of `given/when/then` with a
-simple `*` and it still magically works__)
+matters it is exactly that.
+(__Trust me on that - you can replace each of `given/when/then` with a simple `*` and it still
+magically works__)
 
-There are many different [language bindings][] available, but here we want to focus on the one for
-the [JVM][]:
+There are many different [language bindings][] available, but here we want to focus on the [JVM][]
+one:
 
 [source,java]
 ----
@@ -145,16 +146,16 @@ public class TodoSteps {
 <3> ..and also set a description.
 <4> And finally call the endpoint and assert whatever comes back.
 
-There are probably no surprises here - so let's see how this can be done in [Karate][].
+There are no surprises here - so let's see how this can be done in [Karate][].
 
 ==== Karate
 
-[Karate][] also relies on the [Gherkin][] language and I am most certain you will see similarities
+[Karate][] also relies on the [Gherkin][] language and I am most certain you see similarities
 here.
 In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
 to get this running.
-Under the hood, [Karate][] uses a full-fledged [html engine][] and provides built-ins and keywords
-for the actual tests:
+Under the hood, [Karate][] uses a full-fledged [html engine][] and provides built-ins or rather
+special [keywords][] for the actual tests:
 
 [source,gherkin]
 ----
@@ -186,7 +187,7 @@ Feature: Create a todo
       | 'title2' | 'description2' | 2  |
 ----
 
-<1> Points the internal engine to the given [url][]
+<1> Point the internal engine to the given [url][].
 <2> Update the [path][] of the current location.
 <3> Define the actual [request][] [JSON][] body.
 <4> Set the HTTP [method][] and fire the request.
@@ -196,18 +197,18 @@ What about another example, that relies less on materials on board?
 
 === Use case #2: Create a todo with start and due date
 
-Instead of sending a real request to our backend, this time we want to verify the internal logic of
-our domain object this time.
-Mentioned logic here is, that a todo entry should be marked as `done`, whenever the `due date` is
-*after* the given `start date`. (__Honestly I also think this is a really strange requirement, but
-sometimes requirements are like that.__)
+Instead of sending a real request to our backend, we want to verify the internal logic of our
+domain object this time.
+Aforementioned logic here is, whenever we create a todo with a `due` date after the `start` date,
+it should automatically be marked as `done`.
+(__Honestly I also think this is a really strange requirement, but sometimes it is like that.__)
 
-To get some practice here, let's convert it to [Three R][] as well:
+To get some practice here, let's convert it to the [Three R][] format as well:
 
 ----
-As a user, I want to create a new todo entry that starts and ends on a given time,
+As a user, I want to create a new todo entry with a start and a due date, so that it is
+automatically marked as done, when the due date is after start, to avoid unaccomplishable tasks.
 ----
-
 
 ==== Cucumber
 
