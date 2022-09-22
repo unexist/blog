@@ -212,6 +212,8 @@ automatically marked as done, when the due date is after start, to avoid unaccom
 
 ==== Cucumber
 
+The actual translation from the [Three R][] format to the feature is quickly done:
+
 [source,gherkin]
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
@@ -249,28 +251,28 @@ public class TodoSteps {
         this.dueDate = new DueDate();
     }
 
-    @When("it starts on {string}")
+    @When("it starts on {string}") // <1>
     public void when_set_start_date(String datestr) {
         if (StringUtils.isNotEmpty(datestr)) {
             this.dueDate.setStart(LocalDate.parse(datestr, this.dtf));
         }
     }
 
-    @And("it ends on {string}")
+    @And("it ends on {string}") // <2>
     public void and_set_due_date(String datestr) {
         if (StringUtils.isNotEmpty(datestr)) {
             this.dueDate.setDue(LocalDate.parse(datestr, this.dtf));
         }
     }
 
-    @Then("it should be marked as {status}")
+    @Then("it should be marked as {status}") // <3>
     public void then_get_status(boolean status) {
         this.todoBase.setDueDate(this.dueDate);
 
         assertThat(status).isEqualTo(this.todoBase.getDone());
     }
 
-    @ParameterType("done|undone")
+    @ParameterType("done|undone") // <4>
     public boolean status(String status) {
         return "done".equalsIgnoreCase(status);
     }
