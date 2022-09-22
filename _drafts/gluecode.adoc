@@ -169,13 +169,8 @@ Feature: Create a todo
     And request # <3>
     """
     {
-      "description": <description>,
-      "done": true,
-      "dueDate": {
-        "due": "2021-05-07",
-        "start": "2021-05-07"
-      },
-      "title": <title>
+      "title": <title>,
+      "description": <description>
     }
     """
     When method post # <4>
@@ -218,8 +213,8 @@ The actual translation from the [Three R][] format to the feature is quickly don
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
     Given I create a todo
-    When it starts on "<start>"
-    And it ends on "<due>"
+    When it starts on <start>
+    And it ends on <due>
     Then it should be marked as <status>
 
     Examples:
@@ -251,18 +246,14 @@ public class TodoSteps {
         this.dueDate = new DueDate();
     }
 
-    @When("it starts on {string}") // <1>
-    public void when_set_start_date(String datestr) {
-        if (StringUtils.isNotEmpty(datestr)) {
-            this.dueDate.setStart(LocalDate.parse(datestr, this.dtf));
-        }
+    @When("it starts on {datestr}") // <1>
+    public void when_set_start_date(LocalDate startDate) {
+        this.dueDate.setStart(startDate);
     }
 
-    @And("it ends on {string}") // <2>
-    public void and_set_due_date(String datestr) {
-        if (StringUtils.isNotEmpty(datestr)) {
-            this.dueDate.setDue(LocalDate.parse(datestr, this.dtf));
-        }
+    @And("it ends on {datestr}") // <2>
+    public void and_set_due_date(LocalDate dueDate) {
+        this.dueDate.setDue(dueDate);
     }
 
     @Then("it should be marked as {status}") // <3>
@@ -272,7 +263,12 @@ public class TodoSteps {
         assertThat(status).isEqualTo(this.todoBase.getDone());
     }
 
-    @ParameterType("done|undone") // <4>
+    @ParameterType("[0-9]{4}-[0-9]{2}-[0-9]{2}") // <4>
+    public LocalDate datestr(String datestr) {
+        return LocalDate.parse(datestr, this.dtf);
+    }
+
+    @ParameterType("done|undone") // <5>
     public boolean status(String status) {
         return "done".equalsIgnoreCase(status);
     }
