@@ -62,7 +62,7 @@ Equipped with this, let us dive into how this can be done with [Cucumber][] and 
 
 ==== Cucumber
 
-A [Gherkin][] feature intentionally resembles the [Three R][] and can be easily translated into
+A [Gherkin][] scenario intentionally resembles the [Three R][] and can be easily translated into
 _almost_ natural language:
 
 [source,gherkin]
@@ -207,7 +207,7 @@ automatically marked as done, when the due date is after start, to avoid unaccom
 
 ==== Cucumber
 
-The actual translation from the [Three R][] format to the feature is quickly done:
+The actual translation from the [Three R][] format to a scenario is quickly done:
 
 [source,gherkin]
 ----
@@ -251,29 +251,37 @@ public class TodoSteps {
         this.dueDate.setStart(startDate);
     }
 
-    @And("it ends on {datestr}") // <2>
+    @And("it ends on {datestr}")
     public void and_set_due_date(LocalDate dueDate) {
         this.dueDate.setDue(dueDate);
     }
 
-    @Then("it should be marked as {status}") // <3>
+    @Then("it should be marked as {status}") // <2>
     public void then_get_status(boolean status) {
         this.todoBase.setDueDate(this.dueDate);
 
         assertThat(status).isEqualTo(this.todoBase.getDone());
     }
 
-    @ParameterType("[0-9]{4}-[0-9]{2}-[0-9]{2}") // <4>
+    @ParameterType("[0-9]{4}-[0-9]{2}-[0-9]{2}") // <3>
     public LocalDate datestr(String datestr) {
         return LocalDate.parse(datestr, this.dtf);
     }
 
-    @ParameterType("done|undone") // <5>
+    @ParameterType("done|undone")
     public boolean status(String status) {
         return "done".equalsIgnoreCase(status);
     }
 }
 ----
+<1> Set `start` and `due` date.
+<2> And also set the `status` of the entry.
+<3> Convert types.
+
+Parameter types can help to convey domain information and also allow to adhere to the [DRY][]
+principle by not repeating information - here how to convert input to a date.
+Apart from that the second [Cucumber][] example has no more surprises - this changes with within
+the next one.
 
 ==== Karate
 
