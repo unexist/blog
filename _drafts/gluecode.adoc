@@ -10,47 +10,80 @@ toc: true
 ---
 :imagesdir: /assets/images/glue_code
 
-I am more and more interested in [acceptance testing][] lately and if you browse through the
+:1: https://en.wikipedia.org/wiki/Acceptance_testing
+:2: https://en.wikipedia.org/wiki/Behavior-driven_development
+:3: https://en.wikipedia.org/wiki/Characterization_test
+:4: https://www.oreilly.com/library/view/user-experience-mapping/9781787123502/92d21fe3-a741-49ff-8200-25abf18c98d0.xhtml
+:5: https://cucumber.io/
+:6: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+:7: https://cucumber.io/docs/gherkin/reference/
+:8: https://karatelabs.github.io/karate/#header
+:9: https://blog.unexist.dev/openapi.yaml
+:10: https://de.wikipedia.org/wiki/HTML-Renderer
+:11: https://www.java.com/en/
+:12: https://karatelabs.github.io/karate/#json
+:13: https://en.wikipedia.org/wiki/Java_virtual_machine
+:14: https://karatelabs.github.io/karate/#given-when-then
+:15: https://karatelabs.github.io/karate/
+:16: https://karatelabs.github.io/karate/#core-keywords
+:17: https://cucumber.io/docs/guides/api-automation/
+:18: https://karatelabs.github.io/karate/#method
+:19: https://www.openapis.org/
+:20: https://karatelabs.github.io/karate/#path
+:21: https://karatelabs.github.io/karate/#request
+:22: https://en.wikipedia.org/wiki/Representational_state_transfer
+:23: https://karatelabs.github.io/karate/#result
+:24: https://www.linkedin.com/in/michaelfeathers/
+:25: https://en.wikipedia.org/wiki/System_under_test
+:26: https://en.wikipedia.org/wiki/System_under_test
+:27: https://en.wikipedia.org/wiki/Test-driven_development
+:28: https://www.oreilly.com/library/view/user-experience-mapping/9781787123502/92d21fe3-a741-49ff-8200-25abf18c98d0.xhtml
+:29: https://www.javadoc.io/doc/info.cukes/cucumber-core/1.2.5/cucumber/api/Transformer.html
+:30: https://martinfowler.com/bliki/UbiquitousLanguage.html
+:31: https://karatelabs.github.io/karate/#url
+:32: https://www.goodreads.com/en/book/show/44919
+
+I am more and more interested in {1}[acceptance testing] lately and if you browse through the
 posts of this blog you are going to find one or another post about the whole idea along with some
 noteworthy tooling.
 
 One aspect I haven't touched so far far is how do we bring the actual tests *and* the
-[system under test][] (SUT) together and if we use code, where should it reside?
+{26}[system under test] (SUT) together and if we use code, where should it reside?
 
 Let us start with a small recap, so we all are on the same page and than move on to the sparking
 bits after that.
 
 == A small recap
 
-The general idea of [behavior-driven design][] is to consider a software component as a
+The general idea of {2}[behavior-driven development] is to consider a software component as a
 **blackbox** and describe (and later verify) the observable behavior without any knowledge of
 its internal workings or the chosen technology - this is in contrast to other tests, which follow
 a **whitebox** approach.
 
-Naturally, a [test-driven development][] approach works pretty well here, but there really is no
+Naturally, a {27}[test-driven development] approach works pretty well here, but there really is no
 requirement to this or even to be standing on a green field.
 
 When you are sitting in front of a huge pile of [line-through]#shi# code and are desperately
 trying to figure out what it should do exactly, it even morel beneficial to explore the behavior
 and document it - supported by actual examples.
 
-NOTE: [Robert C. Martin][] calls these tests [characterization tests][] in his book
-[Working Effectively With Legacy Code][].
+NOTE: {24}[Michael C. Feathers] calls these tests {3}[characterization tests] in his book
+{32}[Working Effectively With Legacy Code].
 
 So far the theory - example time!
 
 == Use cases
 
-The following use cases are again based on a simple todo application with a [REST][] endpoint to
-create and manage todo entries - a complete description along with [OpenAPI][] can be found
-[here][].
+The following use cases are again based on a simple todo application with a {22}[REST] endpoint to
+create and manage todo entries - a complete description along with {19}[OpenAPI] can be found
+{9}[here].
 
 === Use case #1: Create a todo with title and description
 
 The creation is pretty straight forward, we just have to pass a `title` and a `description` over
 to our endpoint and verify, if we receive the `id` of a newly created entry.
 
-If we rephrase this to the [Three R][] format (coined by [Connextra][]) used for stories in many
+If we rephrase this to the {28}[Three R] format (coined by {4}[Connextra]) used for stories in many
 agile teams, we end up with something like this:
 
 ----
@@ -58,11 +91,11 @@ As a user, I want to create a new todo entry with title and description, so that
 with an unique ID for later retrieval.
 ----
 
-Equipped with this, let us dive into how this can be done with [Cucumber][] and [Karate][].
+Equipped with this, let us dive into how this can be done with {5}[Cucumber] and {15}[Karate].
 
 ==== Cucumber
 
-A [Gherkin][] scenario intentionally resembles the [Three R][] and can be easily translated into
+A {7}[Gherkin] scenario intentionally resembles the {28}[Three R] and can be easily translated into
 _almost_ natural language:
 
 [source,gherkin]
@@ -84,12 +117,12 @@ Feature: Create a todo
 <2> Next up is what is needed. (`Requirements`)
 <3> And finally why.. (`Reason`)
 
-Calling [Cucumber][] a simple pattern matcher probably doesn't live up to it, but for all practical
+Calling {5}[Cucumber] a simple pattern matcher probably doesn't live up to it, but for all practical
 matters it is exactly that.
 (__Trust me on that - you can replace each of `given/when/then` with a simple `*` and it still
 magically works__)
 
-There are many different [language bindings][] available, but here we want to focus on the [JVM][]
+There are many different {17}[language bindings] available, but here we want to focus on the {13}[JVM]
 one:
 
 [source,java]
@@ -146,16 +179,16 @@ public class TodoSteps {
 <3> ..and also set a description.
 <4> And finally call the endpoint and assert whatever comes back.
 
-There are no surprises here - so let's see how this can be done in [Karate][].
+There are no surprises here - so let's see how this can be done in {15}[Karate].
 
 ==== Karate
 
-[Karate][] also relies on the [Gherkin][] language and I am most certain you see similarities
+{15}[Karate] also relies on the {7}[Gherkin] language and I am most certain you see similarities
 here.
-In contrast to the previous example with [Cucumber][] we don't have to write any [Java][] code
+In contrast to the previous example with {5}[Cucumber] we don't have to write any {11}[Java] code
 to get this running.
-Under the hood, [Karate][] uses a full-fledged [html engine][] and provides built-ins or rather
-special [keywords][] for the actual tests:
+Under the hood, {15}[Karate] uses a full-fledged {10}[html engine] and provides built-ins or rather
+special {16}[keywords] for the actual tests:
 
 [source,gherkin]
 ----
@@ -182,11 +215,11 @@ Feature: Create a todo
       | 'title2' | 'description2' | 2  |
 ----
 
-<1> Point the internal engine to the given [url][].
-<2> Update the [path][] of the current location.
-<3> Define the actual [request][] [JSON][] body.
-<4> Set the HTTP [method][] and fire the request.
-<5> And again - compare whatever comes back - here the [header][].
+<1> Point the internal engine to the given {31}[url].
+<2> Update the {20}[path] of the current location.
+<3> Define the actual {21}[request] {12}[JSON] body.
+<4> Set the HTTP {18}[method] and fire the request.
+<5> And again - compare whatever comes back - here the {8}[header].
 
 What about another example, that relies less on materials on board?
 
@@ -198,7 +231,7 @@ Aforementioned logic here is, whenever we create a todo with a `due` date after 
 it should automatically be marked as `done`.
 (__Honestly I also think this is a really strange requirement, but sometimes it is like that.__)
 
-To get some practice here, let's convert it to the [Three R][] format as well:
+To get some practice here, let's convert it to the {28}[Three R] format as well:
 
 ----
 As a user, I want to create a new todo entry with a start and a due date, so that it is
@@ -207,7 +240,7 @@ automatically marked as done, when the due date is after start, to avoid unaccom
 
 ==== Cucumber
 
-The actual translation from the [Three R][] format to a scenario is quickly done:
+The actual translation from the {28}[Three R] format to a scenario is quickly done:
 
 [source,gherkin]
 ----
@@ -278,18 +311,18 @@ public class TodoSteps {
 <2> And also set the `status` of the entry.
 <3> Convert different types.
 
-Parameter types (or [Transforms][] in older versions of [Cucumber][]) can help to encapsulate and
+Parameter types (or {29}[Transformers] in older versions of {5}[Cucumber]) can help to encapsulate and
 convey domain concepts like the `status`.
-A positive side effect is they also allow to adhere to the [DRY][] principle by not repeating
+A positive side effect is they also allow to adhere to the {6}[DRY] principle by not repeating
 information - here how to convert input to a date.
-Apart from that, the second [Cucumber][] example is basically the same all over again - this
+Apart from that, the second {5}[Cucumber] example is basically the same all over again - this
 changes with with the next one.
 
 ==== Karate
 
-This example is heavier on the glue code side and since we normally don't use [Java][] directly
-for [Karate][] tests, we have to find a way to call [Java][] directly.
-Fortunately, [Karate DSL][] also provides helper here and we can implement the tests like we did
+This example is heavier on the glue code side and since we normally don't use {11}[Java] directly
+for {15}[Karate] tests, we have to find a way to call {11}[Java] directly.
+Fortunately, {14}[Karate DSL] also provides helper here and we can implement the tests like we did
 before:
 
 [source,gherkin]
@@ -326,20 +359,20 @@ before:
       | 2021-09-10 | 2021-09-09 | done   |
 ----
 <1> Define a function that executes the test.
-<2> Create a wrapper for our required [Java][] classes.
+<2> Create a wrapper for our required {11}[Java] classes.
 <3> Implement the actual test in the next few lines.
 <4> Call the previously defined method and pass the values from the table.
-<5> ..and verify the [result][].
+<5> ..and verify the {23}[result].
 
 == Conclusion
 
 What can we learn from both examples?
 
 - Glue code is generally all code, that is required to combine the actual test with the
-[software under test][] and resides somewhere in between.
-- [Cucumber][] separates the glue code from the actual features, whereas [Karate][] includes them in
+{26}[system under test] and resides somewhere in between.
+- {5}[Cucumber] separates the glue code from the actual features, whereas {15}[Karate] includes them in
 the feature file.
-- [Cucumber][] advises to keep technical details out of the features, [Karate][] benefits the
+- {5}[Cucumber] advises to keep technical details out of the features, {15}[Karate] benefits the
 combination of both.
 
 I think the real answer is somewhere in the middle - in my opinion separating the technical details
@@ -349,7 +382,7 @@ systems and doesn't have to be touched whenever the implementation changes.
 This also depends on the included functions and people:
 
 - When the *business side* defines the specifications and also writes the feature files less technical
-is easier to understand and favors focus on the development of a [Ubiquitous Language][] for the
+is easier to understand and favors focus on the development of a {30}[Ubiquitous Language] for the
 business domain.
 - On the other hand, when *dev* writes the specifications, keeping both bundled together helps to
 avoid any drift between specification and the technical tests.
@@ -357,10 +390,3 @@ avoid any drift between specification and the technical tests.
 All examples can be found in my acceptance testing showcase at the usual place:
 
 <https://github.com/unexist/showcase-acceptance-testing-quarkus>
-
-```
-https://www.goodreads.com/en/book/show/44919
-
-https://karatelabs.github.io/karate/#url
-https://karatelabs.github.io/karate/#path
-```
