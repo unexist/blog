@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Gluecode?
+title: What is glue code?
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -8,7 +8,7 @@ tags: cucumber karate showcase
 categories: testing bdd showcase
 toc: true
 ---
-:imagesdir: /assets/images/gluecode.adoc
+:imagesdir: /assets/images/glue_code
 
 I am more and more interested in [acceptance testing][] lately and if you browse through the
 posts of this blog you are going to find one or another post about the whole idea along with some
@@ -287,18 +287,23 @@ changes with with the next one.
 
 ==== Karate
 
+This example is heavier on the glue code side and since we normally don't use [Java][] directly
+for [Karate][] tests, we have to find a way to call [Java][] directly.
+Fortunately, [Karate DSL][] also provides helper here and we can implement the tests like we did
+before:
+
 [source,gherkin]
 ----
   Scenario Outline: Create a todo with start and due dates and check the status.
-    Given def createTodo =
+    Given def createTodo = # <1>
     """
     function(args) {
-      var TodoType = Java.type("dev.unexist.showcase.todo.domain.todo.Todo");
+      var TodoType = Java.type("dev.unexist.showcase.todo.domain.todo.Todo"); // <2>
       var DueDateType = Java.type("dev.unexist.showcase.todo.domain.todo.DueDate");
       var DateTimeFormatterType = Java.type("java.time.format.DateTimeFormatter");
       var LocalDateType = Java.type("java.time.LocalDate");
 
-      var dtf = DateTimeFormatterType.ofPattern("yyyy-MM-dd");
+      var dtf = DateTimeFormatterType.ofPattern("yyyy-MM-dd"); // <3>
 
       var dueDate = new DueDateType();
 
@@ -312,14 +317,46 @@ changes with with the next one.
       return todo.getDone() ? "done" : "undone";
     }
     """
-    When def result = call createTodo { startDate: <start>, dueDate: <due> }
-    Then match result == "<status>"
+    When def result = call createTodo { startDate: <start>, dueDate: <due> } // <4>
+    Then match result == "<status>" // <5>
 
     Examples:
       | start      | due        | status |
       | 2021-09-10 | 2022-09-10 | undone |
       | 2021-09-10 | 2021-09-09 | done   |
 ----
+<1> Define a function that executes the test.
+<2> Create a wrapper for our required [Java][] classes.
+<3> Implement the actual test in the next few lines.
+<4> Call the previously defined method and pass the values from the table.
+<5> ..and verify the [result][].
+
+== Conclusion
+
+What can we learn from both examples?
+
+- Glue code is generally all code, that is required to combine the actual test with the
+[software under test][] and resides somewhere in between.
+- [Cucumber][] separates the glue code from the actual features, whereas [Karate][] includes them in
+the feature file.
+- [Cucumber][] advises to keep technical details out of the features, [Karate][] benefits the
+combination of both.
+
+I think the real answer is somewhere in the middle - in my opinion separating the technical details
+from the actual specification is beneficial, because it becomes robust to changes of the underlying
+systems and doesn't have to be touched whenever the implementation changes.
+
+This also depends on the included functions and people:
+
+- When the *business side* defines the specifications and also writes the feature files less technical
+is easier to understand and favors focus on the development of a [Ubiquitous Language][] for the
+business domain.
+- On the other hand, when *dev* writes the specifications, keeping both bundled together helps to
+avoid any drift between specification and the technical tests.
+
+All examples can be found in my acceptance testing showcase at the usual place:
+
+<https://github.com/unexist/showcase-acceptance-testing-quarkus>
 
 ```
 https://www.goodreads.com/en/book/show/44919
@@ -327,10 +364,3 @@ https://www.goodreads.com/en/book/show/44919
 https://karatelabs.github.io/karate/#url
 https://karatelabs.github.io/karate/#path
 ```
-
-== Conclusion
-
-I've added all the mentioned [Karate][] examples to my acceptance testing showcase and you can find
-it in the usual place:
-
-<https://github.com/unexist/showcase-acceptance-testing-quarkus>
