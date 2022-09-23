@@ -276,12 +276,14 @@ public class TodoSteps {
 ----
 <1> Set `start` and `due` date.
 <2> And also set the `status` of the entry.
-<3> Convert types.
+<3> Convert different types.
 
-Parameter types can help to convey domain information and also allow to adhere to the [DRY][]
-principle by not repeating information - here how to convert input to a date.
-Apart from that the second [Cucumber][] example has no more surprises - this changes with within
-the next one.
+Parameter types (or [Transforms][] in older versions of [Cucumber][]) can help to encapsulate and
+convey domain concepts like the `status`.
+A positive side effect is they also allow to adhere to the [DRY][] principle by not repeating
+information - here how to convert input to a date.
+Apart from that, the second [Cucumber][] example is basically the same all over again - this
+changes with with the next one.
 
 ==== Karate
 
