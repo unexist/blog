@@ -73,8 +73,7 @@ So far the theory - example time!
 == Use cases
 
 The following use cases are again based on a simple todo application with a {22}[REST] endpoint to
-create and manage todo entries - a complete description along with {19}[OpenAPI] can be found
-{9}[here].
+create and manage todo entries - an {19}[OpenAPI] can be found {9}[here].
 
 === Use case #1: Create a todo with title and description
 
