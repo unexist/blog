@@ -367,7 +367,7 @@ Alas, this is pretty common problem and already solved for us.
 
 === Service discovery
 
-:Service discovery][37] is basically a central catalog and every interested service can register
+{37}[Service discovery] is basically a central catalog and every interested service can register
 itself and fetch information about other registered services.
 
 Our best pick from the many options is {6}[Consul], another product from {15}[HashiCorp], with an
