@@ -53,6 +53,7 @@ toc: true
 :41: https://terraform.io
 :42: https://www.nomadproject.io/docs/job-specification/update
 :43: https://yaml.org/
+:44: https://kubernetes.io/docs/concepts/workloads/pods/
 
 When I think about orchestration, {28}[Kubernetes] is something that easily comes up to my mind.
 With its massive ecosystem and all the different companies, that provide even more services, it is
@@ -155,7 +156,7 @@ job "todo" {
 <1> Sets of multiple client nodes are called a datacenter in {30}[Nomad].
 <2> Groups consist of multiple tasks that are run together on the same client node.
 <3> Start at most one instance of this group.
-<4> This is the actual task definition and the smallest unit inside of {30}[Nomad].
+<4> This is the actual task definition and the smallest unit inside of {30}[Nomad] - like a {44}[Pod].
 <5> The {19}[Java] task driver allows to run a jar inside of a {27}[JVM].
 <6> Config options for the chosen task driver.
 <7> {35}[Resource limits] can also be set - here we stick with limits for memory.
