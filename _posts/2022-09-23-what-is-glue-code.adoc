@@ -16,7 +16,7 @@ toc: true
 :6: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
 :7: https://cucumber.io/docs/gherkin/reference/
 :8: https://karatelabs.github.io/karate/#header
-:9: https://blog.unexist.dev/assets/openapi.yaml
+:9: https://blog.unexist.dev/redoc/
 :10: https://de.wikipedia.org/wiki/HTML-Renderer
 :11: https://www.java.com/en/
 :12: https://karatelabs.github.io/karate/#json
