@@ -44,7 +44,7 @@ $ adr-tools/adr new "Assertion Library"
 
 == First steps with jqAssistant
 
-Messing with {1}[jqAssistant] is always funny, when you manage to make your mind about {4}[cypher],
+Messing with {1}[jqAssistant] is always funny, when you manage to make your mind about {4}[Cypher],
 you are busy with lots of flaky tests and varying output errors, but we'll come to that later I
 guess.
 
@@ -109,7 +109,7 @@ ORDER BY
 
 include::jQA:Rules[concepts="adr:AssertionLibrary*", constraints="adr:AssertionLibrary*"] // <4>
 -----
-<1> Simple query in {4}[cypher] for all methods that have `assertThat' in its method signature.
+<1> Simple query in {4}[Cypher] for all methods that have `assertThat` in its method signature.
 <2> Check, if if the full-qualified name of the package is NOT `org.assertj.core.api`.
 <3> Return the name of the method, along with its line number for every match.
 <4> This is required to see the actual results in the rendered document, took me quite a whole to
