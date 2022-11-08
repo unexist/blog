@@ -1,0 +1,12 @@
+---
+layout: post
+title: Versioning of messages
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: kafka avro apicurio karapace showcase
+toc: true
+---
+:imagesdir: /assets/images/versioning-of-messages.adoc
+
