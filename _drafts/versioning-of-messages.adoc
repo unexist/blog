@@ -10,3 +10,10 @@ toc: true
 ---
 :imagesdir: /assets/images/versioning-of-messages.adoc
 
+Messaging can be used to separate services from each other and to avoid tight coupling in bigger
+architectures.
+When communicating with another end it usually is an advantage, when both sides speak the same
+language and this obviously also applies to messaging between services.
+
+== What is versioned?
+
