@@ -10,10 +10,11 @@ toc: true
 ---
 :imagesdir: /assets/images/message-formats-and-versions.adoc
 
-Messaging can be used to separate services from each other and to avoid tight coupling in bigger
-architectures.
-When communicating with another end it usually is an advantage, when both sides speak the same
-language and this obviously also applies to messaging between services.
+There are many things, that need to be balanced, when dealing with inter-service-communication in
+microservice architectures.
+And among these many challenges, there is one thing that has a good potential to really cause you
+headache once the first version has been deployed.
 
-== What is versioned?
+So in this article we want to take a closer look at message formats and message versions.
 
+== What to version?
