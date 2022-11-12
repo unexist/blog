@@ -10,11 +10,11 @@ toc: true
 ---
 :imagesdir: /assets/images/message-formats-and-versions.adoc
 
-There are many things, that need to be balanced, when dealing with inter-service-communication in
-microservice architectures.
-And among these many challenges, there is one thing that has a good chance to really cause
-headaches once deployed, when neglected.
+There are many things, that need to be actively balanced, when dealing with
+inter-service-communication and quite some other things can be cast into stone - like message
+formats.
 
 So in this article we want to take a closer look at message formats and message versions.
 
-== What to version?
+== Message formats
+
