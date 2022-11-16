@@ -10,11 +10,14 @@ toc: true
 ---
 :imagesdir: /assets/images/message-formats-and-versions.adoc
 
-There are many things, that need to be actively balanced, when dealing with
-inter-service-communication and quite some other things can be cast into stone - like message
-formats.
+When you send a letter to someone else it probably helps, when all participants of this exchange
+speak the same language and it can't be wrong, when the letter format is something all sides can
+handle safely.
+The same is true for inter-service-communication, but unlike snail mail the message format can and
+most likely will change and improve over time.
 
-So in this article we want to take a closer look at message formats and message versions.
+In this article we take a closer look at message formats and message versions and talk about ways
+to handle this situation.
 
 == Message formats
 
