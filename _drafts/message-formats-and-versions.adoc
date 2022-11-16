@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Message formats and versions
+title: Message formats and versioning
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -8,15 +8,15 @@ tags: showcase
 categories: kafka avro apicurio karapace showcase
 toc: true
 ---
-:imagesdir: /assets/images/message-formats-and-versions.adoc
+:imagesdir: /assets/images/message-formats-and-versioning.adoc
 
 When you send a letter to someone else it probably helps, when all participants of this exchange
 speak the same language and it can't be wrong, when the letter format is something all sides can
 handle safely.
-The same is true for inter-service-communication, but unlike snail mail the message format can and
-most likely will change and improve over time.
+Obviously, the same is true for inter-service-communication, but unlike snail mail the message
+format can and most likely will change over time.
 
-In this article we take a closer look at message formats and message versions and talk about ways
+In this article we take a closer look at message formats and versioning and talk about ways
 to handle this situation.
 
 == Message formats
