@@ -16,12 +16,12 @@ can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
 format will most likely change over time.
 
-In this article we take a closer look at message formats and versioning and talk about ways
-to handle this situation.
+In this article we take a closer look at message formats, versioning and talk about ways
+to handle these situations.
 
 == Message formats
 
-Nobody quite right on his mind would pick [JSON][] for a letter exchange, but for messaging between
+Nobody in their right mind would pick [JSON][] for a letter exchange, but for messaging between
 services it is quite common:
 
 [source,json]
@@ -30,7 +30,10 @@ services it is quite common:
 ----
 
 This format is straight forward and modern JSON parsers are mature enough to handle `NULL` values
-in any direction, so when something is unset it doesn't bother us and also when something required
-is missing it can point us to the problem.
+in any direction.
+So when something optional is unset we aren't bothered and on the other hand when something is amiss
+we are gracefully pointed to the problem.
+
+We probably can stop here and call the case solved, right?
 
 == Versioning
