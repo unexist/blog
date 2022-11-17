@@ -56,9 +56,11 @@ There normally shouldn't be any surprises waiting for us - except we do somethin
 }
 ----
 
-Here we evolve our `dueDate` field to accept a **start** and a **due** date for our todo entry and
-this change is quite incompatible to the predecessor.
+Here we evolve our `dueDate` field to accept a **start** and a **due** date and this change is
+quite incompatible to the predecessor.
+
+At this point Nothing stops us from building a mapping layer in-between, but please put that
+thought aside and follow me to the next chapter.
 
 == Versioning
 
-From here we have multiple options
