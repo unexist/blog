@@ -26,7 +26,13 @@ services it is quite common:
 
 [source,json]
 ----
-{"title":"First","description":"Bla","done":null,"dueDate":null,"id":0}
+{
+    "title": "First",
+    "description": "Bla",
+    "done": null,
+    "dueDate": "2022-11-21",
+    "id": 0
+}
 ----
 
 This format is straight forward and modern JSON parsers are mature enough to handle `NULL` values
@@ -34,6 +40,25 @@ in any direction.
 So when something optional is unset we aren't bothered and on the other hand when something is amiss
 we are gracefully pointed to the problem.
 
-We probably can stop here and call the case solved, right?
+There normally shouldn't be any surprises waiting for us - except we do something like this:
+
+[source,json]
+----
+{
+    "title": "First",
+    "description": "Bla",
+    "done": null,
+    "dueDate": {
+        "startDate": "2022-11-20",
+        "dueDate": "2022-11-21"
+    },
+    "id":0
+}
+----
+
+Here we evolve our `dueDate` field to accept a **start** and a **due** date for our todo entry and
+this change is quite incompatible to the predecessor.
 
 == Versioning
+
+From here we have multiple options
