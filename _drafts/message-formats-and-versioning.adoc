@@ -64,7 +64,7 @@ thought aside and follow me to the next chapter.
 
 == Versioning
 
-Found your way?
+Over here!
 Great - so we probably agree the obvious solution to our problem is versioning but what exactly -
 the endpoint itself or rather our message?
 
