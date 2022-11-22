@@ -16,7 +16,7 @@ can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
 format will most likely change over time.
 
-In this article we take a closer look at message formats, versioning and talk about ways
+In this article we take a closer look at message formats, versioning and talk about ways and tools
 to handle these situations.
 
 == Message formats
@@ -37,8 +37,8 @@ services it is quite common:
 
 This format is straight forward and modern JSON parsers are mature enough to handle `NULL` values
 in any direction.
-So when something optional is unset we aren't bothered and on the other hand when something is amiss
-we are gracefully pointed to the problem.
+So, when something optional is unset we aren't bothered and on the other hand when something is
+amiss we are gracefully pointed to the problem.
 
 There normally shouldn't be any surprises waiting for us - until we do something like this:
 
@@ -56,16 +56,16 @@ There normally shouldn't be any surprises waiting for us - until we do something
 }
 ----
 
-Here we evolve our `dueDate` field to accept a **start** and a **due** date and this change is
-quite incompatible to the predecessor.
+Here we evolve our `dueDate` field from a simple string to an object consisting of a **start** and
+a **due** date - which is quite incompatible to the predecessor.
 
 At this point nothing stops us from building a mapping layer in-between, but please put that
 thought aside and follow me to the next chapter.
 
 == Versioning
 
-Over here!
-Great - so we probably agree the obvious solution to our problem is versioning but what exactly -
+Team _no-mapping-layer_?
+Great - so we probably agree the obvious solution to our problem is versioning, but what exactly -
 the endpoint itself or rather our message?
 
 Let us consider both.
