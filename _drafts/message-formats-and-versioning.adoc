@@ -72,3 +72,11 @@ Let us consider both.
 
 === Endpoint versioning
 
+This is easier explained on a REST example, because I am quite sure you have seen something like
+the following before:
+
+[source,shell]
+----
+$ curl -X GET http://blog.unexist.dev/api/1/todos
+$ curl -X GET http://blog.unexist.dev/api/todos?version=1
+----
