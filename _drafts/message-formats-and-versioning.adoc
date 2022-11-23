@@ -24,10 +24,9 @@ these situations:
 
 == How can we make sure both sides understand the same format?
 
-== Message formats
-
-Nobody in their right mind would pick [JSON][] for a letter exchange, but for messaging between
-services it is quite common:
+The first step in using a common format is to pick one and make it default.
+Although nobody in their right mind would pick [JSON][] for a letter exchange, it is quite common
+between services:
 
 [source,json]
 ----
@@ -44,6 +43,8 @@ This format is straight forward and modern JSON parsers are mature enough to han
 in any direction.
 So, when something optional is unset we aren't bothered and on the other hand when something is
 amiss we are gracefully pointed to the problem.
+
+=== Evolving the format
 
 There normally shouldn't be any surprises waiting for us - until we do something like this:
 
@@ -67,15 +68,15 @@ a **due** date - which is quite incompatible to the predecessor.
 At this point nothing stops us from building a mapping layer in-between, but please put that
 thought aside and follow me to the next chapter.
 
-== Versioning
-
 So we probably agree versioning the obvious solution to our problem, but what exactly - the
 endpoint itself or rather our message?
+
+=== Use versioning
 
 Let us consider both on a simple REST example, because I am quite sure you have seen something
 like the following before.
 
-=== Endpoint versioning
+==== Endpoint versioning
 
 [source,shell]
 ----
@@ -98,7 +99,7 @@ every tracking and redirection possible with URI and is pretty common for API en
 | Further evolution requires a new endpoint
 |===
 
-=== Message versioning
+==== Message versioning
 
 [source,shell]
 ----
