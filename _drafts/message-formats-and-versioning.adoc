@@ -64,22 +64,23 @@ thought aside and follow me to the next chapter.
 
 == Versioning
 
-Team _no-mapping-layer_ assembled?
+Team _no-mapping-layer_ here?
 Great - so we probably agree the obvious solution to our problem is versioning, but what exactly -
 the endpoint itself or rather our message?
 
-Let us consider both.
+Let us consider both on a simple REST example, because I am quite sure you have seen something
+like the following before.
 
 === Endpoint versioning
-
-This is easier explained on a REST example, because I am quite sure you have seen something like
-the following before:
 
 [source,shell]
 ----
 $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 ----
 <1> Set the version via [path parameter][]
+
+Our first option is to make the version number part of the [URI][], which allows us basically
+every tracking and redirection possible with URI and is pretty common for API endpoints.
 
 |===
 | Pro | Con
@@ -88,6 +89,9 @@ $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 
 | Deprecation of the endpoint can be tracked e.g. with [PACT][]
 |
+
+|
+| Further evolution requires a new endpoint
 |===
 
 === Message versioning
@@ -98,11 +102,18 @@ $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://
 ----
 <1> Set the version via [Accept header][]
 
+And the second option is to serve all versions from a single endpoint and honor the
+[Accept header][] of the client.
+This moves the content negotiation part to the client and it can pick the format is well and proper.
+
 |===
 | Pro | Con
 | Single version of endpoint
 | Increases the complexity of the endpoint to include version handling
 
-| Deprecation of the endpoint can be tracked e.g. with [PACT][]
+|
+| Difficult to track, if the version is still in use
+
+| New versions can be easily added and served
 |
 |===
