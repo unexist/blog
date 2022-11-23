@@ -16,8 +16,11 @@ can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
 format will most likely change over time.
 
-In this article we take a closer look at message formats, versioning and talk about ways and tools
-to handle these situations.
+In this article we take a closer look at two pretty common problems and talk about ways to handle
+these situations:
+
+- How can we make sure both sides understand the same format?
+- How can we get the actual format?
 
 == Message formats
 
@@ -64,9 +67,8 @@ thought aside and follow me to the next chapter.
 
 == Versioning
 
-Team _no-mapping-layer_ here?
-Great - so we probably agree the obvious solution to our problem is versioning, but what exactly -
-the endpoint itself or rather our message?
+So we probably agree versioning the obvious solution to our problem, but what exactly - the
+endpoint itself or rather our message?
 
 Let us consider both on a simple REST example, because I am quite sure you have seen something
 like the following before.
@@ -104,7 +106,8 @@ $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://
 
 And the second option is to serve all versions from a single endpoint and honor the
 [Accept header][] of the client.
-This moves the content negotiation part to the client and it can pick the format is well and proper.
+This moves the content negotiation part to the client and it can pick the format that is well and
+proper.
 
 |===
 | Pro | Con
@@ -117,3 +120,20 @@ This moves the content negotiation part to the client and it can pick the format
 | New versions can be easily added and served
 |
 |===
+
+=== What to pick?
+
+Like so often in IT, both options have their merits and it depends on what you are really up to.
+
+In big architectures, it can be useful to be able to serve different versions of your messages on
+different microservices and keep them really small and simple (see [KISS][]).
+PACT can also help here to keep track of the different versions available and also provide insights
+to the actual use patterns.
+
+From a nitpicking perspective, versioning the actual content is preferable, because you have in
+fact just one version of the endpoint - it just serves a different format.
+And letting clients pick whatever they support is something that is also deeply ingrained into the
+whole REST idea.
+
+So whatever you pick, both options allow the client to select a version, either by route or by
+header and the first problem is addressed.
