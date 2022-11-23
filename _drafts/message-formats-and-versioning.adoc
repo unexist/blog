@@ -22,6 +22,8 @@ these situations:
 - How can we make sure both sides understand the same format?
 - How can we get the actual format?
 
+== How can we make sure both sides understand the same format?
+
 == Message formats
 
 Nobody in their right mind would pick [JSON][] for a letter exchange, but for messaging between
@@ -137,3 +139,5 @@ whole REST idea.
 
 So whatever you pick, both options allow the client to select a version, either by route or by
 header and the first problem is addressed.
+
+== How can we get the actual format?
