@@ -191,3 +191,10 @@ converter like [this one][]:
   ]
 }
 ----
+
+If we keep in line with our analogy, we need some kind of schoolbook now to write some lengthy
+chapter about our format, so teacher can give meaningful lectures about it.
+
+We rather skip this and talk about [schema registries][].
+
+=== Make it public
