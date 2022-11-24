@@ -10,6 +10,7 @@ toc: true
 ---
 :imagesdir: /assets/images/message-formats-and-versioning.adoc
 
+// https://json-schema.org/
 // https://www.liquid-technologies.com/online-json-to-schema-converter
 
 When you send a letter to someone else it probably helps, when all participants of this exchange
@@ -147,16 +148,17 @@ header and the first problem is addressed.
 
 When you want to share something abstract like a format you need some kind of formalism or way
 to really describe it.
-Like if you look back at your schools days, I bet you've had to deal with the formal requirements
+Like, if you look back at your schools days, I bet you've had to deal with the formal requirements
 of how to write a business letter.
 
 === Define a schema
 
-Something like this is quite easy with [JSON][] - some people already had this idea and requirement
+Something like this is quite easy with [JSON][] and some people already did the grunt work for us
 and invented [JSON Schema][].
 
-Converting our previous example is quite easy and there are lots of automatic converters
-like [this one][] available:
+With it, we can describe the fields and validate a message against it.
+And even better, converting our previous example is quite easy and there are lots of automatic
+converters like [this one][] available:
 
 [source,json]
 ----
