@@ -20,13 +20,13 @@ In this article we take a closer look at two pretty common problems and talk abo
 these situations:
 
 - How can we make sure both sides understand the same format?
-- How can we get the actual format?
+- How can we share the actual format?
 
-== How can we make sure both sides understand the same format?
+== Common understanding
 
 The first step in using a common format is to pick one and make it default.
-Although nobody in their right mind would pick [JSON][] for a letter exchange, it is quite common
-between services:
+For a starter, [JSON][] is quite common between services, although nobody in their right mind would
+pick it for a letter exchange:
 
 [source,json]
 ----
@@ -71,7 +71,7 @@ thought aside and follow me to the next chapter.
 So we probably agree versioning the obvious solution to our problem, but what exactly - the
 endpoint itself or rather our message?
 
-=== Use versioning
+=== Apply versioning
 
 Let us consider both on a simple REST example, because I am quite sure you have seen something
 like the following before.
@@ -141,4 +141,4 @@ whole REST idea.
 So whatever you pick, both options allow the client to select a version, either by route or by
 header and the first problem is addressed.
 
-== How can we get the actual format?
+== Share the format
