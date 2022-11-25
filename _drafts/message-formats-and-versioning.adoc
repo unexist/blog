@@ -5,7 +5,7 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: kafka avro apicurio karapace showcase
+categories: kafka jsonschema avro apicurio karapace showcase
 toc: true
 ---
 :imagesdir: /assets/images/message-formats-and-versioning.adoc
@@ -27,9 +27,10 @@ these situations:
 
 == Common understanding
 
-The first step in using a common format is to pick one and make it default.
-For a starter, [JSON][] is quite common between services, although nobody in their right mind would
-pick it for a letter exchange:
+The first stop on our way to common understanding is to pick a format and make it default for
+further communication.
+And although [JSON][] is a really poor choice for a letter exchange, it is quite common in-between
+services:
 
 [source,json]
 ----
@@ -47,7 +48,7 @@ in any direction.
 So, when something optional is unset we aren't bothered and on the other hand when something is
 amiss we are gracefully pointed to the problem.
 
-=== Evolving the format
+=== Breaking the defaults
 
 There normally shouldn't be any surprises waiting for us - until we do something like this:
 
@@ -185,8 +186,7 @@ converter like [this one][]:
   "required": [
     "title",
     "description",
-    "done",
-    "dueDate",
+    "done",    "dueDate",
     "id"
   ]
 }
@@ -198,3 +198,4 @@ chapter about our format, so teacher can give meaningful lectures about it.
 We rather skip this and talk about [schema registries][].
 
 === Make it public
+
