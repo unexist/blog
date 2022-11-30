@@ -29,8 +29,8 @@ these situations:
 
 The first stop on our way to common understanding is to pick a format and make it default for
 further communication.
-And although [JSON][] is a really poor choice for a letter exchange, it is quite common in-between
-services:
+[JSON][] might be a really poor choice for a letter exchange, it is quite common in-between
+services and straight forward;
 
 [source,json]
 ----
@@ -43,8 +43,7 @@ services:
 }
 ----
 
-This format is straight forward and modern JSON parsers are mature enough to handle `NULL` values
-in any direction.
+Nowadays modern JSON parsers are pretty mature to handle `NULL` values in any direction.
 So, when something optional is unset we aren't bothered and on the other hand when something is
 amiss we are gracefully pointed to the problem.
 
