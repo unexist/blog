@@ -19,11 +19,18 @@ can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
 format will most likely change over time.
 
-In this article we take a closer look at two pretty common problems and talk about ways to handle
-these situations:
+This article is split into two parts:
+
+The first part explains a bit why it is necessary to think about how to evolve formats and tries
+to answers questions like:
 
 - How can we make sure both sides understand the same format?
 - How can we share the actual format?
+
+And second part demonstrates how all of this can be done with [Avro][].
+
+NOTE: If you aren't interested in the **why** and just want to see the **how** with [Avro][] - just
+skip to the later chapter.
 
 == Common understanding
 
