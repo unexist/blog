@@ -19,10 +19,8 @@ can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
 format will most likely change over time.
 
-This article is split into two parts:
-
-The first part explains a bit why it is necessary to think about how to evolve formats and tries
-to answers questions like:
+The first part of this article explains a bit why it is necessary to think about how to evolve
+formats even in greenfield projects and tries to answers questions like:
 
 - How can we make sure both sides understand the same format?
 - How can we share the actual format?
