@@ -29,8 +29,8 @@ these situations:
 
 The first stop on our way to common understanding is to pick a format and make it default for
 further communication.
-[JSON][] might be a really poor choice for a letter exchange, it is quite common in-between
-services and straight forward;
+[JSON][] might be a really poor choice for a letter exchange, but it is quite common in-between
+services and straight forward:
 
 [source,json]
 ----
@@ -43,9 +43,9 @@ services and straight forward;
 }
 ----
 
-Nowadays modern JSON parsers are pretty mature to handle `NULL` values in any direction.
-So, when something optional is unset we aren't bothered and on the other hand when something is
-amiss we are gracefully pointed to the problem.
+Modern JSON parsers are pretty mature and handle surprises like `NULL` in a sane way.
+Like, when something optional is unset we aren't bothered or when something is amiss, we are
+gracefully pointed to the problem.
 
 === Breaking the format
 
@@ -68,18 +68,15 @@ There normally shouldn't be any surprises waiting for us - until we do something
 Here we evolve our `dueDate` field from a simple string to an object consisting of a **start** and
 a **due** date - which unfortunately is quite incompatible to the predecessor.
 
-This is something that can be solved by creating some kind of mapping layer, but this adds
-more complexity and more code to maintain.
+This is something that can be solved by some kind of mapping layer, but we normally want to avoid
+adding more complexity and even more code to maintain.
 
 What if we just create a new version of our format?
 
-=== Use versioning
+=== Apply versioning to..?
 
-We can either version the endpoint itself or rather our message - let us consider both on a simple
-[REST][] example.
-
-Let us consider both on a simple [REST][] example, because I am quite sure you have seen something
-like the following before.
+There are multiple ways to apply versioning here, therefore we limit ourselves to the two more
+common cases found in [REST][].
 
 ==== Endpoint versioning
 
@@ -101,10 +98,10 @@ every kind of tracking or redirection and is pretty common for API endpoints.
 |
 
 |
-| Further evolution requires a new endpoint
+| Further evolution might require a new endpoint
 |===
 
-==== Message versioning
+==== Content versioning
 
 [source,shell]
 ----
@@ -112,7 +109,7 @@ $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://
 ----
 <1> Set the version via [Accept header][]
 
-And the second option is to serve all versions from a single endpoint and honor the
+And the second option is to serve all versions from a single endpoint by honoring the
 [Accept header][] of the client.
 This moves the content negotiation part to the client and it can pick the format that is well and
 proper.
