@@ -152,19 +152,20 @@ header and the first problem is addressed.
 
 == Share the format
 
-When you want to share something abstract like a format you need some kind of formalism or way
+When you want to share something abstract like a format, you need some kind of formalism or way
 to really describe it.
 Like, if you look back at your schools days, I bet you've had to deal with the formal requirements
-of how to write a business letter - so people on the receiving end really think you are serious.
+of how to write a business letter - so people on the receiving end really have the impression you
+are serious.
 
 === Define a schema
 
 Defining a schema for a structured format like [JSON][] is pretty easy and some people already did
 the grunt work for us and invented [JSON Schema][].
 
-It allows us to describe the fields and also our expectations about content inside of it.
-And even better, converting our previous example is so easy, it can be done automatically by a
-converter like [this one][]:
+This allows us to describe the fields and also our expectations about content inside of it.
+And even better, converting our previous example is so easy, it can be done automatically with the
+help of a converter like [this one][]:
 
 [source,json]
 ----
