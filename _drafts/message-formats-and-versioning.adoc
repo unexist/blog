@@ -13,7 +13,7 @@ toc: true
 // https://json-schema.org/
 // https://www.liquid-technologies.com/online-json-to-schema-converter
 
-When you send a letter to someone else it probably helps, when all participants of this exchange
+When you send a letter to someone else it probably helps when all participants of this exchange
 speak the same language and it can't be wrong, when the format of the letter is something all sides
 can handle safely.
 Obviously, the same is true for inter-service-communication, but unlike snail mail the message
@@ -34,8 +34,8 @@ skip to the later chapter.
 
 The first stop on our way to common understanding is to pick a format and make it default for
 further communication.
-[JSON][] might be a really poor choice for a letter exchange, but it is quite common in-between
-services and straight forward:
+One of the top choices on the format side usually is [JSON][], which might be a really poor choice
+for a letter exchange, but it is quite common in-between services:
 
 [source,json]
 ----
@@ -48,7 +48,8 @@ services and straight forward:
 }
 ----
 
-Modern JSON parsers are pretty mature and handle surprises like `NULL` in a sane way.
+Since JSON is pretty straight forward and quite common, modern parsers are pretty mature and handle
+some of  surprises in a sane way.
 Like, when something optional is unset we aren't bothered or when something is amiss, we are
 gracefully pointed to the problem.
 
@@ -192,6 +193,7 @@ converter like [this one][]:
     "done",    "dueDate",
     "id"
   ]
+
 }
 ----
 
