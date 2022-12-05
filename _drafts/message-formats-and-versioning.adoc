@@ -53,9 +53,13 @@ some of  surprises in a sane way.
 Like, when something optional is unset we aren't bothered or when something is amiss, we are
 gracefully pointed to the problem.
 
+There normally shouldn't be any surprises waiting for us - until we do something like nasty.
+
 === Breaking the format
 
-There normally shouldn't be any surprises waiting for us - until we do something like this:
+In our scenario, there might be a requirement to evolve our `dueDate` field from a simple _string_
+to an _object_ consisting of a **start** and a **due** date - which unfortunately is quite
+incompatible:
 
 [source,json]
 ----
@@ -71,9 +75,6 @@ There normally shouldn't be any surprises waiting for us - until we do something
 }
 ----
 
-Here we evolve our `dueDate` field from a simple string to an object consisting of a **start** and
-a **due** date - which unfortunately is quite incompatible to the predecessor.
-
 This is something that can be solved by some kind of mapping layer, but we normally want to avoid
 adding more complexity and even more code to maintain.
 
@@ -81,8 +82,8 @@ What if we just create a new version of our format?
 
 === Apply versioning to..?
 
-There are multiple ways to apply versioning here, therefore we limit ourselves to the two more
-common cases found in [REST][].
+There are multiple ways to apply versioning here, but let us limit ourselves to the two more common
+ones usually found with [REST][].
 
 ==== Endpoint versioning
 
