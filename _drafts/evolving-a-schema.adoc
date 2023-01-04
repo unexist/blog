@@ -131,7 +131,7 @@ PACT can also help here to keep track of the different versions available and al
 to the actual use patterns.
 
 From a nitpicking perspective, versioning the actual content is preferable, because you have in
-fact just one version of the endpoint - it just serves a different format.
+fact just one version of the endpoint - it just serves a different version of your format.
 And letting clients pick whatever they support is something that is also deeply ingrained into the
 whole REST idea.
 
@@ -149,9 +149,9 @@ are serious.
 === Define a schema
 
 Defining a schema for a structured format like [JSON][] is pretty easy and some people already did
-the grunt work for us and invented [JSON Schema][].
+the grunt work for us by inventing [JSON Schema][].
 
-This allows us to describe the fields and also our expectations about content inside of it.
+This allows us to describe the fields and also our expectations of the content inside of it.
 And even better, converting our previous example is so easy, it can be done automatically with the
 help of a converter like [this one][]:
 
