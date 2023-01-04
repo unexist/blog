@@ -37,17 +37,16 @@ be a really poor choice for a letter exchange, but easy readable for human and m
 }
 ----
 
-Since JSON is pretty straight forward and quite common, modern parsers are pretty mature and handle
-some of  surprises in a sane way.
-Like, when something optional is unset we aren't bothered or when something is amiss, we are
-gracefully pointed to the problem.
+Modern JSON parsers are pretty mature and handle some of surprises in a sane way.
+This can save us from handling trivial cases like when something optional is unset and we are
+gracefully pointed to the problem, when something essential is amiss.
 
 There normally shouldn't be any surprises waiting for us - until we do something like nasty.
 
 === Breaking the format
 
-In our scenario, there might be a requirement to evolve our `dueDate` field from a simple _string_
-to an _object_ consisting of a **start** and a **due** date - which unfortunately is quite
+In our scenario, we got the requirement to evolve our `dueDate` field from a simple _string_ to an
+_object_ consisting of a **start** and a **due** date - which unfortunately is quite
 incompatible:
 
 [source,json]
@@ -65,7 +64,7 @@ incompatible:
 ----
 
 This is something that can be solved by some kind of mapping layer, but we normally want to avoid
-adding more complexity and even more code to maintain.
+adding more complexity and code to maintain.
 
 What if we just create a new version of our format?
 
@@ -76,14 +75,14 @@ ones usually found with [REST][].
 
 ==== Endpoint versioning
 
+Our first option is to create a new version of our endpoint, by adding the version number to the
+endpoint [URI][], which basically allows every kind of tracking and redirection magic:
+
 [source,shell]
 ----
 $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 ----
 <1> Set the version via [path parameter][]
-
-Our first option is to make the version number part of the [URI][], which allows basically
-every kind of tracking or redirection and is pretty common for API endpoints.
 
 |===
 | Pro | Con
@@ -99,16 +98,16 @@ every kind of tracking or redirection and is pretty common for API endpoints.
 
 ==== Content versioning
 
+And the second option is to serve all versions from a single endpoint by honoring client-provided
+preferences here in the form of an [Accept header][].
+This has the additional benefit of offloading the content negotiation part to the client, so it can
+pick the format it understands.
+
 [source,shell]
 ----
 $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://blog.unexist.dev/api/todos # <1>
 ----
 <1> Set the version via [Accept header][]
-
-And the second option is to serve all versions from a single endpoint by honoring the
-[Accept header][] of the client.
-This moves the content negotiation part to the client and it can pick the format that is well and
-proper.
 
 |===
 | Pro | Con
