@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Message formats and versioning
+title: Evolving a schema
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -8,8 +8,6 @@ tags: showcase
 categories: kafka jsonschema avro apicurio karapace showcase
 toc: true
 ---
-:imagesdir: /assets/images/message-formats-and-versioning.adoc
-
 // https://json-schema.org/
 // https://www.liquid-technologies.com/online-json-to-schema-converter
 
@@ -20,22 +18,13 @@ Obviously, the same is true for inter-service-communication, but unlike snail ma
 format will most likely change over time.
 
 The first part of this article explains a bit why it is necessary to think about how to evolve
-formats even in greenfield projects and tries to answers questions like:
+formats even in greenfield projects and the second part demonstrates how all of this can be done
+with [Avro][].
 
-- How can we make sure both sides understand the same format?
-- How can we share the actual format?
+== Structured format
 
-And second part demonstrates how all of this can be done with [Avro][].
-
-NOTE: If you aren't interested in the **why** and just want to see the **how** with [Avro][] - just
-skip to the later chapter.
-
-== Common understanding
-
-The first stop on our way to common understanding is to pick a format and make it default for
-further communication.
-One of the top choices on the format side usually is [JSON][], which might be a really poor choice
-for a letter exchange, but it is quite common in-between services:
+If we consider various structured formats one of the more common options is [JSON][], which might
+be a really poor choice for a letter exchange, but easy readable for human and machine:
 
 [source,json]
 ----
