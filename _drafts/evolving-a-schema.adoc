@@ -26,10 +26,16 @@ The first part of this article explains why it is necessary to think about how t
 formats from start and demonstrates two of the more common ways to handle this with [REST][].
 And the second part introduces [Avro][] and explains ways can be done with [Kafka][].
 
-== Using a structured format
+== How to evolve formats?
 
-If we consider various structured formats one of the more common options is [JSON][], which might
-be a really poor choice for a letter exchange, but easy readable for human and machine:
+There are few viable options for the kind of format, but I daresay the current gold standard here
+is just [JSON][].
+
+Modern JSON parsers are pretty mature and handle some of surprises in a sane way.
+This can save us from handling trivial cases like when something optional is unset and we are
+gracefully pointed to the problem, when something essential is amiss.
+
+==== Breaking the format
 
 [source,json]
 ----
@@ -42,13 +48,10 @@ be a really poor choice for a letter exchange, but easy readable for human and m
 }
 ----
 
-Modern JSON parsers are pretty mature and handle some of surprises in a sane way.
-This can save us from handling trivial cases like when something optional is unset and we are
-gracefully pointed to the problem, when something essential is amiss.
+
 
 There normally shouldn't be any surprises waiting for us - until we do something like nasty.
 
-=== Breaking the format
 
 In our scenario, we got the requirement to evolve our `dueDate` field from a simple _string_ to an
 _object_ consisting of a **start** and a **due** date - which unfortunately is quite
