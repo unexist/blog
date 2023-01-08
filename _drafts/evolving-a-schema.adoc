@@ -17,13 +17,14 @@ Getting this data to the wire requires some kind of serialization - so some deci
 upfront.
 
 Based on the actual use case, we consider points like thru-put, error handling, support of our
-endpoint technology and ease of use - but unfortunately rarely how can our chosen format be changed.
+endpoint technology and ease of use - but unfortunately rarely how can our chosen format be
+changed and live is never that easy:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
 
-The first part of this article explains why it is necessary to think about how to evolve
-formats from start and demonstrates two of the more common ways to handle this with [REST][].
+So the first part of this article explains why it is necessary to think about how to evolve formats
+and demonstrates two of the more common ways to handle this with [REST][].
 And the second part introduces [Avro][] and explains ways can be done with [Kafka][].
 
 == How to evolve formats?
