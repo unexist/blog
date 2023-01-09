@@ -8,8 +8,11 @@ tags: showcase
 categories: kafka jsonschema avro apicurio karapace showcase
 toc: true
 ---
-// https://json-schema.org/
-// https://www.liquid-technologies.com/online-json-to-schema-converter
+////
+https://json-schema.org/
+https://www.liquid-technologies.com/online-json-to-schema-converter
+https://blog.unexist.dev/redoc/#tag/Todo
+////
 
 Modern distributed systems consist of dozen of different services and they all need to be able
 to communicate with each other to fulfill their intended tasks.
@@ -29,14 +32,12 @@ And the second part introduces [Avro][] and explains ways can be done with [Kafk
 
 == How to evolve formats?
 
-There are few viable options for the kind of format, but I daresay the current gold standard here
-is just [JSON][].
+There are few viable options for the kind of format, so let us take a shortcut here and pick the
+current gold standard [JSON][].
+Modern JSON parsers are pretty mature and can handle trivial cases like when something optional is
+unset and gracefully point us to the problem, when something essential is amiss.
 
-Modern JSON parsers are pretty mature and handle some of surprises in a sane way.
-This can save us from handling trivial cases like when something optional is unset and we are
-gracefully pointed to the problem, when something essential is amiss.
-
-==== Breaking the format
+Let us start with small example for a simple [Todo][] entry:
 
 [source,json]
 ----
@@ -49,10 +50,9 @@ gracefully pointed to the problem, when something essential is amiss.
 }
 ----
 
-
-
 There normally shouldn't be any surprises waiting for us - until we do something like nasty.
 
+==== Breaking the format
 
 In our scenario, we got the requirement to evolve our `dueDate` field from a simple _string_ to an
 _object_ consisting of a **start** and a **due** date - which unfortunately is quite
