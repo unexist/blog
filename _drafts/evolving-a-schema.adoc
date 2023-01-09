@@ -13,12 +13,12 @@ toc: true
 
 Modern distributed systems consist of dozen of different services and they all need to be able
 to communicate with each other to fulfill their intended tasks.
-Getting this data to the wire requires some kind of serialization - so some decisions must be made
-upfront.
+For this communication, the data needs to get down to the wire and here is where things are becoming
+interesting.
 
-Based on the actual use case, we consider points like thru-put, error handling, support of our
-endpoint technology and ease of use - but unfortunately rarely how can our chosen format be
-changed and live is never that easy:
+Based on the actual use case, there should be considerations for throughput, error handling, support
+of our specific endpoint technology and ease of use are things to consider.
+Unfortunately, life is never easy:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
