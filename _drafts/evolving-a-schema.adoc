@@ -37,7 +37,8 @@ current gold standard [JSON][].
 Modern JSON parsers are pretty mature and can handle trivial cases like when something optional is
 unset and gracefully point us to the problem, when something essential is amiss.
 
-Let us start with small example for a simple [Todo][] entry:
+Let us start with small example for a simple [Todo][] entry and see what kind of data must be
+included:
 
 [source,json]
 ----
@@ -50,9 +51,56 @@ Let us start with small example for a simple [Todo][] entry:
 }
 ----
 
-There normally shouldn't be any surprises waiting for us - until we do something like nasty.
+That looks like it covers our current requirements, but can hardly be called a schema right now.
 
-==== Breaking the format
+=== Convert it to a schema
+
+Remember we picked the gold standard?
+This comes with additional goodies - like [JSON Schema][], which is perfectly suited to describe
+our fields and also our expectations of the content inside of it.
+
+And even better, converting our previous example is so easy, it can be done automatically with the
+help of a converter like [this one][]:
+
+[source,json]
+----
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "done": {
+      "type": "null"
+    },
+    "dueDate": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "done",
+    "dueDate",
+    "id"
+  ]
+}
+----
+
+Equipped with this we can verify data and also use it as a reference of what we exepect.
+
+=== Distribute it
+
+There normally shouldn't be any surprises waiting for us - until we do something nasty.
+
+=== Time to break it
 
 In our scenario, we got the requirement to evolve our `dueDate` field from a simple _string_ to an
 _object_ consisting of a **start** and a **due** date - which unfortunately is quite
@@ -72,12 +120,12 @@ incompatible:
 }
 ----
 
-This is something that can be solved by some kind of mapping layer, but we normally want to avoid
-adding more complexity and code to maintain.
+Our problem here can be solved by some kind of mapping layer, but we normally want to avoid adding
+more complexity and code to maintain.
 
 What if we just create a new version of our format?
 
-=== Apply versioning to..?
+=== Does versioning help?
 
 There are multiple ways to apply versioning here, but let us limit ourselves to the two more common
 ones usually found with [REST][].
@@ -108,7 +156,7 @@ $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 ==== Content versioning
 
 And the second option is to serve all versions from a single endpoint by honoring client-provided
-preferences here in the form of an [Accept header][].
+preferences here in the form of an [accept header][].
 This has the additional benefit of offloading the content negotiation part to the client, so it can
 pick the format it understands.
 
@@ -137,7 +185,7 @@ Like so often in IT, both options have their merits and depend on what you are r
 In big architectures, it can be useful to be able to serve different versions of your messages on
 different microservices and keep them really small and simple (see [KISS][]).
 PACT can also help here to keep track of the different versions available and also provide insights
-to the actual use patterns.
+to actual use patterns.
 
 From a nitpicking perspective, versioning the actual content is preferable, because you have in
 fact just one version of the endpoint - it just serves a different version of your format.
@@ -147,22 +195,9 @@ whole REST idea.
 So whatever you pick, both options allow the client to select a version, either by route or by
 header and the first problem is addressed.
 
-== Share the format
 
-When you want to share something abstract like a format, you need some kind of formalism or way
-to really describe it.
-Like, if you look back at your schools days, I bet you've had to deal with the formal requirements
-of how to write a business letter - so people on the receiving end really have the impression you
-are serious.
 
-=== Define a schema
 
-Defining a schema for a structured format like [JSON][] is pretty easy and some people already did
-the grunt work for us by inventing [JSON Schema][].
-
-This allows us to describe the fields and also our expectations of the content inside of it.
-And even better, converting our previous example is so easy, it can be done automatically with the
-help of a converter like [this one][]:
 
 [source,json]
 ----
