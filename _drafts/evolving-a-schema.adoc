@@ -5,12 +5,13 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: kafka jsonschema avro apicurio karapace showcase
+categories: json jsonschema avro apicurio showcase
 toc: true
 ---
 ////
 https://json-schema.org/
 https://www.liquid-technologies.com/online-json-to-schema-converter
+https://konbert.com/convert/json/to/avro
 https://blog.unexist.dev/redoc/#tag/Todo
 ////
 
@@ -19,20 +20,19 @@ to communicate with each other to fulfill their intended tasks.
 For this communication, the data needs to get down to the wire and here is where things are becoming
 interesting.
 
-Based on the actual use case, there should be considerations for throughput, error handling, support
-of our specific endpoint technology and ease of use are things to consider.
-Unfortunately, life is never easy:
+Without any further changes, this would be pretty easy to deal with, but unfortunately life is
+never easy:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
 
-So the first part of this article explains why it is necessary to think about how to evolve formats
-and demonstrates two of the more common ways to handle this with [REST][].
-And the second part introduces [Avro][] and explains ways can be done with [Kafka][].
+The first part of this article compares the textual format [JSON][] with the binary-based
+[Avro][] and the second part why it is necessary to think about how to evolve formats.
 
-== How to evolve formats?
+== Picking a format
 
-There are few viable options for the kind of format, so let us take a shortcut here and pick the
+Strictly speaking, everyt
+There are few viable options that can be usedfor the kind of format, so let us take a shortcut here and pick the
 current gold standard [JSON][].
 Modern JSON parsers are pretty mature and can handle trivial cases like when something optional is
 unset and gracefully point us to the problem, when something essential is amiss.
@@ -48,6 +48,36 @@ included:
     "done": null,
     "dueDate": "2022-11-21",
     "id": 0
+}
+----
+
+[source,avro]
+----
+{
+  "type": "record",
+  "name": "Record",
+  "fields": [
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "done",
+      "type": "null"
+    },
+    {
+      "name": "dueDate",
+      "type": "string"
+    },
+    {
+      "name": "id",
+      "type": "long"
+    }
+  ]
 }
 ----
 
