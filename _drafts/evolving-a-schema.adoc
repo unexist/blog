@@ -31,8 +31,7 @@ The first part of this article compares the textual format [JSON][] with the bin
 
 == Picking a format
 
-Strictly speaking, everyt
-There are few viable options that can be usedfor the kind of format, so let us take a shortcut here and pick the
+There are few viable options that can be used as for the kind of format, so let us take a shortcut here and pick the
 current gold standard [JSON][].
 Modern JSON parsers are pretty mature and can handle trivial cases like when something optional is
 unset and gracefully point us to the problem, when something essential is amiss.
@@ -45,7 +44,7 @@ included:
 {
     "title": "First",
     "description": "Bla",
-    "done": null,
+    "done": true,
     "dueDate": "2022-11-21",
     "id": 0
 }
@@ -67,7 +66,7 @@ included:
     },
     {
       "name": "done",
-      "type": "null"
+      "type": "boolean"
     },
     {
       "name": "dueDate",
