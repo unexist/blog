@@ -12,7 +12,11 @@ toc: true
 https://json-schema.org/
 https://www.liquid-technologies.com/online-json-to-schema-converter
 https://konbert.com/convert/json/to/avro
+https://digital-preservation.github.io/csv-schema/
 http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
+https://avro.apache.org/docs/1.11.1/specification/
+https://www.json.org/
+https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
 ////
 
 Modern distributed systems consist of dozens of different services and each of these needs to
@@ -20,8 +24,8 @@ communicate with others to fulfill tasks.
 Without a well-known and understood format things can become messy, once data needs to go down to
 the wire.
 
-The first part of this article compares the textual format [JSON][] with the binary-based
-[Avro][] and lays out how both can be evolved on a format level.
+The first part of this article compares the textual formats [CSV][] and [JSON][] with the
+binary-based [Avro][] and lays out how both can be evolved on a format level.
 And the second part explains how the same can be archived with versions on examples based on
 [REST][].
 
@@ -39,16 +43,45 @@ format, so we just serialize (or encode) our object values separated by commas (
 First,Bla,true,2022-11-21,0
 ----
 
-Most of the languages ([Java][] included) provide proper and mature CSV-parser which can be quickly
-hooked into our code.
-This allows us to avoid the problems altogether the internet warns us about
-[writing own CSV code][].
+Most of the programming languages ([Java][] included) provide proper and mature CSV-parser which
+can be quickly hooked into our code.
+This allows us to avoid the problems the internet warns us about [writing own CSV code][]
+altogether.
 
-Wired up and deployed, our solutions works splendidly until.. the right time to cite and old greek:
+Wired up and deployed, our solutions works splendidly until..
+I think it is about time to cite an old greek and move this post forward literally:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
 
+== Dealing with change
+
+It is probably easy to imagine a scenario that requires a change of our format:
+
+- A new requirement for additional fields
+- Some data type needs to be changed
+- Removal of data due to regulations
+- ..the list is endless!
+
+How do our formats handle these problems?
+
+== Comparison of formats
+
+The next three chapters compare the different formats based on our identified problems.
+
+=== Good ol' CSV
+
+This is probably a bit unfair, we all know CSV isn't on par with the other formats, but the idea
+here is to demonstrate how bad of a choice CSV is and we also want stay in line with the format
+of the post.
+
+==== Add or remove fields
+
+Adding or removing fields to and from our original version is really difficult - readers must
+be able to match the actual fields and any change (even the order) makes their life miserable.
+
+A straight forward solution here is just to include the names of the fields in a header - this is
+pretty common and probably (in)famously known from [Excel][]:
 
 [source,csv]
 ----
@@ -56,7 +89,33 @@ title,description,done,dueDate,id
 First,Bla,true,2022-11-21,0
 ----
 
+==== Change of data types
+
+Figuring out the data type of the values is up to the reader, we omit all information about
+datatypes.
+
+
+[source,text]
+----
+version 1.0
+@totalColumns 5
+
+title: regex("[-/0-9\w\s,.]+")
+description: regex("[-/0-9\w\s,.]+")
+done: is("true") or is("false")
+dueDate: regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")
+id: positiveInteger
+----
+
+==== Complex data types
+
+There is no support for complex or nested types at all.
+
 === Textual with JSON
+
+==== Add or remove fields
+==== Change of data types
+==== Complex data types
 
 [source,json]
 ----
@@ -68,6 +127,7 @@ First,Bla,true,2022-11-21,0
     "id": 0
 }
 ----
+
 
 [source,json]
 ----
@@ -103,6 +163,10 @@ First,Bla,true,2022-11-21,0
 
 === Avro and the binary
 
+==== Add or remove fields
+==== Change of data types
+==== Complex data types
+
 [source,avro]
 ----
 {
@@ -133,9 +197,8 @@ First,Bla,true,2022-11-21,0
 }
 ----
 
-
-
-
+NOTE: [Martin Kleppman][] compares various binary formats in his seminal book
+[Designing Data-Intensive Application][].
 
 == Apply versioning
 
@@ -190,7 +253,7 @@ $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://
 |
 |===
 
-=== What to pick?
+== Conclusion
 
 Like so often in IT, both options have their merits and depend on what you are really up to.
 
@@ -206,3 +269,7 @@ whole REST idea.
 
 So whatever you pick, both options allow the client to select a version, either by route or by
 header and the first problem is addressed.
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-kafka-quarkus>
