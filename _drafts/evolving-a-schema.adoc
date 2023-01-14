@@ -5,7 +5,7 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: json jsonschema avro apicurio showcase
+categories: json jsonschema avro thrift protobuf apicurio showcase
 toc: true
 ---
 ////
@@ -22,7 +22,7 @@ the wire.
 
 The first part of this article compares the textual format [JSON][] with the binary-based
 [Avro][] and lays out how both can be evolved on a format level.
-And the second part explains how the same can be archived with versions on examples based in
+And the second part explains how the same can be archived with versions on examples based on
 [REST][].
 
 NOTE: This articles uses the usually Todo object found in many of the posts of this blog - if you
@@ -31,8 +31,24 @@ haven't seen it before, an [OpenAPI][] definition can be found here:
 
 == Picking a format
 
-This should be fairly is, since anything that can be parsed on the receiving end **is** a proper
-format, so we just serialize (or encode) our object values separated by commas:
+This should be fairly, since anything that can be parsed on the receiving end **is** a proper
+format, so we just serialize (or encode) our object values separated by commas ([CSV][]):
+
+[source,csv]
+----
+First,Bla,true,2022-11-21,0
+----
+
+Most of the languages ([Java][] included) provide proper and mature CSV-parser which can be quickly
+hooked into our code.
+This allows us to avoid the problems altogether the internet warns us about
+[writing own CSV code][].
+
+Wired up and deployed, our solutions works splendidly until.. the right time to cite and old greek:
+
+[quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
+Change is the only constant in life.
+
 
 [source,csv]
 ----
@@ -119,19 +135,14 @@ First,Bla,true,2022-11-21,0
 
 
 
-[quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
-Change is the only constant in life.
 
 
-
-
-
-=== Does versioning help?
+== Apply versioning
 
 There are multiple ways to apply versioning here, but let us limit ourselves to the two more common
 ones usually found with [REST][].
 
-==== Endpoint versioning
+=== Endpoint versioning
 
 Our first option is to create a new version of our endpoint, by adding the version number to the
 endpoint [URI][], which basically allows every kind of tracking and redirection magic:
@@ -154,7 +165,7 @@ $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 | Further evolution might require a new endpoint
 |===
 
-==== Content versioning
+=== Content versioning
 
 And the second option is to serve all versions from a single endpoint by honoring client-provided
 preferences here in the form of an [accept header][].
