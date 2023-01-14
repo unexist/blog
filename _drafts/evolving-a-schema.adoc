@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Evolving a schema
+title: Evolving a format
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -12,32 +12,35 @@ toc: true
 https://json-schema.org/
 https://www.liquid-technologies.com/online-json-to-schema-converter
 https://konbert.com/convert/json/to/avro
-https://blog.unexist.dev/redoc/#tag/Todo
+http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
 ////
 
-Modern distributed systems consist of dozen of different services and they all need to be able
-to communicate with each other to fulfill their intended tasks.
-For this communication, the data needs to get down to the wire and here is where things are becoming
-interesting.
-
-Without any further changes, this would be pretty easy to deal with, but unfortunately life is
-never easy:
-
-[quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
-Change is the only constant in life.
+Modern distributed systems consist of dozens of different services and each of these needs to
+communicate with others to fulfill tasks.
+Without a well-known and understood format things can become messy, once data needs to go down to
+the wire.
 
 The first part of this article compares the textual format [JSON][] with the binary-based
-[Avro][] and the second part why it is necessary to think about how to evolve formats.
+[Avro][] and lays out how both can be evolved on a format level.
+And the second part explains how the same can be archived with versions on examples based in
+[REST][].
+
+NOTE: This articles uses the usually Todo object found in many of the posts of this blog - if you
+haven't seen it before, an [OpenAPI][] definition can be found here:
+<https://blog.unexist.dev/redoc/#tag/Todo>
 
 == Picking a format
 
-There are few viable options that can be used as for the kind of format, so let us take a shortcut here and pick the
-current gold standard [JSON][].
-Modern JSON parsers are pretty mature and can handle trivial cases like when something optional is
-unset and gracefully point us to the problem, when something essential is amiss.
+This should be fairly is, since anything that can be parsed on the receiving end **is** a proper
+format, so we just serialize (or encode) our object values separated by commas:
 
-Let us start with small example for a simple [Todo][] entry and see what kind of data must be
-included:
+[source,csv]
+----
+title,description,done,dueDate,id
+First,Bla,true,2022-11-21,0
+----
+
+=== Textual with JSON
 
 [source,json]
 ----
@@ -49,6 +52,40 @@ included:
     "id": 0
 }
 ----
+
+[source,json]
+----
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "done": {
+      "type": "boolean"
+    },
+    "dueDate": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "done",
+    "dueDate",
+    "id"
+  ]
+}
+----
+
+=== Avro and the binary
 
 [source,avro]
 ----
@@ -80,79 +117,14 @@ included:
 }
 ----
 
-That looks like it covers our current requirements, but can hardly be called a schema right now.
 
-=== Convert it to a schema
 
-Remember we picked the gold standard?
-This comes with additional goodies - like [JSON Schema][], which is perfectly suited to describe
-our fields and also our expectations of the content inside of it.
+[quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
+Change is the only constant in life.
 
-And even better, converting our previous example is so easy, it can be done automatically with the
-help of a converter like [this one][]:
 
-[source,json]
-----
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "done": {
-      "type": "null"
-    },
-    "dueDate": {
-      "type": "string"
-    },
-    "id": {
-      "type": "integer"
-    }
-  },
-  "required": [
-    "title",
-    "description",
-    "done",
-    "dueDate",
-    "id"
-  ]
-}
-----
 
-Equipped with this we can verify data and also use it as a reference of what we exepect.
 
-=== Distribute it
-
-There normally shouldn't be any surprises waiting for us - until we do something nasty.
-
-=== Time to break it
-
-In our scenario, we got the requirement to evolve our `dueDate` field from a simple _string_ to an
-_object_ consisting of a **start** and a **due** date - which unfortunately is quite
-incompatible:
-
-[source,json]
-----
-{
-    "title": "First",
-    "description": "Bla",
-    "done": null,
-    "dueDate": {
-        "startDate": "2022-11-20",
-        "dueDate": "2022-11-21"
-    },
-    "id":0
-}
-----
-
-Our problem here can be solved by some kind of mapping layer, but we normally want to avoid adding
-more complexity and code to maintain.
-
-What if we just create a new version of our format?
 
 === Does versioning help?
 
@@ -223,47 +195,3 @@ whole REST idea.
 
 So whatever you pick, both options allow the client to select a version, either by route or by
 header and the first problem is addressed.
-
-
-
-
-
-[source,json]
-----
-{
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "type": "object",
-  "properties": {
-    "title": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "done": {
-      "type": "null"
-    },
-    "dueDate": {
-      "type": "string"
-    },
-    "id": {
-      "type": "integer"
-    }
-  },
-  "required": [
-    "title",
-    "description",
-    "done",    "dueDate",
-    "id"
-  ]
-
-}
-----
-
-If we keep in line with our analogy, we need some kind of schoolbook now to write some lengthy
-chapter about our format, so teacher can give meaningful lectures about it.
-
-We rather skip this and talk about [schema registries][].
-
-=== Make it public
-
