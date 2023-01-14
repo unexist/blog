@@ -63,17 +63,16 @@ It is probably easy to imagine a scenario that requires a change of our format:
 - Removal of data due to regulations
 - ..the list is endless!
 
-How do our formats handle these problems?
+How do our formats fare with these problems?
 
 == Comparison of formats
 
-The next three chapters compare the different formats based on our identified problems.
+The next three chapters explain how our identified problems can be solved for our chosen formats.
 
 === Good ol' CSV
 
-This is probably a bit unfair, we all know CSV isn't on par with the other formats, but the idea
-here is to demonstrate how bad of a choice CSV is and we also want stay in line with the format
-of the post.
+This is probably a bit unfair, we all know CSV isn't on par with the other formats, but maybe there
+is a surprise waiting and we also want stay in line with the format of the post, right?
 
 ==== Add or remove fields
 
