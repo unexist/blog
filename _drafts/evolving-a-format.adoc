@@ -25,12 +25,12 @@ Without a well-known and understood format things can become messy, once data ne
 the wire.
 
 The first part of this article compares the textual formats [CSV][] and [JSON][] with the
-binary-based [Avro][] and lays out how both can be evolved on a format level.
+binary-based [Avro][] and lays out how each can be evolved on a format level.
 And the second part explains how the same can be archived with versions on examples based on
 [REST][].
 
 NOTE: This articles uses the Todo object usually found in many posts of this this blog - if you
-haven't seen it before you can find an [OpenAPI][] found:
+haven't seen it before you can find an [OpenAPI][] specification here:
 <https://blog.unexist.dev/redoc/#tag/Todo>
 
 == Picking a format
@@ -83,7 +83,7 @@ title,description,done,dueDate,id
 First,Bla,true,2022-11-21,0
 ----
 
-NOTE: We ignore the fact, that values itself can also include a comma and assume our lovely
+NOTE: We ignore the fact, that values itself can also include e.g. commas and assume our lovely
 CSV-parser handles theses cases perfectly well.
 
 ==== Change of data types
@@ -114,8 +114,8 @@ id: positiveInteger
 
 NOTE: The full specification can be found here: <http://digital-preservation.github.io/csv-schema/csv-schema-1.1.html>
 
-Having a schema that can be used to verify input is nice, but the major advantage is the format is
-now specified, documented and can be put under version control.
+Having a schema that can be used to verify input is nice, but the major advantage here is the
+format can be formally specified now and put under version control.
 
 ==== Complex data types
 
@@ -123,9 +123,8 @@ There is no support for complex or nested types at all.
 
 === Textual with JSON
 
-==== Add or remove fields
-==== Change of data types
-==== Complex data types
+There is probably no lengthy introduction to [JSON][] required, quickly after introduction as an
+object notation for [JavaScript][], it got lots of attention is nowadays pretty widespread.
 
 [source,json]
 ----
@@ -138,6 +137,7 @@ There is no support for complex or nested types at all.
 }
 ----
 
+==== Add or remove fields
 
 [source,json]
 ----
@@ -170,6 +170,24 @@ There is no support for complex or nested types at all.
   ]
 }
 ----
+
+==== Change of data types
+==== Complex data types
+
+[source,json]
+----
+{
+    "title": "First",
+    "description": "Bla",
+    "done": true,
+    "dueDate": {
+      "start": "2022-11-21",
+      "due": "2022-11-23",
+    },
+    "id": 0
+}
+----
+
 
 === Avro and the binary
 
