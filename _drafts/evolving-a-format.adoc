@@ -5,7 +5,7 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: json jsonschema avro thrift protobuf apicurio showcase
+categories: json jsonschema avro showcase
 toc: true
 ---
 ////
@@ -29,27 +29,26 @@ binary-based [Avro][] and lays out how both can be evolved on a format level.
 And the second part explains how the same can be archived with versions on examples based on
 [REST][].
 
-NOTE: This articles uses the usually Todo object found in many of the posts of this blog - if you
-haven't seen it before, an [OpenAPI][] definition can be found here:
+NOTE: This articles uses the Todo object usually found in many posts of this this blog - if you
+haven't seen it before you can find an [OpenAPI][] found:
 <https://blog.unexist.dev/redoc/#tag/Todo>
 
 == Picking a format
 
-This should be fairly, since anything that can be parsed on the receiving end **is** a proper
-format, so we just serialize (or encode) our object values separated by commas ([CSV][]):
+Picking a format should be fairly easy:
+Anything that can be parsed on the receiving end **is** a proper format, so we just serialize
+(or encode) our object values separated by commas ([CSV][]):
 
 [source,csv]
 ----
 First,Bla,true,2022-11-21,0
 ----
 
-Most of the programming languages ([Java][] included) provide proper and mature CSV-parser which
-can be quickly hooked into our code.
-This allows us to avoid the problems the internet warns us about [writing own CSV code][]
-altogether.
+On the implementation side we don't want to needlessly [roll our own CSV code][], so a after quick
+check we settle for any of the mature CSV-parser our programming language provides.
+And once wired up and deployed, our solutions works splendidly, until a change is necessary.
 
-Wired up and deployed, our solutions works splendidly until..
-I think it is about time to cite an old greek and move this post forward literally:
+So far there weren't citation of old Greeks in this blog - about time to change that:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
@@ -87,6 +86,9 @@ pretty common and probably (in)famously known from [Excel][]:
 title,description,done,dueDate,id
 First,Bla,true,2022-11-21,0
 ----
+
+NOTE: We ignore the fact, that values itself can also include a comma and assume our lovely
+CSV-parser handles theses cases perfectly well.
 
 ==== Change of data types
 
