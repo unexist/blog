@@ -45,10 +45,10 @@ First,Bla,true,2022-11-21,0
 ----
 
 On the implementation side we don't want to needlessly [roll our own CSV code][], so a after quick
-check we settle for any of the mature CSV-parser our programming language provides.
+check we settle for any of the hopefully mature CSV-parser our programming language provides.
 And once wired up and deployed, our solutions works splendidly, until a change is necessary.
 
-So far there weren't citation of old Greeks in this blog - about time to change that:
+So far there weren't any citation of old Greeks in this blog - about time to change that:
 
 [quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
 Change is the only constant in life.
@@ -63,10 +63,6 @@ It is probably easy to imagine a scenario that requires a change of our format:
 - ..the list is endless!
 
 How do our formats fare with these problems?
-
-== Comparison of formats
-
-The next three chapters explain how our identified problems can be solved for our chosen formats.
 
 === Good ol' CSV
 
@@ -93,8 +89,16 @@ CSV-parser handles theses cases perfectly well.
 ==== Change of data types
 
 Figuring out the data type of the values is up to the reader, we omit all information about
-datatypes.
+data types.
 
+This kind of definition can usually be done with a schema, which basically describes the format
+including data types and also allows some form of verification of values.
+
+Surprisingly, something like this already exists for CSV, so let me introduce you to
+[CSV Schema][].
+
+The schema itself is straight forward and comes with lots of keywords like `positiveInteger` or
+`regex` to provide arbitrary regular expressions:
 
 [source,text]
 ----
@@ -107,6 +111,11 @@ done: is("true") or is("false")
 dueDate: regex("[0-9]{4}-[0-9]{2}-[0-9]{2}")
 id: positiveInteger
 ----
+
+NOTE: The full specification can be found here: <http://digital-preservation.github.io/csv-schema/csv-schema-1.1.html>
+
+Having a schema that can be used to verify input is nice, but the major advantage is the format is
+now specified, documented and can be put under version control.
 
 ==== Complex data types
 
