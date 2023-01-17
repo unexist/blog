@@ -10,9 +10,9 @@ toc: true
 ---
 ////
 https://json-schema.org/
-https://www.liquid-technologies.com/online-json-to-schema-converter
 https://konbert.com/convert/json/to/avro
 https://digital-preservation.github.io/csv-schema/
+http://json-schema.org/understanding-json-schema/reference/numeric.html
 http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
 https://avro.apache.org/docs/1.11.1/specification/
 https://www.json.org/
@@ -97,8 +97,8 @@ including data types and also allows some form of verification of values.
 Surprisingly, something like this already exists for CSV, so let me introduce you to
 [CSV Schema][].
 
-The schema itself is straight forward and comes with lots of keywords like `positiveInteger` or
-`regex` to provide arbitrary regular expressions:
+The schema itself is straight forward and comes with lots of keywords like `positiveInteger`,
+`regex` to provide arbitrary regular expressions or `is` to construct enumerations:
 
 [source,text]
 ----
@@ -114,8 +114,10 @@ id: positiveInteger
 
 NOTE: The full specification can be found here: <http://digital-preservation.github.io/csv-schema/csv-schema-1.1.html>
 
-Having a schema that can be used to verify input is nice, but the major advantage here is the
-format can be formally specified now and put under version control.
+Using a schema to verify input is nice, but the major advantage here is the format can be formally
+specified now and put under version control.
+If held closely to the code and updated whenever something needs to be changed, this specification
+acts as a [living documentation][] and eases the life of new implementors.
 
 ==== Complex data types
 
@@ -124,7 +126,10 @@ There is no support for complex or nested types at all.
 === Textual with JSON
 
 There is probably no lengthy introduction to [JSON][] required, quickly after introduction as an
-object notation for [JavaScript][], it got lots of attention is nowadays pretty widespread.
+object notation for [JavaScript][], it got rightfully lots of attention is nowadays pretty
+widespread.
+
+If we look back to our example, a converted version probably looks like this:
 
 [source,json]
 ----
@@ -138,6 +143,18 @@ object notation for [JavaScript][], it got lots of attention is nowadays pretty 
 ----
 
 ==== Add or remove fields
+
+Adding or removing fields is pretty easy, due to the object nature of JSON.
+Fields can be accessed by name like `title` and non-existing fields return a specific `null` value.
+
+==== Change of data types
+
+Data types in JSON are a bit more tricky and have similar problems like our CSV version from above.
+Especially numeric types can be troublesome, if we require a specific precision.
+
+Again, the cheap way out here is another schema - namely [JSON Schema][].
+Additionally to the format options, it also allows to specify which fields are required and which
+are optional:
 
 [source,json]
 ----
@@ -171,7 +188,8 @@ object notation for [JavaScript][], it got lots of attention is nowadays pretty 
 }
 ----
 
-==== Change of data types
+NOTE: The above schema was generated with: <https://www.liquid-technologies.com/online-json-to-schema-converter>
+
 ==== Complex data types
 
 [source,json]
