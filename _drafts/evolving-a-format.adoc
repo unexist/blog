@@ -129,7 +129,7 @@ There is probably no lengthy introduction to [JSON][] required, quickly after in
 object notation for [JavaScript][], it got rightfully lots of attention is nowadays pretty
 widespread.
 
-If we look back to our example, a converted version probably looks like this:
+If we look back at our example, a converted version might look like this:
 
 [source,json]
 ----
@@ -145,16 +145,19 @@ If we look back to our example, a converted version probably looks like this:
 ==== Add or remove fields
 
 Adding or removing fields is pretty easy, due to the object nature of JSON.
-Fields can be accessed by name like `title` and non-existing fields return a specific `null` value.
+Fields can be accessed by name like `title` and non-existing fields return a specific `null` value
+depending on the language/parser.
 
 ==== Change of data types
 
-Data types in JSON are a bit more tricky and have similar problems like our CSV version from above.
+Data types in JSON are a bit more tricky and have similar problems like the CSV version from above.
 Especially numeric types can be troublesome, if we require a specific precision.
 
-Again, the cheap way out here is another schema - namely [JSON Schema][].
+So why reinvent the wheel - there is also a schema available - namely [JSON Schema][].
 Additionally to the format options, it also allows to specify which fields are required and which
-are optional:
+are optional.
+This is a kind of double-edged sword, because removing a previously required field can be
+troublesome for compatibility in any direction.
 
 [source,json]
 ----
