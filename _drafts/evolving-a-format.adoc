@@ -17,6 +17,7 @@ http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
 https://avro.apache.org/docs/1.11.1/specification/
 https://www.json.org/
 https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
+https://fasterxml.github.io/jackson-databind/javadoc/2.8/com/fasterxml/jackson/databind/JsonNode.html#asText()
 ////
 
 Modern distributed systems consist of dozens of different services and each of these needs to
@@ -88,7 +89,7 @@ CSV-parser handles theses cases perfectly well.
 
 ==== Change of data types
 
-Figuring out the data type of the values is up to the reader, we omit all information about
+Figuring out the data type of the values is up to the reader, since we omit all information about
 data types.
 
 This kind of definition can usually be done with a schema, which basically describes the format
@@ -121,7 +122,7 @@ acts as a [living documentation][] and eases the life of new implementors.
 
 ==== Complex data types
 
-There is no support for complex or nested types at all.
+There is no support for complex or nested types at all, so this cannot be problem at least.
 
 === Textual with JSON
 
@@ -201,6 +202,9 @@ This will ultimately fail every time, because it cannot find the **required** fi
 
 ==== Complex data types
 
+Objects in JSON can nest other objects and also some special forms like lists.
+This allows some nice trees and doesn't limit us to flat structures like in CSV:
+
 [source,json]
 ----
 {
@@ -215,6 +219,17 @@ This will ultimately fail every time, because it cannot find the **required** fi
 }
 ----
 
+Unfortunately this introduces another case which requires special treatment:
+Applications might expect a specific type like `string` and just find another `object`.
+
+This can be handled fairly easy, because most of the JSON-parsers out there allow to name a specific
+type that should be fetched from an object:
+
+[source,java]
+----
+String content = todo.get("dueDate").textValue(); // <1>
+----
+<1>: This might return a [surprise][], dependent on the value found.
 
 === Avro and the binary
 
