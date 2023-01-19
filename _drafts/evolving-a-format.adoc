@@ -1,13 +1,15 @@
 ---
 layout: post
 title: Evolving a format
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2020-08-12 16:05:48 +0200
+last_updated: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
 tags: showcase
-categories: json jsonschema avro showcase
+categories: json jsonschema avro hadoop showcase
 toc: true
 ---
+:imagesdir: /assets/images/evolving_a_format
+
 ////
 https://json-schema.org/
 https://konbert.com/convert/json/to/avro
@@ -18,6 +20,7 @@ https://avro.apache.org/docs/1.11.1/specification/
 https://www.json.org/
 https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
 https://fasterxml.github.io/jackson-databind/javadoc/2.8/com/fasterxml/jackson/databind/JsonNode.html#asText()
+https://dataformat.net/avro/viewer-and-converter
 ////
 
 Modern distributed systems consist of dozens of different services and each of these needs to
@@ -120,6 +123,11 @@ specified now and be put under version control.
 If held closely to the code and updated whenever something has to be changed, this specification
 acts as a [living documentation][] and eases the life of new implementors.
 
+Another useful benefit is your schema might be supported by one of the available schema registries
+like [Apicurio][].
+Although it might be difficult to find one that actually support CSV-schema, there is plenty of
+support for other types.
+
 ==== Complex data types
 
 There is no support for complex or nested types at all, so this cannot be problem at least.
@@ -193,12 +201,16 @@ NOTE: We are lazy, so the above schema was generated with:
 This pretty much solves the same problems, but also provides some means to mark fields as required
 or entirely optional.
 This is a double-edged sword and should be considered as such, because removing a previously
-required field can be troublesome for compatibility in any direction.
+required field can be troublesome for compatibility in any direction - let me explain:
 
 Consider your application only knows the schema from above, what happens if you feed it an evolved
 version that is basically the same, but replaces the required field `description` with a new
 field `summary`.
 This will ultimately fail every time, because it cannot find the **required** field.
+
+And in contrast to a CSV-schema, our JSON-schema is supported by [Apicurio][]:
+
+image::apicurio_json.png[]
 
 ==== Complex data types
 
@@ -229,19 +241,59 @@ type that should be fetched from an object:
 ----
 String content = todo.get("dueDate").textValue(); // <1>
 ----
-<1>: This might return a [surprise][], dependent on the value found.
+<1>: Be careful, this might return a [surprise][], dependent on the value found.
 
 === Avro and the binary
 
+[Avro][] is a entirely different beast and needs a bit of explanation.
+Originally designed for the use cases of [Hadoop][], there were quickly other cases of application,
+like serialization of data for [Kafka][] due to its small footprint of its binary base and
+compression options.
+
+The base mode of operation is a bundled and encoded form, which includes the schema alogn with the
+actual data, which looks _interesting_ in hex view:
+
+[source,shell]
+----
+$ xxd todo.avro
+00000000: 4f62 6a01 0416 6176 726f 2e73 6368 656d  Obj...avro.schem
+00000010: 61a8 037b 2274 7970 6522 3a22 7265 636f  a..{"type":"reco
+00000020: 7264 222c 226e 616d 6522 3a22 5265 636f  rd","name":"Reco
+00000030: 7264 222c 2266 6965 6c64 7322 3a5b 7b22  rd","fields":[{"
+00000040: 6e61 6d65 223a 2274 6974 6c65 222c 2274  name":"title","t
+00000050: 7970 6522 3a22 7374 7269 6e67 227d 2c7b  ype":"string"},{
+00000060: 226e 616d 6522 3a22 6465 7363 7269 7074  "name":"descript
+00000070: 696f 6e22 2c22 7479 7065 223a 2273 7472  ion","type":"str
+00000080: 696e 6722 7d2c 7b22 6e61 6d65 223a 2264  ing"},{"name":"d
+00000090: 6f6e 6522 2c22 7479 7065 223a 2262 6f6f  one","type":"boo
+000000a0: 6c65 616e 227d 2c7b 226e 616d 6522 3a22  lean"},{"name":"
+000000b0: 6475 6544 6174 6522 2c22 7479 7065 223a  dueDate","type":
+000000c0: 2273 7472 696e 6722 7d2c 7b22 6e61 6d65  "string"},{"name
+000000d0: 223a 2269 6422 2c22 7479 7065 223a 226c  ":"id","type":"l
+000000e0: 6f6e 6722 7d5d 7d14 6176 726f 2e63 6f64  ong"}]}.avro.cod
+000000f0: 6563 086e 756c 6c00 dd2c f589 e9ad 358b  ec.null..,....5.
+00000100: 7557 a016 a861 8c60 022e 0a46 6972 7374  uW...a.`...First
+00000110: 0642 6c61 0114 3230 3232 2d31 312d 3231  .Bla..2022-11-21
+00000120: 00dd 2cf5 89e9 ad35 8b75 57a0 16a8 618c  ..,....5.uW...a.
+00000130: 60
+----
+
+It is also possible to omit the schema and just send the plain encoded data, but the reader needs
+the schema to be able to understand it.
+
 ==== Add or remove fields
-==== Change of data types
-==== Complex data types
+
+
+
+The [IDL][] of the schema supports various advanced options which are better explained in the
+[spec][], but the base form close to our previous version looks like this:
 
 [source,avro]
 ----
 {
   "type": "record",
-  "name": "Record",
+  "name": "Todo",
+  "namespace": "dev.unexist.showcase.todo.domain"
   "fields": [
     {
       "name": "title",
@@ -266,6 +318,11 @@ String content = todo.get("dueDate").textValue(); // <1>
   ]
 }
 ----
+
+==== Change of data types
+==== Complex data types
+
+
 
 NOTE: [Martin Kleppman][] compares various binary formats in his seminal book
 [Designing Data-Intensive Application][].
