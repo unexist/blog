@@ -36,8 +36,8 @@ haven't seen it before you can find an [OpenAPI][] specification here:
 == Picking a format
 
 Picking a format should be fairly easy:
-Anything that can be parsed on the receiving end **is** a proper format, so we just serialize
-(or encode) our object values separated by commas ([CSV][]):
+Anything that can be parsed on the receiving end **is** a proper format, so why not just serialize
+(or encode) our object values separated by commas ([CSV][])?
 
 [source,csv]
 ----
@@ -45,7 +45,7 @@ First,Bla,true,2022-11-21,0
 ----
 
 On the implementation side we don't want to needlessly [roll our own CSV code][], so a after quick
-check we settle for any of the hopefully mature CSV-parser our programming language provides.
+check we settle for any hopefully mature CSV-parser our programming language provides.
 And once wired up and deployed, our solutions works splendidly, until a change is necessary.
 
 So far there weren't any citation of old Greeks in this blog - about time to change that:
@@ -115,8 +115,8 @@ id: positiveInteger
 NOTE: The full specification can be found here: <http://digital-preservation.github.io/csv-schema/csv-schema-1.1.html>
 
 Using a schema to verify input is nice, but the major advantage here is the format can be formally
-specified now and put under version control.
-If held closely to the code and updated whenever something needs to be changed, this specification
+specified now and be put under version control.
+If held closely to the code and updated whenever something has to be changed, this specification
 acts as a [living documentation][] and eases the life of new implementors.
 
 ==== Complex data types
@@ -126,8 +126,8 @@ There is no support for complex or nested types at all.
 === Textual with JSON
 
 There is probably no lengthy introduction to [JSON][] required, quickly after introduction as an
-object notation for [JavaScript][], it got rightfully lots of attention is nowadays pretty
-widespread.
+object notation for [JavaScript][], it got rightfully lots of attention is nowadays pretty much
+default.
 
 If we look back at our example, a converted version might look like this:
 
@@ -145,19 +145,17 @@ If we look back at our example, a converted version might look like this:
 ==== Add or remove fields
 
 Adding or removing fields is pretty easy, due to the object nature of JSON.
-Fields can be accessed by name like `title` and non-existing fields return a specific `null` value
-depending on the language/parser.
+Fields can be accessed by name like `title` and there exist some decent strategies like return
+`null` on non-existing fields.
 
 ==== Change of data types
 
-Data types in JSON are a bit more tricky and have similar problems like the CSV version from above.
+Data types in JSON are a bit more tricky and there are similar problems to the CSV version from
+above.
 Especially numeric types can be troublesome, if we require a specific precision.
 
-So why reinvent the wheel - there is also a schema available - namely [JSON Schema][].
-Additionally to the format options, it also allows to specify which fields are required and which
-are optional.
-This is a kind of double-edged sword, because removing a previously required field can be
-troublesome for compatibility in any direction.
+So why reinvent the wheel, when we already know a solution?
+Yes, another schema - namely [JSON Schema][]:
 
 [source,json]
 ----
@@ -183,15 +181,23 @@ troublesome for compatibility in any direction.
   },
   "required": [
     "title",
-    "description",
-    "done",
-    "dueDate",
-    "id"
+    "description"
   ]
 }
 ----
 
-NOTE: The above schema was generated with: <https://www.liquid-technologies.com/online-json-to-schema-converter>
+NOTE: We are lazy, so the above schema was generated with:
+<https://www.liquid-technologies.com/online-json-to-schema-converter>
+
+This pretty much solves the same problems, but also provides some means to mark fields as required
+or entirely optional.
+This is a double-edged sword and should be considered as such, because removing a previously
+required field can be troublesome for compatibility in any direction.
+
+Consider your application only knows the schema from above, what happens if you feed it an evolved
+version that is basically the same, but replaces the required field `description` with a new
+field `summary`.
+This will ultimately fail every time, because it cannot find the **required** field.
 
 ==== Complex data types
 
