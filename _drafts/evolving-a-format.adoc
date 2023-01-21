@@ -4,8 +4,8 @@ title: Evolving a format
 date: 2020-08-12 16:05:48 +0200
 last_updated: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
-tags: showcase
-categories: json jsonschema avro showcase
+tags: csv json jsonschema avro apicurio kafka hadoop showcase
+categories: showcase
 toc: true
 ---
 :imagesdir: /assets/images/evolving_a_format
@@ -202,7 +202,7 @@ Yes, another schema - namely [JSON Schema][]:
 }
 ----
 
-NOTE: We are lazy, so the above schema was generated with:
+NOTE: We are lazy, so the above schema was generated with
 <https://www.liquid-technologies.com/online-json-to-schema-converter>
 
 This pretty much solves the same problems, but also provides some means to mark fields as required
