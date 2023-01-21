@@ -232,7 +232,7 @@ This allows some nice trees and doesn't limit us to flat structures like in CSV:
 ----
 
 Unfortunately this introduces another case which requires special treatment:
-Applications might expect a specific type like `string` and just find another `object`.
+Applications might expect a specific type like `string` and just find an `object`.
 
 This can be handled fairly easy, because most of the JSON-parsers out there allow to name a specific
 type that should be fetched from an object:
@@ -241,19 +241,19 @@ type that should be fetched from an object:
 ----
 String content = todo.get("dueDate").textValue(); // <1>
 ----
-<1>: Be careful, this might return a [surprise][], dependent on the value found.
+<1>: Be careful, the return value might [surprise][] you.
 
 === Avro and the binary
 
-[Avro][] is a entirely different beast and needs a bit of explanation.
-Originally designed for the use cases of [Hadoop][], there were quickly other cases of application,
-like serialization of data for [Kafka][] due to its small footprint of its binary base and
+[Avro][] is a entirely different beast and probably needs a bit of explanation first.
+Originally designed for the special use cases of [Hadoop][], there were quickly other cases of
+application, like usuage for [Kafka][] due to its small footprint of its binary base and
 compression options.
 
-The base mode of operation is a bundled and encoded form, which includes the schema alogn with the
-actual data, which looks _interesting_ in hex view:
+The base mode of operation is a bundled and encoded form, which includes the schema along with the
+actual data, which looks rather _interesting_ in hex view:
 
-[source,shell]
+[source,text,highlight=18..20]
 ----
 $ xxd todo.avro
 00000000: 4f62 6a01 0416 6176 726f 2e73 6368 656d  Obj...avro.schem
@@ -282,8 +282,6 @@ It is also possible to omit the schema and just send the plain encoded data, but
 the schema to be able to understand it.
 
 ==== Add or remove fields
-
-
 
 The [IDL][] of the schema supports various advanced options which are better explained in the
 [spec][], but the base form close to our previous version looks like this:
