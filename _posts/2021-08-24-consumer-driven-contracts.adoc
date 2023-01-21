@@ -58,7 +58,7 @@ This format (or **contract**) includes all the interaction of the two services w
 
 In other words:
 
-[quote,Ian Robinson,https://martinfowler.com/articles/consumerDrivenContracts.html]
+[quote,Ian Robinson,'<https://martinfowler.com/articles/consumerDrivenContracts.html>']
 A contract between a consuming service and a providing service, stating what the consumer wants
 from a providing service, in a defined format.
 

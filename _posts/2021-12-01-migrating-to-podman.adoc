@@ -119,7 +119,7 @@ a group of them, which must be able to connect to each other, it gets complicate
 
 The concept of a {21}[pod] was originally introduced within {5}[Kubernetes]:
 
-[quote,https://cloud.google.com/kubernetes-engine/docs/concepts/pod]
+[quote,'<https://cloud.google.com/kubernetes-engine/docs/concepts/pod>']
 Pods are the smallest, most basic deployable objects in Kubernetes. A Pod represents a single
 instance of a running process in your cluster. Pods contain one or more containers, such as Docker
 containers. When a Pod runs multiple containers, the containers are managed as a single entity and

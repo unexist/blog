@@ -148,7 +148,7 @@ New: http://localhost:8080/engine-rest/engine/default/process-definition/key/tod
 
 Time to move on and check {3}[Kogito]:
 
-[quote,https://kogito.kie.org]
+[quote,'<https://kogito.kie.org>']
 Kogito is designed from ground up to run at scale on cloud infrastructure. If you think about
 business automation think about the cloud as this is where your business logic lives these days.
 By taking advantage of the latest technologies (Quarkus, knative, etc.), you get amazingly fast

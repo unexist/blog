@@ -131,7 +131,7 @@ need a challenge?_)
 I really preferred the previous name, especially because of this quote which really describes why
 we need more reporting:
 
-[quote,https://en.wikipedia.org/wiki/Thucydides]
+[quote,'<https://en.wikipedia.org/wiki/Thucydides>']
 More generally, Thucydides developed an understanding of human nature to explain behavior in such
 crises as plagues, massacres, and civil war.
 

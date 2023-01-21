@@ -176,7 +176,7 @@ After all the problems with {2}[Helidon] it is a weird surprise, that there is n
 support of {1}[MicroStream] right now.
 Still - sticking to the original plan, let es see what it is all about. Citation time:
 
-[quote,https://microstream.one/platforms/microstream-for-java/]
+[quote,'<https://microstream.one/platforms/microstream-for-java/>']
 Realize ultra-fast in-memory data processing with pure Java. Microsecond query time. Low-latency
 data access. Gigantic data throughput and workloads. Save lots of CPU power, CO2 emission, and
 costs in the data center.
