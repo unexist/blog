@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Evolving a format
-date: 2020-08-12 16:05:48 +0200
-last_updated: 2020-08-12 16:05:48 +0200
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: csv json jsonschema avro apicurio kafka hadoop showcase
 categories: showcase
