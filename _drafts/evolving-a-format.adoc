@@ -5,7 +5,7 @@ date: 2020-08-12 16:05:48 +0200
 last_updated: 2020-08-12 16:05:48 +0200
 author: Christoph Kappel
 tags: showcase
-categories: json jsonschema avro hadoop showcase
+categories: json jsonschema avro showcase
 toc: true
 ---
 :imagesdir: /assets/images/evolving_a_format
@@ -23,6 +23,8 @@ https://www.json.org/
 https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
 https://fasterxml.github.io/jackson-databind/javadoc/2.8/com/fasterxml/jackson/databind/JsonNode.html#asText()
 https://dataformat.net/avro/viewer-and-converter
+https://en.wikipedia.org/wiki/Thucydides
+https://en.wikipedia.org/wiki/Silver_bullet
 ////
 
 Modern distributed systems consist of dozens of different services and each of these needs to
@@ -54,9 +56,9 @@ On the implementation side we don't want to needlessly [roll our own CSV code][]
 check we settle for any hopefully mature CSV-parser our programming language provides.
 And once wired up and deployed, our solutions works splendidly, until a change is necessary.
 
-So far there weren't any citation of old Greeks in this blog - about time to change that:
+In a previous post we talked about [Thucydides][], but other Greeks were also sages:
 
-[quote,Heraclitus,https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b]
+[quote,Heraclitus,'<https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b>']
 Change is the only constant in life.
 
 == Dealing with change
@@ -69,6 +71,9 @@ It is probably easy to imagine a scenario that requires a change of our format:
 - ..the list is endless!
 
 How do our formats fare with these problems?
+
+TIP: [Martin Kleppman][] also compares various binary formats in his seminal book
+[Designing Data-Intensive Application][].
 
 === Good ol' CSV
 
@@ -213,6 +218,7 @@ This will ultimately fail every time, because it cannot find the **required** fi
 And in contrast to a CSV-schema, the JSON-schema is supported by Apicurio and can be stored there
 and also be be retrieved from it:
 
+.Schema view in [Apicurio][]
 image::apicurio_json.png[]
 
 ==== Complex data types
@@ -249,9 +255,9 @@ String content = todo.get("dueDate").textValue(); // <1>
 === Avro and the binary
 
 [Avro][] is a entirely different beast and for a change probably needs a bit of explanation first.
-Originally designed for the special use cases of [Hadoop][], there were quickly other cases of
-application, like usage for [Kafka][] due to its small footprint of its binary form and
-compression options.
+Originally designed for the [special use cases][] of [Hadoop][], there were quickly other cases
+of application, like usage for [Kafka][] due to its small footprint of its binary form and
+[compression codecs][].
 
 The base mode of operation is a bundled and encoded form, which includes the schema along with the
 actual data in binary, which looks rather _interesting_ in hex view:
@@ -280,15 +286,18 @@ $ xxd todo.avro
 00000120: 00dd 2cf5 89e9 ad35 8b75 57a0 16a8 618c  ..,....5.uW...a.
 00000130: 60
 ----
-<1> The schema block at the top.
-<2> Our example is uncompressed, therefore the [null codec][] has been selected.
-<3> And the data block at the end.
+<1> The schema block at the top
+<2> Our example is uncompressed, therefore the [null codec][] has been selected
+<3> And the data block at the end
 
 If we now step through the output of [xxd][], we can clearly see it starts with the schema block in
 plain JSON, which is then followed by the actual encoded data at the end - here highlighted in
 yellow.
 The data itself doesn't include any field name or tags numbers like in [Thrift][] or [Protobuf][]
-and is separated by a control character - this somehow resembles CSV.
+and is separated by a control character - this somehow resembles CSV and can be displayed as such:
+
+.Converted with <https://dataformat.net/avro/viewer-and-converter>
+image::avro_csv.png[]
 
 ==== Add or remove fields
 
@@ -329,7 +338,6 @@ This means the schema is strongly required by the reader to make sense from the 
 And to make things a bit more complex, the schema can be omitted, if the reader already knows it
 or has other means to fetch it like from the previously mentioned registry.
 
-
 ==== Change of data types
 
 With this in place, the same rules apply here that were valid for our CSV version.
@@ -340,20 +348,64 @@ Changing order or whole fields should be no problem, as long as the schema is kn
 Avro is a bit of a mix of both of our textual formats and in this regards it behaves like JSON
 in regards to [complex types][].
 
-NOTE: [Martin Kleppman][] compares various binary formats in his seminal book
-[Designing Data-Intensive Application][].
+Let's have a quick glance at the output of xxd of the evolved version:
 
-So far we discussed how the formats can evolve, but what ab out versioning?
+[source,text,highlight=26..28]
+----
+$ xxd todo-evolved.avro
+00000000: 4f62 6a01 0416 6176 726f 2e73 6368 656d  Obj...avro.schem
+00000010: 619c 057b 2274 7970 6522 3a22 7265 636f  a..{"type":"reco  // <1>
+00000020: 7264 222c 226e 616d 6522 3a22 5265 636f  rd","name":"Reco
+00000030: 7264 222c 2266 6965 6c64 7322 3a5b 7b22  rd","fields":[{"
+00000040: 6e61 6d65 223a 2274 6974 6c65 222c 2274  name":"title","t
+00000050: 7970 6522 3a22 7374 7269 6e67 227d 2c7b  ype":"string"},{
+00000060: 226e 616d 6522 3a22 6465 7363 7269 7074  "name":"descript
+00000070: 696f 6e22 2c22 7479 7065 223a 2273 7472  ion","type":"str
+00000080: 696e 6722 7d2c 7b22 6e61 6d65 223a 2264  ing"},{"name":"d
+00000090: 6f6e 6522 2c22 7479 7065 223a 2262 6f6f  one","type":"boo
+000000a0: 6c65 616e 227d 2c7b 226e 616d 6522 3a22  lean"},{"name":"
+000000b0: 6475 6544 6174 6522 2c22 7479 7065 223a  dueDate","type":
+000000c0: 7b22 7479 7065 223a 2272 6563 6f72 6422  {"type":"record"
+000000d0: 2c22 6e61 6d65 7370 6163 6522 3a22 5265  ,"namespace":"Re
+000000e0: 636f 7264 222c 226e 616d 6522 3a22 6475  cord","name":"du
+000000f0: 6544 6174 6522 2c22 6669 656c 6473 223a  eDate","fields":
+00000100: 5b7b 226e 616d 6522 3a22 7374 6172 7422  [{"name":"start"
+00000110: 2c22 7479 7065 223a 2273 7472 696e 6722  ,"type":"string"
+00000120: 7d2c 7b22 6e61 6d65 223a 2264 7565 222c  },{"name":"due",
+00000130: 2274 7970 6522 3a22 7374 7269 6e67 227d  "type":"string"}
+00000140: 5d7d 7d2c 7b22 6e61 6d65 223a 2269 6422  ]}},{"name":"id"
+00000150: 2c22 7479 7065 223a 226c 6f6e 6722 7d5d  ,"type":"long"}]
+00000160: 7d14 6176 726f 2e63 6f64 6563 086e 756c  }.avro.codec.nul
+00000170: 6c00 d313 7980 7ecf 4645 6249 ddd7 08a1  l...y.~.FEbI....
+00000180: 070a 0244 0a46 6972 7374 0642 6c61 0114  ...D.First.Bla..  // <2>
+00000190: 3230 3232 2d31 312d 3231 1432 3032 322d  2022-11-21.2022-
+000001a0: 3131 2d32 3300 d313 7980 7ecf 4645 6249  11-23...y.~.FEbI
+000001b0: ddd7 08a1 070a                           ......
+----
+<1> The schema block at the top
+<2> And the data block at the end
+
+The interesting part here is the data section still just contains a value separated list and can
+be flattened out like this:
+
+.Converted with <https://dataformat.net/avro/viewer-and-converter>
+image::avro_evolved_csv.png[]
+
+So far we discussed how the formats can evolve, but is there another way?
 
 == Apply versioning
 
-There are multiple ways to apply versioning here, but let us limit ourselves to the two more common
-ones usually found with [REST][].
+In this chapter we are going to have a look at version, which is also a viable way, if we cannot
+directly control our clients or consumers.
+To keep things simple, we just have a look at the two mostly used ways in the wild with examples
+based on [REST][].
 
 === Endpoint versioning
 
-Our first option is to create a new version of our endpoint, by adding the version number to the
-endpoint [URI][], which basically allows every kind of tracking and redirection magic:
+Our first option is to create a new version of our endpoint and just keep both of them.
+We cannot have two resources serve the same [URI][], so we just add a version number to the
+endpoint and have a nice way to tell them apart.
+Another nice side effect here is this allows further tracking and redirection magic of traffic:
 
 [source,shell]
 ----
@@ -375,8 +427,8 @@ $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 
 === Content versioning
 
-And the second option is to serve all versions from a single endpoint by honoring client-provided
-preferences here in the form of an [accept header][].
+And the second option is to serve all versions from a single endpoint and resource, by honoring
+client-provided preferences here in the form of an [accept header][].
 This has the additional benefit of offloading the content negotiation part to the client, so it can
 pick the format it understands.
 
@@ -400,20 +452,15 @@ $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://
 
 == Conclusion
 
-Like so often in IT, both options have their merits and depend on what you are really up to.
+During the course of this article we compared textual formats with a binary one and discovered
+there are many similarities under the [line-through]#toga# hood and also how a schema can
+miraculous save the day.
 
-In big architectures, it can be useful to be able to serve different versions of your messages on
-different microservices and keep them really small and simple (see [KISS][]).
-PACT can also help here to keep track of the different versions available and also provide insights
-to actual use patterns.
+Still, a schema is also no [silver bullet][] and sometimes we have to use others means to be able
+to evolve a format - especially when it is already in use in legacy systems.
 
-From a nitpicking perspective, versioning the actual content is preferable, because you have in
-fact just one version of the endpoint - it just serves a different version of your format.
-And letting clients pick whatever they support is something that is also deeply ingrained into the
-whole REST idea.
-
-So whatever you pick, both options allow the client to select a version, either by route or by
-header and the first problem is addressed.
+Going the way of our REST examples might be way to have different versions of the same format in
+place, without disrupting other (older) services.
 
 All examples can be found here:
 
