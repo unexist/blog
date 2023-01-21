@@ -10,53 +10,70 @@ toc: true
 ---
 :imagesdir: /assets/images/evolving_a_format
 
-////
-https://json-schema.org/
-https://konbert.com/convert/json/to/avro
-https://digital-preservation.github.io/csv-schema/
-http://json-schema.org/understanding-json-schema/reference/numeric.html
-http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
-https://avro.apache.org/docs/1.11.1/specification/
-https://avro.apache.org/docs/1.11.1/specification/#complex-types
-https://avro.apache.org/docs/1.11.1/specification/#required-codecs
-https://www.json.org/
-https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
-https://fasterxml.github.io/jackson-databind/javadoc/2.8/com/fasterxml/jackson/databind/JsonNode.html#asText()
-https://dataformat.net/avro/viewer-and-converter
-https://en.wikipedia.org/wiki/Thucydides
-https://en.wikipedia.org/wiki/Silver_bullet
-////
+:1: https://blog.stoplight.io/consistent-api-urls-with-openapi-and-style-guides
+:2: https://www.apicur.io/
+:3: https://avro.apache.org/
+:4: https://avro.apache.org/docs/1.11.1/specification/#complex-types
+:5: https://avro.apache.org/docs/1.11.1/specification/#required-codecs
+:6: https://digital-preservation.github.io/csv-schema/
+:7: https://en.wikipedia.org/wiki/Comma-separated_values
+:8: https://www.goodreads.com/book/show/23463279-designing-data-intensive-applications
+:9: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+:10: https://www.microsoft.com/en-us/microsoft-365/excel
+:11: https://hadoop.apache.org/
+:12: https://en.wikipedia.org/wiki/Interface_description_language
+:13: https://www.javascript.com/
+:14: https://json-schema.org/
+:15: https://www.json.org/
+:16: https://kafka.apache.org/
+:17: https://en.wikipedia.org/wiki/Living_document
+:18: https://dataintensive.net/
+:19: https://avro.apache.org/docs/1.11.1/specification/#required-codecs
+:20: https://www.openapis.org/
+:21: https://docs.pact.io/
+:22: https://blog.stoplight.io/consistent-api-urls-with-openapi-and-style-guides
+:23: https://developers.google.com/protocol-buffers
+:24: https://en.wikipedia.org/wiki/Representational_state_transfer
+:25: http://thomasburette.com/blog/2014/05/25/so-you-want-to-write-your-own-CSV-code/
+:26: https://en.wikipedia.org/wiki/Silver_bullet
+:27: https://avro.apache.org/docs/1.11.1/mapreduce-guide/
+:28: https://avro.apache.org/docs/1.11.1/specification/
+:29: https://fasterxml.github.io/jackson-databind/javadoc/2.8/com/fasterxml/jackson/databind/JsonNode.html#asText()
+:30: https://thrift.apache.org/
+:31: https://en.wikipedia.org/wiki/Thucydides
+:32: https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
+:33: https://linux.die.net/man/1/xxd
 
 Modern distributed systems consist of dozens of different services and each of these needs to
 communicate with others to fulfill tasks.
 Without a well-known and understood format things can become messy, once data needs to go down to
 the wire.
 
-The first part of this article compares the textual formats [CSV][] and [JSON][] with the
-binary-based [Avro][] and lays out how each can be evolved on a format level.
+The first part of this article compares the textual formats {7}[CSV] and {15}[JSON] with the
+binary-based {3}[Avro] and lays out how each can be evolved on a format level.
 And the second part explains how the same can be archived with versions on examples based on
-[REST][].
+{24}[REST].
 
 NOTE: This articles uses the Todo object usually found in many posts of this this blog - if you
-haven't seen it before you can find an [OpenAPI][] specification here:
+haven't seen it before you can find an {20}[OpenAPI] specification here:
 <https://blog.unexist.dev/redoc/#tag/Todo>
 
 == Picking a format
 
 Picking a format should be fairly easy:
 Anything that can be parsed on the receiving end **is** a proper format, so why not just serialize
-(or encode) our object values separated by commas ([CSV][])?
+(or encode) our object values separated by commas ({7}[CSV])?
 
 [source,csv]
 ----
 First,Bla,true,2022-11-21,0
 ----
 
-On the implementation side we don't want to needlessly [roll our own CSV code][], so a after quick
+On the implementation side we don't want to needlessly {25}[roll our own CSV code], so a after quick
 check we settle for any hopefully mature CSV-parser our programming language provides.
 And once wired up and deployed, our solutions works splendidly, until a change is necessary.
 
-In a previous post we talked about [Thucydides][], but other Greeks were also sages:
+In a previous post we talked about {31}[Thucydides], but other Greeks were also sages:
 
 [quote,Heraclitus,'<https://www.reference.com/world-view/said-only-thing-constant-change-d50c0532e714e12b>']
 Change is the only constant in life.
@@ -72,8 +89,8 @@ It is probably easy to imagine a scenario that requires a change of our format:
 
 How do our formats fare with these problems?
 
-TIP: [Martin Kleppman][] also compares various binary formats in his seminal book
-[Designing Data-Intensive Application][].
+TIP: {18}[Martin Kleppman] also compares various binary formats in his seminal book
+{8}[Designing Data-Intensive Application].
 
 === Good ol' CSV
 
@@ -86,7 +103,7 @@ Adding or removing fields to and from our original version is really difficult -
 be able to match the actual fields and any change (even the order) makes their life miserable.
 
 A straight forward solution here is just to include the names of the fields in a header - this is
-pretty common and probably (in)famously known from [Excel][]:
+pretty common and probably (in)famously known from {10}[Excel]:
 
 [source,csv]
 ----
@@ -106,7 +123,7 @@ This kind of definition can usually be done with a schema, which basically descr
 including data types and also allows some form of verification of values.
 
 Surprisingly, something like this already exists for CSV, so let me introduce you to
-[CSV Schema][].
+{6}[CSV Schema].
 
 The schema itself is straight forward and comes with lots of keywords like `positiveInteger`,
 `regex` to provide arbitrary regular expressions or `is` to construct enumerations:
@@ -128,10 +145,10 @@ NOTE: The full specification can be found here: <http://digital-preservation.git
 Using a schema to verify input is nice, but the major advantage here is the format can be formally
 specified now and be put under version control.
 If held closely to the code and updated whenever something has to be changed, this specification
-acts as a [living documentation][] and eases the life of new implementors.
+acts as a {17}[living documentation] and eases the life of new implementors.
 
 Another useful benefit is your schema might be supported by one of the available schema registries
-like [Apicurio][].
+like {2}[Apicurio].
 Although it might be difficult to find one that actually support CSV-schema, there is plenty of
 support for other types.
 
@@ -141,8 +158,8 @@ There is no support for complex or nested types at all, so this cannot be proble
 
 === Textual with JSON
 
-There is probably no lengthy introduction to [JSON][] required, quickly after introduction as an
-object notation for [JavaScript][], it got rightfully lots of attention is nowadays pretty much
+There is probably no lengthy introduction to {15}[JSON] required, quickly after introduction as an
+object notation for {13}[JavaScript], it got rightfully lots of attention is nowadays pretty much
 default.
 
 If we look back at our example, a converted version might look like this:
@@ -171,7 +188,7 @@ above.
 Especially numeric types can be troublesome, if we require a specific precision.
 
 So why reinvent the wheel, when we already know a solution?
-Yes, another schema - namely [JSON Schema][]:
+Yes, another schema - namely {14}[JSON Schema]:
 
 [source,json]
 ----
@@ -218,7 +235,7 @@ This will ultimately fail every time, because it cannot find the **required** fi
 And in contrast to a CSV-schema, the JSON-schema is supported by Apicurio and can be stored there
 and also be be retrieved from it:
 
-.Schema view in [Apicurio][]
+.Schema view in {2}[Apicurio]
 image::apicurio_json.png[]
 
 ==== Complex data types
@@ -250,14 +267,14 @@ type that should be fetched from an object:
 ----
 String content = todo.get("dueDate").textValue(); // <1>
 ----
-<1> Be careful, the return value might [surprise][] you.
+<1> Be careful, the return value might {29}[surprise] you.
 
 === Avro and the binary
 
-[Avro][] is a entirely different beast and for a change probably needs a bit of explanation first.
-Originally designed for the [special use cases][] of [Hadoop][], there were quickly other cases
-of application, like usage for [Kafka][] due to its small footprint of its binary form and
-[compression codecs][].
+{3}[Avro] is a entirely different beast and for a change probably needs a bit of explanation first.
+Originally designed for the {27}[special use cases] of {11}[Hadoop], there were quickly other cases
+of application, like usage for {16}[Kafka] due to its small footprint of its binary form and
+{5}[compression codecs].
 
 The base mode of operation is a bundled and encoded form, which includes the schema along with the
 actual data in binary, which looks rather _interesting_ in hex view:
@@ -287,13 +304,13 @@ $ xxd todo.avro
 00000130: 60
 ----
 <1> The schema block at the top
-<2> Our example is uncompressed, therefore the [null codec][] has been selected
+<2> Our example is uncompressed, therefore the {19}[null codec] has been selected
 <3> And the data block at the end
 
-If we now step through the output of [xxd][], we can clearly see it starts with the schema block in
+If we now step through the output of {33}[xxd], we can clearly see it starts with the schema block in
 plain JSON, which is then followed by the actual encoded data at the end - here highlighted in
 yellow.
-The data itself doesn't include any field name or tags numbers like in [Thrift][] or [Protobuf][]
+The data itself doesn't include any field name or tags numbers like in {30}[Thrift] or {23}[Protobuf]
 and is separated by a control character - this somehow resembles CSV and can be displayed as such:
 
 .Converted with <https://dataformat.net/avro/viewer-and-converter>
@@ -301,8 +318,8 @@ image::avro_csv.png[]
 
 ==== Add or remove fields
 
-The [IDL][] of the schema supports various advanced options which are better explained in its
-[spec][], but the extracted and formatted version looks like this:
+The {12}[IDL] of the schema supports various advanced options which are better explained in its
+{28}[spec], but the extracted and formatted version looks like this:
 
 [source,avro]
 ----
@@ -346,7 +363,7 @@ Changing order or whole fields should be no problem, as long as the schema is kn
 ==== Complex data types
 
 Avro is a bit of a mix of both of our textual formats and in this regards it behaves like JSON
-in regards to [complex types][].
+in regards to {4}[complex types].
 
 Let's have a quick glance at the output of xxd of the evolved version:
 
@@ -398,12 +415,12 @@ So far we discussed how the formats can evolve, but is there another way?
 In this chapter we are going to have a look at version, which is also a viable way, if we cannot
 directly control our clients or consumers.
 To keep things simple, we just have a look at the two mostly used ways in the wild with examples
-based on [REST][].
+based on {24}[REST].
 
 === Endpoint versioning
 
 Our first option is to create a new version of our endpoint and just keep both of them.
-We cannot have two resources serve the same [URI][], so we just add a version number to the
+We cannot have two resources serve the same {32}[URI], so we just add a version number to the
 endpoint and have a nice way to tell them apart.
 Another nice side effect here is this allows further tracking and redirection magic of traffic:
 
@@ -411,14 +428,14 @@ Another nice side effect here is this allows further tracking and redirection ma
 ----
 $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 ----
-<1> Set the version via [path parameter][]
+<1> Set the version via {22}[path parameter]
 
 |===
 | Pro | Con
 | Clean separation of the endpoints
-| Lots of copy/paste or worse people thinking about [DRY][]
+| Lots of copy/paste or worse people thinking about {9}[DRY]
 
-| Usage and therefore deprecation of the endpoint can be tracked e.g. with [PACT][]
+| Usage and therefore deprecation of the endpoint can be tracked e.g. with {21}[PACT]
 |
 
 |
@@ -428,7 +445,7 @@ $ curl -X GET http://blog.unexist.dev/api/1/todos # <1>
 === Content versioning
 
 And the second option is to serve all versions from a single endpoint and resource, by honoring
-client-provided preferences here in the form of an [accept header][].
+client-provided preferences here in the form of an {1}[accept header].
 This has the additional benefit of offloading the content negotiation part to the client, so it can
 pick the format it understands.
 
@@ -436,7 +453,7 @@ pick the format it understands.
 ----
 $ curl -X GET -H “Accept: application/vnd.xm.device+json; version=1” http://blog.unexist.dev/api/todos # <1>
 ----
-<1> Set the version via [Accept header][]
+<1> Set the version via {1}[Accept header]
 
 |===
 | Pro | Con
@@ -456,7 +473,7 @@ During the course of this article we compared textual formats with a binary one 
 there are many similarities under the [line-through]#toga# hood and also how a schema can
 miraculous save the day.
 
-Still, a schema is also no [silver bullet][] and sometimes we have to use others means to be able
+Still, a schema is also no {26}[silver bullet] and sometimes we have to use others means to be able
 to evolve a format - especially when it is already in use in legacy systems.
 
 Going the way of our REST examples might be way to have different versions of the same format in
