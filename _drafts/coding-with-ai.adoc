@@ -24,9 +24,9 @@ underlying AI model [GPT-3][] with its upcoming pricier and more capable success
 Between all these news and probably related to my own technical bubble there is lots of progress
 regarding AI-assistants for coding.
 
-I had a look at both [CoPilot][] and [Tabnine][] back then, but I never tried to sort my own
-thoughts about this whole idea.
-So in this post I will try to bring these thoughts to paper and with both my operational and my
+I had a look at both [CoPilot][] and [Tabnine][] when they went viral first, but I never tried to
+sort my own thoughts about this whole idea.
+So in this post I will try to bring these thoughts to paper with both my operational and my
 management hat on.
 
 == What are these assistants?
@@ -71,14 +71,18 @@ I am not entirely sure, if this is solely based on the actual coded lines (hello
 the quality of the code.
 
 Still, AI can really speed up the creation of boilerplate code and repeated stuff which cannot
-easily be put into other artifacts like libraries or templates like [Maven Archetype][].
+easily be put into other artifacts like libraries or templates like [Maven Archetype][] for
+[Java][]-based software.
 
 === Cons
 
 ==== Privacy
 
 Privacy is a major concern here and if we consider the apparent disputes with the phenomenal
-results of [Stable Fusion][] based AI like [DALL-E][] or [MidJourney][]
+results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original provider
+for the training data of theses models there are lots of decisions still to be made.
+
+In my opinion the same problems apply to source code
 
 ==== License fees and training costs
 
