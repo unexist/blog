@@ -1,0 +1,110 @@
+---
+layout: post
+title: Coding with AI
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: showcase
+toc: true
+---
+:imagesdir: /assets/images/coding_with_ai.adoc
+
+```
+https://github.com/features/copilot
+https://www.tabnine.com/pricing
+https://en.wikipedia.org/wiki/COCOMO
+```
+
+If I had to name a currently trending topic I would surely pick [ChatGPT][] or rather the
+underlying AI model [GPT-3][] with its upcoming pricier and more capable successor [GPT-4][].
+Between all these news and probably related to my own technical bubble there is lots of progress
+regarding AI-assistants for coding.
+
+I had a look at both [CoPilot][] and [Tabnine][] back then, but I never tried to sort my own
+thoughts about this whole idea.
+So in this post I will try to bring these thoughts to paper and with both my operational and my
+management hat on.
+
+== What are these assistants?
+
+The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
+
+We train an AI model on available natural language and source code and allow it to give
+recommendations based on the actual code an developer writes as a [prompt][].
+
+So if you want to use a derogatory term here it is an auto-completion on steroids.
+
+== What are they capable of?
+
+The results of the code suggestions are nothing short of astonishing and can complete words,
+single sentences als provide whole bodies of methods and functions:
+
+image::code_completion1.gif[]
+
+image::code_completion2.gif[]
+
+On a side note: I also used Tabnine for this blog post just to demonstrate it is entirely possible
+to write natural language with it:
+
+image::natural_language.png[]
+
+== Pros
+
+=== Faster time to market
+
+In our industry there still exists the myth of a **10x developer** which is a really loose
+description for an individual contributor with coding super powers.
+I am not entirely sure, if this is solely based on the actual coded lines (hello [COCOMO][]) or
+the quality of the code.
+
+Still, AI can really speed up the creation of boilerplate code and initial stuff which cannot
+easily be put into other artifacts like libraries or templates like [Maven Archetype][].
+
+== Cons
+
+=== License fees and other costs
+
+Super powers never come for free - the same is true for the processing and storage power that is
+required here from [OpenAI][] or the costs for the actual licenses.
+
+My own experience is limited to CoPilot and Tabnine, but there are companies providing these
+services aplenty.
+Here are the current prices for the two services named - based on data at the time of this post's
+writing:
+
+|===
+|Service|Individual costs (per month)|Business costs (per month per user)
+|[CoPilot][]|$10 (or $100 per year)|$19
+|[TabNine][]|$0 Starter / $12 Pro|Let's talk
+|===
+
+This are just the plain service costs and don't include any time to train staff or to create
+proper company guidelines how to actually use these services.
+
+=== Privacy
+
+=== Closed customer systems
+
+Dependent on the customer and obviously the industry there are legal limits which code can be used
+as training data and even how the data can be accessed.
+
+Training a model with data that is hidden inside of customer systems
+
+=== Code duplication
+
+I think in some ways it kind of behaves like copying code from [StackOverflow][] and it isn't clear,
+if the code was provided in the question or in the accepted answer.
+
+Also code suggestions mean the AI has seen this somewhere else and if we ignore any legal or
+privacy concerns
+
+=== Performance
+
+Many services provide multiple ways of using the language model - but it typically boils down to
+either run it locally or just use the cloud with more processing power and also more suggestions
+due to the availability of training data.
+
+image::resources.png[]
+
+== Conclusion
