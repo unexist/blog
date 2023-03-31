@@ -53,29 +53,6 @@ Let us start with some easy examples.
 
 Here is the typical fun of adding the proper annotations for [OpenAPI][]:
 
-[source,java]
-----
-public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
-    Response.ResponseBuilder response;
-
-    Optional<Todo> todo = this.todoService.create(todoBase);
-
-    if (todo.isPresent()) {
-        this.todoSource.send(todo.get());
-
-        URI uri = uriInfo.getAbsolutePathBuilder()
-                .path(Integer.toString(todo.get().getId()))
-                .build();
-
-        response = Response.created(uri);
-    } else {
-        response = Response.status(Response.Status.NOT_ACCEPTABLE);
-    }
-
-    return response.build();
-}
-----
-
 ++++
 <div class="imageblock">
     <div class="content">
