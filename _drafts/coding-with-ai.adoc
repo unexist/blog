@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Coding with AI
-date: 2023-01-21 21:41 +0100
-last_updated: 2023-01-21 21:41 +0100
+date: 2023-03-30 17:22 +0100
+last_updated: 2023-03-30 17:22 +0100
 author: Christoph Kappel
 tags: showcase
 categories: showcase
@@ -17,6 +17,8 @@ https://en.wikipedia.org/wiki/COCOMO
 https://en.wikipedia.org/wiki/Stable_Diffusion
 https://midjourney.com/
 https://openai.com/product/dall-e-2
+https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
+https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
 ////
 
 If I had to name a currently trending topic I would surely pick [ChatGPT][] or rather the
@@ -27,24 +29,52 @@ regarding AI-assistants for coding.
 I had a look at both [CoPilot][] and [Tabnine][] when they went viral first, but I never tried to
 sort my own thoughts about this whole idea.
 So in this post I will try to bring these thoughts to paper with both my operational and my
-management hat on.
+management hat on and it is up to you to decide which [colors][] they have.
 
 == What are these assistants?
 
 The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
 
 We train an AI model on available natural language and source code and allow it to give
-recommendations based on the actual code an developer writes as a [prompt][].
+recommendations based on a [prompt][] of the actual code an developer writes.
 
 So if you want to use a derogatory term here it is an auto-completion on steroids.
 
 == What are they capable of?
 
 The results of the code suggestions are nothing short of astonishing and can complete words,
-single sentences and also provide whole bodies of methods and functions.
-This is easy to dismiss until you have seen it in action.
+single sentences and also provide whole bodies for methods and functions.
 
-Here is the typical fun with adding the proper annotations for [OpenAPI][]:
+Another autocompleter doesn't sound that fancy and every fellow [omnicompletion][] user can confirm
+the old ways work pretty well, but the actual prowess if the new AI-based systems is easy to
+dismiss until you have seen it in action.
+
+Let us start with some easy examples.
+
+Here is the typical fun of adding the proper annotations for [OpenAPI][]:
+
+[source,java]
+----
+public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
+    Response.ResponseBuilder response;
+
+    Optional<Todo> todo = this.todoService.create(todoBase);
+
+    if (todo.isPresent()) {
+        this.todoSource.send(todo.get());
+
+        URI uri = uriInfo.getAbsolutePathBuilder()
+                .path(Integer.toString(todo.get().getId()))
+                .build();
+
+        response = Response.created(uri);
+    } else {
+        response = Response.status(Response.Status.NOT_ACCEPTABLE);
+    }
+
+    return response.build();
+}
+----
 
 ++++
 <div class="imageblock">
@@ -73,37 +103,20 @@ image:natural_language.png[]
 
 == Things to consider
 
-=== Pros
+=== Faster time to market
 
-==== Faster time to market
-
-In our industry there still exists the myth of a **10x developer** which is a really loose
-description for an individual contributor with coding super powers.
-I am not entirely sure, if this is solely based on the actual coded lines (hello [COCOMO][]) or
-the quality of the code.
-
-Still, AI can really speed up the creation of boilerplate code and repeated stuff which cannot
+AI can really rapidly speed up the creation of boilerplate code and repeated stuff which cannot
 easily be put into other artifacts like libraries or templates like [Maven Archetype][] for
 [Java][]-based software.
 
-=== Cons
+=== License fees and training costs
 
-==== Privacy
-
-Privacy is a major concern here and if we consider the apparent disputes with the phenomenal
-results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original provider
-for the training data of theses models there are lots of decisions still to be made.
-
-In my opinion the same problems apply to source code
-
-==== License fees and training costs
-
-Super powers never come for free - the same is true for the processing and storage power that is
-required here from [OpenAI][] or the costs for the actual licenses.
+Super powers are never free - the same is true for the processing and storage power that is
+required here from [OpenAI][] and additionally there are license costs.
 
 My own experience is limited to CoPilot and Tabnine, but there are companies providing these
 services aplenty.
-Here are the current prices for the two services named - based on data at the time of this post's
+Here are the current prices for both services - based on data at the time of this post's
 writing:
 
 |===
@@ -114,17 +127,27 @@ writing:
 
 NOTE: Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
 
-This are just the plain service costs and don't include any time to train staff or to create
+These are just the plain service costs and don't include further costs to train staff or to create
 proper company guidelines how to actually use this technology.
 
-==== Isolated customer systems
+=== Copyright
+
+Copyright is a major concern here and if we have a look at the apparent disputes with the phenomenal
+results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original artists
+for the training data of theses models there are lots of decisions still to be made.
+
+In my opinion this problem is even worse for software, even when algorithms aren't protected:
+
+image::copyright.png[]
+
+=== Isolated customer systems
 
 Dependent on the customer and obviously the industry there are legal limits which code can be used
 as training data and even how the data can be accessed.
 
 Training a model with data that is hidden inside of customer systems
 
-==== Code duplication
+=== Code duplication
 
 I think in some ways it kind of behaves like copying code from [StackOverflow][] and it isn't clear,
 if the code was provided in the question or in the accepted answer.
@@ -132,7 +155,7 @@ if the code was provided in the question or in the accepted answer.
 Also code suggestions mean the AI has seen this somewhere else and if we ignore any legal or
 privacy concerns
 
-==== Performance
+=== Performance
 
 Many services provide multiple ways of using the language model - but it typically boils down to
 either run it locally or just use the cloud with more processing power and also more suggestions
@@ -141,3 +164,8 @@ due to the availability of training data.
 image::resources.png[]
 
 == Conclusion
+
+In our industry there still exists the myth of a **10x developer** which is a really loose
+description for an individual contributor with coding super powers.
+I am not entirely sure, if this is solely based on the actual coded lines (hello [COCOMO][]) or
+the quality of the code.
