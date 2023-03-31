@@ -13,5 +13,5 @@ tags: showcase
 categories: showcase
 toc: true
 ---
-:imagesdir: /assets/images/${FILE}
+:imagesdir: /assets/images/${FILE/-/_}
 EOF
