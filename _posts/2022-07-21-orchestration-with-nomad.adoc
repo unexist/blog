@@ -633,7 +633,13 @@ Scheduler dry-run:
 
 And if we repeat the commands now:
 
-image::loadbalancer.gif[]
+++++
+<div class="imageblock">
+    <div class="content">
+        <img data-gifffer="/assets/images/nomad/loadbalancer.gif" />
+    </div>
+</div>
+++++
 
 If you wonder why this even works in the first place without any kind of configuration:
 
@@ -765,7 +771,13 @@ version works properly.
 
 No new tricks - we just re-do the {8}[curl] check:
 
-image::canary.gif[]
+++++
+<div class="imageblock">
+    <div class="content">
+        <img data-gifffer="/assets/images/nomad/canary.gif" />
+    </div>
+</div>
+++++
 
 This works perfectly well, time to tell {30}[Nomad] to continue with the deployment.
 Again, there are multiple options like the {5}[CLI] {22}[job promote] call, but since we still have

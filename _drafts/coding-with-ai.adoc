@@ -46,11 +46,23 @@ This is easy to dismiss until you have seen it in action.
 
 Here is the typical fun with adding the proper annotations for [OpenAPI][]:
 
-image::code_completion1.gif[]
+++++
+<div class="imageblock">
+    <div class="content">
+        <img data-gifffer="/assets/images/coding_with_ai/code_completion1.gif" />
+    </div>
+</div>
+++++
 
 It is also possible to complete more complex lines with a visibly worse hit and miss ratio:
 
-image::code_completion2.gif[]
+++++
+<div class="imageblock">
+    <div class="content">
+        <img data-gifffer="/assets/images/coding_with_ai/code_completion2.gif" />
+    </div>
+</div>
+++++
 
 [NOTE]
 ====
