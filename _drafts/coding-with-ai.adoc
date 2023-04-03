@@ -19,6 +19,7 @@ https://midjourney.com/
 https://openai.com/product/dall-e-2
 https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
 https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
+https://twitter.com/DocSparse/status/1581461734665367554
 ////
 
 If I had to name a currently trending topic I would surely pick [ChatGPT][] or rather the
@@ -46,7 +47,7 @@ The results of the code suggestions are nothing short of astonishing and can com
 single sentences and also provide whole bodies for methods and functions.
 
 Another autocompleter doesn't sound that fancy and every fellow [omnicompletion][] user can confirm
-the old ways work pretty well, but the actual prowess if the new AI-based systems is easy to
+the old ways work pretty well, but the actual prowess of the new AI-based systems is easy to
 dismiss until you have seen it in action.
 
 Let us start with some easy examples.
@@ -82,14 +83,13 @@ image:natural_language.png[]
 
 === Faster time to market
 
-AI can really rapidly speed up the creation of boilerplate code and repeated stuff which cannot
-easily be put into other artifacts like libraries or templates like [Maven Archetype][] for
+AI can rapidly speed up the creation of boilerplate code and repeated stuff which cannot easily be
+put into other artifacts like libraries or templates like [Maven Archetype][] for
 [Java][]-based software.
 
-=== License fees and training costs
+=== Recruiting and Training
 
-Super powers are never free - the same is true for the processing and storage power that is
-required here from [OpenAI][] and additionally there are license costs.
+=== License fees and training costs
 
 My own experience is limited to CoPilot and Tabnine, but there are companies providing these
 services aplenty.
@@ -113,24 +113,20 @@ Copyright is a major concern here and if we have a look at the apparent disputes
 results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original artists
 for the training data of theses models there are lots of decisions still to be made.
 
-In my opinion this problem is even worse for software, even when algorithms aren't protected:
+This is probably worse for software:
 
 image::copyright.png[]
 
 === Isolated customer systems
 
 Dependent on the customer and obviously the industry there are legal limits which code can be used
-as training data and even how the data can be accessed.
+as training data and how the data can be accessed.
 
-Training a model with data that is hidden inside of customer systems
+Training a model with data that is hidden inside of customer systems, where usually is no option
+to install non-governed software.
 
 === Code duplication
 
-I think in some ways it kind of behaves like copying code from [StackOverflow][] and it isn't clear,
-if the code was provided in the question or in the accepted answer.
-
-Also code suggestions mean the AI has seen this somewhere else and if we ignore any legal or
-privacy concerns
 
 === Performance
 
@@ -138,7 +134,16 @@ Many services provide multiple ways of using the language model - but it typical
 either run it locally or just use the cloud with more processing power and also more suggestions
 due to the availability of training data.
 
+Dependent on the size of the actual data the requirements for compute can have a huge impact.
+
+Following screenshot shows the process view of TabNine on my local machine while typing inside
+of this blog post:
+
 image::resources.png[]
+
+There are quite few reports of problems about performance:
+
+<https://github.com/codota/TabNine/issues/43>
 
 == Conclusion
 
@@ -146,3 +151,9 @@ In our industry there still exists the myth of a **10x developer** which is a re
 description for an individual contributor with coding super powers.
 I am not entirely sure, if this is solely based on the actual coded lines (hello [COCOMO][]) or
 the quality of the code.
+
+I think in some ways it kind of behaves like copying code from [StackOverflow][] and it isn't clear,
+if the code was provided in the question or in the accepted answer.
+
+Super powers are never free - the same is true for the processing and storage power that is
+required here from [OpenAI][] and additionally there are license costs.
