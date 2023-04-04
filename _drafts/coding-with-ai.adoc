@@ -27,8 +27,9 @@ underlying AI model [GPT-3][] with its upcoming pricier and more capable success
 Between all these news and probably related to my own technical bubble there is lots of progress
 regarding AI-assistants for coding.
 
-I had a look at both [CoPilot][] and [Tabnine][] when they went viral first, but I never tried to
-sort my own thoughts about this whole idea.
+I've had a look at both [CoPilot][] and [Tabnine][] when they went viral first, but I never tried
+to sort my own thoughts about this whole idea.
+
 So in this post I will try to bring these thoughts to paper with both my operational and my
 management hat on and it is up to you to decide which [colors][] they have.
 
@@ -75,8 +76,8 @@ image:natural_language.png[]
 
 == Things to consider
 
-Next comes an unsorted list of pros and cons about the whole idea with hopefully more rational
-thinking and I'll try to limit my own opinion to the conclusion part after that.
+Next comes an unsorted list of pros and cons about the whole idea with hopefully mostly rational
+white hat thinking and personal opinion limited to the conclusion part after that.
 
 === Faster time to market
 
