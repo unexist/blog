@@ -102,8 +102,8 @@ And this by itself can also generate more interest and lure people into the busi
 
 Adding tools to the corporate world usually induces license fees and this is also true here.
 
-There a companies providing these services, but here are the prices for the two services that
-I've used so far based on data at the time of this post's writing:
+There a companies providing these services aplenty, but here are the prices for the two services
+that I've used so far based on data at the time of this post's writing:
 
 |===
 |Service|Individual costs (per month)|Business costs (per month per user)
@@ -137,20 +137,21 @@ non-sanctioned software.
 === Code duplication
 
 
+
 === Performance
 
-Many services provide multiple ways of using the language model - but it typically boils down to
-either run it locally or just use the cloud with more processing power and also more suggestions
-due to the availability of training data.
+Many services provide multiple ways of using a large language model (LLM) - but it typically boils
+down to either run it locally or just use the cloud with more processing power and also more
+suggestions due to the availability of training data.
 
-Dependent on the size of the actual data the requirements for compute can have a huge impact.
+Dependent on the size of the actual data the requirements for compute might have a huge impact.
 
-Following screenshot shows the process view of TabNine on my local machine while typing inside
-of this blog post:
+Following screenshot shows the processes of TabNine on my local machine while typing inside of this
+blog post:
 
 image::resources.png[]
 
-There are quite few reports of problems about performance:
+Also, there are quite few reports of problems about performance:
 
 <https://github.com/codota/TabNine/issues/43>
 
