@@ -4,8 +4,8 @@ title: Coding with AI
 date: 2023-03-30 17:22 +0100
 last_updated: 2023-03-30 17:22 +0100
 author: Christoph Kappel
-tags: showcase
-categories: showcase
+tags: tech ai
+categories: myself
 toc: true
 ---
 :imagesdir: /assets/images/coding_with_ai
@@ -46,10 +46,6 @@ So if you want to use a derogatory term here it is an auto-completion on steroid
 The results of the code suggestions are nothing short of astonishing and can complete words,
 single sentences and also provide whole bodies for methods and functions.
 
-
-
-Let us start with some easy examples.
-
 Here is the typical fun of adding the proper annotations for [OpenAPI][]:
 
 ++++
@@ -72,10 +68,12 @@ It is also possible to complete more complex lines with a visibly worse hit-and-
 
 [NOTE]
 ====
-On a side note: I also used Tabnine for this blog post just to demonstrate it is entirely possible
+I also used TabNine for this blog post just to demonstrate it is entirely possible
 to write natural language with it:
 image:natural_language.png[]
 ====
+
+I also used TabNine for this blog
 
 == Things to consider
 
