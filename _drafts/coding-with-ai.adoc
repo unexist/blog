@@ -73,8 +73,6 @@ to write natural language with it:
 image:natural_language.png[]
 ====
 
-I also used TabNine for this blog
-
 == Things to consider
 
 Next comes an unsorted list of pros and cons about the whole idea with hopefully more rational
@@ -102,10 +100,10 @@ And this by itself can also generate more interest and lure people into the busi
 
 === License fees and training costs
 
-My own experience is limited to CoPilot and Tabnine, but there are companies providing these
-services aplenty.
-Here are the current prices for both services - based on data at the time of this post's
-writing:
+Adding tools to the corporate world usually induces license fees and this is also true here.
+
+There a companies providing these services, but here are the prices for the two services that
+I've used so far based on data at the time of this post's writing:
 
 |===
 |Service|Individual costs (per month)|Business costs (per month per user)
@@ -115,8 +113,8 @@ writing:
 
 NOTE: Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
 
-These are just the plain service costs and don't include further costs to train staff or to create
-proper company guidelines how to actually use this technology.
+Apart from the plain license and service costs there might be additional costs to train staff or
+to create company guidelines how to actually use this technology.
 
 === Copyright
 
@@ -124,7 +122,7 @@ Copyright is a major concern here and if we have a look at the apparent disputes
 results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original artists
 for the training data of theses models there are lots of decisions still to be made.
 
-This is probably worse for software:
+This is probably worse for software, especially when large parts of code can be suggested easily:
 
 image::copyright.png[]
 
