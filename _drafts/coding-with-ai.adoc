@@ -138,8 +138,11 @@ non-sanctioned software.
 
 === Code duplication
 
-AI can only suggest solutions it has seen somewhere else and cannot assist on completely new
-problems.
+When any AI assist suggests a solution to a code prompt, it has seen this somewhere else and where
+this else is, is something that is probably difficult to find out.
+
+This might either lead to lots of code duplication or to coupling when the code is refactored to
+avoid this duplication.
 
 === Performance
 
