@@ -22,8 +22,9 @@ https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
 https://twitter.com/DocSparse/status/1581461734665367554
 ////
 
-If I had to name a currently trending topic I would surely pick [ChatGPT][] or rather the
-underlying AI model [GPT-3][] with its upcoming pricier and more capable successor [GPT-4][].
+If you visit your favorite news page it is really difficult to avoid the trending topic of
+[ChatGPT][] or rather the underlying AI model [GPT-3][] with its upcoming pricier and more capable
+successor [GPT-4][].
 Between all these news and probably related to my own technical bubble there is lots of progress
 regarding AI-assistants for coding.
 
