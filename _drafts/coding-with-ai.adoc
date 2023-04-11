@@ -137,7 +137,8 @@ non-sanctioned software.
 
 === Code duplication
 
-
+AI can only suggest solutions it has seen somewhere else and cannot assist on completely new
+problems.
 
 === Performance
 
