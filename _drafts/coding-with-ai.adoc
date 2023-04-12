@@ -177,3 +177,7 @@ required here from [OpenAI][] and additionally there are license costs.
 Another auto-completer doesn't sound that fancy and every fellow [omnicompletion][] user can
 confirm the old ways work pretty well, but the actual prowess of the new AI-based systems is easy to
 dismiss until you have seen it in action.
+
+```text
+Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where the submitter is an AI and you’re constantly reviewing their proposals, he said.
+```
