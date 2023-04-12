@@ -20,6 +20,10 @@ https://openai.com/product/dall-e-2
 https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
 https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
 https://twitter.com/DocSparse/status/1581461734665367554
+
+https://blog.aspiresys.com/infrastructure-managed-services/why-ai-powered-code-completion-tools-are-essential-for-your-devsecops-strategy/
+https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
+https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/
 ////
 
 If you visit your favorite news page it is really difficult to avoid the trending topic of
@@ -179,5 +183,6 @@ confirm the old ways work pretty well, but the actual prowess of the new AI-base
 dismiss until you have seen it in action.
 
 ```text
-Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where the submitter is an AI and you’re constantly reviewing their proposals, he said.
+Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
+the submitter is an AI and you’re constantly reviewing their proposals, he said.
 ```
