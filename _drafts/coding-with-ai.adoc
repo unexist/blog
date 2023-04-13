@@ -24,6 +24,8 @@ https://twitter.com/DocSparse/status/1581461734665367554
 https://blog.aspiresys.com/infrastructure-managed-services/why-ai-powered-code-completion-tools-are-essential-for-your-devsecops-strategy/
 https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
 https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/
+https://nordcloud.com/tech-community/coding-copilot-ai-autocompletion/
+https://amistrongeryet.substack.com/p/gpt-4-capabilities
 ////
 
 If you visit your favorite news page it is really difficult to avoid the trending topic of
@@ -52,7 +54,7 @@ So if you want to use a derogatory term here it is an auto-completion on steroid
 The results of the code suggestions are nothing short of astonishing and can complete words,
 single sentences and also provide whole bodies for methods and functions.
 
-Here is the typical fun of adding the proper annotations for [OpenAPI][]:
+TabNine:
 
 ++++
 <div class="imageblock">
@@ -62,7 +64,7 @@ Here is the typical fun of adding the proper annotations for [OpenAPI][]:
 </div>
 ++++
 
-It is also possible to complete more complex lines with a visibly worse hit-and-miss ratio:
+CodePilot:
 
 ++++
 <div class="imageblock">
@@ -186,3 +188,7 @@ dismiss until you have seen it in action.
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
 the submitter is an AI and you’re constantly reviewing their proposals, he said.
 ```
+
+[quote,Steve,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
+What GPT-4 Does Is Less Like “Figuring Out” and More Like “Already Knowing”
+Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memorized a Lot More More Than You Have
