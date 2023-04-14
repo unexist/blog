@@ -19,7 +19,6 @@ https://midjourney.com/
 https://openai.com/product/dall-e-2
 https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
 https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
-https://twitter.com/DocSparse/status/1581461734665367554
 
 https://blog.aspiresys.com/infrastructure-managed-services/why-ai-powered-code-completion-tools-are-essential-for-your-devsecops-strategy/
 https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
@@ -80,12 +79,12 @@ single sentences and also provide whole bodies for methods and functions.
 It is also possible to use the suggestions as a kind of [autocomplete][] and [snippet][] library
 like CoPilot here beautifully demonstrates even with [Markdown][] link syntax:
 
-image:natural_language.png[]
+image::natural_language.png[]
 
 When you are in full flow the completion can be a nice addition, until you see for yourself where
 the limits are - or like CoPilot wonders by itself:
 
-image:not_capable.png[]
+image::not_capable.png[]
 
 I think his quote sums this up pretty nicely:
 
@@ -95,8 +94,8 @@ Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memori
 
 == Things to consider
 
-Next comes an unsorted list of pros and cons about the whole idea with hopefully mostly rational
-white hat thinking and personal opinion limited to the conclusion part after that.
+Next comes an unsorted list of thoughts about the whole idea with hopefully mostly rational white
+hat thinking and hopefully with my personal opinion limited to the conclusion part after that.
 
 === Faster time to market
 
@@ -110,8 +109,8 @@ technical level.
 
 === Training and recruiting
 
-Ai completion allows to write functional software even when you aren't well-versed in the given
-language and can make programming in general more approachable for beginners.
+AI completion allows to write functional software even when you aren't well-versed in the given
+language and this can make programming in general more approachable for beginners.
 
 This allows to learn something new without reading large manuals and have a shorter fail/success
 cycle which benefits learning.
@@ -120,10 +119,10 @@ And this by itself can also generate more interest and lure people into the busi
 
 === License fees and training costs
 
-Adding tools to the corporate world usually induces license fees and this is also true here.
+Adding tools to the corporate world usually induces license fees and this applies here as well.
 
-There a companies providing these services aplenty, but here are the prices for the two services
-that I've used so far based on data at the time of this post's writing:
+There a companies providing these services aplenty, but let us just check the price tags of the two
+services that I've used for this post.
 
 |===
 |Service|Individual costs (per month)|Business costs (per month per user)
@@ -138,12 +137,22 @@ to create company guidelines how to actually use this technology.
 
 === Copyright
 
-Copyright is a major concern here and if we have a look at the apparent disputes with the phenomenal
-results of [Stable Fusion][]-based AI like [DALL-E][] or [MidJourney][] and the original artists
-for the training data of theses models there are lots of decisions still to be made.
+There are many pending lawsuits and copyright claims regarding the use of [Stable Diffusion][]-based
+AI like [DALL-E][] or [MidJourney][].
 
-This is probably worse for software, especially when large parts of code can be suggested easily:
+Normally it is quite difficult to make assumptions about the actual training data, when the case
+isn't that obvious like in the example posted on [HackernNews][], with an in-tact watermark
+from [GettyImages][]:
 
+[link=https://news.ycombinator.com/item?id=32573523]
+image::watermark.png[width=50%]
+
+NOTE:
+
+This is worse for software, when the original author can be identified easily of literally large
+parts of suggested code:
+
+[link=https://news.ycombinator.com/item?id=32573523]
 image::copyright.png[]
 
 === Isolated customer systems
