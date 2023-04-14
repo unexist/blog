@@ -47,31 +47,40 @@ The whole idea is actually pretty simple, if we put the inherent complexity of A
 We train an AI model on available natural language and source code and allow it to give
 recommendations based on a [prompt][] of the actual code a developer writes.
 
-So if you want to use a derogatory term here it is an auto-completion on steroids.
+So in a way..
+
+[quote,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
+What GPT-4 Does Is Less Like "Figuring Out" and More Like "Already Knowing".
+Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memorized a Lot More More Than You Have
 
 == What are they capable of?
 
 The results of the code suggestions are nothing short of astonishing and can complete words,
 single sentences and also provide whole bodies for methods and functions.
 
-TabNine:
-
 ++++
-<div class="imageblock">
-    <div class="content">
-        <img data-gifffer="/assets/images/coding_with_ai/code_completion1.gif" />
-    </div>
-</div>
-++++
-
-CodePilot:
-
-++++
-<div class="imageblock">
-    <div class="content">
-        <img data-gifffer="/assets/images/coding_with_ai/code_completion2.gif" />
-    </div>
-</div>
+<table>
+    <tr>
+        <td>TabNine</td>
+        <td>CoPilot</td>
+    </tr>
+    <tr>
+        <td>
+            <div class="imageblock">
+                <div class="content">
+                    <img data-gifffer="/assets/images/coding_with_ai/code_completion1.gif" />
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="imageblock">
+                <div class="content">
+                    <img data-gifffer="/assets/images/coding_with_ai/code_completion2.gif" />
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
 ++++
 
 [NOTE]
@@ -184,11 +193,6 @@ Another auto-completer doesn't sound that fancy and every fellow [omnicompletion
 confirm the old ways work pretty well, but the actual prowess of the new AI-based systems is easy to
 dismiss until you have seen it in action.
 
-```text
+[quote,'https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/']
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
-the submitter is an AI and you’re constantly reviewing their proposals, he said.
-```
-
-[quote,Steve,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
-What GPT-4 Does Is Less Like “Figuring Out” and More Like “Already Knowing”
-Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memorized a Lot More More Than You Have
+the submitter is an AI and you're constantly reviewing their proposals, he said.
