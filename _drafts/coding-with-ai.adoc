@@ -44,14 +44,8 @@ management hat on and it is up to you to decide which [color of the six][] they 
 
 The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
 
-We train an AI model on available natural language and source code and allow it to give
-recommendations based on a [prompt][] of the actual code a developer writes.
-
-So in a way..
-
-[quote,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
-What GPT-4 Does Is Less Like "Figuring Out" and More Like "Already Knowing".
-Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memorized a Lot More More Than You Have
+We train a large language model (LLM) on our available text (natural language) and source code and
+[prompt][] for recommendations based on the actual code we write.
 
 == What are they capable of?
 
@@ -83,12 +77,21 @@ single sentences and also provide whole bodies for methods and functions.
 </table>
 ++++
 
-[NOTE]
-====
-I also used TabNine for this blog post just to demonstrate it is entirely possible
-to write natural language with it:
+It is also possible to use the suggestions as a kind of [autocomplete][] and [snippet][] library
+like CoPilot here beautifully demonstrates even with [Markdown][] link syntax:
+
 image:natural_language.png[]
-====
+
+When you are in full flow the completion can be a nice addition, until you see for yourself where
+the limits are - or like CoPilot wonders by itself:
+
+image:not_capable.png[]
+
+I think his quote sums this up pretty nicely:
+
+[quote,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
+What GPT-4 Does Is Less Like "Figuring Out" and More Like "Already Knowing".
+Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memorized a Lot More More Than You Have
 
 == Things to consider
 
