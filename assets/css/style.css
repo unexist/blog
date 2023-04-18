@@ -393,6 +393,11 @@ hr {
     font-size: 70%;
 }
 
+.post-content .imageblock > .title {
+    font-style: italic;
+    font-size: 90%;
+}
+
 .rss-subscribe {
     display: none;
 }
