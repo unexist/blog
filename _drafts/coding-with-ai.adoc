@@ -207,25 +207,16 @@ image::nice-try.png[]
 If you consider all of the mentioned points it it difficult to make your own mind about it and it
 is totally up to the goal you ultimately want to achieve.
 
-For me, one of the weirdest sensations is that AI-autocompletion kind of changes the way you
-express yourself and I am not sure if I really like it.
+For me, one of the weirdest sensations while writing this post is that AI-autocompletion with all
+the suggestions kind of changes the way you express yourself and I am not sure if I really like it.
 
+the old ways of using completion systems like [Omnicompletion][] or [AutoHotkey][] give good
+and reasonable suggestions and I don't think my coding speed is somehow related to the speed I can
+type.
 
-
-In our industry there still exists the myth of a **10x developer** which is a really loose
-description for an individual contributor with coding super powers.
-I am not entirely sure, if this is solely based on the actual coded lines (hello [COCOMO][]) or
-the quality of the code.
-
-I think in some ways it kind of behaves like copying code from [StackOverflow][] and it isn't clear,
-if the code was provided in the question or in the accepted answer.
-
-Super powers are never free - the same is true for the processing and storage power that is
-required here from [OpenAI][] and additionally there are license costs.
-
-Another auto-completer doesn't sound that fancy and every fellow [omnicompletion][] user can
-confirm the old ways work pretty well, but the actual prowess of the new AI-based systems is easy to
-dismiss until you have seen it in action.
+On the other hand any system that helps to reach the levels of the mythic **10x developer**
+with coding super powers (I am not entirely sure, if this is solely based on the actual coded lines
+(hello [COCOMO][]) or the quality of the code.) is pretty much worth any invest for companies.
 
 [quote,'https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/']
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
