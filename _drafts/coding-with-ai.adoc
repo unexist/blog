@@ -188,6 +188,10 @@ Also, there are quite few reports of problems about performance:
 
 <https://github.com/codota/TabNine/issues/43>
 
+=== Security
+
+<https://stackoverflow.blog/2019/11/26/copying-code-from-stack-overflow-you-might-be-spreading-security-vulnerabilities/>
+
 == Conclusion
 
 In our industry there still exists the myth of a **10x developer** which is a really loose
