@@ -9,6 +9,7 @@ categories: myself
 toc: true
 ---
 :imagesdir: /assets/images/coding_with_ai
+:figure-caption!:
 
 ////
 https://github.com/features/copilot
@@ -43,8 +44,8 @@ management hat on and it is up to you to decide which [color of the six][] they 
 
 The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
 
-We train a large language model (LLM) on our available text (natural language) and source code and
-[prompt][] for recommendations based on the actual code we write.
+We train a large language model ([LLM][]) on our available text (natural language) and source
+code and [prompt][] for recommendations based on the actual code we write.
 
 == What are they capable of?
 
@@ -95,7 +96,7 @@ Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memori
 == Things to consider
 
 Next comes an unsorted list of thoughts about the whole idea with hopefully mostly rational white
-hat thinking and hopefully with my personal opinion limited to the conclusion part after that.
+hat thinking and with my personal opinion limited to the conclusion part after that.
 
 === Faster time to market
 
@@ -145,6 +146,7 @@ isn't that obvious like in the example posted on [HackernNews][], with an in-tac
 from [GettyImages][]:
 
 [link=https://news.ycombinator.com/item?id=32573523]
+.Source <https://news.ycombinator.com/item?id=32573523>
 image::watermark.png[width=50%]
 
 NOTE:
@@ -153,6 +155,7 @@ This is worse for software, when the original author can be identified easily of
 parts of suggested code:
 
 [link=https://news.ycombinator.com/item?id=32573523]
+.Source <https://news.ycombinator.com/item?id=32573523>
 image::copyright.png[]
 
 === Isolated customer systems
