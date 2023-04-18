@@ -193,9 +193,24 @@ Also, there are quite few reports of problems about performance:
 
 === Security
 
+Re-using code can be a double-edged sword, especially when the actual source is unknown.
+This is especially true for pages like [StackOverflow][], when you cannot be sure if the code was
+posted in the question or in the accepted answer:
+
 <https://stackoverflow.blog/2019/11/26/copying-code-from-stack-overflow-you-might-be-spreading-security-vulnerabilities/>
 
 == Conclusion
+
+image::nice-try.png[]
+.(Nice try!)
+
+If you consider all of the mentioned points it it difficult to make your own mind about it and it
+is totally up to the goal you ultimately want to achieve.
+
+For me, one of the weirdest sensations is that AI-autocompletion kind of changes the way you
+express yourself and I am not sure if I really like it.
+
+
 
 In our industry there still exists the myth of a **10x developer** which is a really loose
 description for an individual contributor with coding super powers.
