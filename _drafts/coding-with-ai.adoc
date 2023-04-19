@@ -26,16 +26,21 @@ https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
 https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/
 https://nordcloud.com/tech-community/coding-copilot-ai-autocompletion/
 https://amistrongeryet.substack.com/p/gpt-4-capabilities
+https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
 ////
 
-Trending topics at the moment is surely everything related to [ChatGPT][] and if the widen the
-scope there isn't less about the underlying AI model [GPT-3][] and its pricier and more capable
-successor [GPT-4][].
-And between all these news and probably related to my own technical bubble there is lots of
-progress regarding AI-assistants for coding.
+Trending topics at the moment are surely everything related to [ChatGPT][] and if we widen the
+scope to include the underlying AI model [GPT-3][] and its pricier and more capable successor
+[GPT-4][] is is somehow difficult to keep up with all the news.
+And between all these articles AI-assistants for coding generates lots of traction as well.
 
-I've had a look at both [CoPilot][] and [TabNine][] when they went viral first, but I never tried
-to sort my own thoughts about this whole idea.
+The market is already pretty much flooded with different services and products.
+[Slashdot][] alone lists three paginated pages of tools and I had a tough time to pick the few I
+actually want to give a try.
+
+I ultimately picked [TabNine][], because of its free tier and it was actually the first I ever
+gave a spin and [CoPilot][], due to the vast amount of training data available and also a chance
+of my own repositories used for training.
 
 So in this post I will try to bring these thoughts to paper with both my operational and my
 management hat on and it is up to you to decide which [color of the six][] they are.
@@ -202,7 +207,7 @@ posted in the question or in the accepted answer:
 == Conclusion
 
 image::nice-try.png[]
-.(Nice try!)
+.(Nice try, AI!)
 
 If you consider all of the mentioned points it it difficult to make your own mind about it and it
 is totally up to the goal you ultimately want to achieve.
@@ -210,13 +215,13 @@ is totally up to the goal you ultimately want to achieve.
 For me, one of the weirdest sensations while writing this post is that AI-autocompletion with all
 the suggestions kind of changes the way you express yourself and I am not sure if I really like it.
 
-the old ways of using completion systems like [Omnicompletion][] or [AutoHotkey][] give good
-and reasonable suggestions and I don't think my coding speed is somehow related to the speed I can
-type.
+The old ways of using completion systems like [Omnicompletion][] give good and reasonable
+suggestions and I don't think my coding speed is somehow related to the speed I can type.
 
 On the other hand any system that helps to reach the levels of the mythic **10x developer**
 with coding super powers (I am not entirely sure, if this is solely based on the actual coded lines
-(hello [COCOMO][]) or the quality of the code.) is pretty much worth any invest for companies.
+(hello [COCOMO][]) or the quality of the code.) is pretty much worth any invest for business
+side.
 
 [quote,'https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/']
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
