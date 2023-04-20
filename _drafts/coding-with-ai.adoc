@@ -29,18 +29,16 @@ https://amistrongeryet.substack.com/p/gpt-4-capabilities
 https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
 ////
 
-Trending topics at the moment are surely everything related to [ChatGPT][] and if we widen the
-scope to include the underlying AI model [GPT-3][] and its pricier and more capable successor
-[GPT-4][] is is somehow difficult to keep up with all the news.
-And between all these articles AI-assistants for coding generates lots of traction as well.
+If you open your favorite news page you surely find [ChatGPT][] and the underlying AI model
+[GPT-3][] and its pricier and more capable successor[GPT-4][] among the top trending and topics.
+Close by are articles about AI-assisted coding with dozens of different services and products.
 
-The market is already pretty much flooded with different services and products.
-[Slashdot][] alone lists three paginated pages of tools and I had a tough time to pick the few I
-actually want to give a try.
+[Slashdot][] alone lists three pages of tools and I had a tough time to select the two services
+I want to give a spin during the course of this blog post.
 
-I ultimately picked [TabNine][], because of its free tier and it was actually the first I ever
-gave a spin and [CoPilot][], due to the vast amount of training data available and also a chance
-of my own repositories used for training.
+I ultimately picked [TabNine][], because of its free tier and my previous experience when it came
+to my attention and [Github][]'s [CoPilot][], due to its access to the vast amount of _free_
+training data which by chance might include my own repositories.
 
 So in this post I will try to bring these thoughts to paper with both my operational and my
 management hat on and it is up to you to decide which [color of the six][] they are.
