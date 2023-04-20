@@ -398,6 +398,7 @@ hr {
     font-size: 80%;
     text-align: left;
     color: var(--h3-color);
+    caption-side: bottom;
 }
 
 .rss-subscribe {
