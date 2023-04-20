@@ -40,8 +40,8 @@ I ultimately picked [TabNine][], because of its free tier and my previous experi
 to my attention and [Github][]'s [CoPilot][], due to its access to the vast amount of _free_
 training data which by chance might include my own repositories.
 
-So in this post I will try to bring these thoughts to paper with both my operational and my
-management hat on and it is up to you to decide which [color of the six][] they are.
+So in this post I will try to bring my thoughts to paper with both my operational and my
+management hat on and it is up to you to decide of which [color][] they are.
 
 == What are these assistants?
 
