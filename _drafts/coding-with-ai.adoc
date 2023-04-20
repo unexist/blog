@@ -10,6 +10,7 @@ toc: true
 ---
 :imagesdir: /assets/images/coding_with_ai
 :figure-caption!:
+:table-caption!:
 
 ////
 https://github.com/features/copilot
@@ -108,6 +109,7 @@ put into other artifacts like libraries and template systems like [Maven Archety
 Completion can here be used to assemble functional software from existing parts not unlike the
 [low-code][]/[no-code][] approach.
 
+
 === Training and recruiting
 
 Writing code is not easy to learn and if you aren't well-versed in a given language the
@@ -123,12 +125,12 @@ Adding tools to the corporate world usually induces license fees and this applie
 There a companies providing these services aplenty, but let us just check the price tags of the two
 handpicked services.
 
+.Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
 |===
 |Service|Individual costs (per month)|Business costs (per month per user)
 |CoPilot|$10 (or $100 per year)|$19
 |TabNine|$0 Starter / $12 Pro|Let's talk
 |===
-.Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
 
 Apart from the plain license and service costs there might be additional costs to train staff or
 to create company guidelines how to actually use this technology.
