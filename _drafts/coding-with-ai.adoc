@@ -48,12 +48,14 @@ management hat on and it is up to you to decide of which [color][] they are.
 The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
 
 We train a large language model ([LLM][]) on our available text (natural language) and source
-code and [prompt][] for recommendations based on the actual code we write.
+code and [prompt][] for recommendations based on the actual text and code we write.
 
 == What are they capable of?
 
 The results of the code suggestions are nothing short of astonishing and can complete words,
 single sentences and also provide whole bodies for methods and functions.
+While TabNine produced suggestions for single lines, CoPilot was able to complete whole methods
+for me as can be seen in the following animated GIFs:
 
 ++++
 <table>
@@ -80,17 +82,13 @@ single sentences and also provide whole bodies for methods and functions.
 </table>
 ++++
 
-It is also possible to use the suggestions as a kind of [autocomplete][] and [snippet][] library
-like CoPilot here beautifully demonstrates even with [Markdown][] link syntax:
-
-image::natural_language.png[]
-
-When you are in full flow the completion can be a nice addition, until you see for yourself where
+The suggestions aren't limited to code alone, but can also be used to complete whole sentences.
+In full flow full flow the completion can be a nice addition, until you see for yourself where
 the limits are - or like CoPilot wonders by itself:
 
 image::not_capable.png[]
 
-I think his quote sums this up pretty nicely:
+My favorite quote about the capabilities of the technology is probably this:
 
 [quote,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
 What GPT-4 Does Is Less Like "Figuring Out" and More Like "Already Knowing".
@@ -101,40 +99,36 @@ Yes, It's a Stochastic Parrot, But Most Of The Time You Are Too, And It's Memori
 Next comes an unsorted list of thoughts about the whole idea with hopefully mostly rational white
 hat thinking and with my personal opinion limited to the conclusion part after that.
 
-=== Faster time to market
+=== Time to market
 
 AI can rapidly speed up the creation of boilerplate code and repeated stuff which cannot easily be
-put into other artifacts like libraries or templates like [Maven Archetype][] for [Java][]-based
-software.
+put into other artifacts like libraries and template systems like [Maven Archetype][] for
+[Java][]-based software.
 
-In a closed cosmos the suggestions can then be limited to own software and be a kind of completion
-library to assemble functional software like with the low-code/no-code approach on a more
-technical level.
+Completion can here be used to assemble functional software from existing parts not unlike the
+[low-code][]/[no-code][] approach.
 
 === Training and recruiting
 
-AI completion allows to write functional software even when you aren't well-versed in the given
-language and this can make programming in general more approachable for beginners.
+Writing code is not easy to learn and if you aren't well-versed in a given language the
+fail/success cycles can be long and frustrating.
 
-This allows to learn something new without reading large manuals and have a shorter fail/success
-cycle which benefits learning.
-
-And this by itself can also generate more interest and lure people into the business.
+AI can shorten these cycles and make programming in general more approachable for beginners, which
+by itself can also generate more interest and lure people into the business.
 
 === License fees and training costs
 
 Adding tools to the corporate world usually induces license fees and this applies here as well.
 
 There a companies providing these services aplenty, but let us just check the price tags of the two
-services that I've used for this post.
+handpicked services.
 
 |===
 |Service|Individual costs (per month)|Business costs (per month per user)
 |CoPilot|$10 (or $100 per year)|$19
 |TabNine|$0 Starter / $12 Pro|Let's talk
 |===
-
-NOTE: Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
+.Sources: <https://github.com/features/copilot>, <https://www.tabnine.com/pricing>
 
 Apart from the plain license and service costs there might be additional costs to train staff or
 to create company guidelines how to actually use this technology.
@@ -163,8 +157,8 @@ image::copyright.png[]
 
 === Isolated customer systems
 
-Dependent on the customer and obviously the industry there are legal limits which code can be used
-as training data and how the data can be accessed.
+The effectiveness of the technology is limited by the amount and quality of the available training
+data, which can be limited in a closed environment.
 
 When the data is hidden inside of closed customer systems there is usually no option to install
 non-sanctioned software.
