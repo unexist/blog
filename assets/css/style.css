@@ -393,9 +393,11 @@ hr {
     font-size: 70%;
 }
 
-.post-content .imageblock > .title {
+.post-content .imageblock > .title, .post-content .tableblock > .title {
     font-style: italic;
-    font-size: 90%;
+    font-size: 80%;
+    text-align: left;
+    color: var(--h3-color);
 }
 
 .rss-subscribe {
