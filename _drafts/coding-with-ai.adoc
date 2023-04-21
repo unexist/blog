@@ -31,27 +31,28 @@ https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
 ////
 
 If you open your favorite news page you surely find [ChatGPT][] and the underlying AI model
-[GPT-3][] and its pricier and more capable successor[GPT-4][] among the top trending and topics.
-Close by are articles about AI-assisted coding with dozens of different services and products.
+[GPT-3][] and its pricier and more capable successor[GPT-4][] among the trending topics.
+There are lots of weird and funny applications and there AI-assisted coding is something that
+really made me curious.
 
-[Slashdot][] alone lists three pages of tools and I had a tough time to select the two services
-I want to give a spin during the course of this blog post.
+So in this post I am going to collect my own user experience and thoughts about the implications
+and try to evaluate them based on [white and later red hat thinking][].
+
+== Pick two
+
+[Slashdot][] alone lists three pages of tools and I had a tough time to select two services I want
+to give a spin during the course of this blog post.
 
 I ultimately picked [TabNine][], because of its free tier and my previous experience when it came
 to my attention and [Github][]'s [CoPilot][], due to its access to the vast amount of _free_
-training data which by chance might include my own repositories.
+training data which includes my own repositories according to my settings:
 
-So in this post I will try to bring my thoughts to paper with both my operational and my
-management hat on and it is up to you to decide of which [color][] they are.
+image::github_settings[]
 
-== What are these assistants?
+== What can they do?
 
-The whole idea is actually pretty simple, if we put the inherent complexity of AI aside for now:
-
-We train a large language model ([LLM][]) on our available text (natural language) and source
-code and [prompt][] for recommendations based on the actual text and code we write.
-
-== What are they capable of?
+[VSCode][] comes with nice integration for both of them and you are quickly ready to go once you've
+figured the licensing and tiering out.
 
 The results of the code suggestions are nothing short of astonishing and can complete words,
 single sentences and also provide whole bodies for methods and functions.
