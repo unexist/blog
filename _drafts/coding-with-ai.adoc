@@ -85,9 +85,12 @@ for me as can be seen in the following side-by-side comparison in animated GIFs:
 </table>
 ++++
 
-The suggestions aren't limited to code alone, but can also be used to complete whole sentences.
-In full flow full flow the completion can be a nice addition, until you see for yourself where
-the limits are - or like CoPilot wonders by itself:
+The suggestions aren't limited to code alone and can also provide complete sentences.
+I wrote this blog post partially with the help of both until I found it somehow annoying, but
+more about this in the conclusion part.
+
+In full flow this can be really a nice addition, but there are obsiously limits are - like CoPilot
+wonders by itself:
 
 image::not_capable.png[]
 
