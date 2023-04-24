@@ -89,12 +89,7 @@ The suggestions aren't limited to code alone and can also provide complete sente
 I wrote this blog post partially with the help of both until I found it somehow annoying, but
 more about this in the conclusion part.
 
-In full flow this can be really a nice addition, but there are obsiously limits are - like CoPilot
-wonders by itself:
-
-image::not_capable.png[]
-
-My favorite quote about the capabilities of the technology is probably this:
+My favorite quote to sum up the capabilities is probably this:
 
 [quote,'https://amistrongeryet.substack.com/p/gpt-4-capabilities']
 What GPT-4 Does Is Less Like "Figuring Out" and More Like "Already Knowing".
