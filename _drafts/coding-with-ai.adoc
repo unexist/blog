@@ -103,17 +103,15 @@ hat thinking and with my personal opinion limited to the conclusion part after t
 === Time to market
 
 AI can rapidly speed up the creation of boilerplate code and repeated stuff which cannot easily be
-put into other artifacts like libraries and template systems like [Maven Archetype][] for
-[Java][]-based software.
+put into other artifacts or templates.
 
 Completion can here be used to assemble functional software from existing parts not unlike the
 [low-code][]/[no-code][] approach.
 
-
 === Training and recruiting
 
-Writing code is not easy to learn and if you aren't well-versed in a given language the
-fail/success cycles can be long and frustrating.
+Writing code is not easy to learn and if you aren't well-versed in a given language the fail/success
+cycles can be long and frustrating.
 
 AI can shorten these cycles and make programming in general more approachable for beginners, which
 by itself can also generate more interest and lure people into the business.
@@ -148,8 +146,6 @@ from [GettyImages][]:
 .Source <https://news.ycombinator.com/item?id=32573523>
 image::watermark.png[width=50%]
 
-NOTE:
-
 This is worse for software, when the original author can be identified easily of literally large
 parts of suggested code:
 
@@ -160,7 +156,7 @@ image::copyright.png[]
 === Isolated customer systems
 
 The effectiveness of the technology is limited by the amount and quality of the available training
-data, which can be limited in a closed environment.
+data, which can be quite limited in a closed environment.
 
 When the data is hidden inside of closed customer systems there is usually no option to install
 non-sanctioned software.
