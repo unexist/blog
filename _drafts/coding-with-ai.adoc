@@ -43,9 +43,10 @@ and try to evaluate them based on [white and later red hat thinking][].
 [Slashdot][] alone lists three pages of tools and I had a tough time to select two services I want
 to give a spin during the course of this blog post.
 
-I ultimately picked [TabNine][], because of its free tier and my previous experience when it came
-to my attention and [Github][]'s [CoPilot][], due to its access to the vast amount of _free_
-training data which includes my own repositories according to my settings:
+I ultimately picked [TabNine][], because of its free tier, local options and my previous experience
+when it came to my attention and [Github][]'s [CoPilot][], due to its access to the vast amount of
+_free_ training data, their promise of [code synthesis][] and obviously the inclusion of my own
+repositories accordingly to my settings:
 
 image::github_settings[]
 
@@ -54,10 +55,10 @@ image::github_settings[]
 [VSCode][] comes with nice integration for both of them and you are quickly ready to go once you've
 figured the licensing and tiering out.
 
-The results of the code suggestions are nothing short of astonishing and can complete words,
-single sentences and also provide whole bodies for methods and functions.
+In daily use the results of the code suggestions are nothing short of astonishing and can complete
+words, single sentences and also provide whole bodies for methods and functions.
 While TabNine produced suggestions for single lines, CoPilot was able to complete whole methods
-for me as can be seen in the following animated GIFs:
+for me as can be seen in the following side-by-side comparison in animated GIFs:
 
 ++++
 <table>
