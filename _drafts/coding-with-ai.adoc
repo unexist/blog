@@ -30,29 +30,29 @@ https://amistrongeryet.substack.com/p/gpt-4-capabilities
 https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
 ////
 
-If you open your favorite news page you surely find [ChatGPT][] and the underlying AI model
-[GPT-3][] and its pricier and more capable successor[GPT-4][] among the trending topics.
+If you open your favorite news page you surely find {1}[ChatGPT] and the underlying AI model
+{8}[GPT-3] and its pricier and more capable successor{9}[GPT-4] among the trending topics.
 There are lots of weird and funny applications and there AI-assisted coding is something that
 really made me curious.
 
 So in this post I am going to collect my own user experience and thoughts about the implications
-and try to evaluate them based on [white and later red hat thinking][].
+and try to evaluate them based on {20}[white and later red hat thinking].
 
 == Pick two
 
-[Slashdot][] alone lists three pages of tools and I had a tough time to select two services I want
+{15}[Slashdot] alone lists three pages of tools and I had a tough time to select two services I want
 to give a spin during the course of this blog post.
 
-I ultimately picked [TabNine][], because of its free tier, local options and my previous experience
-and [Github][]'s [Copilot][], due to its access to the vast amount of _free_ training data, their
-promise of [code synthesis][] and obviously the inclusion of my own repositories accordingly to my
+I ultimately picked {18}[TabNine], because of its free tier, local options and my previous experience
+and {7}[Github]'s {4}[Copilot], due to its access to the vast amount of _free_ training data, their
+promise of {3}[code synthesis] and obviously the inclusion of my own repositories accordingly to my
 settings:
 
 image::github_settings[]
 
 == What can they do?
 
-[VSCode][] comes with nice integration for both of them and you are quickly ready to go once you've
+{19}[VSCode] comes with nice integration for both of them and you are quickly ready to go once you've
 figured out the licensing.
 
 In daily use the results of the code suggestions are nothing short of astonishing and can complete
@@ -106,7 +106,7 @@ AI can rapidly speed up the creation of boilerplate code and repeated stuff whic
 put into other artifacts or templates.
 
 Completion can here be used to assemble functional software from existing parts not unlike the
-[low-code][]/[no-code][] approach.
+{11}[low-code]/{13}[no-code] approach.
 
 === Training and recruiting
 
@@ -135,22 +135,22 @@ to create company guidelines how to actually use this technology.
 
 === Copyright
 
-There are many pending lawsuits and copyright claims regarding the use of [Stable Diffusion][]-based
-AI like [DALL-E][] or [MidJourney][].
+There are many pending lawsuits and copyright claims regarding the use of {16}[Stable Diffusion]-based
+AI like {5}[DALL-E] or {12}[MidJourney].
 
 Normally, it is quite difficult to make assumptions about the actual training data, when the case
-isn't that obvious like in the example posted on [HackernNews][], with an in-tact watermark
-from [GettyImages][]:
+isn't that obvious like in the example posted on {10}[HackernNews], with an in-tact watermark
+from {6}[GettyImages]:
 
 [link=https://news.ycombinator.com/item?id=32573523]
 .Source <https://news.ycombinator.com/item?id=32573523>
-image::watermark.png[width=50%]
+image::watermark.png[width=30%]
 
 This is worse for software, when the original author can be identified easily of literally large
 parts of suggested code:
 
-[link=https://news.ycombinator.com/item?id=32573523]
-.Source <https://news.ycombinator.com/item?id=32573523>
+[link=https://twitter.com/DocSparse/status/1581461734665367554]
+.Source <https://twitter.com/DocSparse/status/1581461734665367554>
 image::copyright.png[]
 
 === Isolated customer systems
@@ -190,7 +190,7 @@ Also, there are quite few reports of problems about performance:
 
 Re-using code can be a double-edged sword, especially when the actual source is unknown.
 
-This is especially true for pages like [StackOverflow][], when you cannot be sure if the code was
+This is especially true for pages like {17}[StackOverflow], when you cannot be sure if the code was
 posted in the question or in the accepted answer:
 
 <https://stackoverflow.blog/2019/11/26/copying-code-from-stack-overflow-you-might-be-spreading-security-vulnerabilities/>
@@ -206,14 +206,38 @@ is totally up to the goal you ultimately want to achieve.
 For me, one of the weirdest sensations while writing this post was with ongoing AI-autocompletion
 the suggestions kind of change the way you express yourself and I am not sure if I really like it.
 
-The old ways of using completion systems like [Omnicompletion][] give good and reasonable
+The old ways of using completion systems like {14}[Omnicompletion] give good and reasonable
 suggestions and I don't think my coding speed is somehow related to the speed I can type.
 
 On the other hand any system that helps to reach the levels of the mythic **10x developer**
 with coding super powers (I am not entirely sure, if this is solely based on the actual coded lines
-(hello [COCOMO][]) or the quality of the code.) is pretty much worth any invest for business
+(hello {2}[COCOMO]) or the quality of the code.) is pretty much worth any invest for business
 side.
+
+The overall development of progress will surely have a big impact on our business and it is up to
+us to make the best of it:
 
 [quote,'https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/']
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
 the submitter is an AI and you're constantly reviewing their proposals, he said.
+
+:1: <ChatGPT>
+:2: <COCOMO>
+:3: <codesynthesis>
+:4: <Copilot>
+:5: <DALL-E>
+:6: <GettyImages>
+:7: <Github>
+:8: <GPT-3>
+:9: <GPT-4>
+:10: <HackernNews>
+:11: <low-code>
+:12: <MidJourney>
+:13: <no-code>
+:14: <Omnicompletion>
+:15: <Slashdot>
+:16: <StableDiffusion>
+:17: <StackOverflow>
+:18: <TabNine>
+:19: <VSCode>
+:20: <whiteandlaterredhatthinking>
