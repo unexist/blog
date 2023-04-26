@@ -138,7 +138,7 @@ to create company guidelines how to actually use this technology.
 There are many pending lawsuits and copyright claims regarding the use of [Stable Diffusion][]-based
 AI like [DALL-E][] or [MidJourney][].
 
-Normally it is quite difficult to make assumptions about the actual training data, when the case
+Normally, it is quite difficult to make assumptions about the actual training data, when the case
 isn't that obvious like in the example posted on [HackernNews][], with an in-tact watermark
 from [GettyImages][]:
 
@@ -163,7 +163,7 @@ non-approved software.
 
 === Code duplication
 
-When any AI assist suggests a solution to a code prompt, it has seen this somewhere else and where
+When any AI assists suggest a solution to a code prompt, it has seen this somewhere else and where
 this else is, is something that is probably difficult to find out.
 
 This might either lead to lots of code duplication or to coupling when the code is refactored to
@@ -175,9 +175,9 @@ Many services provide multiple ways of using a large language model (LLM) - but 
 down to either run it locally or just use the cloud with more processing power and also more
 suggestions due to the availability of training data.
 
-Dependent on the size of the actual data the requirements for compute might have a huge impact.
+Dependent on the size of the actual data the requirements for compute might have measurable impact.
 
-Following screenshot shows the processes of TabNine on my local machine while typing inside of this
+Following screenshot shows the processes of TabNine on my local machine while working on this
 blog post:
 
 image::resources.png[]
@@ -189,6 +189,7 @@ Also, there are quite few reports of problems about performance:
 === Security
 
 Re-using code can be a double-edged sword, especially when the actual source is unknown.
+
 This is especially true for pages like [StackOverflow][], when you cannot be sure if the code was
 posted in the question or in the accepted answer:
 
@@ -202,8 +203,8 @@ image::nice-try.png[]
 If you consider all of the mentioned points it it difficult to make your own mind about it and it
 is totally up to the goal you ultimately want to achieve.
 
-For me, one of the weirdest sensations while writing this post is that AI-autocompletion with all
-the suggestions kind of changes the way you express yourself and I am not sure if I really like it.
+For me, one of the weirdest sensations while writing this post was with ongoing AI-autocompletion
+the suggestions kind of change the way you express yourself and I am not sure if I really like it.
 
 The old ways of using completion systems like [Omnicompletion][] give good and reasonable
 suggestions and I don't think my coding speed is somehow related to the speed I can type.
