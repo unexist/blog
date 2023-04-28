@@ -12,14 +12,6 @@ toc: true
 :figure-caption!:
 :table-caption!:
 
-////
-https://blog.aspiresys.com/infrastructure-managed-services/why-ai-powered-code-completion-tools-are-essential-for-your-devsecops-strategy/
-https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
-https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/
-https://nordcloud.com/tech-community/coding-copilot-ai-autocompletion/
-https://amistrongeryet.substack.com/p/gpt-4-capabilities
-////
-
 :1: https://openai.com/blog/chatgpt
 :2: https://en.wikipedia.org/wiki/COCOMO
 :3: https://github.com/features/copilot
