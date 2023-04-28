@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Coding with AI
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2023-04-28 17:09 +0200
+last_updated: 2023-04-28 17:09 +0200
 author: Christoph Kappel
 tags: tech ai
 categories: myself
