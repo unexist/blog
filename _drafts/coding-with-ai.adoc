@@ -13,22 +13,33 @@ toc: true
 :table-caption!:
 
 ////
-https://github.com/features/copilot
-https://www.tabnine.com/pricing
-https://en.wikipedia.org/wiki/COCOMO
-https://en.wikipedia.org/wiki/Stable_Diffusion
-https://midjourney.com/
-https://openai.com/product/dall-e-2
-https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
-https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
-
 https://blog.aspiresys.com/infrastructure-managed-services/why-ai-powered-code-completion-tools-are-essential-for-your-devsecops-strategy/
 https://about.gitlab.com/blog/2023/03/23/ai-assisted-code-suggestions/
 https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/
 https://nordcloud.com/tech-community/coding-copilot-ai-autocompletion/
 https://amistrongeryet.substack.com/p/gpt-4-capabilities
-https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
 ////
+
+:1: https://openai.com/blog/chatgpt
+:2: https://en.wikipedia.org/wiki/COCOMO
+:3: https://github.com/features/copilot
+:4: https://github.com/features/copilot
+:5: https://openai.com/product/dall-e-2
+:6: https://www.gettyimages.com
+:7: https://github.com
+:8: https://en.wikipedia.org/wiki/GPT-3
+:9: https://en.wikipedia.org/wiki/GPT-4
+:10: https://news.ycombinator.com/
+:11: https://en.wikipedia.org/wiki/Low-code_development_platform
+:12: https://midjourney.com/
+:13: https://en.wikipedia.org/wiki/No-code_development_platform
+:14: https://medium.com/usevim/vim-101-completion-compendium-97b4ebc3a45a
+:15: https://slashdot.org/software/ai-coding-assistants/?sort=rating_avg
+:16: https://en.wikipedia.org/wiki/Stable_Diffusion
+:17: https://stackoverflow.com/
+:18: https://www.tabnine.com
+:19: https://code.visualstudio.com/
+:20: https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
 
 If you open your favorite news page you surely find {1}[ChatGPT] and the underlying AI model
 {8}[GPT-3] and its pricier and more capable successor{9}[GPT-4] among the trending topics.
@@ -220,24 +231,3 @@ us to make the best of it:
 [quote,'https://thenewstack.io/github-copilot-a-powerful-controversial-autocomplete-for-developers/']
 Rauch likens the situation to GitHub providing a way of creating an “inline pull request,” where
 the submitter is an AI and you're constantly reviewing their proposals, he said.
-
-:1: <ChatGPT>
-:2: <COCOMO>
-:3: <codesynthesis>
-:4: <Copilot>
-:5: <DALL-E>
-:6: <GettyImages>
-:7: <Github>
-:8: <GPT-3>
-:9: <GPT-4>
-:10: <HackernNews>
-:11: <low-code>
-:12: <MidJourney>
-:13: <no-code>
-:14: <Omnicompletion>
-:15: <Slashdot>
-:16: <StableDiffusion>
-:17: <StackOverflow>
-:18: <TabNine>
-:19: <VSCode>
-:20: <whiteandlaterredhatthinking>
