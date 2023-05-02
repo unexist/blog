@@ -51,7 +51,7 @@ and {7}[Github]'s {4}[Copilot], due to its access to the vast amount of _free_ t
 promise of {3}[code synthesis] and obviously the inclusion of my own repositories accordingly to my
 settings:
 
-image::github_settings[]
+image::github_settings.png[]
 
 == What can they do?
 
