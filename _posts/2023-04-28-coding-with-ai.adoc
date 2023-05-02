@@ -109,7 +109,7 @@ AI can rapidly speed up the creation of boilerplate code and repeated stuff whic
 put into other artifacts or templates.
 
 Completion can here be used to assemble functional software from existing parts not unlike the
-{11}[low-code]/{13}[no-code] approach.
+{11}[low-code] / {13}[no-code] approach.
 
 === Training and recruiting
 
