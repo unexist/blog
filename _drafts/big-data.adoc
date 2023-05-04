@@ -5,7 +5,8 @@ date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: showcase
+categories: showcase hadoop hive iceberg debezium
 toc: true
 ---
 :imagesdir: /assets/images/big-data.adoc
+
