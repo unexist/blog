@@ -10,3 +10,10 @@ toc: true
 ---
 :imagesdir: /assets/images/big-data.adoc
 
+Looking into something more deeply usually has the nice benefit of completely changing your own
+point about it.
+This can also promote something from a mere [buzzword][] to a buzzword with some nice and technical
+implications.
+
+When reading about [big data][] the interesting part for me was the fact the data there is
+basically "schema-less" until you try to read it again.
