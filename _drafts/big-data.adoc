@@ -15,5 +15,15 @@ point about it.
 This can also promote something from a mere [buzzword][] to a buzzword with some nice and technical
 implications.
 
-When reading about [big data][] the interesting part for me was the fact the data there is
+When reading about [Data Les][] the interesting part for me was the fact the data there is
 basically "schema-less" until you try to read it again.
+Which brings us to the question how does the data gets there in the first place?
+
+So in this blog post we are going to set up a single-container-data-lake and play with two
+ways of moving data from our demo [todo][] application into it.
+
+== Setting everything up
+
+== Debezium and the WAL
+
+== Scala with a spark
