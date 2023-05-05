@@ -24,6 +24,6 @@ ways of moving data from our demo [todo][] application into it.
 
 == Setting everything up
 
-== Debezium and the WAL
+== Debezium, the WAL and an Iceberg
 
-== Scala with a spark
+== Scala with a Spark
