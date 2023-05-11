@@ -11,16 +11,18 @@ toc: true
 :imagesdir: /assets/images/big-data.adoc
 
 Looking into something more deeply usually has the nice benefit of completely changing your own
-point about it.
-This can also promote something from a mere [buzzword][] to a buzzword with some nice and technical
-implications.
+mind about it.
+And this can ultimately promote something from a mere [buzzword][] to a something nice with
+interesting technical implications.
 
-When reading about [Data Les][] the interesting part for me was the fact the data there is
-basically "schema-less" until you try to read it again.
-Which brings us to the question how does the data gets there in the first place?
+I never had much contact with the general topic of [Data Lakes][] before, but had to
+A while ago, I had the opportunity to look into [Data Lakes][] and found the aspect of schema-less
+data until read pretty intriguing.
+Following theses thoughts I had to deal with the question question how does the data gets there in
+the first place?
 
-So in this blog post we are going to set up a single-container-data-lake and play with two
-ways of moving data from our demo [todo][] application into it.
+So in this blog post we are going to set up a single-container data-lake and play with two ways of
+moving data from our usual [demo application][] into it.
 
 == Setting everything up
 
