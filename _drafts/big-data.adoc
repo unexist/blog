@@ -10,6 +10,11 @@ toc: true
 ---
 :imagesdir: /assets/images/big-data.adoc
 
+```
+https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
+https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
+```
+
 Looking into something more deeply usually has the nice benefit of completely changing your own
 mind about it.
 And this can ultimately promote something from a mere [buzzword][] to a something nice with
@@ -26,6 +31,17 @@ So in this blog post we are going to set up a single-container data-lake and pla
 moving data from our usual [demo application][] into it.
 
 == Setting everything up
+
+Although the [Dockerfile][] is quite huge, there isn't much complexity involved and I'd like to
+use this paragraph to talk about some fun issues I had with it.
+
+=== Alpine and Musl
+
+The first bigger issues that I faced is the incompatibility of the C-based parts of the datanodes
+with the default [libc][] of [Alpine][].
+Instead of the more common [glibc][] it relies on [Musl][] due to its smaller footprint in storage.
+
+=== Podman removed capabilities
 
 == Debezium, the WAL and an Iceberg
 
