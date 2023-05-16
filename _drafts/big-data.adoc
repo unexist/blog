@@ -45,6 +45,8 @@ Instead of the more common [glibc][] it relies on [Musl][] due to its smaller fo
 
 === Podman removed capabilities
 
+[link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
+.Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
 image::podman_capabilites[]
 
 == Debezium, the WAL and an Iceberg
