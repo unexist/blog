@@ -8,7 +8,9 @@ tags: showcase
 categories: showcase hadoop hive iceberg debezium
 toc: true
 ---
-:imagesdir: /assets/images/big-data.adoc
+:imagesdir: /assets/images/big_data
+:figure-caption!:
+:table-caption!:
 
 ```
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
@@ -42,6 +44,8 @@ with the default [libc][] of [Alpine][].
 Instead of the more common [glibc][] it relies on [Musl][] due to its smaller footprint in storage.
 
 === Podman removed capabilities
+
+image::podman_capabilites[]
 
 == Debezium, the WAL and an Iceberg
 
