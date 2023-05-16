@@ -1,8 +1,8 @@
 #!/bin/zsh
 TITLE="$*"
-FILE="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`.adoc"
+FILENAME="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`"
 
-cat > "_drafts/$FILE" <<EOF
+cat > "_drafts/${FILENAME}.adoc" <<EOF
 ---
 layout: post
 title: ${TITLE}
@@ -13,5 +13,7 @@ tags: showcase
 categories: showcase
 toc: true
 ---
-:imagesdir: /assets/images/${FILE/-/_}
+:imagesdir: /assets/images/${FILENAME/-/_}
+:figure-caption!:
+:table-caption!:
 EOF
