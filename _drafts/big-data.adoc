@@ -15,6 +15,7 @@ toc: true
 ```
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
 https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
+https://wiki.musl-libc.org/functional-differences-from-glibc.html
 ```
 
 Looking into something more deeply usually has the nice benefit of completely changing your own
@@ -42,7 +43,10 @@ use this paragraph to talk about some fun issues I had with it.
 The first bigger issues that I faced is the incompatibility of the C-based parts of the datanodes
 with the default [libc][] of [Alpine][].
 Due to its smaller storage footprint, [Musl][] is a good candidate for containerization, but
-sometimes causes really weird problems.
+sometimes causes headaches.
+
+The key take-away here is if you happen to see random crashes make sure to check the
+[official list of the known differences][].
 
 === Podman removed capabilities
 
