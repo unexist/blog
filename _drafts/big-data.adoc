@@ -41,13 +41,21 @@ use this paragraph to talk about some fun issues I had with it.
 
 The first bigger issues that I faced is the incompatibility of the C-based parts of the datanodes
 with the default [libc][] of [Alpine][].
-Instead of the more common [glibc][] it relies on [Musl][] due to its smaller footprint in storage.
+Due to its smaller storage footprint, [Musl][] is a good candidate for containerization, but
+sometimes causes really weird problems.
 
 === Podman removed capabilities
 
+
+[source,log]
+----
+ssh: Connection closed by 127.0.0.1 port 22
+sshd: chroot("/run/sshd"): Operation not permitted [preauth]
+----
+
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
-image::podman_capabilites[]
+image::podman_capabilites.png[]
 
 == Debezium, the WAL and an Iceberg
 
