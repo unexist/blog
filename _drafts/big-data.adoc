@@ -42,20 +42,30 @@ use this paragraph to talk about some fun issues I had with it.
 
 The first bigger issues that I faced is the incompatibility of the C-based parts of the datanodes
 with the default [libc][] of [Alpine][].
-Due to its smaller storage footprint, [Musl][] is a good candidate for containerization, but
-sometimes causes headaches.
+Due to its smaller storage footprint, [Musl][] is a good candidate for containerization and the
+default libc chosen there.
 
 The key take-away here is if you happen to see random crashes make sure to check the
 [official list of the known differences][].
 
 === Podman removed capabilities
 
+One of the drawbacks of using software in a **rolling-update-way** is that you stumble upon nasty
+changes and forces you to check the changelogs of the various packages.
+This effectively happened to me with a change in [Podman][] introduced in `4.4.1`.
+
+After updating my local Podman installation I couldn't start [sshd][] inside of my container
+anymore and [Hadoop][] and friends rely heavily on it for communication between nodes:
 
 [source,log]
 ----
 ssh: Connection closed by 127.0.0.1 port 22
 sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ----
+
+I'd like to say seeing this error poiunted me directly to the changelog of Podman, but unfortunately
+I had to debug some time and cannot really remember
+I cannot exactly tell how I
 
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
