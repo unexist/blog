@@ -52,8 +52,9 @@ By using Alpine, you're getting "free" chaos engineering for your cluster.
 
 === Podman removed capabilities
 
-One of the drawbacks of using software in a **rolling-updaty-way** is that you run into
-changes and forces you to check the changelogs of the various packages.
+One of the drawbacks of using software in a **rolling-updaty-way** is that you run head first into
+every breaking change, unless you make it a good habit of checking changelogs before doing the
+actual update.
 This effectively happened to me with a change in [Podman][] introduced in `4.4.1`.
 
 After updating my local Podman installation I couldn't start [sshd][] inside of my container
