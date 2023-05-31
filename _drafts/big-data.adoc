@@ -50,12 +50,12 @@ check [this curated list][] for more information about it.
 [quote,'https://martinheinz.dev/blog/92']
 By using Alpine, you're getting "free" chaos engineering for your cluster.
 
-=== Podman removed capabilities
+=== Podman capabilities
 
 One of the drawbacks of using software in a **rolling-updaty-way** is that you run head first into
 every breaking change, unless you make it a good habit of checking changelogs before doing the
 actual update.
-Needless to say I didn't do that and discoverd a nice change introduced in [Podman][] `4.4.1`.
+Needless to say I didn't do that and discovered a nice change introduced in [Podman][] `4.4.1`.
 
 After updating my local Podman installation I couldn't start [sshd][] inside of my container
 anymore and [Hadoop][] and friends rely heavily on it for communication between nodes:
@@ -66,13 +66,13 @@ ssh: Connection closed by 127.0.0.1 port 22
 sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ----
 
-I'd like to say seeing this error poiunted me directly to the changelog of Podman, but unfortunately
+I'd like to say seeing this error pointed me directly to the changelog of Podman, but unfortunately
 I had to debug some time and cannot really remember
 I cannot exactly tell how I
 
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
-image::podman_capabilites.png[]
+image::podman_capabilities.png[]
 
 == Debezium, the WAL and an Iceberg
 
