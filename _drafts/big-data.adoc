@@ -35,19 +35,21 @@ use this paragraph to talk about some fun issues I had with it.
 
 === Alpine and Musl
 
-The first bigger issues that I faced is the incompatibility of the C-based parts of the datanodes
+The first bigger issues that I faced was the incompatibility of the C-based parts of [datanodes][]
 with the default [libc][] implementation of [Alpine][].
 [Musl][] is an excellent choice due to its small storage footprint, which happens to be one of the
 concerns with containers, but is not without problems.
 There are some differences which can to lead to surprising issues and it is never a bad to idea to
 check [this curated list][] for more information about it.
 
+The best option for me here was to switch to another base image.
+
 [quote,'https://martinheinz.dev/blog/92']
 By using Alpine, you're getting "free" chaos engineering for your cluster.
 
 === Podman capabilities
 
-One of the drawbacks of using software in a **rolling-updaty-way** is that you run head first into
+One of the drawbacks of using software in a **rolling-update-way** is that you run head first into
 every breaking change, unless you make it a good habit of checking changelogs before doing the
 actual update.
 Needless to say I didn't do that and discovered a nice change introduced in [Podman][] `4.4.1`.
