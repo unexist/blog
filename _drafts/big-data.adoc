@@ -55,7 +55,7 @@ actual update.
 Needless to say I didn't do that and discovered a nice change introduced in [Podman][] `4.4.1`.
 
 After updating my local Podman installation I couldn't start [sshd][] inside of my container
-anymore and [Hadoop][] and friends rely heavily on it for communication between nodes:
+anymore and [Hadoop][] and friends rely heavily on it for inter-communication:
 
 [source,log]
 ----
@@ -64,8 +64,8 @@ sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ----
 
 I'd like to say seeing this error pointed me directly to the changelog of Podman, but unfortunately
-I had to debug some time and cannot really remember
-I cannot exactly tell how I
+I had to debug some time and cannot really remember exactly how I found the extract in the
+release notes:
 
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
