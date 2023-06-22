@@ -63,9 +63,8 @@ ssh: Connection closed by 127.0.0.1 port 22
 sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ----
 
-I'd like to say seeing this error pointed me directly to the changelog of Podman, but unfortunately
-I had to debug some time and cannot really remember exactly how I found the extract in the
-release notes:
+I'd like to say this error directly pointed me to the changelog of Podman, but unfortunately I spent
+some hours debugging and finally found a hint on [Stack Overflow][] to have a look here:
 
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
