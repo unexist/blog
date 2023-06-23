@@ -18,8 +18,10 @@ https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
 https://wiki.musl-libc.org/functional-differences-from-glibc.html
 ```
 
-I never had much contact with the general topic of [Data Lakes][] before, but had to fill in some
-blanks in preparation for a meeting for a possible new project.
+I never had much contact with the general topic of [Big Data][] or even [Data Lakes][] before and
+I mainly knew both just exists and is a hype.
+And recently I had to fill in some blanks in preparation for a meeting for a possible new project.
+
 After reading some books and blog posts about the overall idea I pretty much wanted to start
 playing with it.
 Setting everything up was a challenge by itself, but the more difficult one was how to get data
