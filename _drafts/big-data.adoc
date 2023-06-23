@@ -24,12 +24,11 @@ And recently I had to fill in some blanks in preparation for a meeting for a pos
 
 After reading some books and blog posts about the overall idea I pretty much wanted to start
 playing with it.
-Setting everything up was a challenge by itself, but the more difficult one was how to get data
-there in the first place?
+Setting everything up was a challenge by itself, but the more difficult one was how to get actual
+data there in the first place?
 
-So in this blog post we are going to start with a brief introduction, have a look at a
-single-container data lake and play with two ways of moving data from our usual
-[demo application][] into it.
+So in this blog post we are going to start with a brief introduction, set up a single-container data
+lake and play with two ways of moving data from our usual [demo application][] into it.
 
 == What is Big Data?
 
