@@ -25,20 +25,23 @@ playing with it.
 Setting everything up was a challenge by itself, but the more difficult one was how to get data
 there in the first place?
 
-So in this blog post we are going to set up a single-container data lake and play with two ways of
-moving data from our usual [demo application][] into it.
+So in this blog post we are going to start with a brief introduction, have a look at a
+single-container data lake and play with two ways of moving data from our usual
+[demo application][] into it.
+
+== What is Big Data?
 
 == Setting everything up
 
 Although the [Dockerfile][] is quite huge, there isn't much complexity involved and I'd like to
-use this paragraph to talk about some fun issues I had with it.
+use this paragraph to talk about some fun issues I had to deal with.
 
 === Alpine and Musl
 
-The first bigger issues that I faced was the incompatibility of the C-based parts of [datanodes][]
-with the default [libc][] implementation of [Alpine][].
-[Musl][] is an excellent choice due to its small storage footprint, which happens to be one of the
-concerns with containers, but is not without problems.
+The first bigger issues was the incompatibility of the C-based parts of [datanodes][] with the
+default [libc][] implementation of [Alpine][].
+[Musl][] is an excellent choice due to its small storage footprint for containers, but is not
+without problems.
 There are some differences which can to lead to surprising issues and it is never a bad to idea to
 check [this curated list][] for more information about it.
 
