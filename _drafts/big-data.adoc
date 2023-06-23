@@ -52,13 +52,20 @@ The first bigger issues was the incompatibility of the C-based parts of [datanod
 default [libc][] implementation of [Alpine][].
 [Musl][] is an excellent choice due to its small storage footprint for containers, but is not
 without problems.
-There are some differences which can to lead to surprising issues and it is never a bad to idea to
-check [this curated list][] for more information about it.
-
-The best option for me here was to switch to another base image.
 
 [quote,'https://martinheinz.dev/blog/92']
 By using Alpine, you're getting "free" chaos engineering for your cluster.
+
+There are some differences which can to lead to surprising issues and it is never a bad to idea to
+check [this curated list][] for more information about it.
+
+The best option for me here was to switch to another base image entirely:
+
+[source,docker]
+----
+FROM eclipse-temurin:8-jdk
+----
+
 
 === Podman capabilities
 
