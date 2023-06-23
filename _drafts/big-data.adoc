@@ -32,10 +32,13 @@ lake and play with two ways of moving data from our usual [demo application][] i
 
 == What is Big Data?
 
+[quote, "Jim Barksdale (former Netscape CEO)"]
+"If we have data, let’s look at data. If all we have our opinions, let’s go with mine."
+
 == Setting everything up
 
-Although the [Dockerfile][] is quite huge, there isn't much complexity involved and I'd like to
-use this paragraph to talk about some fun issues I had to deal with.
+Although the [Dockerfile][] is quite huge, there isn't much complexity involved, but I still would
+like to dedicate a chapter to talk about some issues I especially had fun with.
 
 === Alpine and Musl
 
@@ -53,13 +56,16 @@ By using Alpine, you're getting "free" chaos engineering for your cluster.
 
 === Podman capabilities
 
-One of the drawbacks of using software in a **rolling-update-way** is that you run head first into
-every breaking change, unless you make it a good habit of checking changelogs before doing the
-actual update.
-Needless to say I didn't do that and discovered a nice change introduced in [Podman][] `4.4.1`.
+Coming from [ArchLinux][], I obviously still have the **rolling-update-way** deeply ingrained in
+me and usually just hit update whenever I see such a message and also fire-up [brew][] and [rustup][]
+quite frequently.
 
-After updating my local Podman installation I couldn't start [sshd][] inside of my container
-anymore and [Hadoop][] and friends rely heavily on it for inter-communication:
+This usually works well - until it doesn't.
+
+After updating my local [Podman][] (somehwere around `4.4.1`) installation I discovered I cannot
+start [sshd][] inside of my container anymore.
+Podman doesn't necessarily need sshd, but [Hadoop][] and friends rely heavily on it for
+inter-node-communication:
 
 [source,log]
 ----
@@ -68,7 +74,8 @@ sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ----
 
 I'd like to say this error directly pointed me to the changelog of Podman, but unfortunately I spent
-some hours debugging and finally found a hint on [Stack Overflow][] to have a look here:
+some hours debugging and desperating until I finally found a hint on [Stack Overflow][] to have a
+look at the release notes:
 
 [link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
 .Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
