@@ -32,14 +32,14 @@ lake and play with two ways of moving data from our usual [demo application][] i
 
 == What is Big Data?
 
-I won't bore you with a fancy definition about what data actual is, although there are some funny
-quotes about it:
+I won't bore you with a fancy definition about the difference between data and information, so let
+us stick with another funny quote about data:
 
 [quote, "Jim Barksdale (former Netscape CEO)"]
 "If we have data, let’s look at data. If all we have our opinions, let’s go with mine."
 
-So instead, let us talk about the actual problems Big Data tries to address, how this is done and
-what the actual drawbacks of it are.
+More interesting instead is the problem Big Data actual tries to address, how it is done and if
+there are any drawbacks.
 
 == Setting everything up
 
