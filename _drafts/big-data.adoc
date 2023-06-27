@@ -33,7 +33,7 @@ lake and play with two ways of moving data from our usual [demo application][] i
 == What is Big Data?
 
 I won't bore you with a fancy definition about the difference between data and information, so let
-us stick with another funny quote about data and move on:
+us stick with another random quote about data and move on:
 
 [quote, "Jim Barksdale (former Netscape CEO)"]
 "If we have data, let’s look at data. If all we have our opinions, let’s go with mine."
