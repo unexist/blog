@@ -44,7 +44,7 @@ there are any drawbacks.
 == Setting everything up
 
 Although the [Dockerfile][] is quite huge, there isn't much complexity involved, but I still would
-like to dedicate a chapter to talk about some issues I especially had fun with.
+like to dedicate some lines to some issues I especially had fun with.
 
 === Alpine and Musl
 
