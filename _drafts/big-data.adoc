@@ -32,10 +32,11 @@ lake and play with two ways of moving data from our usual [demo application][] i
 
 == What is Big Data?
 
-One of the major problems of todays data-based systems is the huge complexity, that is required to
-address modern concerns for to fault-tolerancy and obviously the latency of the systems.
+One of the major problems of today's data-based systems is the huge complexity, which is required to
+address modern concerns for to fault-tolerance and obviously the latency of the systems.
 This can be quite easy for smaller scales, but can cause lots of headaches if you want to store
 petabytes of data.
+
 
 
 
@@ -64,7 +65,6 @@ The best option for me here was to switch to another base image entirely:
 ----
 FROM eclipse-temurin:8-jdk
 ----
-
 
 === Podman capabilities
 
