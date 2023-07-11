@@ -39,9 +39,16 @@ the systems.
 
 This can be easy for smaller scales, but causes lots of headaches in the petabytes range of data.
 
-Unfortunately the storage size is only one-half of the problem, processing large quantities also
-dramatically increases the processing time up to the point where a timely response cannot be
-guaranteed anymore without using some shortcuts.
+Unfortunately the storage size is only one-half of the problem, processing large quantities of data
+also dramatically increases the processing time up to the point where a timely response cannot be
+guaranteed anymore without cutting some corners.
+
+Entering big data!
+
+=== Reducing complexity
+
+The easiest way of reducing complexity is to either avoid it in general or just make someone else
+responsible for it.
 
 == Setting everything up
 
