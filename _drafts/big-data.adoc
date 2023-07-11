@@ -34,13 +34,14 @@ single-container data lake and play with two ways of moving data from our usual
 == What is Big Data?
 
 One of the major problems of today's data-based systems is the huge complexity, which is required to
-address modern expecations of fault-tolerance and obviously the latency of the systems.
+address modern expectations of fault-tolerance and obviously the performance or rather latency of
+the systems.
 
-This can be easy for smaller scales, but causes lots of headaches for petabytes of data.
-of data.
-Unfortunately the storage size is only one-half of the problem, processing large quantities of data
-also drastically increases the processing time.
+This can be easy for smaller scales, but causes lots of headaches in the petabytes range of data.
 
+Unfortunately the storage size is only one-half of the problem, processing large quantities also
+dramatically increases the processing time up to the point where a timely response cannot be
+guaranteed anymore without using some shortcuts.
 
 == Setting everything up
 
