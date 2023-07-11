@@ -22,22 +22,24 @@ I never had much contact with the general topic of [Big Data][] or even [Data La
 I mainly knew both just exists and is a hype.
 And recently I had to fill in some blanks in preparation for a meeting for a possible new project.
 
-After reading some books and blog posts about the overall idea I pretty much wanted to start
-playing with it.
+After reading some books and blog posts about the overall idea I was pretty much enticed and
+wanted to start playing with it.
 Setting everything up was a challenge by itself, but the more difficult one was how to get actual
 data there in the first place?
 
-So in this blog post we are going to start with a brief introduction, set up a single-container data
-lake and play with two ways of moving data from our usual [demo application][] into it.
+So in this blog post we are going to start with a brief introduction to the whole point, set up a
+single-container data lake and play with two ways of moving data from our usual
+[demo application][] into it.
 
 == What is Big Data?
 
 One of the major problems of today's data-based systems is the huge complexity, which is required to
-address modern concerns for to fault-tolerance and obviously the latency of the systems.
-This can be easy for smaller scales, but can cause lots of headaches if you want to store petabytes
+address modern expecations of fault-tolerance and obviously the latency of the systems.
+
+This can be easy for smaller scales, but causes lots of headaches for petabytes of data.
 of data.
-Unfortunately the storage size is only one-half of the problem, processing large quantities also
-takes more time.
+Unfortunately the storage size is only one-half of the problem, processing large quantities of data
+also drastically increases the processing time.
 
 
 == Setting everything up
