@@ -22,8 +22,8 @@ I never had much contact with the general topic of [Big Data][] or even [Data La
 I mainly knew both just exists and is a hype.
 And recently I had to fill in some blanks in preparation for a meeting for a possible new project.
 
-After reading some books and blog posts about the overall idea I was pretty much enticed and
-wanted to start playing with it.
+After reading some books (<<datalake>>, <<practical>> and <<bigdata>>) and blog posts about the
+overall idea I was pretty much enticed and wanted to start playing with it.
 Setting everything up was a challenge by itself, but the more difficult one was how to get actual
 data there in the first place?
 
@@ -33,11 +33,19 @@ single-container data lake and play with two ways of moving data from our usual
 
 == What is Big Data?
 
-The introduction of big data as a thing generally marks the shift away from storing processed or
-in some ways refined data to just storing anything in case it might become useful later.
-And it doesn't really matter for the course of this article, if the data rests in a data warehouse
-as a mix of all available domains, in a data lake with a single domain or even finer grained in a
-data mart.
+The introduction of big data generally marks the shift away from storing processed or in some ways
+refined data to just storing anything - just in case it might become useful later.
+Keeping many things in one place has some special requirements for the kind of storage, so the data
+is basically just flat files and the step to find a schema is postponed to read.
+
+This got out of hand quickly and the huge piles couldn't be handled anymore, so the big data idea
+was revised and broken down into all-purpose data warehouses with a mix of all available domains,
+a data lake with a single domain and even finer grained in a data mart.
+
+
+
+
+
 
 
 
@@ -126,6 +134,6 @@ image::podman_capabilities.png[]
 [bibliography]
 == References
 
-* [[bigdata]] Nathan Marz, Big Data, Manning 2019
-* [[practical]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
 * [[datalake]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
+* [[practical]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
+* [[bigdata]] Nathan Marz, Big Data, Manning 2019
