@@ -27,11 +27,23 @@ wanted to start playing with it.
 Setting everything up was a challenge by itself, but the more difficult one was how to get actual
 data there in the first place?
 
-So in this blog post we are going to start with a brief introduction to the whole point, set up a
+So in this blog post we are going to start with a brief introduction of the whole idea, fire up a
 single-container data lake and play with two ways of moving data from our usual
 [demo application][] into it.
 
 == What is Big Data?
+
+The introduction of big data as a thing generally marks the shift away from storing processed or
+in some ways refined data to just storing anything in case it might become useful later.
+And it doesn't really matter for the course of this article, if the data rests in a data warehouse
+as a mix of all available domains, in a data lake with a single domain or even finer grained in a
+data mart.
+
+
+
+Handling a huge amount of data comes with problems of its own right.
+The first obvious one is it takes a lot of storage space and
+
 
 One of the major problems of today's data-based systems is the huge complexity, which is required to
 address modern expectations of fault-tolerance and obviously the performance or rather latency of
@@ -47,8 +59,13 @@ Entering big data!
 
 === Reducing complexity
 
-The easiest way of reducing complexity is to either avoid it in general or just make someone else
-responsible for it.
+The easiest way of reducing complexity is to either avoid it or just blame someone else for it.
+And somehow this is the best approach
+
+
+[link=https://xkcd.com/2582/]
+.Source <https://xkcd.com/2582/>
+image::data_trap.png[]
 
 == Setting everything up
 
@@ -105,3 +122,10 @@ image::podman_capabilities.png[]
 == Debezium, the WAL and an Iceberg
 
 == Scala with a Spark
+
+[bibliography]
+== References
+
+* [[bigdata]] Nathan Marz, Big Data, Manning 2019
+* [[practical]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
+* [[datalake]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
