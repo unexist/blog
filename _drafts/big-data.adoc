@@ -19,7 +19,7 @@ https://wiki.musl-libc.org/functional-differences-from-glibc.html
 ```
 
 I never had much contact with [Big Data][]-related topics before and as far as I was concerned
-they exist and are used to put information there.
+it exists and are used to put information there to rest.
 
 This changed, when I had to fill in some blanks in preparation for a meeting for a possible
 new project.
@@ -34,18 +34,15 @@ single-container data lake and play with two ways of putting data from our usual
 
 == What is Big Data?
 
-The introduction of big data generally marks the shift away from storing processed or in some ways
-refined data to just storing anything - just in case it might become useful later.
-Keeping many things in one place has some special requirements for the kind of storage, so the data
-is basically just flat files and the step to find a schema is postponed to read.
+Historically I'd say the introduction of big data generally marks the shift away from storing
+processed or in some ways refined data to just storing anything as is - just in case it might
+become useful later.
+This splendidly solves the problem of a pre-processing bottleneck in influx, but postpones the
+problem to a later reader of the data - whoever tries to make sense of it.
 
 This got out of hand quickly and the huge piles couldn't be handled anymore, so the big data idea
 was revised and broken down into all-purpose data warehouses with a mix of all available domains,
 a data lake with a single domain and even finer grained in a data mart.
-
-
-
-
 
 
 
