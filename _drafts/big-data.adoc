@@ -19,7 +19,7 @@ https://wiki.musl-libc.org/functional-differences-from-glibc.html
 ```
 
 I never had much contact with [Big Data][]-related topics before and as far as I was concerned
-it exists and are used to put information there to rest.
+it is there and used to put information to rest.
 
 This changed, when I had to fill in some blanks in preparation for a meeting for a possible
 new project.
