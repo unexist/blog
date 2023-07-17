@@ -18,17 +18,18 @@ https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
 https://wiki.musl-libc.org/functional-differences-from-glibc.html
 ```
 
-I never had much contact with the general topic of [Big Data][] or even [Data Lakes][] before and
-I mainly knew both just exists and is a hype.
-And recently I had to fill in some blanks in preparation for a meeting for a possible new project.
+I never had much contact with [Big Data][]-related topics before and as far as I was concerned
+they exist and are used to put information there.
 
-After reading some books (<<datalake>>, <<practical>> and <<bigdata>>) and blog posts about the
-overall idea I was pretty much enticed and wanted to start playing with it.
-Setting everything up was a challenge by itself, but the more difficult one was how to get actual
-data there in the first place?
+This changed, when I had to fill in some blanks in preparation for a meeting for a possible
+new project.
+I've read some books about the overall idea (<<datalake>>, <<practical>> and <<bigdata>>), followed
+blog posts and was pretty much enticed.
+I knew there are some pre-constructed containers available for first steps, but I usually wanted
+to set it up myself and also try to get my own data into it.
 
 So in this blog post we are going to start with a brief introduction of the whole idea, fire up a
-single-container data lake and play with two ways of moving data from our usual
+single-container data lake and play with two ways of putting data from our usual
 [demo application][] into it.
 
 == What is Big Data?
