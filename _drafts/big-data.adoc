@@ -16,6 +16,7 @@ toc: true
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
 https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
 https://wiki.musl-libc.org/functional-differences-from-glibc.html
+https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
 ```
 
 I never had much contact with [Big Data][]-related topics before and as far as I was concerned
@@ -37,12 +38,17 @@ single-container data lake and play with two ways of putting data from our usual
 Historically I'd say the introduction of big data generally marks the shift away from storing
 processed or in some ways refined data to just storing anything as is - just in case it might
 become useful later.
-This splendidly solves the problem of a pre-processing bottleneck in influx, but postpones the
-problem to a later reader of the data - whoever tries to make sense of it.
 
-This got out of hand quickly and the huge piles couldn't be handled anymore, so the big data idea
-was revised and broken down into all-purpose data warehouses with a mix of all available domains,
-a data lake with a single domain and even finer grained in a data mart.
+Data warehouses were invented and basically stored everything in a huge SQL-database.
+This got out of hand quickly and if we ignore performance roadblocks this was especially bad for
+for data without a relational structure.
+They were followed by data lakes with a schemaless approach, which splendidly solved the problem of
+a pre-processing bottleneck for influx, but postpones the problem to a future reader of the
+data - whoever tries to make sense of it must have an idea about the actual schema of the data.
+
+Just to mention it: There are some ways to store similar data in the same place, so instead of data
+warehouses with a mix of all available domains, there are now data lakes with a single domain and
+even finer grained in a data mart.
 
 
 
