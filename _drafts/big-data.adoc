@@ -40,8 +40,8 @@ processed or in some ways refined data to just storing anything as is - just in 
 become useful later.
 
 Data warehouses were invented and basically stored everything in a huge SQL-database.
-This got out of hand quickly and if we ignore performance roadblocks this was especially bad for
-for data without a relational structure.
+This got out of hand quickly and if we ignore performance roadblocks for now this was especially
+bad for for non-relational data.
 They were followed by data lakes with a schemaless approach, which splendidly solved the problem of
 a pre-processing bottleneck for influx, but postpones the problem to a future reader of the
 data - whoever tries to make sense of it must have an idea about the actual schema of the data.
