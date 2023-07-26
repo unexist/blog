@@ -20,18 +20,20 @@ https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake
 ```
 
 [Big Data] was just another buzzword for me and I never had any real contact besides a bit of
-proximity due to the overall architecture - insurances like to store everything.
+proximity due to the overall architecture - there are industries out there that like to keep
+everything.
 
 Then I got the opportunity to have a closer look at it during my preparations for a possible
 upcoming project on my quest to fill in some blanks at least.
 I've read a few books about the overall idea (<<datalake>>, <<practical>> and <<bigdata>>),
-followed by lots of blog posts, articles and tweets and was suddently pretty much enticed.
-I knew there are some pre-constructed containers available for first steps, but I usually wanted
-to set it up myself and also try to get my own data into it.
+followed by lots of blog posts, articles and tweets and was suddenly pretty much enticed.
 
-So in this blog post we are going to start with a brief introduction of the whole idea, fire up a
-single-container data lake and play with two ways of putting data from our usual
-[demo application][] into it.
+There are some pre-constructed containers available for a starter, but since I usually want to
+get my own hand dirty you are invited to accompany me.
+
+So during the course of this post we are going to cover the brief idea, fire up my own version
+of a single-container-data lake and use some complex ways move some data into it from the usual
+[demo application][].
 
 == What is Big Data?
 
