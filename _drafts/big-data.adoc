@@ -19,13 +19,13 @@ https://wiki.musl-libc.org/functional-differences-from-glibc.html
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
 ```
 
-I never had much contact with [Big Data][]-related topics before and as far as I was concerned
-it is there and used to put information to rest.
+[Big Data] was just another buzzword for me and I never had any real contact besides a bit of
+proximity due to the overall architecture - insurances like to store everything.
 
-This changed, when I had to fill in some blanks in preparation for a meeting for a possible
-new project.
-I've read some books about the overall idea (<<datalake>>, <<practical>> and <<bigdata>>), followed
-blog posts and was pretty much enticed.
+Then I got the opportunity to have a closer look at it during my preparations for a possible
+upcoming project on my quest to fill in some blanks at least.
+I've read a few books about the overall idea (<<datalake>>, <<practical>> and <<bigdata>>),
+followed by lots of blog posts, articles and tweets and was suddently pretty much enticed.
 I knew there are some pre-constructed containers available for first steps, but I usually wanted
 to set it up myself and also try to get my own data into it.
 
