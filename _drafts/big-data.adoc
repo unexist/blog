@@ -41,45 +41,21 @@ Historically I'd say the introduction of big data generally marks the shift away
 processed or in some ways refined data to just storing anything as is - just in case it might
 become useful later.
 
-Data warehouses were invented and basically stored everything in a huge SQL-database.
-This got out of hand quickly and if we ignore performance roadblocks for now this was especially
-bad for for non-relational data.
-They were followed by data lakes with a schemaless approach, which splendidly solved the problem of
-a pre-processing bottleneck for influx, but postpones the problem to a future reader of the
-data - whoever tries to make sense of it must have an idea about the actual schema of the data.
+This quickly let to the invention of [Data Warehouses][], which are vast SQL-databases with
+complex scaling and redundancy requirements and mostly the same data schema.
+That was broken apart into [Data Lakes][] for schemaless data, which basically offloaded the
+refinement step to a future reader for a single domain and even finer grained into
+[Data Mart][] for more specific use cases.
 
-Just to mention it: There are some ways to store similar data in the same place, so instead of data
-warehouses with a mix of all available domains, there are now data lakes with a single domain and
-even finer grained in a data mart.
-
-
-
-
-Handling a huge amount of data comes with problems of its own right.
-The first obvious one is it takes a lot of storage space and
-
-
-One of the major problems of today's data-based systems is the huge complexity, which is required to
-address modern expectations of fault-tolerance and obviously the performance or rather latency of
-the systems.
-
-This can be easy for smaller scales, but causes lots of headaches in the petabytes range of data.
-
-Unfortunately the storage size is only one-half of the problem, processing large quantities of data
-also dramatically increases the processing time up to the point where a timely response cannot be
-guaranteed anymore without cutting some corners.
-
-Entering big data!
-
-=== Reducing complexity
-
-The easiest way of reducing complexity is to either avoid it or just blame someone else for it.
-And somehow this is the best approach
-
+One funny property of data is the build trap:
 
 [link=https://xkcd.com/2582/]
 .Source <https://xkcd.com/2582/>
 image::data_trap.png[]
+
+=== Reducing complexity
+
+The easiest way of reducing complexity is to either avoid it or just blame someone else for it.
 
 == Setting everything up
 
