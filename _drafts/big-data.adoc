@@ -44,10 +44,10 @@ become useful later.
 This quickly let to the invention of [Data Warehouses][], which are vast SQL-databases with
 complex scaling and redundancy requirements for mostly the same data schema - one fits all.
 That was broken apart into [Data Lakes][] for schemaless data of single domain, which basically
-offloaded the refinement step to a future reader and even finer grained into
-[Data Mart][] for more specific use cases.
+offloaded the refinement step to a future reader and was even more broken down into
+[Data Marts][] for more specific use cases.
 
-One funny property of data is the build trap:
+Having so much data in one place triggers one funny property of data:
 
 [link=https://xkcd.com/2582/]
 .Source <https://xkcd.com/2582/>
