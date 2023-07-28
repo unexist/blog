@@ -8,7 +8,12 @@ tags: showcase
 categories: showcase hadoop hive iceberg debezium
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/big_data
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/big_data
+endif::[]
 :figure-caption!:
 :table-caption!:
 
