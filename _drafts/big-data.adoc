@@ -30,8 +30,9 @@ everything.
 
 Then I got the opportunity to have a closer look at it during my preparations for a possible
 upcoming project on my quest to fill in some blanks at least.
-I've read a few books about the overall idea (<<datalake>>, <<practical>> and <<bigdata>>),
-followed by lots of blog posts, articles and tweets and was suddenly pretty much enticed.
+I've read a few books about the overall idea (<<datalake>>, <<practical>>, <<bigdata>> and
+<<hadoop>>), followed by lots of blog posts, articles and tweets and was suddenly pretty much
+enticed.
 
 There are some pre-constructed containers available for a starter, but since I usually want to
 get my own hand dirty you are invited to accompany me.
@@ -124,3 +125,4 @@ image::podman_capabilities.png[]
 * [[datalake]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
 * [[practical]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
 * [[bigdata]] Nathan Marz, Big Data, Manning 2019
+* [[hadoop]] Tom White, Hadoop: The Definitive Guide, O'Reilly 2009
