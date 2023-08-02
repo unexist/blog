@@ -47,9 +47,10 @@ Historically I'd say the introduction of big data generally marks the shift away
 processed or in some ways refined data to just storing anything as is - just in case it might
 become useful later.
 
-This quickly let to the invention of [Data Warehouses][], which are vast SQL-databases with
+So first approach was the invention of [Data Warehouses][], which are vast SQL-databases with
 complex scaling and redundancy requirements for mostly the same data schema - one fits all.
-That was broken apart into [Data Lakes][] for schemaless data of single domain, which basically
+
+That was broken apart into [Data Lakes][] for schemaless data of single domains, which basically
 offloaded the refinement step to a future reader and was even more broken down into
 [Data Marts][] for more specific use cases.
 
