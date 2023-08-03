@@ -68,12 +68,6 @@ That was broken apart into [Data Lakes][] for schemaless data of single domains,
 offloaded the refinement step to a future reader and was even more broken down into
 [Data Marts][] for more specific use cases.
 
-Having so much data in one place triggers one funny property of data:
-
-[link=https://xkcd.com/2582/]
-.Source <https://xkcd.com/2582/>
-image::data_trap.png[]
-
 === Reducing complexity
 
 The easiest way of reducing complexity is to either avoid it or just blame someone else for it.
