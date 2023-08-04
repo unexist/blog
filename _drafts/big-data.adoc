@@ -59,12 +59,8 @@ This worked for some time, but also introduced complex requirements for scaling 
 even worse.
 
 Splitting this data by domain of origin eased the operative pain a bit, but the removing the
-requirement of a schema at all really made the handling easier in [Data Lakes].
-
-
-That was broken apart into [Data Lakes][] for schemaless data of single domains, which basically
-offloaded the refinement step to a future reader and was even more broken down into
-[Data Marts][] for more specific use cases.
+requirement of a schema at all really made the handling easier in [Data Lakes] and was further
+broken down into [Data Marts][] for more specific use cases.
 
 === Reducing complexity
 
