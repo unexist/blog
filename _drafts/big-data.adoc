@@ -47,21 +47,19 @@ Historically I'd say the introduction of big data generally marks the shift away
 processed or in some ways refined data to just storing anything as is - just in case it might
 become useful later.
 
-In the first iteration everything was stored in vast SQL-databases which enforced a quite rigid
-schema onto the data - welcome to [Data Warehouses].
-This quickly introduced operative nightmares, due the complex requirements for scaling and
-redundancy.
-Also working with the data triggered a funny property:
+Storing everything piles up pretty quickly and gets even worse when you actually work with it:
 
 [link=https://xkcd.com/2582/]
 .Source <https://xkcd.com/2582/>
 image::data_trap.png[]
 
-Besides the huge amount of storage required for this approach these [Data Warehouses][] had
-complex requirements for scaling and redundancy
+One of the first ideas was to store everything in a [Data Warehouse], which basically consists of
+vast SQL-databases and enforces the same rigid schema for everything.
+This worked for some time, but also introduced complex requirements for scaling and makes redundancy
+even worse.
 
-So first approach was the invention of [Data Warehouses][], which are vast SQL-databases with
-complex scaling and redundancy requirements for mostly the same data schema - one fits all.
+Splitting this data by domain of origin eased the operative pain a bit, but the removing the
+requirement of a schema at all really made the handling easier in [Data Lakes].
 
 
 That was broken apart into [Data Lakes][] for schemaless data of single domains, which basically
