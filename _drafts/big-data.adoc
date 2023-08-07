@@ -55,16 +55,16 @@ image::data_trap.png[]
 
 === Reducing complexity
 
-[Data Warehouses] were the first attempt to store everything in vast SQL-databases with a rigid
-schema.
-They introduced complex requirements for scaling and made redundancy even worse, but did the job
+There have been several iterations of tackling the overall complexity of the data storage.
+The first approach was just put everything into vast SQL-databases and keep the data in so-called
+[Data Warehouses].
+This introduced complex requirements for scaling and made redundancy even worse, but did the job
 for a while.
 
-Later the data was split by domain of origin and this eased the operative pain a bit.
-The removal of requirement of a schema at all really made the handling easier in [Data Lakes] and can be broken
-further down into [Data Marts][] for more specific use cases.
+They were followed by [Data Lakes] and [Data Marts], which do two main things differently:
 
-
+- They contain data split by domain of origin or use-case
+- No data schema is enforced on write and everything is a flat-file
 
 == Setting everything up
 
