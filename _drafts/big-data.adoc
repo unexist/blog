@@ -53,18 +53,18 @@ Storing everything piles up pretty quickly and gets even worse when you actually
 .Source <https://xkcd.com/2582/>
 image::data_trap.png[]
 
-One of the first ideas was to store everything in a [Data Warehouse], which basically consists of
-vast SQL-databases and enforces the same rigid schema for everything.
-This worked for some time, but also introduced complex requirements for scaling and makes redundancy
-even worse.
-
-Splitting this data by domain of origin eased the operative pain a bit, but the removing the
-requirement of a schema at all really made the handling easier in [Data Lakes] and was further
-broken down into [Data Marts][] for more specific use cases.
-
 === Reducing complexity
 
-The easiest way of reducing complexity is to either avoid it or just blame someone else for it.
+[Data Warehouses] were the first attempt to store everything in vast SQL-databases with a rigid
+schema.
+They introduced complex requirements for scaling and made redundancy even worse, but did the job
+for a while.
+
+Later the data was split by domain of origin and this eased the operative pain a bit.
+The removal of requirement of a schema at all really made the handling easier in [Data Lakes] and can be broken
+further down into [Data Marts][] for more specific use cases.
+
+
 
 == Setting everything up
 
