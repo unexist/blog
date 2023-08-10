@@ -55,11 +55,11 @@ image::data_trap.png[]
 
 === Reducing complexity
 
-There have been several iterations of tackling the overall complexity of the type of data storage.
-Back then when everything was a SQL-like, [Data Warehouses] used vast databases to keep data in
-rigid schemas
-This introduced complex requirements for scaling and made redundancy even worse, but did the job
-for a while.
+There have been several iterations of tackling the overall complexity on the storage level.
+Like all good stories it started with SQL - there were [Data Warehouses] with big databases,
+which kept everything in rigid schemas.
+Unfortunately this introduced complex requirements for scaling and made redundancy even worse, but
+did the job for a while.
 
 They were followed by [Data Lakes] and [Data Marts], which do two main things differently:
 
