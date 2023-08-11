@@ -24,24 +24,24 @@ https://wiki.musl-libc.org/functional-differences-from-glibc.html
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
 ```
 
-[Big Data] was just another buzzword for me and I never had any real contact besides a bit of
-proximity due to the overall architecture - there are industries out there that like to keep
-everything.
+[Big Data] was just another buzzword for me and I never had any real contact besides the typical
+requests of data scientists to move data to a specific endpoint in the overall architecture.
+This changed, when I got the opportunity to have a closer look at a big data project at work.
 
-Then I got the opportunity to have a closer look at it during my preparations for a possible
-upcoming project on my quest to fill in some blanks at least.
-I've read a few books about the overall idea (<<datalake>>, <<practical>>, <<bigdata>> and
-<<hadoop>>), followed by lots of blog posts, articles and tweets and was suddenly pretty much
-enticed.
-
-There are some pre-constructed containers available for a starter, but since I usually want to
-get my own hand dirty you are invited to accompany me.
+I don't like to deal with tech stuff unprepared, so filled in some blanks by reading some articles,
+a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and checked out some
+pre-constructed containers.
+Some of these containers actually [line-through]#worked# started, but I knew I had to ultimately roll my own to understand
+the intricate design and communication between all the moving parts.
 
 So during the course of this post we are going to cover the brief idea, fire up my own version
 of a single-container-data lake and use some complex ways move some data into it from the usual
 [demo application][].
 
 == What is Big Data?
+
+Big data is the story of a simple idea to keep every bit until it might become useful later and
+the related problems that come along with it.
 
 Historically I'd say the introduction of big data generally marks the shift away from storing
 processed or in some ways refined data to just storing anything as is - just in case it might
