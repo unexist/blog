@@ -5,7 +5,7 @@ date: 2021-03-19 08:40 +0100
 last_updated: 2021-03-19 08:40 +0100
 author: Christoph Kappel
 tags: intellij
-categories: myself tools testing
+categories: myself
 toc: false
 ---
 :1: https://www.jetbrains.com/idea/

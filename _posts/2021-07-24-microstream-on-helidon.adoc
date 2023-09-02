@@ -5,7 +5,7 @@ date: 2021-07-24 17:01 +0200
 last_updated: 2021-07-24 17:01 +0200
 author: Christoph Kappel
 tags: microstream helidon showcase
-categories: tools
+categories: tech
 toc: true
 ---
 :1: https://microstream.one/

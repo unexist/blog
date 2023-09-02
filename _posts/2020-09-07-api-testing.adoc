@@ -5,7 +5,7 @@ date: 2020-09-06 12:00:00 +0200
 last_updated: 2020-09-06 12:00:00 +0200
 author: Christoph Kappel to-be-continued
 tags: api postman testmace insomnia hoppscotch
-categories: testing tools
+categories: testing
 toc: false
 ---
 :1: https://www.postman.com/

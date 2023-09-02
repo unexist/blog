@@ -5,7 +5,7 @@ date: 2020-09-25 11:00:00 +0200
 last_updated: 2020-09-25 11:00:00 +0200
 author: Christoph Kappel
 tags: validation ddd showcase
-categories: architecture testing tools
+categories: architecture testing
 toc: true
 ---
 :1: https://www.archunit.org/

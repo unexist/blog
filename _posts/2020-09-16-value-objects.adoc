@@ -5,7 +5,7 @@ date: 2020-09-16 12:00:00 +0200
 last_updated: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
 tags: ddd frameworks
-categories: software-design tools
+categories: software-design
 toc: false
 ---
 :1: https://manifold.systems/
