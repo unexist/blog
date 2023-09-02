@@ -4,8 +4,8 @@ title: Skill matrix
 date: 2020-10-15 16:00:00 +0200
 last_updated: 2020-10-15 16:00:00 +0200
 author: Christoph Kappel
-tags: tools people soft-skills management
-categories: warstory
+tags: people soft-skills management
+categories: myself tools
 toc: false
 ---
 :1: https://www.nngroup.com/articles/skill-mapping/

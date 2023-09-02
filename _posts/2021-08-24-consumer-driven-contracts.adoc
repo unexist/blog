@@ -4,8 +4,8 @@ title: Consumer-driven contracts
 date: 2021-08-24 12:14 +0200
 last_updated: 2021-08-24 12:14 +0200
 author: Christoph Kappel
-tags: tools testing consumer-driven-contracts pact showcase
-categories: testing showcase
+tags: consumer-driven-contracts pact docker junit showcase
+categories: tools testing
 toc: true
 ---
 :imagesdir: /assets/images/consumer_driven_contracts/

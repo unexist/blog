@@ -4,8 +4,8 @@ title: Problems with testing in IntelliJ
 date: 2021-03-19 08:40 +0100
 last_updated: 2021-03-19 08:40 +0100
 author: Christoph Kappel
-tags: tools intellij
-categories: testing
+tags: intellij
+categories: myself tools testing
 toc: false
 ---
 :1: https://www.jetbrains.com/idea/

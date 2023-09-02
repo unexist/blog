@@ -4,8 +4,8 @@ title: Coding with AI
 date: 2023-04-28 17:09 +0200
 last_updated: 2023-04-28 17:09 +0200
 author: Christoph Kappel
-tags: tech ai tabnine copilot
-categories: myself
+tags: ai tabnine copilot
+categories: tools myself
 toc: true
 ---
 :imagesdir: /assets/images/coding_with_ai

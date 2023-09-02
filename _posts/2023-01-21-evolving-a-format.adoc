@@ -5,7 +5,7 @@ date: 2023-01-21 21:41 +0100
 last_updated: 2023-01-21 21:41 +0100
 author: Christoph Kappel
 tags: csv json jsonschema avro apicurio kafka hadoop showcase
-categories: showcase
+categories: tools
 toc: true
 ---
 :imagesdir: /assets/images/evolving_a_format

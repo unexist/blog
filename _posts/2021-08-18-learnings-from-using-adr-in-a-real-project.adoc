@@ -4,8 +4,8 @@ title: Learnings from using ADR in a real project
 date: 2021-08-18 17:07 +0200
 last_updated: 2021-08-18 17:07 +0200
 author: Christoph Kappel
-tags: tools architecture adr
-categories: architecture warstory
+tags: adr asciidoc jqassistant markdown
+categories: myself architecture
 toc: true
 ---
 :1: https://adr.github.io/

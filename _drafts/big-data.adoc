@@ -4,8 +4,8 @@ title: Big Data
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
-categories: showcase hadoop hive iceberg debezium
+tags: hadoop hive iceberg debezium
+categories: showcase big-data
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
