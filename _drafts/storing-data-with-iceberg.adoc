@@ -1,14 +1,14 @@
 ---
 layout: post
-title: Big Data formats
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+title: Storing data with Iceberg
+date: 2023-09-02 16:05:48 +0200
+last_updated: 2023-09-02 16:05:48 +0200
 author: Christoph Kappel
-tags: showcase
-categories: showcase big.data
+tags: formats hadoop iceberg parquet orc hive duckdb showcase
+categories: big-data
 toc: true
 ---
-:imagesdir: /assets/images/big-data-formats
+:imagesdir: /assets/images/storing_data_with_iceberg
 :figure-caption!:
 :table-caption!:
 
@@ -20,19 +20,23 @@ NOTE: This is actually the funny part of writing and a great way of learning how
 
 Needless to say exactly happened in my post about [Big Data][], which I am trying to complete for
 quite some time.
-This time I am only partly guilty, because the whole topic is really huge and it **is** difficult
+This time I am only partly guilty, because the whole topic is really huge, and it **is** difficult
 to include just the necessities of the topic.
 
 One way to deal with these kind of problems is either to reduce the overall scope or just split
 things from the main article into smaller and more focused ones.
 
-So in this article let us talk in preparation about two heavily used formats in the Big Data world,
-which I didn't know in depth at time of writing the post about [evolving a format][].
+So in this article let us talk in preparation about a heavily used format in the Big Data world,
+which I didn't know in depth at time of writing the post about [Evolving a format][].
 
-== New formats
+== Why a new format?
 
-=== Iceberg
+== Apache Iceberg
 
-=== Parquet
+{% plantuml %}
+[First] - [Second]
+{% endplantuml %}
+
+=== Structure
 
 == Conclusion
