@@ -34,7 +34,7 @@ toc: true
 :20: https://www.goodreads.com/book/show/97030.Six_Thinking_Hats
 
 If you open your favorite news page you surely find {1}[ChatGPT] and the underlying AI model
-{8}[GPT-3] and its pricier and more capable successor{9}[GPT-4] among the trending topics.
+{8}[GPT-3] and its pricier and more capable successor {9}[GPT-4] among the trending topics.
 There are lots of weird and funny applications and there AI-assisted coding is something that
 really made me curious.
 
