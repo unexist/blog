@@ -59,7 +59,7 @@ Caused by: java.lang.RuntimeException: java.lang.NoClassDefFoundError: javax/ann
 [source,log]
 ----
 [WARNING] Discovered module-info.class. Shading will break its strong encapsulation.
-````
+----
 
 [source,xml]
 ----
