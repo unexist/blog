@@ -3,7 +3,7 @@ layout: post
 title: Testing with Arquillian
 #date: %%%DATE%%%
 #author: Christoph Kappel
-tags: arcquillian pact postman showcase
+tags: arquillian pact postman showcase
 categories: testing
 toc: true
 ---
