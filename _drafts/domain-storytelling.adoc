@@ -5,7 +5,7 @@ title: Domain Storytelling
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: domain-storytelling ddd showcase
-categories: specification showcase
+categories: software-design
 toc: true
 ---
 Lately, I am more and more interested in communication or rather the lack and the manifold problems

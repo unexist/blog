@@ -4,7 +4,7 @@ title: Phases of Domain-Driven Design
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: myself
-categories: warstory
+tags: ddd
+categories: myself
 toc: true
 ---

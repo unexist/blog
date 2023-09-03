@@ -5,7 +5,7 @@ title: Aspect-oriented with Micronaut
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: tech micronaut aspect-oriented-programming showcase
-categories: tech showcase
+categories: tech
 toc: true
 ---
 

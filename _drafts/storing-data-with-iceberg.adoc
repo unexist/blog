@@ -37,7 +37,6 @@ which I didn't know in depth at time of writing the post about [Evolving a forma
 ++++
 {% plantuml %}
 !theme unexist from ../assets/plantuml
-
 left to right direction
 
 database "Catalog Layer" {

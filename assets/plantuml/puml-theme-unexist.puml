@@ -30,7 +30,7 @@ skinparam useBetaStyle false
 !$WHITE = "#FFF"
 !$GRAY_DARK = "#343A40"
 !$GRAY = "#868E96"
-!$PRIMARY = "#2FA4E7"
+!$PRIMARY = "#8CF8CF"
 !$SECONDARY = "#E9ECEF"
 !$SUCCESS = "#73A839"
 !$INFO = "#033C73"
@@ -65,6 +65,9 @@ skinparam useBetaStyle false
 !$DANGER_TEXT = $WHITE
 
 !$BORDER_THICKNESS = 1
+!$ARROW_COLOR = "#D7BA7D"
+!$ROUNDED_CORNER = 8
+!$PADDING = 10
 
 !procedure $success($msg)
   <font color=$SUCCESS><b>$msg
@@ -98,8 +101,8 @@ skinparam useBetaStyle false
     Shadowing 0.0
   }
   node {
-   Padding 15
-   RoundCorner 20
+   Padding $PADDING
+   RoundCorner $ROUNDED_CORNER
    BackgroundColor $PRIMARY-$PRIMARY_DARK
   }
   caption {
@@ -146,7 +149,7 @@ skinparam useBetaStyle false
   }
   arrow {
     FontColor $PRIMARY_DARK
-    LineColor $PRIMARY_DARK
+    LineColor $ARROW_COLOR
   }
   group {
     BackGroundColor $LIGHT
