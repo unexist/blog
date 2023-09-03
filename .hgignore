@@ -3,6 +3,8 @@ syntax: glob
 Gemfile.lock
 .jekyll-cache
 _site
+vendor
+uml
 
 .idea
 **/*.iml
