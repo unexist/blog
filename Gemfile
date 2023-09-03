@@ -19,6 +19,7 @@ group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.12"
   gem "jekyll-compose"
   gem "jekyll-toc"
+  gem "jekyll-tagging"
   gem "jekyll-plantuml"
 end
 
@@ -33,7 +34,6 @@ end
 gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
 
 # Plugins and co
-gem "jekyll-tagging"
 gem "rouge"
 
 gem "webrick", "~> 1.7"
