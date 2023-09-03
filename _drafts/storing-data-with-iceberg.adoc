@@ -11,6 +11,7 @@ toc: true
 :imagesdir: /assets/images/storing_data_with_iceberg
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 Usually when I start a new blog post, I want to mention hundreds of things tightly intermixed
 with each other and totally miss the scope of the things I originally wanted to cover.
@@ -33,9 +34,32 @@ which I didn't know in depth at time of writing the post about [Evolving a forma
 
 == Apache Iceberg
 
+++++
 {% plantuml %}
-[First] - [Second]
+!theme unexist from ../assets/plantuml
+
+left to right direction
+
+database "Catalog Layer" {
+  [Catalog]
+}
+
+node "Metadata Layer" {
+  [Metadata File]
+  [Manifest List]
+  [Manifest File]
+}
+
+node "Data Layer" {
+  [Data Files]
+}
+
+[Catalog] --> [Metadata File]
+[Metadata File] --> [Manifest List]
+[Manifest List] --> [Manifest File]
+[Manifest File] --> [Data Files]
 {% endplantuml %}
+++++
 
 === Structure
 
