@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big Data
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: hadoop hive iceberg debezium big-data
 categories: big-data

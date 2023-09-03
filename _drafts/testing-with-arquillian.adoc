@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Testing with Arquillian
-date: %%%DATE%%%
-author: Christoph Kappel
+#date: %%%DATE%%%
+#author: Christoph Kappel
 tags: tech archquillian pact postman showcase
 categories: tech showcase
 toc: true

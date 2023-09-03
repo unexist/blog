@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Aspect-oriented with Micronaut
-date: %%%DATE%%%
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: tech micronaut aspect-oriented-programming showcase
 categories: tech showcase

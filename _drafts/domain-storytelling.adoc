@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Domain Storytelling
-date: %%%DATE%%%
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: domain-storytelling ddd showcase
 categories: specification showcase
