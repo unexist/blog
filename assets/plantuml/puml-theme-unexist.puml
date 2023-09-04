@@ -3,7 +3,7 @@
 '' https://bootswatch.com/cerulean/
 ''
 '' Author: Christoph Kappel
-'' Copyright (c) 2023-present by Brett Schwarz
+'' Copyright (c) 2023-present by Christoph Kappel
 
 !$THEME = "unexist"
 
@@ -51,8 +51,8 @@ skinparam useBetaStyle false
 !$SECONDARY_LIGHT = "#EDF0F2"
 !$SECONDARY_DARK = "#BABDBF"
 !$SECONDARY_TEXT = $DARK
-!$INFO_LIGHT = "#35638F"
-!$INFO_DARK = "#02305C"
+!$INFO_LIGHT = "#777777"
+!$INFO_DARK = "#666666"
 !$INFO_TEXT = $WHITE
 !$SUCCESS_LIGHT = "#8FB961"
 !$SUCCESS_DARK = "#5C862E"
@@ -103,7 +103,7 @@ skinparam useBetaStyle false
   node {
    Padding $PADDING
    RoundCorner $ROUNDED_CORNER
-   BackgroundColor $PRIMARY-$PRIMARY_DARK
+   BackgroundColor $PRIMARY
   }
   caption {
     LineThickness 0
