@@ -1,6 +1,7 @@
 #!/bin/zsh
 TITLE="$*"
 FILENAME="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`"
+PATHNAME="${FILENAME//-/_}"
 
 cat > "_drafts/${FILENAME}.adoc" <<EOF
 ---
@@ -10,10 +11,15 @@ title: ${TITLE}
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
-categories: showcase
+categories: tech
 toc: true
 ---
-:imagesdir: /assets/images/${FILENAME//-/_}
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/${PATHNAME}
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/${PATHNAME}
+endif::[]
 :figure-caption!:
 :table-caption!:
 EOF
