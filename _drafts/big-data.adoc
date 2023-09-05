@@ -47,9 +47,7 @@ become useful later.
 
 Storing everything piles up pretty quickly and gets even worse when you actually work with it:
 
-[link=https://xkcd.com/2582/]
-.Source <https://xkcd.com/2582/>
-image::data_trap.png[]
+
 
 === Reducing complexity
 
