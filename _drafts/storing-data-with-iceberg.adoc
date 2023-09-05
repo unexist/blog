@@ -8,27 +8,28 @@ tags: formats hadoop iceberg parquet orc hive duckdb showcase
 categories: big-data
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/storing_data_with_iceberg
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/storing_data_with_iceberg
+endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
 
-Usually when I start a new blog post, I want to mention hundreds of things tightly intermixed
-with each other and totally miss the scope of the things I originally wanted to cover.
+Modern systems accumulate huge quantities of data and create plenty of new problems ready to be
+solved.
+Some of the problems revolve around infrastructural issues like redundancy or how to reduce latency
+in huge distributed systems, but these are problems for a next blog post about my first steps
+with [Hadoop][].
 
-NOTE: This is actually the funny part of writing and a great way of learning how to define an outline
-**and** also stay within of it.
+In this article we are going to have a look at the data itself and how to deal with every changing
+schema and specially data that continuesly grows:
 
-Needless to say exactly happened in my post about [Big Data][], which I am trying to complete for
-quite some time.
-This time I am only partly guilty, because the whole topic is really huge, and it **is** difficult
-to include just the necessities of the topic.
-
-One way to deal with these kind of problems is either to reduce the overall scope or just split
-things from the main article into smaller and more focused ones.
-
-So in this article let us talk in preparation about a heavily used format in the Big Data world,
-which I didn't know in depth at time of writing the post about [Evolving a format][].
+[link=https://xkcd.com/2582/]
+.Source: <https://xkcd.com/2582/>
+image::data_trap.png[]
 
 == Why a new format?
 
@@ -48,6 +49,7 @@ node "Metadata Layer" {
   [Manifest List]
   [Manifest File]
 }
+
 
 node "Data Layer" {
   [Data Files]
