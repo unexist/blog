@@ -25,7 +25,7 @@ in huge distributed systems, but these are problems for a next blog post about m
 with [Hadoop][].
 
 In this article we are going to have a look at the data itself and how to deal with every changing
-schema and specially data that continuesly grows:
+schema and specially data that continuously grows:
 
 [link=https://xkcd.com/2582/]
 .Source: <https://xkcd.com/2582/>
