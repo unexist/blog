@@ -555,7 +555,7 @@ $ xxd todo.parquet
 00000530: 7d03 0000 5041 5231                      }...PAR1
 ----
 <1> The data block at the top
-<2> Following by the schema in Avro
+<2> Followed by the Avro schema
 <3> And a metadata block at the end
 
 The last byte of the file is reserved for the size of the metadata block, which can be loaded in a
