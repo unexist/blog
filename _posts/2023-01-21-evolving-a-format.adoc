@@ -466,7 +466,7 @@ $ parquet convert todo.avro -o todo.parquet
 
 Having a look at the quite lengthy dump shows some more differences to the previous formats:
 
-[source,text,highlight="17,61,78"]
+[source,text,highlight="17,62,79"]
 ----
 $ xxd todo.parquet
 00000000: 5041 5231 1500 1512 153a 1580 c8d8 f00d  PAR1.....:......
