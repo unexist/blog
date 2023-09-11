@@ -2,9 +2,9 @@
 layout: post
 title: Evolving a format
 date: 2023-01-21 21:41 +0100
-last_updated: 2023-01-21 21:41 +0100
+last_updated: 2023-09-11 13:00 +0100
 author: Christoph Kappel
-tags: csv csvschema json jsonschema avro apicurio kafka hadoop showcase
+tags: csv csvschema json jsonschema avro parquet apicurio kafka hadoop showcase
 categories: tools
 toc: true
 ---
@@ -50,6 +50,9 @@ endif::[]
 :31: https://en.wikipedia.org/wiki/Thucydides
 :32: https://en.wikipedia.org/wiki/Uniform_Resource_Identifier
 :33: https://linux.die.net/man/1/xxd
+:34: https://parquet.apache.org/
+:35: https://www.geeksforgeeks.org/difference-between-row-oriented-and-column-oriented-data-stores-in-dbms/
+:36: https://duckdb.org/
 
 Modern distributed systems consist of dozens of different services and each of these needs to
 communicate with others to fulfill tasks.
@@ -286,7 +289,7 @@ of application, like usage for {16}[Kafka] due to its small footprint of its bin
 The base mode of operation is a bundled and encoded form, which includes the schema along with the
 actual data in binary, which looks rather _interesting_ in hex view:
 
-[source,text,highlight=18..20]
+[source,text,highlight="3,18,20"]
 ----
 $ xxd todo.avro
 00000000: 4f62 6a01 0416 6176 726f 2e73 6368 656d  Obj...avro.schem
@@ -362,6 +365,30 @@ This means the schema is strongly required by the reader to make sense from the 
 And to make things a bit more complex, the schema can be omitted, if the reader already knows it
 or has other means to fetch it like from the previously mentioned registry.
 
+A big advantage of this behavior is the schema used to write *must not* be the same used for a
+read.
+This allows to create smaller projections to omit fields entirely and also to utilize default
+values for newer fields which cannot be resolved:
+
+[source,avro]
+----
+{
+  "type": "record",
+  "name": "Record",
+  "fields": [
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "default": null
+    }
+  ]
+}
+----
+
 ==== Change of data types
 
 With this in place, the same rules apply here that were valid for our CSV version.
@@ -369,12 +396,12 @@ Changing order or whole fields should be no problem, as long as the schema is kn
 
 ==== Complex data types
 
-Avro is a bit of a mix of both of our textual formats and in this regards it behaves like JSON
-in regards to {4}[complex types].
+Avro is a bit of a mix of both of our textual formats and behaves like JSON in regard to
+{4}[complex types].
 
 Let's have a quick glance at the output of xxd of the evolved version:
 
-[source,text,highlight=26..28]
+[source,text,highlight="2,26"]
 ----
 $ xxd todo-evolved.avro
 00000000: 4f62 6a01 0416 6176 726f 2e73 6368 656d  Obj...avro.schem
@@ -416,6 +443,150 @@ be flattened out like this:
 image::avro_evolved_csv.png[]
 
 So far we discussed how the formats can evolve, but is there another way?
+
+=== On the Parquet
+
+{34}[Parquet] wasn't included in the original list of formats to be covered here, but during my
+experiments with Hadoop I discovered it fits here perfectly well and can also be a good
+foundation for follow-up posts.
+
+In comparison to the previous formats, a major difference is that Parquet is a columnar data type
+and stores data {35}[column-oriented] in contrast to row-oriented type.
+This means every value of a column is aligned next to each other and allows some interesting
+compressions tricks for example with date types due to locality.
+Another benefit is column fetches are faster - at the cost of more expensive row fetches.
+
+Creating a Parquet from scratch isn't that difficult, but here we can utilize the `parquet-cli`
+that can be installed separately:
+
+[source,shell]
+----
+$ parquet convert todo.avro -o todo.parquet
+----
+
+Having a look at the quite lengthy dump shows some more differences to the previous formats:
+
+[source,text,highlight="17,61,78"]
+----
+$ xxd todo.parquet
+00000000: 5041 5231 1500 1512 153a 1580 c8d8 f00d  PAR1.....:......
+00000010: 1c15 0215 0015 0815 0800 001f 8b08 0000  ................
+00000020: 0000 0000 ff63 6560 6070 cb2c 2a2e 0100  .....ce``p.,*...
+00000030: af67 0c39 0900 0000 1500 150e 1536 1580  .g.9.........6..
+00000040: c8e4 ce01 1c15 0215 0015 0815 0800 001f  ................
+00000050: 8b08 0000 0000 0000 ff63 6660 6070 ca49  .........cf``p.I
+00000060: 0400 28e9 672c 0700 0000 1500 1502 152a  ..(.g,.........*
+00000070: 15c1 e287 b006 1c15 0215 0015 0815 0800  ................
+00000080: 001f 8b08 0000 0000 0000 ff63 0400 1bdf  ...........c....
+00000090: 05a5 0100 0000 1500 151c 1544 15e5 bd89  ...........D....
+000000a0: a703 1c15 0215 0015 0815 0800 001f 8b08  ................
+000000b0: 0000 0000 0000 ffe3 6260 6030 3230 32d2  ........b``0202.
+000000c0: 3534 d435 3204 0012 4870 5a0e 0000 0015  54.52...HpZ.....
+000000d0: 0015 1015 2e15 f887 c88d 0e1c 1502 1500  ................
+000000e0: 1508 1508 0000 1f8b 0800 0000 0000 00ff  ................
+000000f0: 6360 8000 0069 df22 6508 0000 0019 1102  c`...i."e.......
+00000100: 1918 0546 6972 7374 1918 0546 6972 7374  ...First...First  // <1>
+00000110: 1502 1916 0000 1911 0219 1803 426c 6119  ............Bla.
+00000120: 1803 426c 6115 0219 1600 0019 1102 1918  ..Bla...........
+00000130: 0101 1918 0101 1502 1916 0000 1911 0219  ................
+00000140: 180a 3230 3232 2d31 312d 3231 1918 0a32  ..2022-11-21...2
+00000150: 3032 322d 3131 2d32 3115 0219 1600 0019  022-11-21.......
+00000160: 1102 1918 0800 0000 0000 0000 0019 1808  ................
+00000170: 0000 0000 0000 0000 1502 1916 0000 191c  ................
+00000180: 1608 1568 1600 0000 191c 1670 1564 1600  ...h.......p.d..
+00000190: 0000 191c 16d4 0115 5816 0000 0019 1c16  ........X.......
+000001a0: ac02 1572 1600 0000 191c 169e 0315 5c16  ...r..........\.
+000001b0: 0000 0015 0219 6c48 0652 6563 6f72 6415  ......lH.Record.
+000001c0: 0a00 150c 2500 1805 7469 746c 6525 004c  ....%...title%.L
+000001d0: 1c00 0000 150c 2500 180b 6465 7363 7269  ......%...descri
+000001e0: 7074 696f 6e25 004c 1c00 0000 1500 2500  ption%.L......%.
+000001f0: 1804 646f 6e65 0015 0c25 0018 0764 7565  ..done...%...due
+00000200: 4461 7465 2500 4c1c 0000 0015 0425 0018  Date%.L......%..
+00000210: 0269 6400 1602 191c 195c 2608 1c15 0c19  .id......\&.....
+00000220: 2508 0019 1805 7469 746c 6515 0416 0216  %.....title.....
+00000230: 4016 6826 083c 1805 4669 7273 7418 0546  @.h&.<..First..F
+00000240: 6972 7374 1600 2805 4669 7273 7418 0546  irst..(.First..F
+00000250: 6972 7374 0019 1c15 0015 0015 0200 0016  irst............
+00000260: fc05 1514 16fa 0315 3200 2670 1c15 0c19  ........2.&p....
+00000270: 2508 0019 180b 6465 7363 7269 7074 696f  %.....descriptio
+00000280: 6e15 0416 0216 3c16 6426 703c 1803 426c  n.....<.d&p<..Bl
+00000290: 6118 0342 6c61 1600 2803 426c 6118 0342  a..Bla..(.Bla..B
+000002a0: 6c61 0019 1c15 0015 0015 0200 0016 9006  la..............
+000002b0: 1514 16ac 0415 2a00 26d4 011c 1500 1925  ......*.&......%
+000002c0: 0800 1918 0464 6f6e 6515 0416 0216 3016  .....done.....0.
+000002d0: 5826 d401 3c18 0101 1801 0116 0028 0101  X&..<........(..
+000002e0: 1801 0100 191c 1500 1500 1502 0000 16a4  ................
+000002f0: 0615 1616 d604 1522 0026 ac02 1c15 0c19  .......".&......
+00000300: 2508 0019 1807 6475 6544 6174 6515 0416  %.....dueDate...
+00000310: 0216 4a16 7226 ac02 3c18 0a32 3032 322d  ..J.r&..<..2022-
+00000320: 3131 2d32 3118 0a32 3032 322d 3131 2d32  11-21..2022-11-2
+00000330: 3116 0028 0a32 3032 322d 3131 2d32 3118  1..(.2022-11-21.
+00000340: 0a32 3032 322d 3131 2d32 3100 191c 1500  .2022-11-21.....
+00000350: 1500 1502 0000 16ba 0615 1616 f804 1546  ...............F
+00000360: 0026 9e03 1c15 0419 2508 0019 1802 6964  .&......%.....id
+00000370: 1504 1602 163e 165c 269e 033c 1808 0000  .....>.\&..<....
+00000380: 0000 0000 0000 1808 0000 0000 0000 0000  ................
+00000390: 1600 2808 0000 0000 0000 0000 1808 0000  ..(.............
+000003a0: 0000 0000 0000 0019 1c15 0015 0015 0200  ................
+000003b0: 0016 d006 1516 16be 0515 3e00 16b4 0216  ..........>.....
+000003c0: 0226 0816 f203 1400 0019 2c18 1370 6172  .&........,..par  // <2>
+000003d0: 7175 6574 2e61 7672 6f2e 7363 6865 6d61  quet.avro.schema
+000003e0: 18d4 017b 2274 7970 6522 3a22 7265 636f  ...{"type":"reco
+000003f0: 7264 222c 226e 616d 6522 3a22 5265 636f  rd","name":"Reco
+00000400: 7264 222c 2266 6965 6c64 7322 3a5b 7b22  rd","fields":[{"
+00000410: 6e61 6d65 223a 2274 6974 6c65 222c 2274  name":"title","t
+00000420: 7970 6522 3a22 7374 7269 6e67 227d 2c7b  ype":"string"},{
+00000430: 226e 616d 6522 3a22 6465 7363 7269 7074  "name":"descript
+00000440: 696f 6e22 2c22 7479 7065 223a 2273 7472  ion","type":"str
+00000450: 696e 6722 7d2c 7b22 6e61 6d65 223a 2264  ing"},{"name":"d
+00000460: 6f6e 6522 2c22 7479 7065 223a 2262 6f6f  one","type":"boo
+00000470: 6c65 616e 227d 2c7b 226e 616d 6522 3a22  lean"},{"name":"
+00000480: 6475 6544 6174 6522 2c22 7479 7065 223a  dueDate","type":
+00000490: 2273 7472 696e 6722 7d2c 7b22 6e61 6d65  "string"},{"name
+000004a0: 223a 2269 6422 2c22 7479 7065 223a 226c  ":"id","type":"l
+000004b0: 6f6e 6722 7d5d 7d00 1811 7772 6974 6572  ong"}]}...writer
+000004c0: 2e6d 6f64 656c 2e6e 616d 6518 0461 7672  .model.name..avr
+000004d0: 6f00 184a 7061 7271 7565 742d 6d72 2076  o..Jparquet-mr v  // <3>
+000004e0: 6572 7369 6f6e 2031 2e31 332e 3120 2862  ersion 1.13.1 (b
+000004f0: 7569 6c64 2064 6234 3138 3331 3039 6435  uild db4183109d5
+00000500: 6237 3334 6563 3539 3330 6438 3730 6364  b734ec5930d870cd
+00000510: 6165 3136 3165 3430 3864 6462 6129 195c  ae161e408ddba).\
+00000520: 1c00 001c 0000 1c00 001c 0000 1c00 0000  ................
+00000530: 7d03 0000 5041 5231                      }...PAR1
+----
+<1> The data block at the top
+<2> Following by the schema in Avro
+<3> And a metadata block at the end
+
+The last byte of the file is reserved for the size of the metadata block, which can be loaded in a
+first seek/read and then used to load the whole metadata block.
+This allows quicker inserts without rewriting the whole file.
+
+==== Add or remove fields
+
+Parquet supports a different but similar enough set of data types and the same rules that are valid
+for Avro can be applied here.
+
+==== Change of data types
+
+Switching data types of known columns is easier here, because we know just need to rewrite a
+specific column and update the schema without touching the complete file.
+
+==== Complex data types
+
+Again, everything that applies to Avro is also true for Parquet and can be nicely visualized
+due to great support in with multiple tools - here exemplary with {36}[DuckkDB]:
+
+[source,shell]
+----
+$ duckdb_cli -c 'select * from read_parquet("./todo-evolved.parquet")'
+┌─────────┬─────────────┬─────────┬───────────────┬─────────────┬───────┐
+│  title  │ description │  done   │ dueDate.start │ dueDate.due │  id   │
+│ varchar │   varchar   │ boolean │    varchar    │   varchar   │ int64 │
+├─────────┼─────────────┼─────────┼───────────────┼─────────────┼───────┤
+│ First   │ Bla         │ true    │ 2022-11-21    │ 2022-11-23  │     0 │
+└─────────┴─────────────┴─────────┴───────────────┴─────────────┴───────┘
+----
 
 == Apply versioning
 
