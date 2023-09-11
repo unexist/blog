@@ -8,7 +8,14 @@ tags: consumer-driven-contracts pact docker junit showcase
 categories: testing
 toc: true
 ---
-:imagesdir: /assets/images/consumer_driven_contracts/
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/consumer_driven_contracts
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/consumer_driven_contracts
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://en.wikipedia.org/wiki/No_Silver_Bullet
 :2: https://spring.io/projects/spring-cloud-contract

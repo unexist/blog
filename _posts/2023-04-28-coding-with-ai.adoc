@@ -8,7 +8,12 @@ tags: ai tabnine copilot
 categories: myself
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/coding_with_ai
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/coding_with_ai
+endif::[]
 :figure-caption!:
 :table-caption!:
 

@@ -8,7 +8,14 @@ tags: csv csvschema json jsonschema avro apicurio kafka hadoop showcase
 categories: tools
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/evolving_a_format
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/evolving_a_format
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://blog.stoplight.io/consistent-api-urls-with-openapi-and-style-guides
 :2: https://www.apicur.io/

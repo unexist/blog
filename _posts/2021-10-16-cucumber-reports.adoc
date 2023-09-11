@@ -8,7 +8,14 @@ tags: specification-by-example cucumber showcase
 categories: tools
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/cucumber_reports
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/cucumber_reports/
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://www.asciiart.eu/
 :2: https://github.com/trivago/cluecumber-report-plugin

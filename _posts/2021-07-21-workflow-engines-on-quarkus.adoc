@@ -8,7 +8,14 @@ tags: workflow-engine rules-engine camunda kogito quarkus kafka redpanda messagi
 categories: tech
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/workflow_engines_on_quarkus
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/workflow_engines_on_quarkus/
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://quarkus.io
 :2: https://camunda.com

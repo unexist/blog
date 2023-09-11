@@ -8,7 +8,14 @@ tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf sho
 categories: observability
 toc: true
 ---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/logging_vs_tracing
+endif::[]
+ifndef::asciidoctorconfigdir[]
 :imagesdir: /assets/images/logging_vs_tracing/
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://en.wikipedia.org/wiki/Aspect-oriented_programming
 :2: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation

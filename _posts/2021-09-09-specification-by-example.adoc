@@ -8,7 +8,14 @@ tags: specification-by-example cucumber concordion fitnesse showcase
 categories: testing
 toc: true
 ---
-:imagesdir: /assets/images/specification_by_example/
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/specification_by_example
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/specification_by_example
+endif::[]
+:figure-caption!:
+:table-caption!:
 
 :1: https://en.wikipedia.org/wiki/Test-driven_development
 :2: https://en.wikipedia.org/wiki/Acceptance_testing
