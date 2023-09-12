@@ -575,7 +575,7 @@ specific column and update the schema without touching the complete file.
 ==== Complex data types
 
 Again, everything that applies to Avro is also true for Parquet and can be nicely visualized
-due to great support in with multiple tools - here exemplary with {36}[DuckkDB]:
+due to great support in with multiple tools - here exemplary with {36}[DuckDB]:
 
 [source,shell]
 ----
