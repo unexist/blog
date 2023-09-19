@@ -1,0 +1,29 @@
+---
+layout: post
+title: Playing with OData
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/playing_with_odata
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/playing_with_odata
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+----
+Outline:
+
+- Intro
+- What is OData
+-- Metadata
+-- Query, Filter, Expand
+
+- Conclusion
+----
