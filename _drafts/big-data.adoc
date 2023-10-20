@@ -16,11 +16,12 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
-```
+////
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
-```
+////
 
 [Big Data] was just another buzzword for me and I never had any real contact besides the typical
 requests of data scientists to move data to a specific endpoint of a [Data Lake] in the overall
@@ -32,41 +33,85 @@ I usually don't like to deal with new tech stuff unprepared, so I filled in some
 articles, a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and basically
 started playing with it.
 
-This led to lots of insights and Aha!-moments I really want to write about, but unfortunately not
-only the name is big.
+This led to lots of insights and Aha!-moments and I really wanted to write about, but unfortunately
+not only the name is big.
 Condensing all the stuff I'd like to address is quite difficult, so this is the start of a small
-series about the groundwork and (at least to me) interesting aspects and technologies.
+series about the groundwork and (at least to me) interesting tools and aspects.
 
 == What is Big Data?
 
-Historically I'd say the introduction of big data generally marks the shift away from storing
-processed or in some ways refined data to just storing anything as is - just in case it might
-become useful later.
+From my impression the biggest thing in the big data idea is the shift away from storing processed
+or in some ways refined data to just storing anything as is - just in case it might become useful
+later.
 
 Storing everything piles up pretty quickly and gets even worse when you actually work with it:
 
+[link=https://xkcd.com/2582/]
+.Source <https://xkcd.com/2582/>
+image::data_trap.png[]
+
 === Reducing complexity
 
-There have been several iterations of tackling the overall complexity on the storage level.
-Like all good stories it started with SQL - there were [Data Warehouses] with big databases,
-which kept everything in rigid schemas.
+There have been several iterations of tackling the overall complexity on the storage level and like
+all good stories it started with SQL.
+
+Once upon a time, there were [Data Warehouses] with big databases, which kept everything in rigid
+schemas.
 Unfortunately this introduced complex requirements for scaling and made redundancy even worse, but
-did the job for a while.
+did the job for a while and everyone was happy...
 
-They were followed by [Data Lakes] and [Data Marts], which do two main things differently:
+Later on they were augmented or replaced by [Data Lakes] and [Data Marts], which did some things
+differently:
 
-- They contain data split by domain of origin or use-case
+- They contained data split by domain of origin or simply use-case
 - No data schema is enforced on write and everything is flat (most likely flat-file)
+- They offloaded the problem of handling the actual data to [Hadoop]
 
-In both cases the probably best underlying storage is [Hadoop], because it allows to offload some
-tasks like redundancy and scaling to it.
+== What is Hadoop?
 
-=== Benefits of Hadoop
+The general
+
+=== Architecture
+
+
+=== Files
+
+++++
+{% plantuml %}
+!theme unexist from ../assets/plantuml
+left to right direction
+
+database "Catalog Layer" {
+  [Catalog]
+}
+
+node "Metadata Layer" {
+  [Metadata File]
+  [Manifest List]
+  [Manifest File]
+}
+
+
+node "Data Layer" {
+  [Data Files]
+}
+
+[Catalog] --> [Metadata File]
+[Metadata File] --> [Manifest List]
+[Manifest List] --> [Manifest File]
+[Manifest File] --> [Data Files]
+{% endplantuml %}
+++++
+
+
+=== Benefits
+
+
 
 [bibliography]
 == References
 
-* [[datalake]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
-* [[practical]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
-* [[bigdata]] Nathan Marz, Big Data, Manning 2019
-* [[hadoop]] Tom White, Hadoop: The Definitive Guide, O'Reilly 2009
+* [[[datalake]]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
+* [[[practical]]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
+* [[[bigdata]]] Nathan Marz, Big Data, Manning 2019
+* [[[hadoop]]] Tom White, Hadoop: The Definitive Guide, O'Reilly 2009
