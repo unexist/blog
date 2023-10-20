@@ -4,7 +4,7 @@ title: Big Data
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: hadoop hive iceberg debezium big-data
+tags: hadoop big-data showcase
 categories: big-data
 toc: true
 ---
@@ -18,26 +18,24 @@ endif::[]
 :table-caption!:
 
 ```
-https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
-https://www.linkedin.com/pulse/musl-libc-alpines-greatest-weakness-rogan-lynch/
-https://wiki.musl-libc.org/functional-differences-from-glibc.html
+https://github.com/unexist/showcase-hadoop-cdc-quarkus/
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
 ```
 
 [Big Data] was just another buzzword for me and I never had any real contact besides the typical
-requests of data scientists to move data to a specific endpoint in the overall architecture.
-This changed, when I got the opportunity to have a closer look at a big data project at work.
+requests of data scientists to move data to a specific endpoint of a [Data Lake] in the overall
+architecture.
 
-I don't like to deal with tech stuff unprepared, so filled in some blanks by reading some articles,
-a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and checked out some
-pre-constructed containers.
-Some of these containers actually [line-through]#worked# started, but I knew I had to ultimately
-roll my own version to understand the intricate design and communication between all the moving
-parts.
+This changed, when I got the opportunity to have a closer look at a big data project in a business
+context.
+I usually don't like to deal with new tech stuff unprepared, so I filled in some blanks by reading
+articles, a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and basically
+started playing with it.
 
-So during the course of this post we are going to cover the brief idea, fire up my own version
-of a single-container-data lake and use some complex ways move some data into it from the usual
-[demo application][].
+This led to lots of insights and Aha!-moments I really want to write about, but unfortunately not
+only the name is big.
+Condensing all the stuff I'd like to address is quite difficult, so this is the start of a small
+series about the groundwork and (at least to me) interesting aspects and technologies.
 
 == What is Big Data?
 
@@ -46,8 +44,6 @@ processed or in some ways refined data to just storing anything as is - just in 
 become useful later.
 
 Storing everything piles up pretty quickly and gets even worse when you actually work with it:
-
-
 
 === Reducing complexity
 
@@ -66,62 +62,6 @@ In both cases the probably best underlying storage is [Hadoop], because it allow
 tasks like redundancy and scaling to it.
 
 === Benefits of Hadoop
-
-== Setting everything up
-
-Although the [Dockerfile][] is quite huge, there isn't much complexity involved, but I still would
-like to dedicate some lines to some issues I especially had fun with.
-
-=== Alpine and Musl
-
-The first bigger issues was the incompatibility of the C-based parts of [datanodes][] with the
-default [libc][] implementation of [Alpine][].
-[Musl][] is an excellent choice due to its small storage footprint for containers, but is not
-without problems.
-
-[quote,'https://martinheinz.dev/blog/92']
-By using Alpine, you're getting "free" chaos engineering for your cluster.
-
-There are some differences which can to lead to surprising issues and it is never a bad to idea to
-check [this curated list][] for more information about it.
-
-The best option for me here was to switch to another base image entirely:
-
-[source,docker]
-----
-FROM eclipse-temurin:8-jdk
-----
-
-=== Podman capabilities
-
-Coming from [ArchLinux][], I obviously still have the **rolling-update-way** deeply ingrained in
-me and usually just hit update whenever I see such a message and also fire-up [brew][] and [rustup][]
-quite frequently.
-
-This usually works well - until it doesn't.
-
-After updating my local [Podman][] (somehwere around `4.4.1`) installation I discovered I cannot
-start [sshd][] inside of my container anymore.
-Podman doesn't necessarily need sshd, but [Hadoop][] and friends rely heavily on it for
-inter-node-communication:
-
-[source,log]
-----
-ssh: Connection closed by 127.0.0.1 port 22
-sshd: chroot("/run/sshd"): Operation not permitted [preauth]
-----
-
-I'd like to say this error directly pointed me to the changelog of Podman, but unfortunately I spent
-some hours debugging and desperating until I finally found a hint on [Stack Overflow][] to have a
-look at the release notes:
-
-[link=https://github.com/containers/podman/blob/main/RELEASE_NOTES.md]
-.Source: https://github.com/containers/podman/blob/main/RELEASE_NOTES.md
-image::podman_capabilities.png[]
-
-== Debezium, the WAL and an Iceberg
-
-== Scala with a Spark
 
 [bibliography]
 == References
