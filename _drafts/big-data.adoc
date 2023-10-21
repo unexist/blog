@@ -75,7 +75,6 @@ The general
 
 {% plantuml %}
 !theme unexist from ../assets/plantuml
-left to right direction
 'skinparam linetype ortho
 
 together {
