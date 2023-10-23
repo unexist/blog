@@ -73,54 +73,9 @@ The general
 
 === Architecture
 
-{% plantuml %}
-!theme unexist from ../assets/plantuml
-'skinparam linetype ortho
-
-together {
-  package "Namenode" as nn {
-    card Metadata [
-    Name
-    ----
-    Replicas
-    ----
-    Path
-    ]
-  }
-
-  package "Datanodes" as pkg1 {
-    card " " as dn1 {
-      file "File" as f1
-      file "File" as f2
-      file "File" as f3
-    }
-
-    card " " as dn2 {
-      file "File" as f4
-      file "File" as f5
-    }
-
-    card " " as dn3 {
-      file "File" as f6
-      file "File" as f7
-    }
-  }
-}
-
-usecase "Client" as c1
-
-nn -left-> dn3 : Block ops
-
-c1 -right-> nn : Metadata ops
-c1 <-up- f1 : Read
-
-c1 -up-> f3 : Write
-c1 --> f7 : Write
-
-f3 <-right-> f4 : Replication
-{% endplantuml %}
-++++
-
+[link=https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html]
+.Source <https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html>
+image::hdfsarchitecture.gif[]
 
 === Files
 
