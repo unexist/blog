@@ -21,6 +21,8 @@ endif::[]
 ////
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
+https://cloud.google.com/learn/what-is-hadoop
+https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html
 ////
 
 [Big Data] was just another buzzword for me and I never had any real contact besides the typical
