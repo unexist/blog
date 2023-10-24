@@ -124,7 +124,73 @@ node "Data Layer" {
 
 === Benefits
 
+=== How to use the API?
 
+==== Setup
+
+[source,java]
+----
+Configuration configuration = new Configuration();
+
+String baseDir = Files.createTempDirectory("test_hdfs").toFile().getAbsoluteFile();
+
+configuration.set(MiniDFSCluster.HDFS_MINIDFS_BASEDIR, baseDir.getAbsolutePath());
+
+MiniDFSCluster.Builder builder = new MiniDFSCluster.Builder(configuration);
+
+MiniDFSCluster cluster = builder.build();
+----
+
+==== Write data
+
+[source,java]
+----
+FileSystem fileSystem = FileSystem.get(configuration);
+
+Path hdfsPath = new Path(HADOOP_FILE);
+FSDataOutputStream fsOut;
+
+if (fileSystem.exists(hdfsPath)) {
+    fsOut = fileSystem.append(hdfsPath);
+} else {
+    fsOut = fileSystem.create(hdfsPath);
+}
+
+OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardCharsets.UTF_8);
+
+BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
+
+bufferedWriter.write("data");
+
+mapper.writeValue(bufferedWriter, "data");
+
+bufferedWriter.close();
+outStreamWriter.close();
+fsOut.close();
+fileSystem.close()
+----
+
+==== Read data
+
+[source,java]
+----
+FileSystem fileSystem = FileSystem.get(configuration);
+
+Path hdfsPath = new Path(HADOOP_FILE);
+
+FSDataInputStream inputStream = fileSystem.open(hdfsPath);
+
+BufferedReader bufferedReader = new BufferedReader(
+    new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+
+String line = null;
+while (null != (line = bufferedReader.readLine())) {
+    LOGGER.debug("Read line: %s", line);
+}
+
+inputStream.close();
+fileSystem.close();
+----
 
 [bibliography]
 == References
