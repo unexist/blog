@@ -66,14 +66,14 @@ Later on they were augmented or replaced by [Data Lakes] and [Data Marts], which
 differently:
 
 - They contained data split by domain of origin or simply use-case
-- No data schema is enforced on write and everything stays as-is (in mostly flat-file)
+- No data schema is enforced on write and everything stays as-is in mostly flat-file
 - They offloaded the problem of handling the actual data to [Hadoop]
 
 == What is Hadoop?
 
 Hadoop is an open-source [Java] framework that manages large quantities of data and provides means
 for further processing.
-It allows to break tasks down into smaller jobs and run them close to the actual data and at the
+It allows to break tasks down into smaller jobs and run them close to the actual data at the
 same time.
 
 It consists of four major components:
@@ -88,9 +88,17 @@ and is going to be covered in a further post.
 
 === Architecture
 
+The actual architecture of HDFS is based on the leader/follower principle with a primary and
+an optionally secondary namenode and many datanodes:
+
 [link=https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html]
 .Source <https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html>
 image::hdfsarchitecture.gif[]
+
+. Clients connect to the active namenode and ask for metadata of specific data blocks
+. Once they have this information they connect directly to a datanode with a copy of the data
+. If clients wish to write data they connect again to a specific datanode
+. The namenodes keep track of the data and force balanced replication to different datanodes
 
 === Files
 
