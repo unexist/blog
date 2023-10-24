@@ -69,7 +69,19 @@ differently:
 
 == What is Hadoop?
 
-The general
+Hadoop is an open-source [Java] framework that manages large quantities of data and provides means
+for further processing.
+Tasks can be broken down into smaller jobs and are run close to the actual data at the same time.
+
+It consists of four major components:
+
+- *Hadoop Distributed File System (HDFS)* - is the underlying distributed filesystem and allows
+the Hadoop nodes to operate on local data.
+- *Yet Another Resource Negotiator (YARN)* - is the resource-management part of the system and
+responsible for scheduling jobs and resource allocation.
+- *MapReduce* - is a programming model for the actual processing in a [divide-and-conquer] way
+and is going to be covered in a further post.
+- *Hadoop Common* - is a collection of all supporting tools and libraries.
 
 === Architecture
 
