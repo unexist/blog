@@ -73,8 +73,8 @@ differently:
 
 Hadoop is an open-source [Java] framework that manages large quantities of data and provides means
 for further processing.
-
-And consists of four major components:
+We are going to cover the processing of the actual data with [MapReduce] in a follow-up article,
+but before we can do that we have to talk about the architecture and the major components first:
 
 - *Hadoop Distributed File System (HDFS)* - is the underlying distributed filesystem and allows
 the Hadoop nodes to operate on local data.
@@ -86,18 +86,20 @@ and is going to be covered in a further post.
 
 === Architecture
 
-The actual architecture of HDFS is based on the leader/follower principle with a primary and
-an optionally secondary namenode for bookkeeping and controlling tasks and many datanodes for the
-store the actual data:
+The core architecture of HDFS is based on a leader/follower principle with a strong focus on
+resiliency and redundancy.
 
 [link=https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html]
 .Source <https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html>
 image::hdfsarchitecture.gif[]
 
-. Clients connect to the active namenode and ask for metadata of specific data blocks
-. Once they have this information they connect directly to a datanode with a copy of the data
-. If clients wish to write data they connect again directly to a specific datanode
-. And the namenode keeps track of the data and enforce re-balancing and replication
+- Namesnodes keep track of every block and store metadata like the name or the count of active
+replicas and answer questions of clients which datanodes have a copy of the desired block.
+- Clients use this information to connect directly to the datanodes and load the actual data.
+- When a client wants to write data it again consults the namesnodes first and then writes the data
+to the datanodes.
+- And namenodes check if the data needs to be re-balanced or replicated based on different events like
+a datanode
 
 === Files
 
