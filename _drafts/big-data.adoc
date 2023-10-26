@@ -32,8 +32,8 @@ architecture.
 This changed, when I got the opportunity to have a closer look at a big data project in a business
 context.
 I usually don't like to deal with new tech stuff unprepared, so I filled in some blanks by reading
-articles, a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and basically
-started playing with it.
+articles, a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and just started
+playing with it.
 
 This led to lots of insights and Aha!-moments and I really wanted to write about, but unfortunately
 not only the name is big.
@@ -46,13 +46,14 @@ From my impression the biggest thing in the big data idea is the shift away from
 or in some ways refined data to just storing anything as is - just in case it might become useful
 later.
 
-Storing everything piles up pretty quickly and gets even worse when you actually work with it:
+This initially sounds like a good idea, but storing everything piles up pretty quickly and gets
+even worse when you actually work with it:
 
 [link=https://xkcd.com/2582/]
 .Source <https://xkcd.com/2582/>
 image::data_trap.png[]
 
-=== Reducing complexity
+=== Managing complexity
 
 There have been several iterations of tackling the overall complexity on the storage level and like
 all good stories it started with SQL.
@@ -89,17 +90,64 @@ and is going to be covered in a further post.
 The core architecture of HDFS is based on a leader/follower principle with a strong focus on
 resiliency and redundancy.
 
-[link=https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html]
-.Source <https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html>
-image::hdfsarchitecture.gif[]
+++++
+{% plantuml %}
+!theme unexist from ../assets/plantuml
+skinparam linetype ortho
 
-- Namesnodes keep track of every block and store metadata like the name or the count of active
+together {
+  package "Namenode" as nn {
+    card Metadata [
+    Metadata
+    ====
+    Name
+    ----
+    Replicas
+    ----
+    Path
+    ]
+  }
+
+  package "Datanodes" as dns {
+    card "Datanode" as dn1 {
+      file "File" as f1
+      file "File" as f2
+    }
+
+    card "Datanode" as dn2 {
+      file "File" as f3
+      file "File" as f4
+    }
+
+    card "Datanode" as dn3 {
+      file "File" as f5
+      file "File" as f6
+    }
+  }
+}
+
+usecase "Client" as c
+
+nn -[hidden]-> dns
+'dns -[hidden]-> c
+
+c --> nn : Metadata ops (1)
+c <-- f1 : Read (2)
+c --> f3 : Write (3)
+
+nn --> dns : Block ops (4)
+
+@enduml
+{% endplantuml %}
+++++
+
+<1> Namesnodes keep track of every block and store metadata like the name or the count of active
 replicas and answer questions of clients which datanodes have a copy of the desired block.
-- Clients use this information to connect directly to the datanodes and load the actual data.
-- When a client wants to write data it again consults the namesnodes first and then writes the data
+<2> Clients use this information to connect directly to the datanodes and load the actual data.
+<3> When a client wants to write data it again consults the namesnodes first and then writes the data
 to the datanodes.
-- And namenodes check if the data needs to be re-balanced or replicated based on different events like
-a datanode
+<4> And namenodes check if the data needs to be re-balanced or replicated based on different events
+like a datanode
 
 === Files
 
@@ -129,7 +177,6 @@ node "Data Layer" {
 [Manifest File] --> [Data Files]
 {% endplantuml %}
 ++++
-
 
 === Benefits
 
@@ -170,8 +217,6 @@ OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardChars
 BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
 
 bufferedWriter.write("data");
-
-mapper.writeValue(bufferedWriter, "data");
 
 bufferedWriter.close();
 outStreamWriter.close();
