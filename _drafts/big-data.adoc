@@ -96,7 +96,7 @@ resiliency and redundancy.
 skinparam linetype ortho
 
 together {
-  package "Namenode" as nn {
+  package "Namenodes" as nn {
     card Metadata [
     Metadata
     ====
@@ -149,36 +149,15 @@ to the datanodes.
 <4> And namenodes check if the data needs to be re-balanced or replicated based on different events
 like a datanode
 
-=== Files
-
-++++
-{% plantuml %}
-!theme unexist from ../assets/plantuml
-left to right direction
-
-database "Catalog Layer" {
-  [Catalog]
-}
-
-node "Metadata Layer" {
-  [Metadata File]
-  [Manifest List]
-  [Manifest File]
-}
-
-
-node "Data Layer" {
-  [Data Files]
-}
-
-[Catalog] --> [Metadata File]
-[Metadata File] --> [Manifest List]
-[Manifest List] --> [Manifest File]
-[Manifest File] --> [Data Files]
-{% endplantuml %}
-++++
-
 === Benefits
+
+- *Scalability* - the architecture and computing model allow to quickly add new nodes, so the
+capacity can be increased easily.
+- *Low cost* - the software itself is [FOSS], is supported by a rich set of tools and runs on
+[COTS]-hardware.
+- *Flexibility* - there is no preprocessing of data required, so if a new use-case is discovered
+existing data can also be utilized.
+- *Resilience* - data is replicated across multiple nodes and jobs can be re-scheduled on faults.
 
 === How to use the API?
 
@@ -202,18 +181,11 @@ MiniDFSCluster cluster = builder.build();
 [source,java]
 ----
 FileSystem fileSystem = FileSystem.get(configuration);
-
 Path hdfsPath = new Path(HADOOP_FILE);
-FSDataOutputStream fsOut;
 
-if (fileSystem.exists(hdfsPath)) {
-    fsOut = fileSystem.append(hdfsPath);
-} else {
-    fsOut = fileSystem.create(hdfsPath);
-}
+FSDataOutputStream fsOut = fileSystem.create(hdfsPath);
 
 OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardCharsets.UTF_8);
-
 BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
 
 bufferedWriter.write("data");
@@ -245,6 +217,32 @@ while (null != (line = bufferedReader.readLine())) {
 inputStream.close();
 fileSystem.close();
 ----
+
+=== On the shell
+
+[source,shell]
+----
+BP-306144324-10.21.1.65-1698325314327 $ ls -R
+current/  tmp/  scanner.cursor
+
+./current:
+finalized/  rbw/  VERSION
+
+./current/finalized:
+subdir0/
+
+./current/finalized/subdir0:
+subdir0/
+
+./current/finalized/subdir0/subdir0:
+blk_1073741825  blk_1073741825_1002.meta
+
+./current/rbw:
+
+./tmp:
+----
+
+== Conclusion
 
 [bibliography]
 == References
