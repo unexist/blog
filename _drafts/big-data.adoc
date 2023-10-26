@@ -19,10 +19,12 @@ endif::[]
 :page-liquid:
 
 ////
-https://github.com/unexist/showcase-hadoop-cdc-quarkus/
 https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
 https://cloud.google.com/learn/what-is-hadoop
 https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html
+https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/CLIMiniCluster.html
+https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
+https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop/src/main/java/dev/unexist/showcase/todo/infrastructure/persistence/HadoopTodoRepository.java
 ////
 
 [Big Data] was just another buzzword for me and I never had any real contact besides the typical
@@ -87,7 +89,7 @@ and is going to be covered in a further post.
 
 === Architecture
 
-The core architecture of HDFS is based on a leader/follower principle with a strong focus on
+The core [architecture of HDFS] is based on a leader/follower principle with a strong focus on
 resiliency and redundancy.
 
 ++++
@@ -149,17 +151,8 @@ to the datanodes.
 <4> And namenodes check if the data needs to be re-balanced or replicated based on different events
 like a datanode
 
-=== Benefits
-
-- *Scalability* - the architecture and computing model allow to quickly add new nodes, so the
-capacity can be increased easily.
-- *Low cost* - the software itself is [FOSS], is supported by a rich set of tools and runs on
-[COTS]-hardware.
-- *Flexibility* - there is no preprocessing of data required, so if a new use-case is discovered
-existing data can also be utilized.
-- *Resilience* - data is replicated across multiple nodes and jobs can be re-scheduled on faults.
-
 === How to use the API?
+
 
 ==== Setup
 
@@ -218,7 +211,14 @@ inputStream.close();
 fileSystem.close();
 ----
 
-=== On the shell
+=== In action
+
+.Source Hadoop webinterface
+image::list1.png[]
+
+.Source Hadoop webinterface
+image::file1.png[]
+
 
 [source,shell]
 ----
@@ -243,6 +243,18 @@ blk_1073741825  blk_1073741825_1002.meta
 ----
 
 == Conclusion
+
+- *Scalability* - the architecture and computing model allow to quickly add new nodes, so the
+capacity can be increased easily.
+- *Low cost* - the software itself is [FOSS], is supported by a rich set of tools and runs on
+[COTS]-hardware.
+- *Flexibility* - there is no preprocessing of data required, so if a new use-case is discovered
+existing data can also be utilized.
+- *Resilience* - data is replicated across multiple nodes and jobs can be re-scheduled on faults.
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/>
 
 [bibliography]
 == References
