@@ -44,7 +44,7 @@ skinparam useBetaStyle false
 '' *_DARK = shade (darker) of the main color of 80%
 ''          and SHADE is calculated by clr * (1 - shade_factor)
 ''
-!$FGCOLOR = $DARK
+!$FGCOLOR = $LIGHT
 !$PRIMARY_LIGHT = "#59B6EC"
 !$PRIMARY_DARK = "#2683B9"
 !$PRIMARY_TEXT = $WHITE
@@ -148,7 +148,7 @@ skinparam useBetaStyle false
     $primary_scheme()
   }
   arrow {
-    FontColor $PRIMARY_DARK
+    FontColor $PRIMARY_LIGHT
     LineColor $ARROW_COLOR
   }
   group {
