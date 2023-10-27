@@ -103,7 +103,7 @@ resiliency and redundancy.
 
 ++++
 {% plantuml %}
-!theme unexist from ../assets/plantuml
+!theme unexist from /home/unexist/blog/assets/plantuml
 skinparam linetype ortho
 
 together {
