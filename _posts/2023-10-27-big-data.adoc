@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big Data
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2023-10-27 15:14 +0200
+last_updated: 2023-10-27 15:14 +0200
 author: Christoph Kappel
 tags: hadoop big-data showcase
 categories: big-data
