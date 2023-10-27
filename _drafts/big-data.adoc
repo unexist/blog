@@ -149,31 +149,43 @@ replicas and answer questions of clients which datanodes have a copy of the desi
 <3> When a client wants to write data it again consults the namesnodes first and then writes the data
 to the datanodes.
 <4> And namenodes check if the data needs to be re-balanced or replicated based on different events
-like a datanode
+like a datanode fault.
 
 === How to use the API?
 
+Setting up Hadoop is a task on its own and heavily depends on which other tools should come along with it.
+During my tests I set up a [Dockerfile] for more complex examples further down the course of the articles,
+but there is a really handy in-memory suite available that covers our initial needs for now.
 
-==== Setup
+Startup and configuration is straight forward and requires just a few lines of code:
 
 [source,java]
 ----
 Configuration configuration = new Configuration();
 
-String baseDir = Files.createTempDirectory("test_hdfs").toFile().getAbsoluteFile();
+configuration.set("fs.defaultFS", "hdfs://localhost:9000");
+configuration.set("dfs.replication", "1"); // <1>
+
+String baseDir = Files.createTempDirectory("test_hdfs").toFile().getAbsoluteFile(); // <2>
 
 configuration.set(MiniDFSCluster.HDFS_MINIDFS_BASEDIR, baseDir.getAbsolutePath());
 
 MiniDFSCluster.Builder builder = new MiniDFSCluster.Builder(configuration);
 
-MiniDFSCluster cluster = builder.build();
+MiniDFSCluster cluster = builder.build(); // <3>
 ----
+<1> Limit the replication to one, to avoid replication errors with only a single datanode.
+<2> Use a temp base directory on the host machine.
+<3> Build and run it.
 
 ==== Write data
 
+Writing data just requires the typical combination of out-stream and writer and behaves like every
+other IO in Java:
+
 [source,java]
 ----
-FileSystem fileSystem = FileSystem.get(configuration);
+FileSystem fileSystem = FileSystem.get(configuration); // <1>
 Path hdfsPath = new Path(HADOOP_FILE);
 
 FSDataOutputStream fsOut = fileSystem.create(hdfsPath);
@@ -182,14 +194,18 @@ OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardChars
 BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
 
 bufferedWriter.write("data");
+bufferedWriter.newline();
 
 bufferedWriter.close();
 outStreamWriter.close();
 fsOut.close();
 fileSystem.close()
 ----
+<1> We re-use the configuration from the setup example here as well.
 
 ==== Read data
+
+And lastly reading data pretty much offers no surprises at all:
 
 [source,java]
 ----
