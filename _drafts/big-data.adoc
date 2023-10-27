@@ -27,9 +27,9 @@ https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop
 https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop/src/main/java/dev/unexist/showcase/todo/infrastructure/persistence/HadoopTodoRepository.java
 ////
 
-[Big Data] was just another buzzword for me and I never had any real contact besides the typical
-requests of data scientists to move data to a specific endpoint of a [Data Lake] in the overall
-architecture.
+[Big Data][] was just another buzzword for me and I never had any real contact besides the typical
+requests of data scientists to move data to a specific endpoint of a [Data Lake][] in the
+overall architecture.
 
 This changed, when I got the opportunity to have a closer look at a big data project in a business
 context.
@@ -65,12 +65,12 @@ schemas.
 Unfortunately this introduced complex requirements for scaling and made redundancy even worse, but
 did the job for a while and everyone was happy...
 
-Later on they were augmented or replaced by [Data Lakes][] and [Data Marts][], which did some
+Later on they were augmented or replaced by Data Lakes and [Data Marts][], which did some
 things differently:
 
 - Data is split by domain of origin or simply use-case
 - No schema is enforced on write and everything stays as-is in mostly flat-file
-- The problem of handling the actual data is offloaded to [Hadoop]
+- The problem of handling the actual data is offloaded to [Hadoop][]
 
 == What is Hadoop?
 
@@ -84,7 +84,7 @@ components first:
 the Hadoop nodes to operate on local data.
 - *Yet Another Resource Negotiator (YARN)* - is the resource-management part of the system and
 responsible for scheduling jobs and resource allocation.
-- *MapReduce* - is a programming model for the actual processing in a [divide-and-conquer]-way
+- *MapReduce* - is a programming model for the actual processing in a [divide-and-conquer][]-way
 and is going to be covered in a further post.
 - *Hadoop Common* - is a collection of all supporting tools and libraries.
 
