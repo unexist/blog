@@ -155,7 +155,7 @@ like a datanode fault.
 
 Setting up Hadoop is a task on its own and heavily depends on which other tools should come along with it.
 During my tests I set up a [Dockerfile] for more complex examples further down the course of the articles,
-but there is a really handy in-memory suite available that covers our initial needs for now.
+but there is a really handy [in-memory suite] available that covers our initial needs for now.
 
 Startup and configuration is straight forward and requires just a few lines of code:
 
@@ -229,12 +229,50 @@ fileSystem.close();
 
 === In action
 
+Hadoop comes with different web interfaces, basically one for every moving part like the namenodes
+or the datanodes.
+From there we can access a  file browser, which allows to actually see the content of our running instance.
+
+In the default configuration the mini-cluster is started on a random port, which probably can be
+configured somehow, but printing it on startup is a way easier solution:
+
+[source,java]
+----
+LOGGER.info(String.format("\n---\nCluster is ready\n URL = %s\nPath = %s\n---\n",
+    cluster.getHttpUri(0), cluster.getDataDirectory()));
+----
+
+[source,log]
+----
+---
+Cluster is ready
+ URL = http://localhost:62280
+Path = /var/folders/fb/k_q6yq7s0qvf0q_z971rdsjh0000gq/T/test_hdfs10722280644286762801/data
+---
+----
+
+That figured out we can see the file listing inside of our browser:
+
 .Source Hadoop webinterface
 image::list1.png[]
+
+The interesting parts here are the replication and the block size.
+We've configured the actual replication level, so there is no surprise here, but the internal block size is quite a
+catch.
+Hadoop uses a default block size of *128 MB* for every file and is geared towards *bigger* and *fewer* files in total.
+
+This is especially relevant for namenodes, because they have to keep the blocks in active memory and this makes a
+failover to a secondary namenodes more difficult, but this is something for another day.
+
+The web interfaces also happily provides more information about the used block and also serves the head or the tail of
+the file.
+The example in the [showcase] stores JSON data in a file and this can be seen in the file contents:
 
 .Source Hadoop webinterface
 image::file1.png[]
 
+Since we know the block pool ID and the temp path of our cluster we can have a glance how this is stored under the
+hood:
 
 [source,shell]
 ----
@@ -251,12 +289,23 @@ subdir0/
 subdir0/
 
 ./current/finalized/subdir0/subdir0:
-blk_1073741825  blk_1073741825_1002.meta
+blk_1073741825  blk_1073741825_1002.meta #<1>
 
 ./current/rbw:
 
 ./tmp:
+
+$ cat blk_1073741825
+{"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0} # <2>
+
+$ xxd blk_1073741825_1002.meta
+00000000: 0001 0200 0002 0011 5d21 d1              ........]!. # <3>
 ----
+<1> The interesting files here are some level down the directory hierarchy of our warehouse.
+<2> Hadoop and friends support four major formats: Plain text files, binary sequence files, [Avro] data files and
+[Parquet]
+<3> Next to the data file is a meta file, which contains a file header with version and a series of checksums for the
+sections of the block.
 
 == Conclusion
 
