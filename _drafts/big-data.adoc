@@ -240,10 +240,7 @@ configured somehow, but printing it on startup is a way easier solution:
 ----
 LOGGER.info(String.format("\n---\nCluster is ready\n URL = %s\nPath = %s\n---\n",
     cluster.getHttpUri(0), cluster.getDataDirectory()));
-----
 
-[source,log]
-----
 ---
 Cluster is ready
  URL = http://localhost:62280
@@ -308,6 +305,11 @@ $ xxd blk_1073741825_1002.meta
 sections of the block.
 
 == Conclusion
+
+Hadoop offers a great variety of use-cases for companies starting from research to storing production data and
+satisfies the analytical needs of modern applications.
+
+There are many benefits, but just to name a few:
 
 - *Scalability* - the architecture and computing model allow to quickly add new nodes, so the
 capacity can be increased easily.
