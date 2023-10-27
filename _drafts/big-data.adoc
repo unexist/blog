@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big Data
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: hadoop big-data showcase
 categories: big-data
@@ -18,17 +18,25 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-////
-https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
-https://cloud.google.com/learn/what-is-hadoop
-https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html
-https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/CLIMiniCluster.html
-https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
-https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop/src/main/java/dev/unexist/showcase/todo/infrastructure/persistence/HadoopTodoRepository.java
-////
+:1: https://hadoop.apache.org/docs/r1.2.1/hdfs_design.html
+:2: https://avro.apache.org/
+:3: https://en.wikipedia.org/wiki/Big_data
+:4: https://en.wikipedia.org/wiki/Commercial_off-the-shelf
+:5: https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
+:6: https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
+:7: https://aws.amazon.com/compare/the-difference-between-a-data-warehouse-data-lake-and-data-mart/
+:8: https://en.wikipedia.org/wiki/Divide-and-conquer_algorithm
+:9: https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/hadoop_hive_spark/Dockerfile
+:10: https://en.wikipedia.org/wiki/Free_and_open-source_software
+:11: https://hadoop.apache.org/
+:12: https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/CLIMiniCluster.html
+:13: https://www.java.com/en/
+:14: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
+:15: https://parquet.apache.org/
+:16: https://github.com/unexist/showcase-hadoop-cdc-quarkus
 
-[Big Data][] was just another buzzword for me and I never had any real contact besides the typical
-requests of data scientists to move data to a specific endpoint of a [Data Lake][] in the
+{3}[Big Data] was just another buzzword for me and I never had any real contact besides the typical
+requests of data scientists to move data to a specific endpoint of a {5}[Data Lake] in the
 overall architecture.
 
 This changed, when I got the opportunity to have a closer look at a big data project in a business
@@ -60,23 +68,23 @@ image::data_trap.png[]
 There have been several iterations of tackling the overall complexity on the storage level and like
 all good stories it started with SQL.
 
-Once upon a time, there were [Data Warehouses][] with big databases, which kept everything in rigid
+Once upon a time, there were {7}[Data Warehouses] with big databases, which kept everything in rigid
 schemas.
 Unfortunately this introduced complex requirements for scaling and made redundancy even worse, but
 did the job for a while and everyone was happy...
 
-Later on they were augmented or replaced by Data Lakes and [Data Marts][], which did some
+Later on they were augmented or replaced by Data Lakes and {6}[Data Marts], which did some
 things differently:
 
 - Data is split by domain of origin or simply use-case
 - No schema is enforced on write and everything stays as-is in mostly flat-file
-- The problem of handling the actual data is offloaded to [Hadoop][]
+- The problem of handling the actual data is offloaded to {11}[Hadoop]
 
 == What is Hadoop?
 
-Hadoop is an open-source [Java][] framework that manages large quantities of data and provides
+Hadoop is an open-source {13}[Java] framework that manages large quantities of data and provides
 means for further processing.
-We are going to cover the processing of the actual data with [MapReduce][] in a follow-up
+We are going to cover the processing of the actual data with {14}[MapReduce] in a follow-up
 article, but before we can do that we have to talk about the architecture and the major
 components first:
 
@@ -84,13 +92,13 @@ components first:
 the Hadoop nodes to operate on local data.
 - *Yet Another Resource Negotiator (YARN)* - is the resource-management part of the system and
 responsible for scheduling jobs and resource allocation.
-- *MapReduce* - is a programming model for the actual processing in a [divide-and-conquer][]-way
+- *MapReduce* - is a programming model for the actual processing in a {8}[divide-and-conquer]-way
 and is going to be covered in a further post.
 - *Hadoop Common* - is a collection of all supporting tools and libraries.
 
 === Architecture
 
-The core [architecture of HDFS][] is based on a leader/follower principle with a strong focus on
+The core {1}[architecture of HDFS] is based on a leader/follower principle with a strong focus on
 resiliency and redundancy.
 
 ++++
@@ -155,8 +163,8 @@ like a datanode fault.
 === How to use the API?
 
 Setting up Hadoop is a task on its own and heavily depends on which other tools should come along with it.
-During my tests I set up a [Dockerfile][] for more complex examples further down the course of the articles,
-but there is a really handy [in-memory suite][] available that covers our initial needs for now.
+During my tests I set up a {9}[Dockerfile] for more complex examples further down the course of the articles,
+but there is a really handy {12}[in-memory suite] available that covers our initial needs for now.
 
 Startup and configuration is straight forward and requires just a few lines of code:
 
@@ -264,7 +272,7 @@ failover to a secondary namenodes more difficult, but this is something for anot
 
 The web interfaces also happily provides more information about the used block and also serves the head or the tail of
 the file.
-The example in the [showcase][] stores JSON data in a file and this can be seen in the file contents:
+The example in the {16}[showcase] stores JSON data in a file and this can be seen in the file contents:
 
 .Source Hadoop webinterface
 image::file1.png[]
@@ -300,8 +308,8 @@ $ xxd blk_1073741825_1002.meta
 00000000: 0001 0200 0002 0011 5d21 d1              ........]!. # <3>
 ----
 <1> The interesting files here are some level down the directory hierarchy of our warehouse.
-<2> Hadoop and friends support four major formats: Plain text files, binary sequence files, [Avro][] data files and
-[Parquet][]
+<2> Hadoop and friends support four major formats: Plain text files, binary sequence files, {2}[Avro] data files and
+{15}[Parquet]
 <3> Next to the data file is a meta file, which contains a file header with version and a series of checksums for the
 sections of the block.
 
@@ -314,8 +322,8 @@ There are many benefits, but just to name a few:
 
 - *Scalability* - the architecture and computing model allow to quickly add new nodes, so the
 capacity can be increased easily.
-- *Low cost* - the software itself is [FOSS][], is supported by a rich set of tools and runs on
-[COTS][]-hardware.
+- *Low cost* - the software itself is {10}[FOSS], is supported by a rich set of tools and runs on
+{4}[COTS]-hardware.
 - *Flexibility* - there is no preprocessing of data required, so if a new use-case is discovered
 existing data can also be utilized.
 - *Resilience* - data is replicated across multiple nodes and jobs can be re-scheduled on faults.
