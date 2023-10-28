@@ -106,49 +106,42 @@ resiliency and redundancy.
 !theme unexist from /home/unexist/blog/assets/plantuml
 skinparam linetype ortho
 
-together {
-  package "Namenodes" as nn {
-    card Metadata [
-    Metadata
-    ====
-    Name
-    ----
-    Replicas
-    ----
-    Path
-    ]
+package "Namenodes" as nn {
+  card Metadata [
+  Metadata
+  ====
+  Name
+  ----
+  Replicas
+  ----
+  Path
+  ]
+}
+
+package "Datanodes" as dns {
+  card "Datanode" as dn1 {
+    file "File" as f1
+    file "File" as f2
   }
 
-  package "Datanodes" as dns {
-    card "Datanode" as dn1 {
-      file "File" as f1
-      file "File" as f2
-    }
+  card "Datanode" as dn2 {
+    file "File" as f3
+    file "File" as f4
+  }
 
-    card "Datanode" as dn2 {
-      file "File" as f3
-      file "File" as f4
-    }
-
-    card "Datanode" as dn3 {
-      file "File" as f5
-      file "File" as f6
-    }
+  card "Datanode" as dn3 {
+    file "File" as f5
+    file "File" as f6
   }
 }
 
 usecase "Client" as c
 
-nn -[hidden]-> dns
-'dns -[hidden]-> c
-
 c --> nn : Metadata ops (1)
 c <-- f1 : Read (2)
 c --> f3 : Write (3)
 
-nn --> dns : Block ops (4)
-
-@enduml
+nn -r-> dns : Block ops (4)
 {% endplantuml %}
 ++++
 
