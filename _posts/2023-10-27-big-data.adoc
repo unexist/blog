@@ -34,6 +34,10 @@ endif::[]
 :14: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html
 :15: https://parquet.apache.org/
 :16: https://github.com/unexist/showcase-hadoop-cdc-quarkus
+:17: https://www.goodreads.com/book/show/27560182-the-enterprise-big-data-lake
+:18: https://goodreads.com/book/show/38244465-practical-enterprise-data-lake-insights
+:19: https://goodreads.com/book/show/13421400-big-data
+:20: https://www.goodreads.com/book/show/6308439-hadoop
 
 {3}[Big Data] was just another buzzword for me and I never had any real contact besides the typical
 requests of data scientists to move data to a specific endpoint of a {5}[Data Lake] in the
@@ -42,7 +46,9 @@ overall architecture.
 This changed, when I got the opportunity to have a closer look at a big data project in a business
 context.
 I usually don't like to deal with new tech stuff unprepared, so I filled in some blanks by reading
-articles, a few books (<<datalake>>, <<practical>>, <<bigdata>> and <<hadoop>>) and just started
+articles, a few books ({17}[The Enterprise Big Data Lake] <<datalake>>,
+{18}[Practical Enterprise Data Lake Insights] <<practical>>, {19}[Big Data] <<bigdata>> and
+{20}[Hadoop: The Definitive Guide] <<hadoop>>) and just started
 playing with it.
 
 This led to lots of insights and Aha!-moments and I really wanted to write about, but unfortunately
@@ -326,7 +332,7 @@ All examples can be found here:
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/>
 
 [bibliography]
-== References
+== Bibliography
 
 * [[[datalake]]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
 * [[[practical]]] Saurabh Gupta, Practical Enterprise Data Lake Insights: Handle Data-Driven Challenges in an Enterprise Big Data Lake, Apress 2018
