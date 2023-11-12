@@ -100,7 +100,7 @@ It is probably easy to imagine a scenario that requires a change of our format:
 How do our formats fare with these problems?
 
 TIP: {18}[Martin Kleppman] also compares various binary formats in his seminal book
-{8}[Designing Data-Intensive Application].
+{8}[Designing Data-Intensive Applications] <<dataintensive>>.
 
 === Good ol' CSV
 
@@ -660,3 +660,8 @@ place, without disrupting other (older) services.
 All examples can be found here:
 
 <https://github.com/unexist/showcase-kafka-quarkus>
+
+[bibliography]
+== Bibliography
+
+* [[[dataintensive]]] Martin Kleppmann, Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems, O'Reilly 2015
