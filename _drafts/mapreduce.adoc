@@ -18,3 +18,99 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+[source,java]
+----
+public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+    private final static IntWritable addOne = new IntWritable(1);
+
+    private Text dueDate = new Text();
+    private ObjectMapper mapper = new ObjectMapper();
+
+    protected void map(LongWritable key, Text value, Context context)
+            throws java.io.IOException, InterruptedException
+    {
+        try {
+            Todo todo = this.mapper.readValue(value.toString(), Todo.class);
+
+            dueDate.set(todo.getDueDate().getDue()
+                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN)));
+
+            context.write(dueDate, addOne);
+        } catch (JsonProcessingException e) {
+            /* Do nothing */
+        }
+    }
+}
+----
+
+[source,java]
+----
+public class TodoReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+    protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws java.io.IOException,
+            InterruptedException
+    {
+        int sum = 0;
+
+        for (IntWritable value : values) {
+            sum += value.get();
+        }
+
+        context.write(key, new IntWritable(sum));
+    }
+}
+----
+
+[source,java]
+----
+public class TodoMapperReducerTest {
+    final static String RECORD =
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":0}";
+
+    MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
+    ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
+    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
+
+    @Before
+    public void setUp() {
+        TodoMapper mapper = new TodoMapper();
+        TodoReducer reducer = new TodoReducer();
+
+        mapDriver = MapDriver.newMapDriver(mapper);
+        reduceDriver = ReduceDriver.newReduceDriver(reducer);
+        mapReduceDriver = MapReduceDriver.newMapReduceDriver(mapper, reducer);
+    }
+
+    @Test
+    public void shouldVerifyMapper() throws IOException {
+        mapDriver.withInput(new LongWritable(), new Text(RECORD));
+        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
+        mapDriver.runTest();
+    }
+
+    @Test
+    public void shouldVerifyReducer() throws IOException {
+        List<IntWritable> values = new ArrayList<IntWritable>();
+
+        values.add(new IntWritable(1));
+        values.add(new IntWritable(1));
+
+        reduceDriver.withInput(new Text("2021-05-07"), values);
+        reduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(2));
+        reduceDriver.runTest();
+    }
+
+    @Test
+    public void shouldVerfiyMapAndReduce() throws IOException {
+        mapReduceDriver.withInput(new LongWritable(), new Text(RECORD));
+
+        List<IntWritable> values = new ArrayList<IntWritable>();
+
+        values.add(new IntWritable(1));
+        values.add(new IntWritable(1));
+
+        mapReduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
+        mapReduceDriver.runTest();
+    }
+}
+----
