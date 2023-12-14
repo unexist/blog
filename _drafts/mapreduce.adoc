@@ -1,0 +1,20 @@
+---
+layout: post
+title: MapReduce
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: hadoop big-data showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/mapreduce
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/mapreduce
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
