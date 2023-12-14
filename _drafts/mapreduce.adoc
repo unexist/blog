@@ -18,6 +18,12 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+In my previous blog post..
+
+== Map and reduce?
+
+=== Mapper
+
 [source,java]
 ----
 public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
@@ -43,6 +49,8 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 }
 ----
 
+=== Reducer
+
 [source,java]
 ----
 public class TodoReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
@@ -60,6 +68,8 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
     }
 }
 ----
+
+=== Testing
 
 [source,java]
 ----
@@ -114,3 +124,14 @@ public class TodoMapperReducerTest {
     }
 }
 ----
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/>
+
+[bibliography]
+== Bibliography
+
+* [[[datalake]]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
