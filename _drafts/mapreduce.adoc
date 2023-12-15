@@ -20,7 +20,55 @@ endif::[]
 
 In my previous blog post..
 
-== Map and reduce?
+== What is MapReduce?
+
+=== Sort and shuffle
+
+++++
+{% plantuml %}
+' left to right direction
+skinparam linetype ortho
+' skinparam nodesep 100
+' skinparam ranksep 100
+
+rectangle Mapper as map
+rectangle Reducer as red
+
+rectangle "HDFS (Replicated)" as hdfs {
+  File "Block of Data" as f_block
+  File "Output File" as f_out
+}
+
+rectangle "Native File System" as fs {
+  File "Temp Spill Data" as f_spill
+  File "Partitioned Sorted Data" as f_part
+  File "Reducer Local Copy" as f_local
+}
+
+' Layout
+
+map -d[hidden]-> hdfs
+map -r[hidden]-> red
+red -d[hidden]-> hdfs
+hdfs -r[hidden]-> fs
+
+f_block -r[hidden]-> f_out
+f_spill -r[hidden]-> f_part
+f_part -r[hidden]-> f_local
+
+' Arrows
+
+f_block -u[#green]-> map: (1)
+map -d-> f_spill: (2)
+f_spill -u-> map: (2)
+map -d-> f_part: (3)
+
+f_part -u-> red: (4)
+red -d-> f_local: (5)
+f_local -u-> red: (5)
+red -d[#red]-> f_out: (6)
+{% endplantuml %}
+++++
 
 === Mapper
 
@@ -134,4 +182,4 @@ All examples can be found here:
 [bibliography]
 == Bibliography
 
-* [[[datalake]]] Alex Gorelik, The Enterprise Big Data Lake: Delivering the Promise of Big Data and Data Science, O'Reilly 2019
+* [[[hadooparch]]] Mark Grover, Ted Malask, Jonathan Seidman, Gwen Shapira, Hadoop Application Architectures, O'Reilly 2015
