@@ -18,7 +18,11 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-In my previous blog post..
+This is the second part of my [Big Data] series
+
+
+With the basics laid out in the previous article about the general concepts of [Hadoop][]
+and [Big data][] we can focus on the actual compute model [MapReduce][].
 
 == What is MapReduce?
 
