@@ -18,19 +18,24 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-```
+////
 https://mrunit.apache.org/
-```
+////
 
-This is the second part of my [Big Data] series
+In the previous post of my [Big Data][] series we started with a bit of the technical concepts of
+[Hadoop][], briefly covered the computing model and explored how it can be used as a plain file
+storage.
+This is from a technical point interesting, but storage alone is only half the fun.
 
+So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test frame
+[MRUnit][] and a really simple todo example the advantages of the whole idea.
 
-With the basics laid out in the previous article about the general concepts of [Hadoop][]
-and [Big data][] we can focus on the actual compute model [MapReduce][].
+Understanding a bit of the basics is really helpful, so if you haven't read the previous post yet
+we will wait - promised.
+
+Ready? So without further ado let us start.
 
 == What is MapReduce?
-
-=== Sort and shuffle
 
 ++++
 {% plantuml %}
