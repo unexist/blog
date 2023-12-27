@@ -1,8 +1,8 @@
 ---
 layout: post
 title: MapReduce
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2023-09-02 16:05:48 +0200
+last_updated: 2023-09-02 16:05:48 +0200
 author: Christoph Kappel
 tags: hadoop big-data mapreduce showcase
 categories: tech
@@ -63,19 +63,19 @@ skinparam ranksep 30
 
 together {
   file in1 [
-{{json
+\{\{json
   {
     "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
   }
-}}
+\}\}
   ]
 
   file in2 [
-{{json
+\{\{json
   {
     "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1
   }
-}}
+\}\}
   ]
 }
 
@@ -123,8 +123,8 @@ shuf1 -[hidden]-> shuf2
 ++++
 
 <1> Mapping phase
-<2> Shuffle phrase
-<3> Reduce phase
+<2> Shuffling phrase
+<3> Reducing phase
 
 === Mapper
 
@@ -171,7 +171,7 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 }
 ----
 
-=== Testing
+== Testing with MRUnit
 
 [source,java]
 ----
