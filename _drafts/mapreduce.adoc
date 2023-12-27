@@ -27,7 +27,7 @@ In the previous post of my [Big Data][] series we started with a bit of the tech
 storage.
 This is from a technical point interesting, but storage alone is only half the fun.
 
-So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test frame
+So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test framework
 [MRUnit][] and a really simple [todo][] example to demonstrate the advantages of the whole idea.
 
 While not strictly required to understand why Hadoop is an excellent choice for storage, it really
