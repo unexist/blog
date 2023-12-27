@@ -32,13 +32,28 @@ So in this follow-up we are going to dive into the world of [MapReduce][], the u
 
 While not strictly required to understand why Hadoop is an excellent choice for storage, it really
 helps to have a bit of understanding during the course of this article, so if you haven't read the
-previous post yet, we will wait - promised.
+previous post yet, we will wait - promised:
+
+<https://blog.unexist.dev/big-data/2023/10/27/big-data.html>
 
 Ready? So without further ado let us start.
 
 == What is MapReduce?
 
+One of the major problems with processing large quantities of data is that the processing of it
+doesn't necessarily happen where the data actually is located.
+This is normally not a problem, but scales really badly and easily reaches physically limits of
+the underlying hardware e.g. in networking or failure handling.
 
+To circumvent this, MapReduce as a programming paradigm breaks the processing task into
+[line-through]#two# three basic phases:
+
+- In the *mapping phase* small [Java][] programs called *mappers* ingest and convert data according to
+internal logic into key-value pairs.
+- This data is collected in the *shuffling phase*, sorted and similar data piped to matching
+*reducers*.
+- And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate it and send it
+further on to the storage.
 
 ++++
 {% plantuml %}
