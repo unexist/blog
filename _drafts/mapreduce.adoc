@@ -4,7 +4,7 @@ title: MapReduce
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: hadoop big-data showcase
+tags: hadoop big-data mapreduce showcase
 categories: tech
 toc: true
 ---
@@ -28,7 +28,7 @@ storage.
 This is from a technical point interesting, but storage alone is only half the fun.
 
 So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test frame
-[MRUnit][] and a really simple todo example the advantages of the whole idea.
+[MRUnit][] and a really simple todo example to demonstrate the advantages of the whole idea.
 
 Understanding a bit of the basics is really helpful, so if you haven't read the previous post yet
 we will wait - promised.
@@ -103,6 +103,10 @@ map1 -[hidden]-> map2
 shuf1 -[hidden]-> shuf2
 {% endplantuml %}
 ++++
+
+<1> Mapping phase
+<2> Shuffle phrase
+<3> Reduce phase
 
 === Mapper
 
