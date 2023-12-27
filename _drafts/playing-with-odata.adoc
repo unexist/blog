@@ -17,13 +17,10 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-----
-Outline:
+== What is OData
 
-- Intro
-- What is OData
--- Metadata
--- Query, Filter, Expand
+=== Metadata
 
-- Conclusion
-----
+=== Query, Filter, Expand
+
+== Conclusion
