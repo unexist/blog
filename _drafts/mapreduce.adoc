@@ -23,19 +23,22 @@ https://mrunit.apache.org/
 ////
 
 In the previous post of my [Big Data][] series we started with a bit of the technical concepts of
-[Hadoop][], briefly covered the computing model and explored how it can be used as a plain file
+[Hadoop][], briefly covered its computing model and explored how it can be used as a plain file
 storage.
 This is from a technical point interesting, but storage alone is only half the fun.
 
 So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test frame
-[MRUnit][] and a really simple todo example to demonstrate the advantages of the whole idea.
+[MRUnit][] and a really simple [todo][] example to demonstrate the advantages of the whole idea.
 
-Understanding a bit of the basics is really helpful, so if you haven't read the previous post yet
-we will wait - promised.
+While not strictly required to understand why Hadoop is an excellent choice for storage, it really
+helps to have a bit of understanding during the course of this article, so if you haven't read the
+previous post yet, we will wait - promised.
 
 Ready? So without further ado let us start.
 
 == What is MapReduce?
+
+
 
 ++++
 {% plantuml %}
@@ -113,8 +116,6 @@ shuf1 -[hidden]-> shuf2
 [source,java]
 ----
 public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
-    private final static IntWritable addOne = new IntWritable(1);
-
     private Text dueDate = new Text();
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -124,10 +125,10 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         try {
             Todo todo = this.mapper.readValue(value.toString(), Todo.class);
 
-            dueDate.set(todo.getDueDate().getDue()
-                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN)));
+            String formattedDate = todo.getDueDate().getDue()
+                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN));
 
-            context.write(dueDate, addOne);
+            context.write(new Text(formattedDate), new IntWritable(todo.getId()));
         } catch (JsonProcessingException e) {
             /* Do nothing */
         }
