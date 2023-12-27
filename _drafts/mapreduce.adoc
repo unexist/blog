@@ -18,6 +18,10 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+```
+https://mrunit.apache.org/
+```
+
 This is the second part of my [Big Data] series
 
 
@@ -30,47 +34,68 @@ and [Big data][] we can focus on the actual compute model [MapReduce][].
 
 ++++
 {% plantuml %}
-' left to right direction
 skinparam linetype ortho
-' skinparam nodesep 100
-' skinparam ranksep 100
+skinparam nodesep 30
+skinparam ranksep 30
 
-rectangle Mapper as map
-rectangle Reducer as red
+together {
+  file in1 [
+{{json
+  {
+    "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
+  }
+}}
+  ]
 
-rectangle "HDFS (Replicated)" as hdfs {
-  File "Block of Data" as f_block
-  File "Output File" as f_out
+  file in2 [
+{{json
+  {
+    "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1
+  }
+}}
+  ]
 }
 
-rectangle "Native File System" as fs {
-  File "Temp Spill Data" as f_spill
-  File "Partitioned Sorted Data" as f_part
-  File "Reducer Local Copy" as f_local
+together {
+  rectangle "Map (1)" as map1 #red
+  rectangle "Map (1)" as map2 #red
 }
+
+together {
+  file shuf1 [
+2021-05-07 => 0
+  ]
+
+  file shuf2 [
+2021-05-07 => 1
+  ]
+}
+
+file out [
+2021-06-07 => (0, 1, 2)
+]
+
+rectangle "Shuffle (2)" as shuffle #green
+rectangle "Reduce (3)" as reduce #blue
+
+in1 -> map1
+in2 -> map2
+
+map1 -> shuf1
+map2 -> shuf2
+
+shuf1 -> shuffle
+shuf2 -> shuffle
+
+shuffle -> reduce
+
+reduce -> out
 
 ' Layout
 
-map -d[hidden]-> hdfs
-map -r[hidden]-> red
-red -d[hidden]-> hdfs
-hdfs -r[hidden]-> fs
-
-f_block -r[hidden]-> f_out
-f_spill -r[hidden]-> f_part
-f_part -r[hidden]-> f_local
-
-' Arrows
-
-f_block -u[#green]-> map: (1)
-map -d-> f_spill: (2)
-f_spill -u-> map: (2)
-map -d-> f_part: (3)
-
-f_part -u-> red: (4)
-red -d-> f_local: (5)
-f_local -u-> red: (5)
-red -d[#red]-> f_out: (6)
+in1 -[hidden]-> in2
+map1 -[hidden]-> map2
+shuf1 -[hidden]-> shuf2
 {% endplantuml %}
 ++++
 
