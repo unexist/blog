@@ -127,10 +127,19 @@ shuf1 -[hidden]-> shuf2
 ++++
 
 <1> One mapper per file converts our JSON into a single key-value pair.
-<2> During shuffle the framework ensures similar pairs are fed into the same reducer.
+<2> With a good shuffle similar pairs are fed into the same reducer.
 <3> Finally the reducer compacts and combines the key-pairs.
 
 === Mapper
+
+In the first step the mapper consumes the data supplied by the various
+[RecordReader][] implementations of the framework.
+There exists a broad range of different implementations of the well-known
+formats like [Parquet][], [Avro][] and even flat data, so the processing here
+is quite agnostic of it.
+
+The interesting method here is *map*, which can be supplemented with optional *setup*
+and *cleanup* steps to prepare and respectively tidy up the stage.
 
 [source,java]
 ----
@@ -142,23 +151,25 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
             throws java.io.IOException, InterruptedException
     {
         try {
-            Todo todo = this.mapper.readValue(value.toString(), Todo.class);
+            Todo todo = this.mapper.readValue(value.toString(), Todo.class); // <1>
 
             String formattedDate = todo.getDueDate().getDue()
                     .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN));
 
-            context.write(new Text(formattedDate), new IntWritable(todo.getId()));
+            context.write(new Text(formattedDate), new IntWritable(todo.getId())); // <2>
         } catch (JsonProcessingException e) {
             /* Do nothing */
         }
     }
 }
 ----
+<1> Parse the JSON-string and convert it to a Todo object.
+<2> After that write the parsed date along with the found it back to the context.
 
 === Partitioner and Combiner
 
-During the shuffling phase [partitioners][] and [combiners][] implement the logic how the data is
-distributed between the reducers.
+During the shuffling phase [partitioners][] and [combiners][] implement the logic how the
+data is distributed between the reducers.
 
 If the partitioner is omitted, the framework just takes the hash of the keys, divides it the
 number of possible reducers and splits it accordingly.
@@ -184,7 +195,7 @@ public class TodoPartitioner extends Partitioner<Text, Text> {
 ----
 
 Combiners are quite similar to [reducers][] with the sole difference they are applied directly
-after the mapping and before the data is sent to the reducer on the same machine.
+*after* the mapping step and *before* the data is sent to the reducer on the same machine.
 This allows to aggregate the data directly and there is a good chance that this reduces the data
 that is sent across the network.
 
