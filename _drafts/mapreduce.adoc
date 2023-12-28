@@ -31,7 +31,7 @@ So in this follow-up we are going to dive into the world of [MapReduce][], the u
 [MRUnit][] and a really simple [todo][] example to demonstrate the advantages of the whole idea.
 
 While not strictly required to understand why Hadoop is an excellent choice for storage, it really
-helps to have a bit of understanding during the course of this article, so if you haven't read the
+helps to have a bit of understanding for the course of this article, so if you haven't read the
 previous post yet, we will wait - promised:
 
 <https://blog.unexist.dev/big-data/2023/10/27/big-data.html>
@@ -43,41 +43,46 @@ Ready? So without further ado let us start.
 One of the major problems with processing large quantities of data is that the processing of it
 doesn't necessarily happen where the data actually is located.
 This is normally not a problem, but scales really badly and easily reaches physically limits of
-the underlying hardware e.g. in networking or failure handling.
+the underlying hardware e.g. in networking and causes further more headaches on any kind of
+failure.
 
 To circumvent this, MapReduce as a programming paradigm breaks the processing task into
 [line-through]#two# three basic phases:
 
 - In the *mapping phase* small [Java][] programs called *mappers* ingest and convert data according to
 internal logic into key-value pairs.
-- This data is collected in the *shuffling phase*, sorted and similar data piped to matching
-*reducers*.
+- This data is collected in the *shuffling phase*, sorted and similar data piped to a single matching
+*reducers* if possible.
 - And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate it and send it
 further on to the storage.
 
 ++++
 {% plantuml %}
+' !theme unexist from /home/unexist/blog/assets/plantuml
+!theme unexist from ../assets/plantuml
 skinparam linetype ortho
 skinparam nodesep 30
 skinparam ranksep 30
 
 together {
+{% raw %}
   file in1 [
-\{\{json
+{{json
   {
     "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
   }
-\}\}
+}}
   ]
 
   file in2 [
-\{\{json
+{{json
   {
     "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1
   }
-\}\}
+}}
   ]
 }
+{% endraw %}
 
 together {
   rectangle "Map (1)" as map1 #red
@@ -122,9 +127,9 @@ shuf1 -[hidden]-> shuf2
 {% endplantuml %}
 ++++
 
-<1> Mapping phase
-<2> Shuffling phrase
-<3> Reducing phase
+<1> One mapper per file converts our JSON into a single key-value pair.
+<2> During shuffle the framework ensures similar pairs are fed into the same reducer.
+<3> Finally the reducer compacts and combines the key-pairs.
 
 === Mapper
 
