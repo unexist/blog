@@ -43,18 +43,17 @@ Ready? So without further ado let us start.
 One of the major problems with processing large quantities of data is that the processing of it
 doesn't necessarily happen where the data actually is located.
 This is normally not a problem, but scales really badly and easily reaches physically limits of
-the underlying hardware e.g. in networking and causes further more headaches on any kind of
-failure.
+the underlying hardware e.g. in networking and causes further headaches on any kind of failure.
 
-To circumvent this, MapReduce as a programming paradigm breaks the processing task into
+To circumvent this, the programming paradigm of MapReduce breaks the processing task into
 [line-through]#two# three basic phases:
 
 - In the *mapping phase* small [Java][] programs called *mappers* ingest and convert data according to
 internal logic into key-value pairs.
 - This data is collected in the *shuffling phase*, sorted and similar data piped to a single matching
 *reducers* if possible.
-- And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate it and send it
-further on to the storage.
+- And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate and further
+refine it and ultimately write it to a store like [HDFS][].
 
 ++++
 {% plantuml %}
