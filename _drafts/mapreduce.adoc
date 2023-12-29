@@ -216,13 +216,13 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritab
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws java.io.IOException,
             InterruptedException
     {
-        List<IntWritable> ids = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
 
         for (IntWritable value : values) { // <1>
-            ids.add(value);
+            idList.add(value.get());
         }
 
-        context.write(key, new IntArrayWritable(ids.toArray(IntWritable[]::new))); // <2>
+        context.write(key, new IntArrayWritable(idList.toArray(Integer[]::new))); // <2>
     }
 }
 ----
