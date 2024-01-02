@@ -123,7 +123,7 @@ shuf1 -[hidden]-> shuf2
 ++++
 
 <1> One mapper per file converts our JSON into a single key-value pair.
-<2> With a good shuffle similar pairs are fed into the same reducer.
+<2> The shuffle step ensures that similar pairs are fed into the same reducer.
 <3> Finally the reducer compacts and combines the key-pairs.
 
 === Mapper
@@ -160,7 +160,7 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 }
 ----
 <1> Parse the JSON-string and convert it to a Todo object.
-<2> After that write the parsed date along with the found it back to the context.
+<2> After that write the parsed date along with the id back to the context.
 
 === Partitioner and Combiner
 
@@ -226,11 +226,57 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritab
     }
 }
 ----
-<1> This simply collects all found ids and appends them to an array.
-<2> When the data is written back to the context the custom class `IntArrayWriteable` is used, which has been
-omitted here for brevity.
+<1> This simply collects all found ids and appends them to a list.
+<2> When the data is written back to the context the [custom class][] `IntArrayWriteable` is used, which
+has been omitted here for brevity.
 
-== Testing with MRUnit
+== How to run it?
+
+All processing happens with the help of jobs, which are submitted to and run on the data nodes holding
+the actual data.
+
+=== Creating a job
+
+[source,java]
+----
+public class TodoCollect extends Configured implements Tool {
+
+    public int run(String[] args) throws Exception {
+        Path inputPath = new Path(args[0]);
+        Path outputPath = new Path(args[1]);
+
+        Configuration conf = new Configuration(true);
+
+        Job job = Job.getInstance(conf, "TodoCollect"); // <1>
+
+        job.setJarByClass(getClass());
+
+        job.setMapperClass(TodoMapper.class); // <2>
+        job.setReducerClass(TodoReducer.class);
+        job.setNumReduceTasks(1);
+
+        job.setOutputKeyClass(Text.class); // <3>
+        job.setOutputValueClass(IntArrayWritable.class);
+
+        FileInputFormat.addInputPath(job, inputPath); // <4>
+        FileOutputFormat.setOutputPath(job, outputPath);
+
+        return job.waitForCompletion(true) ? 0 : 1;
+    }
+
+    public static void main(String[] args) throws Exception {
+        int exitCode = ToolRunner.run(new TodoCollect(), args);
+
+        System.exit(exitCode);
+    }
+}
+----
+<1> The definition of a job is really straight forward.
+<2> Mapper, reducer and any other steps like combiner can be configured here.
+<3> The output types must be supplied in order to write the data back to storage.
+<4> We supply the input and output path via argument.
+
+=== Testing with MRUnit
 
 [source,java]
 ----
@@ -290,7 +336,7 @@ public class TodoMapperReducerTest {
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-hadoop-cdc-quarkus/>
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/tree/master/todo-mapreduce>
 
 [bibliography]
 == Bibliography
