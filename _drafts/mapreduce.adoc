@@ -232,10 +232,14 @@ has been omitted here for brevity.
 
 == How to run it?
 
-All processing happens with the help of jobs, which are submitted to and run on the data nodes holding
-the actual data.
+And with every component in place it is time to talk about how to actually put them to use.
+
+We briefly talked about the resource manager [YARN][] and its job scheduling capabilities in the previous article and
+this is actually something
 
 === Creating a job
+
+Since all processing happens inside and with the help of jobs the step here is to create
 
 [source,java]
 ----
