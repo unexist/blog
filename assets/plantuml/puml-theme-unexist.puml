@@ -473,7 +473,7 @@ skinparam usecase {
 !startsub rectangle
 
 skinparam rectangle {
-  FontColor $PRIMARY
+  FontColor $BLACK
   BorderColor $PRIMARY_LIGHT
   BackgroundColor $BGCOLOR
   BorderThickness $BORDER_THICKNESS
@@ -542,10 +542,9 @@ skinparam card {
 !startsub file
 
 skinparam file {
+  FontColor $BLACK
   BackgroundColor $SECONDARY_LIGHT-$SECONDARY
   BorderColor $INFO
-  FontColor $GRAY
-
 }
 !endsub
 
