@@ -237,6 +237,49 @@ And with every component in place it is time to talk about how to actually put t
 We briefly talked about the resource manager [YARN][] and its job scheduling capabilities in the previous article and
 this is actually something
 
+++++
+{% plantuml %}
+' !theme unexist from /home/unexist/blog/assets/plantuml
+!theme unexist from ../assets/plantuml
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 100
+
+rectangle "Client" as c #lightgrey
+
+rectangle "Resource manager" as rm #lightblue
+
+together {
+  rectangle "Node 1" as r1 {
+    rectangle "Node manager" as nm1 #lightblue
+    rectangle "App master" as am #red
+    rectangle "Container" as co1 #red
+  }
+
+  rectangle "Node 2" as r2 {
+    rectangle "Node manager" as nm2 #lightblue
+    rectangle "Container" as co2 #red
+  }
+}
+
+c -[#orange]-> rm: <color:orange>Job submission (1)
+
+nm1 .[#blue]> rm: <color:blue>Node status (3)
+nm2 .[#blue]> rm
+
+co1 -[#red]-> am: <color:red>Job status (2)
+co2 -[#red]> am
+
+am .[#green]> rm: <color:green>Resource request (4)
+
+r1 -[hidden]-> r2
+{% endplantuml %}
+++++
+<1> a
+<2> b
+<3> c
+<4> d
+
 === Creating a job
 
 Since all processing happens inside and with the help of jobs the step here is to create
