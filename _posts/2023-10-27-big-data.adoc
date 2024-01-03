@@ -151,7 +151,7 @@ nn -r-> dns : Block ops (4)
 {% endplantuml %}
 ++++
 
-<1> Namesnodes keep track of every block and store metadata like the name or the count of active
+<1> Namenodes keep track of every block and store metadata like the name or the count of active
 replicas and answer questions of clients which datanodes have a copy of the desired block.
 <2> Clients use this information to connect directly to the datanodes and load the actual data.
 <3> When a client wants to write data it again consults the namesnodes first and then writes the data
