@@ -80,8 +80,8 @@ together {
 {% endraw %}
 
 together {
-  rectangle "Map (1)" as map1 #red
-  rectangle "Map (1)" as map2 #red
+  rectangle "Map (1)" as map1 #crimson
+  rectangle "Map (1)" as map2 #crimson
 }
 
 together {
@@ -99,7 +99,7 @@ file out [
 ]
 
 rectangle "Shuffle (2)" as shuffle #green
-rectangle "Reduce (3)" as reduce #blue
+rectangle "Reduce (3)" as reduce #navy
 
 in1 -> map1
 in2 -> map2
@@ -113,8 +113,6 @@ shuf2 -> shuffle
 shuffle -> reduce
 
 reduce -> out
-
-' Layout
 
 in1 -[hidden]-> in2
 map1 -[hidden]-> map2
@@ -241,44 +239,43 @@ this is actually something
 {% plantuml %}
 ' !theme unexist from /home/unexist/blog/assets/plantuml
 !theme unexist from ../assets/plantuml
+' left to right direction
 skinparam linetype ortho
 skinparam nodesep 20
-skinparam ranksep 100
+skinparam ranksep 20
 
-rectangle "Client" as c #lightgrey
+rectangle "Client" as c #dimgrey
+rectangle "Resource manager" as rm #navy
 
-rectangle "Resource manager" as rm #lightblue
-
-together {
-  rectangle "Node 1" as r1 {
-    rectangle "Node manager" as nm1 #lightblue
-    rectangle "App master" as am #red
-    rectangle "Container" as co1 #red
-  }
-
-  rectangle "Node 2" as r2 {
-    rectangle "Node manager" as nm2 #lightblue
-    rectangle "Container" as co2 #red
-  }
+rectangle "Node 1" as n1 {
+  rectangle "Node manager" as nm1 #navy
+  rectangle "App master" as am #crimson
+  rectangle "Container" as co1 #crimson
 }
 
-c -[#orange]-> rm: <color:orange>Job submission (1)
+rectangle "Node 2" as n2 {
+  rectangle "Node manager" as nm2 #navy
+  rectangle "Container" as co2 #crimson
+}
+
+c -[#orange]---> rm: <color:orange>Job submission (1)
 
 nm1 .[#blue]> rm: <color:blue>Node status (3)
-nm2 .[#blue]> rm
+nm2 .[#blue]...> rm
 
-co1 -[#red]-> am: <color:red>Job status (2)
-co2 -[#red]> am
+co1 -[#crimson]-> am: <color:crimson>Job status (2)
+co2 -[#crimson]--> am
 
-am .[#green]> rm: <color:green>Resource request (4)
+am .[#green]...> rm: <color:green>Resource request (4)
 
-r1 -[hidden]-> r2
+c -u[hidden]> rm
+n1 -[hidden]> n2
 {% endplantuml %}
 ++++
-<1> a
-<2> b
-<3> c
-<4> d
+<1> Clients submit jobs to the resource manager.
+<2> MapReduce containers report their status back to the app master.
+<3> Nodes inform the resource manager about their status.
+<4> And the resource manager requests resources from the respective node managers.
 
 === Creating a job
 
