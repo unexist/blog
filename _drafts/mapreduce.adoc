@@ -51,6 +51,8 @@ internal logic into key-value pairs.
 - And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate and further
 refine it and ultimately write it to a store like [HDFS][].
 
+This can be simplified in following flow:
+
 ++++
 {% plantuml %}
 ' !theme unexist from /home/unexist/blog/assets/plantuml
@@ -201,10 +203,11 @@ Analogous to a mapper, a reducer can have a *setup* and a *cleanup* step, but si
 strictly required we can skip this here as well and jump to the *reduce* step where the actual
 processing happens.
 
-A reducer operates with some assumptions about the input data:
+A reducer operates with some assumptions about the input data and this really eases the
+implementation:
 
 - They keys are sorted
-- A single reducer is responsible for a specific key
+- A single reducer is responsible for a single specific key
 - There can be a multitude of values in the supplied key-value pairs
 
 [source,java]
@@ -228,12 +231,14 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritab
 <2> When the data is written back to the context the [custom class][] `IntArrayWriteable` is used, which
 has been omitted here for brevity.
 
+Now that we have every component in place it is time to talk about how to actually put them to use.
+
 == How to run it?
 
-And with every component in place it is time to talk about how to actually put them to use.
+We briefly mentioned the resource manager [YARN][] and its job scheduling capabilities in the
+previous article and this can be simplified like this:
 
-We briefly talked about the resource manager [YARN][] and its job scheduling capabilities in the previous article and
-this is actually something
+The general job submission flow can be simplified like this:
 
 ++++
 {% plantuml %}
@@ -279,7 +284,8 @@ n1 -[hidden]> n2
 
 === Creating a job
 
-Since all processing happens inside and with the help of jobs the step here is to create
+Jobs as the actual workhorse combine the required steps and are supplied as small
+jar files.
 
 [source,java]
 ----
