@@ -38,6 +38,7 @@ skinparam useBetaStyle false
 !$DANGER = "#C71C22"
 !$LIGHT = "#F8F9FA"
 !$DARK = "#343A40"
+!$BLACK = "#000000"
 
 '' *_LIGHT = tint (lighter) of the main color of 80%
 ''          where TINT is calculated by clr + (255-clr) * tint_factor
@@ -275,7 +276,7 @@ skinparam actor {
 !startsub arrow
 
 skinparam arrow {
-  Thickness 3
+  Thickness 2
   Color $PRIMARY
   FontColor $FGCOLOR
 }
@@ -473,7 +474,7 @@ skinparam usecase {
 !startsub rectangle
 
 skinparam rectangle {
-  FontColor $BLACK
+  FontColor $WHITE
   BorderColor $PRIMARY_LIGHT
   BackgroundColor $BGCOLOR
   BorderThickness $BORDER_THICKNESS
@@ -530,7 +531,7 @@ skinparam queue {
 }
 !endsub
 
-!startsub card
+!startsub care
 
 skinparam card {
   BackgroundColor $INFO_LIGHT-$INFO
