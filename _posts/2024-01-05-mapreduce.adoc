@@ -4,8 +4,8 @@ title: Big Data and MapReduce
 date: 2024-01-05 16:07 +0100
 last_updated: 2024-01-05 16:07 +0100
 author: Christoph Kappel
-tags: hadoop big-data mapreduce showcase
-categories: tech
+tags: hadoop mapreduce showcase
+categories: big-data
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]

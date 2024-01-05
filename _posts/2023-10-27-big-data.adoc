@@ -4,7 +4,7 @@ title: Big Data
 date: 2023-10-27 15:14 +0200
 last_updated: 2023-10-27 15:14 +0200
 author: Christoph Kappel
-tags: hadoop big-data showcase
+tags: hadoop showcase
 categories: big-data
 toc: true
 ---
