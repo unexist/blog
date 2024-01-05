@@ -365,6 +365,18 @@ file in the output directory.
 
 Testing and debugging MapReduce jobs can be quite difficult due to the lack of real output and
 the distributed nature of the Hadoop stack.
+Also setting up Hadoop is quite complex for single developers and requires a good amount of
+computing resources.
+
+This can be eased a bit with the virtualized approaches of [MiniDFS][] or [MiniCluster][],
+but fortunately there is a better way, which also plays perfectly well with [JUnit][].
+
+[MRUnit][] is a Java library that helps developers testing map and reduce tasks independently
+and with full control of input of output, without the overhead and burden of a running Hadoop
+cluster locally.
+
+The following example suite demonstrates the different drivers and the execution of the
+actual tests:
 
 [source,java]
 ----
@@ -422,11 +434,15 @@ public class TodoMapperReducerTest {
 <1> During the setup phase we create drivers for our different phases.
 <2> Splitting the phases into single tests allow to check the outputs independently.
 <3> The reducing phase can be tested accordingly.
-<4> And everything can naturally also be combined.
+<4> And everything can also naturally be combined.
 
 == Conclusion
 
-The programming model MapReduce allows to split complicated tasks
+The programming model MapReduce allows to split complicated tasks into smaller units and also
+operates directly on the data instead of moving data to the client.
+
+This works splendidly with bigger files and avoids network congestion, since only the results are
+sent back to the client.
 
 All examples can be found here:
 
