@@ -1,6 +1,6 @@
 ---
 layout: post
-title: MapReduce
+title: Big Data and MapReduce
 date: 2023-09-02 16:05:48 +0200
 last_updated: 2023-09-02 16:05:48 +0200
 author: Christoph Kappel
@@ -195,7 +195,7 @@ Combiners are quite similar to [reducers][] with the sole difference they are ap
 This allows to aggregate the data directly and there is a good chance that this reduces the data
 that is sent across the network.
 
-This is surely not an issue in this example, but it might have a huge impact in real scenarios.
+NOTE: This is surely not an issue in this example, but it might have a huge impact in real scenarios.
 
 === Reducer
 
@@ -235,10 +235,10 @@ Now that we have every component in place it is time to talk about how to actual
 
 == How to run it?
 
-We briefly mentioned the resource manager [YARN][] and its job scheduling capabilities in the
-previous article and this can be simplified like this:
+I briefly mentioned the resource manager [YARN][] and its job scheduling capabilities in the
+previous article which handles all the allocation and control aspects of it.
 
-The general job submission flow can be simplified like this:
+Before see how we can actually create a job let us first talk about the general job submission flow:
 
 ++++
 {% plantuml %}
@@ -277,15 +277,16 @@ c -u[hidden]> rm
 n1 -[hidden]> n2
 {% endplantuml %}
 ++++
-<1> Clients submit jobs to the resource manager.
-<2> MapReduce containers report their status back to the app master.
-<3> Nodes inform the resource manager about their status.
-<4> And the resource manager requests resources from the respective node managers.
+<1> *Clients* submit jobs to the *resource manager*.
+<2> MapReduce jobs are started inside of *containers* and they report their status back to the *app master*.
+<3> *Node manager* inform the *resource manager* about their status and available resources.
+<4> And finally the *resource manager* requests resources from the respective *node managers*.
 
 === Creating a job
 
-Jobs as the actual workhorse combine the required steps and are supplied as small
-jar files.
+Jobs are the actual workhorse of the flows and are supplied as small [jar][] libraries.
+The entry point of these libraries is a `main` function which sets all relevant configuration like
+mapper, reducer classes, the input or output formats and also the respective paths on the Hadoop cluster.
 
 [source,java]
 ----
@@ -325,6 +326,31 @@ public class TodoCollect extends Configured implements Tool {
 <2> Mapper, reducer and any other steps like combiner can be configured here.
 <3> The output types must be supplied in order to write the data back to storage.
 <4> We supply the input and output path via argument.
+
+Jobs are provided as simple jar files and
+
+[source,shell]
+----
+$ mvn clean package -Dmaven.test.skip=true
+...
+[INFO] --- jar:3.3.0:jar (default-jar) @ todo-mapreduce ---
+[INFO] Building jar: /Users/christoph.kappel/Projects/showcase-hadoop-cdc-quarkus/todo-mapreduce/target/todo-mapreduce-0.1.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.241 s
+[INFO] Finished at: 2024-01-05T14:50:44+01:00
+----
+
+[source,shell]
+----
+$ hadoop fs -mkdir input
+$ hadoop fs -put tododata.json input/
+
+$ hadoop jar todo-mapreduce-0.1.jar com.sodonnel.MapReduce.WordCount input output
+----
+
+The submission flow can be simplified like this:
 
 === Testing with MRUnit
 
