@@ -61,14 +61,12 @@ footer {
     text-align: center;
 }
 
-footer a:link, footer a:visited {
-    color: var(--font-color2);
-    text-decoration: underline;
+footer a:not(:last-child) {
+    margin-right: 5px;
 }
 
-footer a:hover {
-    color: var(--link-color);
-    text-decoration: none;
+footer a:not(:hover) {
+    opacity: .8;
 }
 
 #container, #main {
@@ -311,6 +309,26 @@ hr {
 
 .line-through {
     text-decoration-line: line-through;
+}
+
+/* SVG */
+svg.rss, svg.github, svg.linkedin {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+}
+
+svg.rss *, svg.github *, svg.linkedin * {
+    fill: var(--font-color);
+    stroke: var(--font-color);
+}
+
+svg.linkedin #path14 {
+    fill: var(--font-color)
+}
+
+svg.linkedin #path28, svg.linkedin #path30 {
+    fill: var(--bottom-color)
 }
 
 /* Jekyll */
