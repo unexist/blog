@@ -311,6 +311,10 @@ hr {
     text-decoration-line: line-through;
 }
 
+*[rel="tag"]:before {
+    content: "#";
+}
+
 /* SVG */
 svg.rss, svg.github, svg.linkedin {
     width: 2em;
