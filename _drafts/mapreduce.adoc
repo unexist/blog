@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big Data and MapReduce
-date: 2023-09-02 16:05:48 +0200
-last_updated: 2023-09-02 16:05:48 +0200
+date: 2024-01-05 15:05:48 +0200
+last_updated: 2024-01-05 15:05:48 +0200
 author: Christoph Kappel
 tags: hadoop big-data mapreduce showcase
 categories: tech
@@ -18,13 +18,33 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-In the previous post of my [Big Data][] series we started with a bit of the technical concepts of
-[Hadoop][], briefly covered its computing model and explored how it can be used as a plain file
+:1: https://avro.apache.org/
+:2: https://en.wikipedia.org/wiki/Big_data
+:3: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Partitioner
+:4: https://hadoop.apache.org/docs/current/api/org/apache/hadoop/io/ArrayWritable.html
+:5: https://hadoop.apache.org/
+:6: https://hadoop.apache.org/docs/current/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html
+:7: https://en.wikipedia.org/wiki/JAR_(file_format)
+:8: https://www.java.com/en/
+:9: https://junit.org/
+:10: https://en.wikipedia.org/wiki/MapReduce
+:11: https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/CLIMiniCluster.html
+:12: https://github.com/apache/hadoop-common/blob/trunk/hadoop-hdfs-project/hadoop-hdfs/src/test/java/org/apache/hadoop/hdfs/MiniDFSCluster.java
+:13: https://mrunit.apache.org/
+:14: https://parquet.apache.org/
+:15: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Partitioner
+:16: https://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapreduce/RecordReader.html
+:17: https://hadoop.apache.org/docs/current/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html#Reducer
+:18: https://blog.unexist.dev/redoc/
+:19: https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+
+In the previous post of my {2}[Big Data] series we started with a bit of the technical concepts of
+{5}[Hadoop], briefly covered its computing model and explored how it can be used as a plain file
 storage.
 This is from a technical point interesting, but storage alone is only half the fun.
 
-So in this follow-up we are going to dive into the world of [MapReduce][], the unit-test framework
-[MRUnit][] and a really simple [todo][] example to demonstrate the advantages of the whole idea.
+So in this follow-up we are going to dive into the world of {10}[MapReduce], the unit-test framework
+{13}[MRUnit] and a really simple {18}[todo] example to demonstrate the advantages of the whole idea.
 
 While not strictly required to understand why Hadoop is an excellent choice for storage, it really
 helps to have a bit of understanding for the course of this article, so if you haven't read the
@@ -44,19 +64,19 @@ the underlying hardware e.g. in networking and causes further headaches on any k
 To circumvent this, the programming paradigm of MapReduce breaks the processing task into
 [line-through]#two# three basic phases:
 
-- In the *mapping phase* small [Java][] programs called *mappers* ingest and convert data according to
+- In the *mapping phase* small {8}[Java] programs called *mappers* ingest and convert data according to
 internal logic into key-value pairs.
 - This data is collected in the *shuffling phase*, sorted and similar data piped to a single matching
 *reducers* if possible.
 - And in the final *reducing phase* the *reducers* pick the sorted data up, aggregate and further
-refine it and ultimately write it to a store like [HDFS][].
+refine it and ultimately write it to a store like {6}[HDFS].
 
 This can be simplified in following flow:
 
 ++++
 {% plantuml %}
-' !theme unexist from /home/unexist/blog/assets/plantuml
-!theme unexist from ../assets/plantuml
+!theme unexist from /home/unexist/blog/assets/plantuml
+' !theme unexist from ../assets/plantuml
 skinparam linetype ortho
 skinparam nodesep 30
 skinparam ranksep 30
@@ -129,9 +149,9 @@ shuf1 -[hidden]-> shuf2
 === Mapper
 
 In the first step a mapper consumes the data supplied by the various
-[RecordReader][] implementations of the framework.
+{16}[RecordReader] implementations of the framework.
 There exists a broad range of different implementations of the well-known
-formats like [Parquet][], [Avro][] and even flat data, so the processing here
+formats like {14}[Parquet], {1}[Avro] and even flat data, so the processing here
 is quite agnostic of it.
 
 The interesting method here is *map*, which can be supplemented with optional *setup*
@@ -164,7 +184,7 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
 
 === Partitioner and Combiner
 
-During the shuffling phase [partitioners][] and [combiners][] implement the logic how the
+During the shuffling phase {15}[partitioners] and {3}[combiners] implement the logic how the
 data is distributed between the reducers.
 
 If the partitioner is omitted, the framework just takes the hash of the keys, divides it the
@@ -190,7 +210,7 @@ public class TodoPartitioner extends Partitioner<Text, Text> {
 }
 ----
 
-Combiners are quite similar to [reducers][] with the sole difference they are applied directly
+Combiners are quite similar to {17}[reducers] with the sole difference they are applied directly
 *after* the mapping step and *before* the data is sent to the reducer on the same machine.
 This allows to aggregate the data directly and there is a good chance that this reduces the data
 that is sent across the network.
@@ -228,22 +248,22 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritab
 }
 ----
 <1> This simply collects all found ids and appends them to a list.
-<2> When the data is written back to the context the [custom class][] `IntArrayWriteable` is used, which
+<2> When the data is written back to the context the {4}[custom class] `IntArrayWriteable` is used, which
 has been omitted here for brevity.
 
 Now that we have every component in place it is time to talk about how to actually put them to use.
 
 == How to run it?
 
-I briefly mentioned the resource manager [YARN][] and its job scheduling capabilities in the
+I briefly mentioned the resource manager {19}[YARN] and its job scheduling capabilities in the
 previous article which handles all the allocation and control aspects of it.
 
 Before see how we can actually create a job let us first talk about the general job submission flow:
 
 ++++
 {% plantuml %}
-' !theme unexist from /home/unexist/blog/assets/plantuml
-!theme unexist from ../assets/plantuml
+!theme unexist from /home/unexist/blog/assets/plantuml
+' !theme unexist from ../assets/plantuml
 ' left to right direction
 skinparam linetype ortho
 skinparam nodesep 20
@@ -284,7 +304,7 @@ n1 -[hidden]> n2
 
 === Creating a job
 
-Jobs are the actual workhorse of the flows and are supplied as small [jar][] libraries.
+Jobs are the actual workhorse of the flows and are supplied as small {7}[jar] libraries.
 
 The entry point of these libraries is a `main` function which sets all relevant configuration like
 mapper, reducer classes, the input or output formats and also the respective paths on the Hadoop cluster.
@@ -368,10 +388,10 @@ the distributed nature of the Hadoop stack.
 Also setting up Hadoop is quite complex for single developers and requires a good amount of
 computing resources.
 
-This can be eased a bit with the virtualized approaches of [MiniDFS][] or [MiniCluster][],
-but fortunately there is a better way, which also plays perfectly well with [JUnit][].
+This can be eased a bit with the virtualized approaches of {12}[MiniDFS] or {11}[MiniCluster],
+but fortunately there is a better way, which also plays perfectly well with {9}[JUnit].
 
-[MRUnit][] is a Java library that helps developers testing map and reduce tasks independently
+{13}[MRUnit] is a Java library that helps developers testing map and reduce tasks independently
 and with full control of input of output, without the overhead and burden of a running Hadoop
 cluster locally.
 
@@ -452,3 +472,4 @@ All examples can be found here:
 == Bibliography
 
 * [[[hadooparch]]] Mark Grover, Ted Malask, Jonathan Seidman, Gwen Shapira, Hadoop Application Architectures, O'Reilly 2015
+
