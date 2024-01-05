@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Big Data and MapReduce
-date: 2024-01-05 15:05:48 +0200
-last_updated: 2024-01-05 15:05:48 +0200
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: hadoop big-data mapreduce showcase
 categories: tech
