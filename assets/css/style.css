@@ -319,12 +319,12 @@ svg.rss, svg.github, svg.linkedin {
 }
 
 svg.rss *, svg.github *, svg.linkedin * {
-    fill: var(--font-color);
-    stroke: var(--font-color);
+    fill: var(--h1-color);
+    stroke: var(--h1-color);
 }
 
 svg.linkedin #path14 {
-    fill: var(--font-color)
+    fill: var(--h1-color)
 }
 
 svg.linkedin #path28, svg.linkedin #path30 {
