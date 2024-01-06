@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Logging vs Tracing
+description: This blog explains two of the three pillars of observability - logging and tracing.
 date: 2022-02-18 20:30 +0100
 last_updated: 2022-02-18 20:30 +0100
 author: Christoph Kappel

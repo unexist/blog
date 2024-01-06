@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Idiosyncrasy of the Docker CLI
+description: This blog post is a reminder and a warning abou the problems if the Docker CLI.
 date: 2021-07-23 10:53 +0200
 last_updated: 2021-07-23 10:53 +0200
 tags: docker cli quarkus kafka redpanda

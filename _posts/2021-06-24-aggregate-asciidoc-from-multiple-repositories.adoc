@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Aggregate AsciiDoc from multiple repositories
+description: This blog post demonstrates how multiple AsciiDoc documents can be assembled with the help of Antora.
 date: 2021-06-24 15:24 +0200
 last_updated: 2021-06-24 15:24 +0200
 author: Christoph Kappel
@@ -36,7 +37,7 @@ Time to check out {3}[Antora].
 [quote,'<https://antora.org>']
 The multi-repository documentation site generator for tech writers who <3 writing in AsciiDoc.
 
-According to this, this looks really interesting and promising.
+According to this, this looks fascinating and promising.
 And after a few hours down the road I managed to actually generate docs and found a few gotchas.
 
 So here is the general idea about {3}[Antora]:

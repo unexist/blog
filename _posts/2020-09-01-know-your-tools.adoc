@@ -1,11 +1,12 @@
 ---
 layout: post
 title: Know your tools
+description: This blog post is basically just a rant about Citrix and Windows.
 date: 2020-09-01 14:30:00 +0200
 last_updated: 2020-09-01 14:30:00 +0200
 author: Christoph Kappel
 tags: citrix intellij
-categories: tech
+categories: myself
 toc: false
 ---
 :1: https://www.citrix.com/

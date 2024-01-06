@@ -1,6 +1,7 @@
 ---
 layout: post
 title: What is glue code?
+description: This blog post explains the usage of glue code in modern testing frameworks.
 date: 2022-09-23 14:02 +0200
 last_updated: 2022-09-23 14:02 +0200
 author: Christoph Kappel
@@ -45,10 +46,10 @@ I am more and more interested in {1}[acceptance testing] lately and if you brows
 posts of this blog you are going to find one or another post about the whole idea along with some
 noteworthy tooling.
 
-One aspect I haven't touched so far far is how do we bring the actual tests *and* the
+One aspect I haven't touched so far is how do we bring the actual tests *and* the
 {26}[system under test] (SUT) together and if we use code, where should it reside?
 
-Let us start with a small recap, so we all are on the same page and than move on to the sparking
+Let us start with a small recap, so we all are on the same page and then move on to the sparking
 bits after that.
 
 == A small recap

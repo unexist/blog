@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Skill matrix
+description: This blog post suggests a way to measure and evaluate the different level and skillsets inside of a team.
 date: 2020-10-15 16:00:00 +0200
 last_updated: 2020-10-15 16:00:00 +0200
 author: Christoph Kappel
@@ -12,9 +13,9 @@ toc: false
 
 For a new gig, we started with a bunch of new people with various sets of knowledge and skills.
 Without any way to assess, where our strengths and weaknesses are, it is kind of difficult to say,
-if we are covered in the requires areas.
+if we are covered in the requireD areas.
 
-Someone stumbled upon a promising google sheet, which exactly does what we need: {1}[Skill Mapping]
+Someone stumbled upon a promising Google sheet, which exactly does what we need: {1}[Skill Mapping]
 
 It allows to pick some categories, enter names and basically ask the team to evaluate their own
 skill.
@@ -25,5 +26,5 @@ I am really curious, what the result of this is going to be and how the team rea
 == Conclusion
 
 So after quite some time in this project, there was no reaction at all.
-Some people ignored it completely and I don't think we will re-evaluate the matrix in regards to
+Some people ignored it completely and I don't think we will re-evaluate the matrix in regard to
 what we have learned over the course of the project.

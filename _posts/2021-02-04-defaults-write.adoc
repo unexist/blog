@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Defaults Write
+description: This blog post is a collection and cynical reminder of all the hidden defaults of macOS.
 date: 2021-02-04 17:09 +0100
 last_updated: 2021-02-04 17:09 +0100
 author: Christoph Kappel

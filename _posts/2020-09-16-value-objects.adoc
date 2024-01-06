@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Value objects
+description: This blog post describes a useful way and help for value objects int he DDD cosmos.
 date: 2020-09-16 12:00:00 +0200
 last_updated: 2020-09-16 12:00:00 +0200
 author: Christoph Kappel
@@ -32,5 +33,5 @@ So why do even mention this contrived example?
 I stumbled upon {1}[Manifold framework] and along other useful things like `@Jailbreak` to access
 private methods and `#define/#ifdef`, it comes with a really cool way to handle unit types.
 
-I know strictly speaking this has isn't even closely related to **DDD**, but it still cool and
-hey, clickbait.
+I know strictly speaking this has isn't even closely related to **DDD**, but it is still cool and
+hey, clickbait-y!

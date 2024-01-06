@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Property based testing
+description: This blog post gives a brief introduction along with examples about property based testing.
 date: 2020-08-13 12:10:00 +0200
 last_updated: 2020-08-13 12:10:00 +0200
 author: Christoph Kappel
@@ -12,7 +13,7 @@ toc: false
 :2: https://jqwik.net/
 
 I initially read about the Python framework {1}[Hypothesis] and I must say I like the overall idea
-to just define ranges and the framework does dozen of tests with semi-random values.
+to just define ranges and the framework does a dozen of tests with semi-random values.
 
 This might lead to combinations, you normally wouldn't think of.
 
@@ -43,6 +44,7 @@ public class TodoTest {
 <1> This tells {2}[jqwik] how often to run the test with different generator values.
 <2> Here `@ForAll` just marks the value that is taken from a generator.
 <3> The parameter `anyStr` can now be used like you'd expect.
+<4> And finally the tests can be done with your favorite assertion library.
 
 == Adding a bit of complexity
 

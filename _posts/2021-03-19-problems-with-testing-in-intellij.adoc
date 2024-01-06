@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Problems with testing in IntelliJ
+description: This blog post is a reminder of problems with IntelliJ I faced repeatedly before actually posting about it.
 date: 2021-03-19 08:40 +0100
 last_updated: 2021-03-19 08:40 +0100
 author: Christoph Kappel

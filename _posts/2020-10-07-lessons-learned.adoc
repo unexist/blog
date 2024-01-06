@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Lessons learned
+description: This blog post shows how years of testing and tinkering can be applied to cheat in raffles.
 date: 2020-10-07 12:00:00 +0200
 last_updated: 2020-10-07 12:00:00 +0200
 author: Christoph Kappel
@@ -29,7 +30,7 @@ I had two options now:
 . Understand the code that writes the CSRF into the dom
 . Find a scraper with a JS engine
 
-In my day job, we always like to play with with e2e-testing, which mostly involves scripts, that
+In my day job, we always like to play with e2e-testing, which mostly involves scripts, that
 remote-control a web browser.
 
 That said, I had a few glances at this stack again.

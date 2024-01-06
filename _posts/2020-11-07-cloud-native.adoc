@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Cloud-native
+description: This blog post summarizes my initial experiences during the course of a cloud-native project.
 date: 2020-11-07 17:44 +0100
 last_updated: 2020-11-07 17:44 +0100
 author: Christoph Kappel

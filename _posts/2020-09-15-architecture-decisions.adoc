@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Architecture decisions
+description: This blog post summarizes my experience with architecture decisions and the need to have a specific format and location.
 date: 2020-09-15 08:00:00 +0200
 last_updated: 2020-09-15 08:00:00 +0200
 author: Christoph Kappel

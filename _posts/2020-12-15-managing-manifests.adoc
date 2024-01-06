@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Managing manifests
+description: This blog evaluates different ways of handling Kubernetes manifest files.
 date: 2020-12-15 16:53 +0100
 last_updated: 2020-12-15 16:53 +0100
 author: Christoph Kappel
@@ -47,8 +48,8 @@ example):
     state: present
 ----
 
-This basically let's us rewrite or rather copy the whole manifests and put them into playbooks,
-there is bit of template magic available, but I don't see any really advantage here. Next!
+This basically let us rewrite or rather copy the whole manifests and put them into playbooks,
+there is a bit of template magic available, but I don't see any really advantage here. Next!
 
 == Make
 

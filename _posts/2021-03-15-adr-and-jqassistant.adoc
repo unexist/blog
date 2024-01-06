@@ -1,6 +1,7 @@
 ---
 layout: post
 title: ADR and jqAssistant
+description: This blog post demonstrates how ADR and jqAssistant can be combined to do architecture testing from the actual records.
 date: 2021-03-15 17:45 +0100
 last_updated: 2021-03-15 17:45 +0100
 author: Christoph Kappel

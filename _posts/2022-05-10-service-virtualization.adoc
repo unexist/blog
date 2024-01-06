@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Service virtualization
+description: This blog post demonstrates service virtualization with a simple example.
 date: 2022-05-10 18:15 +0100
 last_updated: 2022-05-10 18:15 +0100
 author: Christoph Kappel

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Windows tools
+description: This blog post demonstrates an easy way in Windows to get rid of pending Java processes.
 date: 2020-09-03 16:30:00 +0200
 last_updated: 2020-09-03 16:30:00 +0200
 author: Christoph Kappel

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Naming and DDD
+description: This blog post is just thinking out loud about the problems of naming inside of DDD.
 date: 2020-08-18 08:30:00 +0200
 last_updated: 2020-08-18 08:30:00 +0200
 author: Christoph Kappel

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Diagramming
+description: This blog post is a sole collection of diagramming tools I am currently aware of.
 date: 2020-09-09 15:00:00 +0200
 last_updated: 2020-09-09 15:00:00 +0200
 author: Christoph Kappel

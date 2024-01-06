@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Spec framework
+description: This blog post is a reminder to give the Spock framework a try - some day.
 date: 2020-10-16 07:00:00 +0200
 last_updated: 2020-10-16 07:00:00 +0200
 author: Christoph Kappel

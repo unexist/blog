@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Multiline commands in makefiles
+description: This blog post is a reminder how to actually use multilines inside of Make.
 date: 2021-05-21 16:27 +0200
 last_updated: 2021-05-21 16:27 +0200
 author: Christoph Kappel

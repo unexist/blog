@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Cucumber reports
+description: This blog post demonstrates different reporting tools along with the basic reporting capabilities of Cucumber.
 date: 2021-10-16 15:57 +0200
 last_updated: 2021-10-16 15:57 +0200
 author: Christoph Kappel

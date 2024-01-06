@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Minikube with hyperkit
+description: This blog post is a reminder to avoid HyperKit when Minikube is in use.
 date: 2021-03-29 07:29 +0200
 last_updated: 2021-03-29 07:29 +0200
 author: Christoph Kappel
@@ -16,7 +17,7 @@ toc: false
 :6: https://developer.apple.com/bonjour/
 
 I cannot really say what happened, but unfortunately during some of the latest updates
-DNS resolution inside of my {1}[Hyperkit] VM stopped working.
+DNS resolution inside my {1}[Hyperkit] VM stopped working.
 I can manually set the DNS to something like `8.8.8.8`, but after a while it fails again.
 
 After some digging around I found this:

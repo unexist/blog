@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Workflow engines on Quarkus
+description: This blog post demonstrates how the workflow engines Camunda and Kogito can be used with Quarkus.
 date: 2021-07-21 17:15 +0200
 last_updated: 2021-07-21 17:15 +0200
 author: Christoph Kappel
@@ -39,8 +40,8 @@ endif::[]
 :20: https://cloudevents.io
 :21: https://github.com/wg/wrk
 
-Discussions about flexibility as a requirement, usually lead to workflow engines and although
-they are more a technical solution, than a real requirement, it is time to to re-evaluate the
+Discussions about flexibility as a requirement, usually lead to workflow engines, and although
+they are a more technical solution, than a real requirement, it is time to re-evaluate the
 current state of the support for {1}[Quarkus].
 
 When you fire up Google and ask it for `workflow engine quarkus`, there is usually {2}[Camunda] and

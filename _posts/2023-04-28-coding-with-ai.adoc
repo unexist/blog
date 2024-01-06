@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Coding with AI
+description: This blog post summarizes my experience with AI-assisted coding.
 date: 2023-04-28 17:09 +0200
 last_updated: 2023-04-28 17:09 +0200
 author: Christoph Kappel
@@ -51,10 +52,11 @@ and try to evaluate them based on {20}[white and later red hat thinking].
 {15}[Slashdot] alone lists three pages of tools and I had a tough time to select two services I want
 to give a spin during the course of this blog post.
 
-I ultimately picked {18}[TabNine], because of its free tier, local options and my previous experience
-and {7}[Github]'s {4}[Copilot], due to its access to the vast amount of _free_ training data, their
-promise of {3}[code synthesis] and obviously the inclusion of my own repositories accordingly to my
-settings:
+I ultimately picked {18}[TabNine], because of its free tier and local options and
+{7}[Github]'s {4}[Copilot]m due to my previous experience with it and its access to the vast
+amount of _free_ training data.
+Their promise of {3}[code synthesis] and obviously the inclusion of my own repositories accordingly
+to my settings:
 
 image::github_settings.png[]
 
