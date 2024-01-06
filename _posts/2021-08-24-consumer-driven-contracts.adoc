@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Consumer-driven contracts
+description: This blog post demonstrates Consumer-driven contract testing with the help of Pact.
 date: 2021-08-24 12:14 +0200
 last_updated: 2021-08-24 12:14 +0200
 author: Christoph Kappel
@@ -16,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 :1: https://en.wikipedia.org/wiki/No_Silver_Bullet
 :2: https://spring.io/projects/spring-cloud-contract
@@ -38,7 +40,22 @@ unfortunately breaks the public API and violates the contract between both servi
 For the ease of the discussion, let us say team A is responsible for the **consumer** of the public
 API and team B takes care of the **producer**.
 
-image::pact_normal_flow.png[]
+++++
+{% plantuml %}
+!theme unexist from /home/unexist/blog/assets/plantuml
+' !theme unexist from ../assets/plantuml
+skinparam linetype ortho
+skinparam nodesep 150
+skinparam ranksep 50
+
+rectangle "Consumer" as c #dimgrey
+rectangle "Provider" as p #navy
+
+c .r[#green]......> p: <color:green>Request
+p .l[#green]......> c: <color:green>Response
+
+{% endplantuml %}
+++++
 
 This scenario has lots of problems, but let us talk about two in detail:
 
@@ -50,9 +67,24 @@ This scenario has lots of problems, but let us talk about two in detail:
 This whole problem isn't new and we have a perfect hammer for this particular nail: We just create
 a **mock** or even better a **fake** from the **producer** and test the **consumer** against it:
 
-image::pact_mock_flow.png[]
+++++
+{% plantuml %}
+!theme unexist from /home/unexist/blog/assets/plantuml
+' !theme unexist from ../assets/plantuml
+skinparam linetype ortho
+skinparam nodesep 150
+skinparam ranksep 50
 
-..but how does this help to validate assumptions? Or even worse: Who is responsible for updating the
+rectangle "Consumer" as c #dimgrey
+rectangle "Provider\n(Mocked)" as p #navy
+
+c .r[#green]......> p: <color:green>Request
+p .l[#green]......> c: <color:green>Response
+
+{% endplantuml %}
+++++
+
+How does this help to validate assumptions? Or even worse: Who is responsible for updating the
 mock or fake, when the API really changes?
 
 There has to be another way..
@@ -145,7 +177,26 @@ void todoCheckPactTest(MockServer mockServer) throws IOException {
 The {6}[broker] allows to uncouple **consumer** and **producer**, so that instead of talking
 directly to each other during tests the communication looks like this:
 
-image::pact_broker_flow.png[]
+++++
+{% plantuml %}
+!theme unexist from /home/unexist/blog/assets/plantuml
+' !theme unexist from ../assets/plantuml
+skinparam linetype ortho
+skinparam nodesep 150
+skinparam ranksep 50
+
+rectangle "Consumer" as c #dimgrey
+rectangle "Broker" as b #limegreen
+rectangle "Provider" as p #navy
+
+
+c .r[#green].....> b: <color:green>Request
+b .l[#green].....> c: <color:green>Response
+
+b .l[#green].....> p: <color:green>Request
+p .l[#green].....> b: <color:green>Response
+{% endplantuml %}
+++++
 
 This makes it possible for both sides to work independently on their services without interrupting
 other teams.
@@ -249,8 +300,8 @@ We ultimately got rid of this problem by adding the certificate to the matching 
 
 [source,shell]
 ----
-curl https://some.host/RootCA.crt -o RootCA.crt
-keytool -import -alias RootCA -cacerts -file RootCA.crt -storepass changeit -noprompt
+$ curl https://some.host/RootCA.crt -o RootCA.crt
+$ keytool -import -alias RootCA -cacerts -file RootCA.crt -storepass changeit -noprompt
 ----
 
 A colleague also opened a feature request and gladly they accepted and added it:
