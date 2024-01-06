@@ -344,6 +344,11 @@ svg.linkedin #path28, svg.linkedin #path30 {
     font-size: 80%;
 }
 
+.post-summary {
+    font-size: 80%;
+    padding-top: var(--padding);
+}
+
 .post-list li {
     display: block;
 }

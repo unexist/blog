@@ -24,6 +24,9 @@ layout: default
                     and tagged as {{ post | tags }}
                 {% endif %}
             </div>
+            <div class="post-summary">
+                {{ post.description }}
+            </div>
         </p>
         {% endfor %}
     </div>
