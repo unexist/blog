@@ -24,7 +24,7 @@ endif::[]
 :3: https://pact.io/
 :4: https://docs.pact.io/implementation_guides/jvm/provider/maven/
 :5: https://docs.pact.io/getting_started/sharing_pacts/
-:6: https://docs.pact.io/implementation_guides/jvm/consumer/#building-json-bodies-with-pactdsljsonbody-dsl[
+:6: https://docs.pact.io/implementation_guides/jvm/consumer/#building-json-bodies-with-pactdsljsonbody-dsl
 :7: https://github.com/unexist/showcase-testing-quarkus
 :8: https://docs.pact.io/implementation_guides/jvm/provider/junit5/
 :9: https://www.docker.com/
