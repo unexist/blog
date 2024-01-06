@@ -9,15 +9,22 @@ layout: default
             {% capture updatetime %}{{ page.last_updated | date: '%s' }}{% endcapture %}
 
             {% if datetime == updatetime %}
-                Written by <a href="/about">{{ page.author }}</a> on
+                <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}">{{ page.author }}</a>
+                &middot;
                 <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
+                &middot;
             {% else %}
-                Written by <a href="/about">{{ page.author }}</a>, updated on
+                <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}">{{ page.author }}</a>
+                &middot;
+                <time class="line-through" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
                 <time datetime="{{ page.last_updated | date_to_xmlschema }}">{{ page.last_updated | date_to_long_string }}</time>
+                &middot;
             {% endif %}
             {% if page.tags != nil %}
-                and tagged as {{ page | tags }}
+                {{ page | tags }}
+                &middot;
             {% endif %}
+            Reading time <span class="reading-time">{{ page.content | reading_time_as_i | downcase }}</span>
         </div>
     </div>
 
