@@ -3,7 +3,7 @@ layout: post
 title: API testing
 description: This blog post is a sole collection of API testing tools I am currently aware of.
 date: 2020-09-06 12:00:00 +0200
-last_updated: 2024-01-06 13:00:00 +0200
+last_updated: 2020-09-06 12:00:00 +0200
 author: Christoph Kappel to-be-continued
 tags: api postman testmace insomnia hoppscotch bruno
 categories: testing
