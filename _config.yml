@@ -34,6 +34,7 @@ plugins:
   - jekyll-feed
   - jekyll-toc
   - jekyll-plantuml
+  - jekyll-time-to-read
 
 asciidoctor:
   attributes:
