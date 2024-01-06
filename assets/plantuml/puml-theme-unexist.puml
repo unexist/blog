@@ -276,7 +276,7 @@ skinparam actor {
 !startsub arrow
 
 skinparam arrow {
-  Thickness 2
+  Thickness 1
   Color $PRIMARY
   FontColor $FGCOLOR
 }
