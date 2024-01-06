@@ -7,6 +7,7 @@ cat > "_drafts/${FILENAME}.adoc" <<EOF
 ---
 layout: post
 title: ${TITLE}
+description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
