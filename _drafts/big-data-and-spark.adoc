@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Big Data and Spark
+title: Spark vs MapReduce
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
+tags: hadoop mapreduce spark iceberg parquet showcase
 categories: tech
 toc: true
 ---
@@ -17,3 +17,147 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+
+////
+https://www.goodreads.com/book/show/38467996-spark
+https://sparkbyexamples.com/
+////
+
+Welcome to our third round in the wonderful world of [Big Data].
+
+== What is Spark?
+
+=== Examples
+
+==== Spark shell
+
+[source,json]
+----
+{
+  "title": "string",
+  "description": "string",
+  "done": false,
+  "dueDate": {
+    "start": "2021-05-07",
+    "due": "2021-05-07"
+  },
+  "id": 0
+}
+----
+
+[source,shell]
+----
+scala> import spark.implicits._
+import spark.implicits._
+
+scala> val todoDF = spark.read.json("/Users/ces/todo.json")
+todoDF: org.apache.spark.sql.DataFrame = [description: string, done: boolean ... 3 more fields]
+
+scala> todoDF.printSchema()
+root
+ |-- description: string (nullable = true)
+ |-- done: boolean (nullable = true)
+ |-- dueDate: struct (nullable = true)
+ |    |-- due: string (nullable = true)
+ |    |-- start: string (nullable = true)
+ |-- id: long (nullable = true)
+ |-- title: string (nullable = true)
+
+scala> todoDF.createOrReplaceTempView("todo")
+
+scala> val idDF = spark.sql("SELECT id, title, done FROM todo WHERE id = 0")
+idDF: org.apache.spark.sql.DataFrame = [description: string, done: boolean ... 3 more fields]
+
+scala> idDF.show()
++---+------+-----+
+| id| title| done|
++---+------+-----+
+|  0|string|false|
++---+------+-----+
+----
+
+==== Kafka consumer
+
+[source,scala]
+----
+object TodoSparkSink {
+    def main(args: Array[String]): Unit = {
+        val sparkConf = new SparkConf() // <1>
+
+        sparkConf.set("packages", "org.apache.iceberg:iceberg-spark-runtime-3.3_2.13:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1")
+        sparkConf.set("spark.sql.catalog.todo_catalog", "org.apache.iceberg.spark.SparkCatalog")
+        sparkConf.set("spark.sql.catalog.todo_catalog.type", "hadoop")
+        sparkConf.set("spark.sql.catalog.todo_catalog.warehouse", "hdfs://localhost:9000/warehouse")
+
+        val spark = SparkSession // <2>
+            .builder()
+            .config(sparkConf)
+            .appName("TodoSparkSink")
+            .getOrCreate()
+
+        import spark.implicits._
+
+        val df = spark.readStream // <3>
+            .format("kafka")
+            .option("kafka.bootstrap.servers", "localhost:9092")
+            .option("subscribe", "todo_created")
+            .option("checkpointLocation", "/tmp/checkpoint")
+            .load()
+
+    val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+    val resDF = dataFrame.as[(String, String)].toDF("key", "value")
+
+    resDF.writeStream // <4>
+      .format("iceberg")
+      .outputMode("append")
+      .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
+      .option("path", "todo_catalog.spark.messages")
+      .start()
+
+    spark.streams.awaitAnyTermination() // <5>
+    spark.streams.resetTerminated()
+    }
+}
+----
+<1> TBD
+<2> TBD
+<3> TBD
+<4> TBD
+<5> TBD
+
+== Difference between MapReduce and Spark
+
+Both frameworks are [FOSS][] and free to use, but there are
+
+|===
+| Difference | MapReduce | Spark
+| Speed
+| Depends on the implementations; can be slow
+| Due to its design Spark it is much faster
+
+| Realtime
+| No support for real-time processing
+| [Spark Streaming][] supports realtime data
+
+| Ease of use
+| Strong programming experience in [Java][] is required
+| [Spark SQL][] is easy to learn with experience in SQL
+
+| Caching
+| Tasks need to write back their data to storage (e.g. [HDFS][])
+| Spark supports caching in memory
+
+| Scalability
+
+|===
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/tree/master/todo-mapreduce>
+
+[bibliography]
+== Bibliography
+
+* [[[sparkdef]]] Bill Chambers, Matei Zaharia, Spark: The Definitive Guide: Big Data Processing Made Easy, O'Reilly 2018
