@@ -5,7 +5,7 @@ description: This blog explains two of the three pillars of observability - logg
 date: 2022-02-18 20:30 +0100
 last_updated: 2022-02-18 20:30 +0100
 author: Christoph Kappel
-tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf showcase
+tags: tracing jaeger opentelemetry logging kibana elasticsearch fluentd gelf versus showcase
 categories: observability
 toc: true
 ---
