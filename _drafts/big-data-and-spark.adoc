@@ -1,0 +1,19 @@
+---
+layout: post
+title: Big Data and Spark
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/big_data_and_spark
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/big_data_and_spark
+endif::[]
+:figure-caption!:
+:table-caption!:
