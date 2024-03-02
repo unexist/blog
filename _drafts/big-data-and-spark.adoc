@@ -36,19 +36,22 @@ Here is a simplified view of the architecture:
 
 ==== Spark shell
 
-[source,json]
-----
-{
-  "title": "string",
-  "description": "string",
-  "done": false,
-  "dueDate": {
-    "start": "2021-05-07",
-    "due": "2021-05-07"
-  },
-  "id": 0
-}
-----
+++++
+{% plantuml %}
+!theme unexist from /home/unexist/blog/assets/plantuml
+skinparam linetype ortho
+skinparam nodesep 30
+skinparam ranksep 30
+
+file in1 [
+{{json
+  {
+    "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
+  }
+}}
+]
+{% endplantuml %}
+++++
 
 [source,shell]
 ----
