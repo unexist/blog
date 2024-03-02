@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Big Data and MapReduce
-description: This followup blog post of the Big Data series briefly explains the computing model MapReduce and provides some examples how it can be used and tested.
+title: MapReduce for Big Data
+description: This follow up blog post of the Big Data series briefly explains the computing model MapReduce and provides some examples how it can be used and tested.
 date: 2024-01-05 16:07 +0100
 last_updated: 2024-01-05 16:07 +0100
 author: Christoph Kappel
