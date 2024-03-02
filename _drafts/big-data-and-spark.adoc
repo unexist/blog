@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: hadoop mapreduce spark iceberg parquet showcase
+tags: hadoop mapreduce spark iceberg versus showcase
 categories: tech
 toc: true
 ---
@@ -17,15 +17,20 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 ////
 https://www.goodreads.com/book/show/38467996-spark
 https://sparkbyexamples.com/
+https://www.python.org/
+https://www.r-project.org/
 ////
 
 Welcome to our third round in the wonderful world of [Big Data].
 
 == What is Spark?
+
+Here is a simplified view of the architecture:
 
 === Examples
 
@@ -76,7 +81,7 @@ scala> idDF.show()
 +---+------+-----+
 ----
 
-==== Kafka consumer
+==== Kafka streaming
 
 [source,scala]
 ----
@@ -108,8 +113,8 @@ object TodoSparkSink {
     val resDF = dataFrame.as[(String, String)].toDF("key", "value")
 
     resDF.writeStream // <4>
-      .format("iceberg")
-      .outputMode("append")
+      .format("console")
+      .outputMode("complete")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
       .option("path", "todo_catalog.spark.messages")
       .start()
