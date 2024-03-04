@@ -32,6 +32,34 @@ Welcome to our third round in the wonderful world of [Big Data].
 
 Here is a simplified view of the architecture:
 
+++++
+{% plantuml %}
+left to right direction
+
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+rectangle "Driver program" as driver {
+  rectangle "Spark context"
+}
+
+rectangle "Cluster manager" as cluster
+
+rectangle "Worker node" as work1 {
+  rectangle "Executor" as exec1 {
+    rectangle "Task" as task1
+    rectangle "Task" as task2
+  }
+}
+
+driver --> cluster
+cluster --> exec1
+driver --> work1
+{% endplantuml %}
+++++
+
+
 === Examples
 
 ==== Spark shell
