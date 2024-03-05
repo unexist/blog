@@ -22,7 +22,7 @@ title: unexist.dev
 email: christoph@unexist.dev
 description: Random bits about tech, software design, architecture and sometimes about myself.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: https://blog.unexist.dev # the base hostname & protocol for your site, e.g. http://example.com
+url: https://unexist.blog # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  unexist
 linkedin_username: christoph-kappel-24bba71b7
 
@@ -40,6 +40,8 @@ asciidoctor:
   attributes:
     - icons=font
     - source-highlighter=rouge
+    - plantumldir=../assets/plantuml
+#    - plantumldir=/home/unexist/blog/assets/plantuml
 
 category_page_layout: category_page
 category_page_dir: category
