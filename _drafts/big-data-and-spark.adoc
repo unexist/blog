@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Spark vs MapReduce
-description: TBD
+description: This third blog post of the Big Data series compares the computing model of MapReduce with the features of options of Apache Spark.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: hadoop mapreduce spark iceberg versus showcase
+tags: hadoop mapreduce spark versus showcase
 categories: tech
 toc: true
 ---
@@ -26,39 +26,47 @@ https://www.python.org/
 https://www.r-project.org/
 ////
 
-Welcome to our third round in the wonderful world of [Big Data].
+Welcome to round three of our journey through the mysteries world of [Big Data][].
+
+After our first steps with the computing model of [MapReduce][], we are going to focus
+on a string contender of it, learn about its strengths and have a look at a few examples - so
+without further ado let us say hello to [Apache Spark][].
 
 == What is Spark?
+
+Spark is an open-source framework that proce
 
 Here is a simplified view of the architecture:
 
 ++++
 {% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 left to right direction
-
 skinparam linetype ortho
-skinparam nodesep 20
-skinparam ranksep 20
+skinparam nodesep 10
+skinparam ranksep 50
 
-rectangle "Driver program" as driver {
-  rectangle "Spark context"
+card "Driver program" as driver {
+  rectangle "Spark context" as context
 }
 
-rectangle "Cluster manager" as cluster
+rectangle "Cluster manager" as manager
 
-rectangle "Worker node" as work1 {
-  rectangle "Executor" as exec1 {
-    rectangle "Task" as task1
-    rectangle "Task" as task2
-  }
+card "Worker node" as worker {
+    card "Executor" as exec {
+       file "Task" as task1
+       file "Task" as task2
+    }
 }
 
-driver --> cluster
-cluster --> exec1
-driver --> work1
+context <--> manager
+driver <--> exec
+manager --> worker
+
+task1 -[hidden]-> task2
 {% endplantuml %}
 ++++
-
 
 === Examples
 
@@ -66,11 +74,13 @@ driver --> work1
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 30
 skinparam ranksep 30
 
+{% raw %}
 file in1 [
 {{json
   {
@@ -78,6 +88,7 @@ file in1 [
   }
 }}
 ]
+{% endraw %}
 {% endplantuml %}
 ++++
 
@@ -155,36 +166,59 @@ object TodoSparkSink {
     }
 }
 ----
-<1> TBD
-<2> TBD
-<3> TBD
-<4> TBD
-<5> TBD
+<1> Pass the necessary configuration
+<2> Create the Spark session
+<3> Read the Kafka stream from given server and topic
+<4> Write the stream back to a file of the catalog
+<5> Wait until everything is done and exit
+
+[source,shell]
+----
+$ @spark-submit --master spark://localhost:7077 \
+    --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2 \
+    --conf spark.executorEnv.JAVA_HOME=/opt/java/openjdk \
+    -- conf spark.yarn.appMasterEnv.JAVA_HOME=/opt/java/openjdk \
+    --conf spark.sql.streaming.checkpointLocation=/tmp/checkpoint \
+    --name todosink \
+    --deploy-mode cluster
+    --num-executors 1 \
+    --class dev.unexist.showcase.todo.TodoSparkSink \
+    hdfs://localhost:9000/jars/todo-spark-sink-0.1.jar
+----
+
+[source,shell]
+----
+[INFO] --- jar:3.3.0:jar (default-jar) @ todo-mapreduce ---
+[INFO] Building jar: /Users/unexist/projects/showcase-hadoop-cdc-quarkus/todo-spark-sink/target/todo-spark-sink-0.1.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.576 s
+[INFO] Finished at: 2024-03-10T17:13:22+01:00
+----
 
 == Difference between MapReduce and Spark
 
-Both frameworks are [FOSS][] and free to use, but there are
+Both frameworks are [FOSS][] and free to use, but there are some key
+differences:
 
 |===
 | Difference | MapReduce | Spark
-| Speed
+| Processing speed
 | Depends on the implementations; can be slow
-| Due to its design Spark it is much faster
+| Spark utilizes memory caching and is much faster
 
-| Realtime
-| No support for real-time processing
-| [Spark Streaming][] supports realtime data
+| Processing paradigm
+| Designed for batch processing
+| Spark supports processing of real-time data with [Spark Streaming][]
 
 | Ease of use
 | Strong programming experience in [Java][] is required
-| [Spark SQL][] is easy to learn with experience in SQL
+| Spark supports multiple programming languages like [R][], [Python][] or [Spark SQL][]
 
-| Caching
-| Tasks need to write back their data to storage (e.g. [HDFS][])
-| Spark supports caching in memory
-
-| Scalability
-
+| Integration
+| Primarily designed to work with [HDFS]]
+| Spark has an extensive ecosystem and integrates well with other Big Data tools
 |===
 
 == Conclusion
