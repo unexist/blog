@@ -24,49 +24,90 @@ https://www.goodreads.com/book/show/38467996-spark
 https://sparkbyexamples.com/
 https://www.python.org/
 https://www.r-project.org/
+https://mesos.apache.org/
+https://kubernetes.io/
+https://spark.apache.org/
 ////
 
 Welcome to round three of our journey through the mysteries world of [Big Data][].
 
 After our first steps with the computing model of [MapReduce][], we are going to focus
-on a string contender of it, learn about its strengths and have a look at a few examples - so
-without further ado let us say hello to [Apache Spark][].
+on a string contender of it, learn about its strengths and have a look at a few more examples - so
+let us say hello to [Apache Spark][].
+
+TIP: If you missed the previous posts just have a look here
+     <https://unexist.blog/big-data/2023/10/27/big-data.html> and here
+     <https://unexist.blog/big-data/2024/01/05/mapreduce.html>
 
 == What is Spark?
 
-Spark is an open-source framework that proce
+Like MapReduce, Spark is an open-source framework geared towards processing of large quantities of
+data for e.g. analytics.
+It has different modes of operation and can run as standalone application, use [Mesos][] and [Kubernetes][]
+or hop on Hadoop's [YARN][] and directly access data from HDFS.
 
-Here is a simplified view of the architecture:
+So far nothing really new, but there is one major difference which make the amazing
+processing speed possible:
+Spark isn't tied to the two-stage paradigm of MapReduce and can cache data in-memory
+between calls directly on the cluster to speed up repeated access to the same data.
+
+
+On a high-level, Spark consists of following main components:
 
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-left to right direction
+top to bottom direction
 skinparam linetype ortho
-skinparam nodesep 10
-skinparam ranksep 50
+skinparam nodesep 20
+skinparam ranksep 20
 
-card "Driver program" as driver {
+card "Driver program (1)" as driver {
   rectangle "Spark context" as context
 }
 
-rectangle "Cluster manager" as manager
+card "Worker node (2)" as worker {
+    rectangle "RDDS (3) and DAG (4) Scheduler" as sched
 
-card "Worker node" as worker {
-    card "Executor" as exec {
-       file "Task" as task1
-       file "Task" as task2
+    rectangle "Cluster manager (5)" as manager
+
+    card "Executor (6)" as exec {
+        rectangle "Cache" as cache
+        file "Task" as task1
+        file "Task" as task2
     }
 }
 
-context <--> manager
-driver <--> exec
-manager --> worker
+rectangle "Hadoop HDFS (7)" as hdfs
 
-task1 -[hidden]-> task2
+driver --> worker
+sched --> manager
+sched -[hidden]d-> exec
+
+manager -d-> exec
+worker -> hdfs
+
+context -[hidden]d-> sched
+cache -[hidden]> task1
+task1 -[hidden]> task2
+task2 -[hidden]-> hdfs
 {% endplantuml %}
 ++++
+<1> The **driver** is the master process that coordinates the workers and overseas the tasks
+<2> A **cluster manager** manages the communication with the worker nodes
+<3> **Worker nodes** handle Spark tasks and assigns partions (units of work) to executors
+<4> **Resilient Distributed Datasets (RDD)** enable re-checks of data in an event of failure and
+act as immutable data store
+<5> A **Directed Acyclic Graph (DAG)** is used as the internal presentation of the steps of each job
+<6> **Executors** are the working horse of Spark, directly execute jobs and cache the data on the outset
+<7> And HDFS is used as underlying storage
+
+=== Modes of execution
+
+- Cluster mode
+- Client mode
+- Local mode
 
 === Examples
 
@@ -97,7 +138,7 @@ file in1 [
 scala> import spark.implicits._
 import spark.implicits._
 
-scala> val todoDF = spark.read.json("/Users/ces/todo.json")
+scala> val todoDF = spark.read.json("/home/unexist/todo.json")
 todoDF: org.apache.spark.sql.DataFrame = [description: string, done: boolean ... 3 more fields]
 
 scala> todoDF.printSchema()
@@ -197,7 +238,7 @@ $ @spark-submit --master spark://localhost:7077 \
 [INFO] Finished at: 2024-03-10T17:13:22+01:00
 ----
 
-== Difference between MapReduce and Spark
+== Conclusion
 
 Both frameworks are [FOSS][] and free to use, but there are some key
 differences:
@@ -220,8 +261,6 @@ differences:
 | Primarily designed to work with [HDFS]]
 | Spark has an extensive ecosystem and integrates well with other Big Data tools
 |===
-
-== Conclusion
 
 All examples can be found here:
 
