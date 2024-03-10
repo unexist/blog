@@ -46,7 +46,7 @@ require "watir"
 
 browser = Watir::Browser::new
 
-browser.goto "https://blog.unexist.dev"
+browser.goto "https://unexist.blog"
 
 browser.close
 ----
@@ -81,7 +81,7 @@ require "headless"
 Headless.ly do
     browser = Watir::Browser::new
 
-    browser.goto "https://blog.unexist.dev"
+    browser.goto "https://unexist.blog"
 
     browser.close
 end

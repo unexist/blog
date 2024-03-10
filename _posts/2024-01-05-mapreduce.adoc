@@ -51,7 +51,7 @@ While not strictly required to understand why Hadoop is an excellent choice for 
 helps to have a bit of understanding for the course of this article, so if you haven't read the
 previous post yet, we will wait - promised:
 
-<https://blog.unexist.dev/big-data/2023/10/27/big-data.html>
+<https://unexist.blog/big-data/2023/10/27/big-data.html>
 
 Ready? So without further ado let us start.
 
