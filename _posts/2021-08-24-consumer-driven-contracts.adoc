@@ -42,8 +42,8 @@ API and team B takes care of the **producer**.
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
-' !theme unexist from ../assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 150
 skinparam ranksep 50
@@ -51,9 +51,8 @@ skinparam ranksep 50
 rectangle "Consumer" as c #dimgrey
 rectangle "Provider" as p #navy
 
-c .r[#green]......> p: <color:green>Request
-p .l[#green]......> c: <color:green>Response
-
+c .[#green]r......> p: <color:green>Request
+p .[#green]l......> c: <color:green>Response
 {% endplantuml %}
 ++++
 
@@ -69,8 +68,8 @@ a **mock** or even better a **fake** from the **producer** and test the **consum
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
-' !theme unexist from ../assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 150
 skinparam ranksep 50
@@ -78,9 +77,8 @@ skinparam ranksep 50
 rectangle "Consumer" as c #dimgrey
 rectangle "Provider\n(Mocked)" as p #navy
 
-c .r[#green]......> p: <color:green>Request
-p .l[#green]......> c: <color:green>Response
-
+c .[#green]r......> p: <color:green>Request
+p .[#green]l......> c: <color:green>Response
 {% endplantuml %}
 ++++
 
@@ -179,8 +177,8 @@ directly to each other during tests the communication looks like this:
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
-' !theme unexist from ../assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 150
 skinparam ranksep 50
@@ -190,11 +188,11 @@ rectangle "Broker" as b #limegreen
 rectangle "Provider" as p #navy
 
 
-c .r[#green].....> b: <color:green>Request
-b .l[#green].....> c: <color:green>Response
+c .[#green]r.....> b: <color:green>Request
+b .[#green]l.....> c: <color:green>Response
 
-b .l[#green].....> p: <color:green>Request
-p .l[#green].....> b: <color:green>Response
+b .[#green]l.....> p: <color:green>Request
+p .[#green]l.....> b: <color:green>Response
 {% endplantuml %}
 ++++
 
@@ -312,7 +310,7 @@ A colleague also opened a feature request and gladly they accepted and added it:
 
 {3}[Pact] takes good care of the bulk work of the consumer-driven contract flow, so it is quite easy
 go get started with it.
-In general, adding this to CICD can still be a challenge, especially if many stages test or dev may
+In general, adding this to CI/CD can still be a challenge, especially if many stages test or dev may
 contain different versions of the services.
 
 My showcase can be found here:

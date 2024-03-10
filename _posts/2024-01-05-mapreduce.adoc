@@ -76,45 +76,45 @@ This can be simplified in following flow:
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
-' !theme unexist from ../assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 30
 skinparam ranksep 30
 
 together {
 {% raw %}
-  file in1 [
+file in1 [
 {{json
-  {
-    "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
-  }
+{
+"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0
+}
 }}
-  ]
+]
 
-  file in2 [
+file in2 [
 {{json
-  {
-    "title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1
-  }
+{
+"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1
+}
 }}
-  ]
+]
 }
 {% endraw %}
 
 together {
-  rectangle "Map (1)" as map1 #crimson
-  rectangle "Map (1)" as map2 #crimson
+rectangle "Map (1)" as map1 #crimson
+rectangle "Map (1)" as map2 #crimson
 }
 
 together {
-  file shuf1 [
+file shuf1 [
 2021-05-07 => 0
-  ]
+]
 
-  file shuf2 [
+file shuf2 [
 2021-05-07 => 1
-  ]
+]
 }
 
 file out [
@@ -142,7 +142,6 @@ map1 -[hidden]-> map2
 shuf1 -[hidden]-> shuf2
 {% endplantuml %}
 ++++
-
 <1> One mapper per file converts our JSON into a single key-value pair.
 <2> The shuffle step ensures that similar pairs are fed into the same reducer.
 <3> Finally the reducer compacts and combines the key-pairs.
@@ -263,8 +262,8 @@ Before see how we can actually create a job let us first talk about the general 
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
-' !theme unexist from ../assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 ' left to right direction
 skinparam linetype ortho
 skinparam nodesep 20
@@ -273,13 +272,13 @@ skinparam ranksep 20
 rectangle "Client" as c #dimgrey
 rectangle "Resource manager" as rm #navy
 
-rectangle "Node 1" as n1 {
+card "Node 1" as n1 {
   rectangle "Node manager" as nm1 #navy
   rectangle "App master" as am #crimson
   rectangle "Container" as co1 #crimson
 }
 
-rectangle "Node 2" as n2 {
+card "Node 2" as n2 {
   rectangle "Node manager" as nm2 #navy
   rectangle "Container" as co2 #crimson
 }
@@ -294,7 +293,7 @@ co2 -[#crimson]--> am
 
 am .[#green]...> rm: <color:green>Resource request (4)
 
-c -u[hidden]> rm
+c -[hidden]u-> rm
 n1 -[hidden]> n2
 {% endplantuml %}
 ++++

@@ -110,7 +110,8 @@ resiliency and redundancy.
 
 ++++
 {% plantuml %}
-!theme unexist from /home/unexist/blog/assets/plantuml
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 
 package "Namenodes" as nn {
@@ -151,7 +152,6 @@ c --> f3 : Write (3)
 nn -r-> dns : Block ops (4)
 {% endplantuml %}
 ++++
-
 <1> Namenodes keep track of every block and store metadata like the name or the count of active
 replicas and answer questions of clients which datanodes have a copy of the desired block.
 <2> Clients use this information to connect directly to the datanodes and load the actual data.
@@ -308,8 +308,8 @@ $ xxd blk_1073741825_1002.meta
 00000000: 0001 0200 0002 0011 5d21 d1              ........]!. # <3>
 ----
 <1> The interesting files here are some level down the directory hierarchy of our warehouse.
-<2> Hadoop and friends support four major formats: Plain text files, binary sequence files, {2}[Avro] data files and
-{15}[Parquet]
+<2> Hadoop and friends support four major formats: Plain text files, binary sequence files,
+{2}[Avro] data files and {15}[Parquet]
 <3> Next to the data file is a meta file, which contains a file header with version and a series of checksums for the
 sections of the block.
 
