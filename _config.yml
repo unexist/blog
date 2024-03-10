@@ -69,7 +69,6 @@ kramdown:
 exclude:
   - .hg/
   - idea/
-  - uml/
 #   - .sass-cache/
 #   - .jekyll-cache/
 #   - gemfiles/
