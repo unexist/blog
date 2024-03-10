@@ -36,12 +36,14 @@ plugins:
   - jekyll-plantuml
   - jekyll-time-to-read
 
+asciidoctor_attributes: &asciidoctor_attributes
+  icons: font
+  source-highlighter: rouge
+  plantumldir: /home/unexist/projects/blog/assets/plantuml
+# plantumldir: /home/unexist/blog/assets/plantuml
+
 asciidoctor:
-  attributes:
-    - icons=font
-    - source-highlighter=rouge
-    - plantumldir=../assets/plantuml
-#    - plantumldir=/home/unexist/blog/assets/plantuml
+  attributes: *asciidoctor_attributes
 
 category_page_layout: category_page
 category_page_dir: category
