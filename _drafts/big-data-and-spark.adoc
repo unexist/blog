@@ -67,11 +67,10 @@ card "Driver program (1)" as driver {
   rectangle "Spark context" as context
 }
 
-card "Worker node (2)" as worker {
-    rectangle "RDDS (3) and DAG (4) Scheduler" as sched
+rectangle "RDDS (2) and DAG (3) Scheduler" as sched
+rectangle "Cluster manager (4)" as manager
 
-    rectangle "Cluster manager (5)" as manager
-
+card "Worker node (5)" as worker {
     card "Executor (6)" as exec {
         rectangle "Cache" as cache
         file "Task" as task1
@@ -81,33 +80,23 @@ card "Worker node (2)" as worker {
 
 rectangle "Hadoop HDFS (7)" as hdfs
 
-driver --> worker
-sched --> manager
-sched -[hidden]d-> exec
+driver -d-> sched
+sched -d-> manager
+manager -d-> worker
+worker -d-> hdfs
 
-manager -d-> exec
-worker -> hdfs
-
-context -[hidden]d-> sched
-cache -[hidden]> task1
-task1 -[hidden]> task2
-task2 -[hidden]-> hdfs
+cache -[hidden]r-> task1
+task1 -[hidden]r-> task2
 {% endplantuml %}
 ++++
 <1> The **driver** is the master process that coordinates the workers and overseas the tasks
-<2> A **cluster manager** manages the communication with the worker nodes
-<3> **Worker nodes** handle Spark tasks and assigns partions (units of work) to executors
-<4> **Resilient Distributed Datasets (RDD)** enable re-checks of data in an event of failure and
+<2> **Worker nodes** handle Spark tasks and assigns partions (units of work) to executors
+<3> **Resilient Distributed Datasets (RDD)** enable re-checks of data in an event of failure and
 act as immutable data store
+<4> A **cluster manager** manages the communication with the worker nodes
 <5> A **Directed Acyclic Graph (DAG)** is used as the internal presentation of the steps of each job
 <6> **Executors** are the working horse of Spark, directly execute jobs and cache the data on the outset
 <7> And HDFS is used as underlying storage
-
-=== Modes of execution
-
-- Cluster mode
-- Client mode
-- Local mode
 
 === Examples
 
