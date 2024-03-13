@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Spark vs MapReduce
-description: This third blog post of the Big Data series compares the computing model of MapReduce with the features of options of Apache Spark.
+description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features and the computing model of MapReduce.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -22,6 +22,7 @@ endif::[]
 ////
 https://www.goodreads.com/book/show/38467996-spark
 https://sparkbyexamples.com/
+https://www.scala-lang.org/
 https://www.python.org/
 https://www.r-project.org/
 https://mesos.apache.org/
@@ -244,7 +245,7 @@ differences:
 
 | Ease of use
 | Strong programming experience in [Java][] is required
-| Spark supports multiple programming languages like [R][], [Python][] or [Spark SQL][]
+| Spark supports multiple programming languages like [Python[], [Java][], [Scala][] and [R][]
 
 | Integration
 | Primarily designed to work with [HDFS]]
