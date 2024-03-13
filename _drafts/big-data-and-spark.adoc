@@ -30,7 +30,7 @@ https://kubernetes.io/
 https://spark.apache.org/
 ////
 
-Welcome to round three of our journey through the mysteries world of [Big Data][].
+Welcome to round three of our journey through the mysterious world of [Big Data][].
 
 After our first steps with the computing model of [MapReduce][], we are going to focus
 on a string contender of it, learn about its strengths and have a look at a few more examples - so
@@ -44,6 +44,8 @@ TIP: If you missed the previous posts just have a look here
 
 Like MapReduce, Spark is an open-source framework geared towards processing of large quantities of
 data for e.g. analytics.
+Its key driving goal is to provide an unified platform for writing Big Data applications.
+
 It has different modes of operation and can run as standalone application, use [Mesos][] and [Kubernetes][]
 or hop on Hadoop's [YARN][] and directly access data from HDFS.
 
