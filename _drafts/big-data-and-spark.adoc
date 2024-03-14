@@ -30,21 +30,26 @@ https://kubernetes.io/
 https://spark.apache.org/
 ////
 
-Welcome to round three of our journey through the mysterious world of [Big Data][].
+I've started a bit late with the [Big Data][] game and there is no surprise that even things like
+[MapReduce][] have some strong contenders even on its own platform.
+[Apache Spark][] is probably one of the the strongest contender and provides a unique approach
+to the whole idea.
 
-After our first steps with the computing model of [MapReduce][], we are going to focus
-on a string contender of it, learn about its strengths and have a look at a few more examples - so
-let us say hello to [Apache Spark][].
+So during the course of this third post we are going to learn about the general architecture of
+Spark, talk about differences to the original computing model of [MapReduce][] and have a look
+at a few examples.
+
+Ready? Onwards!
 
 TIP: If you missed the previous posts just have a look here
      <https://unexist.blog/big-data/2023/10/27/big-data.html> and here
-     <https://unexist.blog/big-data/2024/01/05/mapreduce.html>
+     <https://unexist.blog/big-data/2024/01/05/mapreduce.html>.
 
 == What is Spark?
 
 Like MapReduce, Spark is an open-source framework geared towards processing of large quantities of
 data for e.g. analytics.
-Its key driving goal is to provide an unified platform for writing Big Data applications.
+Its key driving goal is to provide an unified platform for writing Big Data applications and
 
 It has different modes of operation and can run as standalone application, use [Mesos][] and [Kubernetes][]
 or hop on Hadoop's [YARN][] and directly access data from HDFS.
