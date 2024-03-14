@@ -32,7 +32,7 @@ https://spark.apache.org/
 
 I've started a bit late with the [Big Data][] game and there is no surprise that even things like
 [MapReduce][] have some strong contenders even on its own platform.
-[Apache Spark][] is probably one of the the strongest contender and provides a unique approach
+[Apache Spark][] is probably one of the the strongest contender and provides a unified approach
 to the whole idea.
 
 So during the course of this third post we are going to learn about the general architecture of
@@ -48,8 +48,12 @@ TIP: If you missed the previous posts just have a look here
 == What is Spark?
 
 Like MapReduce, Spark is an open-source framework geared towards processing of large quantities of
-data for e.g. analytics.
-Its key driving goal is to provide an unified platform for writing Big Data applications and
+data for e.g. analytics and as initially mentioned follows a unified approach.
+It provides a whole platform for writing of Big Data applications and offers a wide range of
+different data tasks like simple loading of data to SQL queries to streaming computation.
+
+All of these components integrate seemingly inside the same application and can be assembled from
+different API in the supported programming languages [Python[], [Java][], [Scala][] and [R][].
 
 It has different modes of operation and can run as standalone application, use [Mesos][] and [Kubernetes][]
 or hop on Hadoop's [YARN][] and directly access data from HDFS.
@@ -252,7 +256,7 @@ differences:
 
 | Ease of use
 | Strong programming experience in [Java][] is required
-| Spark supports multiple programming languages like [Python[], [Java][], [Scala][] and [R][]
+| Spark supports multiple programming languages like Python, Java, Scala and R
 
 | Integration
 | Primarily designed to work with [HDFS]]
