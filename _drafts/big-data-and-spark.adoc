@@ -184,9 +184,9 @@ scala> idDF.show() // <5>
 ----
 <1> The REPL creates a [Spark session][] implicitly - so we can read in some JSON
 <2> Spark knows how to handle JSON and provides us a matching [DataFrame][]
-<3> A dataframe can be easily converted to a [view][] - aptly named **todo**
-<4> Once created the view can be accessed like any normal view with  SQL
-<5> And the output printed again
+<3> Dataframes are mainly simple data structures and can be easily used to create the [view][] **todo**
+<4> Once created the view can be accessed like any normal view with SQL
+<5> Evaluations of dataframes are lazy and evaluated only when required
 
 ==== Kafka streaming
 
