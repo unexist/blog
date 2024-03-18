@@ -114,16 +114,10 @@ the resources
 
 Spark applications can be run either in a **cluster mode** and make use of many worker nodes and
 executors, but also feel at home in a **local mode**, with all processes running on the same
-machine.
+machine and provides us with enough prowess for the next two examples.
 
-The next two example describe two different ways of interacting with Spark in the local mode to
-ease the setup.
-
-Typical examples in this blog revolve around a simple [todo application][], but for all
-practical means the data model of todo entries is more than enough and exactly what the example
-service writes to the storage:
-
-<https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop>
+Typically examples inside of this blog revolve around a simple [todo application][], but for all
+practical means the data model of todo entries is more than enough.
 
 Here is the flattened out [JSON][] structure to make it easier to understand what happens in the
 next chapters:
@@ -148,10 +142,13 @@ file in0 [
 {% endplantuml %}
 ++++
 
+TIP: If you still need an example service go over here and have a look at how the data can be written to the
+HDFS store:
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop>
+
 ==== Spark shell
 
-The Spark shell can basically be used as a kind of Scala [REPL][] and is an ideal start for
-experimentation with the building blocks and API.
+The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the building blocks and API.
 
 
 [source,shell]
