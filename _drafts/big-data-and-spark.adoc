@@ -53,11 +53,12 @@ It provides a whole platform for writing Big Data applications and offers a wide
 different data tasks starting from simple data loading, SQL queries and up to streaming computation.
 
 All of these components integrate seemingly into the same application and can be assembled from
-different API in the supported programming languages [Python[], [Java][], [Scala][] and [R][].
+different API in its primary language [Scala][], but also in the supported programming languages
+[Java[], [Python][], [SQL][] and [R][].
 
 This unification idea doesn't stop at the persistence level:
-There is a wide support of different systems including [AWS S3][], [Apache Cassandra][], and
-obviously HDFS and also includes messaging systems like [Kafka[][].
+There is a wide support of different systems including but not limited to [AWS S3][],
+[Apache Cassandra][], and obviously HDFS, but also includes messaging systems like [Kafka[][].
 
 === Architecture
 
@@ -103,12 +104,19 @@ task1 -[hidden]r-> task2
 <2> **Worker nodes** handle Spark tasks and assigns partions (units of work) to executors
 <3> **Resilient Distributed Datasets (RDD)** enable re-checks of data in an event of failure and
 act as immutable data store
-<4> A **cluster manager** manages the communication with the worker nodes
+<4> A **cluster manager** manages the communication with the worker nodes and keeps track of
+the resources
 <5> A **Directed Acyclic Graph (DAG)** is used as the internal presentation of the steps of each job
 <6> **Executors** are the working horse of Spark, directly execute jobs and cache the data on the outset
-<7> And HDFS is used as underlying storage
+<7> And here, HDFS is used as underlying storage
 
 === Examples
+
+Spark applications can be run either in a **cluster mode**, which allows the usage of many worker
+nodes and executors, but also feel at home in a **local mode** with all processes running on the
+same machine.
+
+The next example
 
 ==== Spark shell
 
