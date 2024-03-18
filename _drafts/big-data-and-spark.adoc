@@ -70,27 +70,28 @@ On a high-level, Spark consists of following main components:
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-top to bottom direction
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-card "Driver program (1)" as driver {
-  rectangle "Spark context" as context
-}
-
-rectangle "RDDS (2) and DAG (3) Scheduler" as sched
-rectangle "Cluster manager (4)" as manager
-
-card "Worker node (5)" as worker {
-    card "Executor (6)" as exec {
-        rectangle "Cache" as cache
-        file "Task" as task1
-        file "Task" as task2
+together {
+    card "Driver program (1)" as driver {
+      rectangle "Spark context" as context
     }
-}
 
-rectangle "Hadoop HDFS (7)" as hdfs
+    rectangle "RDDS (2) and DAG (3) Scheduler" as sched
+    rectangle "Cluster manager (4)" as manager
+
+    card "Worker node (5)" as worker {
+          card "Executor (6)" as exec {
+              rectangle "Cache" as cache
+              file "Task" as task1
+              file "Task" as task2
+          }
+    }
+
+    rectangle "Hadoop HDFS (7)" as hdfs
+}
 
 driver -d-> sched
 sched -d-> manager
@@ -222,7 +223,7 @@ $ spark-submit --master spark://localhost:7077 \
     --conf spark.yarn.appMasterEnv.JAVA_HOME=/opt/java/openjdk \
     --conf spark.sql.streaming.checkpointLocation=/tmp/checkpoint \
     --name todosink \
-    --deploy-mode cluster
+    --deploy-mode cluster \
     --num-executors 1 \
     --class dev.unexist.showcase.todo.TodoSparkSink \
     hdfs://localhost:9000/jars/todo-spark-sink-0.1.jar
