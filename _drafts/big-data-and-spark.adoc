@@ -30,14 +30,14 @@ https://kubernetes.io/
 https://spark.apache.org/
 ////
 
-I've started a bit late with the [Big Data][] game and there is no surprise that even things like
+I've come a bit late to [Big Data][] game and there is no surprise that even things like
 [MapReduce][] have some strong contenders even on its own platform.
-[Apache Spark][] is probably one of the the strongest contender and provides a unified approach
+[Apache Spark][] is probably one of the strongest contender and provides a unified approach
 to the whole idea.
 
-So during the course of this third post we are going to learn about the general architecture of
-Spark, talk about differences to the original computing model of [MapReduce][] and have a look
-at a few examples.
+During the course of this third post we are going to have a look at the general architecture of
+Spark, talk about differences to the original computing model of [MapReduce][] and tinker with a
+few examples.
 
 Ready? Onwards!
 
