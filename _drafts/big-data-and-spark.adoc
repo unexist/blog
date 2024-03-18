@@ -49,11 +49,15 @@ TIP: If you missed the previous posts just have a look here
 
 Like MapReduce, Spark is an open-source framework geared towards processing of large quantities of
 data for e.g. analytics and as initially mentioned follows a unified approach.
-It provides a whole platform for writing of Big Data applications and offers a wide range of
-different data tasks like simple loading of data to SQL queries to streaming computation.
+It provides a whole platform for writing Big Data applications and offers a wide range of
+different data tasks starting from simple data loading, SQL queries and up to streaming computation.
 
-All of these components integrate seemingly inside the same application and can be assembled from
+All of these components integrate seemingly into the same application and can be assembled from
 different API in the supported programming languages [Python[], [Java][], [Scala][] and [R][].
+
+This unification idea also covers persistence and there is a wide support of different systems
+including [AWS S3][], [Apache Cassandra][], and HDFS and also includes messaging systems like
+[Kafka[][].
 
 It has different modes of operation and can run as standalone application, use [Mesos][] and [Kubernetes][]
 or hop on Hadoop's [YARN][] and directly access data from HDFS.
