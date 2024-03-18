@@ -148,7 +148,8 @@ HDFS store:
 
 ==== Spark shell
 
-The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the building blocks and API.
+The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the building
+blocks and API.
 
 
 [source,shell]
@@ -156,10 +157,10 @@ The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for exper
 scala> import spark.implicits._
 import spark.implicits._
 
-scala> val todoDF = spark.read.json("/home/unexist/todo.json")
+scala> val todoDF = spark.read.json("/home/unexist/todo.json") // <1>
 todoDF: org.apache.spark.sql.DataFrame = [description: string, done: boolean ... 3 more fields]
 
-scala> todoDF.printSchema()
+scala> todoDF.printSchema() // <2>
 root
  |-- description: string (nullable = true)
  |-- done: boolean (nullable = true)
@@ -169,18 +170,23 @@ root
  |-- id: long (nullable = true)
  |-- title: string (nullable = true)
 
-scala> todoDF.createOrReplaceTempView("todo")
+scala> todoDF.createOrReplaceTempView("todo") // <3>
 
-scala> val idDF = spark.sql("SELECT id, title, done FROM todo WHERE id = 0")
+scala> val idDF = spark.sql("SELECT id, title, done FROM todo WHERE id = 0") // <4>
 idDF: org.apache.spark.sql.DataFrame = [description: string, done: boolean ... 3 more fields]
 
-scala> idDF.show()
+scala> idDF.show() // <5>
 +---+------+-----+
 | id| title| done|
 +---+------+-----+
 |  0|string|false|
 +---+------+-----+
 ----
+<1> The REPL creates a [Spark session][] implicitly - so we can read in some JSON
+<2> Spark knows how to handle JSON and provides us a matching [DataFrame][]
+<3> A dataframe can be easily converted to a [view][] - aptly named **todo**
+<4> Once created the view can be accessed like any normal view with  SQL
+<5> And the output printed again
 
 ==== Kafka streaming
 
