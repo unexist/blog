@@ -355,7 +355,8 @@ The compilation of the job files is pretty straight forward:
 $ mvn clean package -Dmaven.test.skip=true
 ...
 [INFO] --- jar:3.3.0:jar (default-jar) @ todo-mapreduce ---
-[INFO] Building jar: /Users/christoph.kappel/Projects/showcase-hadoop-cdc-quarkus/todo-mapreduce/target/todo-mapreduce-0.1.jar
+
+[INFO] Building jar: /home/unexist/projects/showcase-hadoop-cdc-quarkus/todo-mapreduce/target/todo-mapreduce-0.1.jar
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
