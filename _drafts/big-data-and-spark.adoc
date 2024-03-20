@@ -60,7 +60,7 @@ This unification idea doesn't stop at the persistence level:
 There is a wide support of different systems including but not limited to [AWS S3][],
 [Apache Cassandra][], and obviously HDFS, but also includes messaging systems like [Kafka[][].
 
-=== Application architecture
+=== Spark architecture
 
 On a high-level, Spark application consist of following main components:
 
@@ -110,6 +110,33 @@ the resources
 <6> **Executors** are the working horse of Spark, directly execute jobs and cache the data on the outset
 <7> And here, HDFS is used as underlying storage
 
+== Spark applications
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+card "Development environment" as dev {
+    rectangle "Driver" as driver
+    rectangle "Spark context" as context
+}
+
+card "Cluster" as cluster {
+    rectangle "Master" as master
+    rectangle "Worker" as worker
+}
+
+
+driver -> master
+
+dev -[hidden]> driver
+master -[hidden]> worker
+{% endplantuml %}
+++++
+
 === Examples
 
 Spark applications can be run either in a **cluster mode** and make use of many worker nodes and
@@ -127,8 +154,8 @@ next chapters:
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 skinparam linetype ortho
-skinparam nodesep 29
-skinparam ranksep 29
+skinparam nodesep 30
+skinparam ranksep 30
 
 {% raw %}
 file in0 [
@@ -150,7 +177,6 @@ HDFS store:
 
 The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the building
 blocks and API.
-
 
 [source,shell]
 ----
