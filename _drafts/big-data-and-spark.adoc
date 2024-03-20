@@ -129,8 +129,30 @@ card "Cluster" as cluster {
     rectangle "Worker" as worker
 }
 
+dev -> cluster
 
-driver -> master
+dev -[hidden]> driver
+master -[hidden]> worker
+{% endplantuml %}
+++++
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+card "Development environment" as dev {
+    rectangle "Spark context" as context
+}
+
+card "Cluster" as cluster {
+    rectangle "Driver" as driver
+    rectangle "Master" as master
+    rectangle "Worker" as worker
+}
+
+dev -> cluster
 
 dev -[hidden]> driver
 master -[hidden]> worker
