@@ -112,6 +112,17 @@ the resources
 
 == Spark applications
 
+Spark applications can be run either in a **cluster mode** and make use of many worker nodes and
+executors, but also feel at home in a **local mode**, with all processes running on the same
+machine and provides us with enough prowess for the next two examples.
+
+Spark applications can either be run in local or **client mode** in a single [JVM][] instance,
+which is perfectly suited for first steps in tools like [pyspark][] or
+
+There are multiple running modes for spark applications:
+
+- **Local mode** or **client mode**
+
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
@@ -161,15 +172,10 @@ master -[hidden]> worker
 
 === Examples
 
-Spark applications can be run either in a **cluster mode** and make use of many worker nodes and
-executors, but also feel at home in a **local mode**, with all processes running on the same
-machine and provides us with enough prowess for the next two examples.
-
 Typically examples inside of this blog revolve around a simple [todo application][], but for all
 practical means the data model of todo entries is more than enough.
-
-Here is the flattened out [JSON][] structure to make it easier to understand what happens in the
-next chapters:
+So for the following examples we just re-use the data structured which can be seen here flattend
+out:
 
 ++++
 {% plantuml %}
@@ -191,14 +197,13 @@ file in0 [
 {% endplantuml %}
 ++++
 
-TIP: If you still need an example service go over here and have a look at how the data can be written to the
-HDFS store:
+TIP: Following service writes this kind of data to the underlying HDFS store:
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop>
 
 ==== Spark shell
 
-The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the building
-blocks and API.
+The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the API and the
+building blocks.
 
 [source,shell]
 ----
