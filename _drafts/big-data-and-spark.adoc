@@ -196,17 +196,17 @@ master -[hidden]> worker
 ++++
 
 Setting up a cluster takes some time and pain, so for the remainder of this blog
-we just stay in **standalone** mode, which provides more than enough prowess for us.
+we just stay in **standalone** mode.
+There is sufficient prowess for us to reap.
 
-TIP: If you want to run the examples locally here is [Dockerfile][] for a kickstart:
+TIP: If you want to run the examples locally here is a [Dockerfile][] for a kickstart:
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/spark/Dockerfile>
 
 === Examples
 
-Typically examples inside of this blog revolve around a simple [todo application][], but for all
-practical means the data model of todo entries is more than enough.
-So for the following examples we just re-use the data structured which can be seen here flattend
-out:
+Like every good post inside of this blog we again are going to use a simple [todo application][]
+and its really simple data model.
+Heavy lifting is a nice exercise for the reader, so we keep it simple and probably stupid, too:
 
 ++++
 {% plantuml %}
@@ -228,7 +228,7 @@ file in0 [
 {% endplantuml %}
 ++++
 
-TIP: Data like this can also be easily written to an underlying HDFS store:
+TIP: More complexity required? Data like this can also be easily written to an underlying HDFS store:
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop>
 
 ==== Spark shell
@@ -266,13 +266,29 @@ scala> idDF.show() // <5>
 |  0|string|false|
 +---+------+-----+
 ----
-<1> The REPL creates a [Spark session][] automatically and we can directly start ingesting JSON data
-<2> Spark knows how to handle JSON and provides us a matching [DataFrame][]
+<1> The REPL creates a [Spark session][] automatically, and we can directly start ingesting JSON data
+<2> Spark knows how to handle JSON and provides us with a matching [DataFrame][]
 <3> Dataframes are mainly simple data structures and can be easily used to create the [SQL view][] **todo**
 <4> Once created the view can be accessed like any normal view with SQL
 <5> Evaluations of dataframes are lazy and evaluated only when required like to generate output
 
 ==== Kafka streaming
+
+The next example adds some more complexity and demonstrates the streaming abilities of Kafka in
+combination with Spark.
+
+Again, the standalone version is more than enough, we just need start Kafka. Since Kafka itself can
+also be a pain, we will throw in [RedPanda][] as a lightweight alternative.
+
+Installing RedPanda is also pretty painless, here is how it can be done with [Podman][] for the
+existing pod named _hadoop_:
+
+[source,shell]
+----
+$ podman run -dit --name redpanda --pod=hadoop docker.io/vectorized/redpanda
+...
+9a084aa8d6fc79a29040f1575ead1dd097d3ec6ce444c7a39018ad251bc406b0
+----
 
 [source,scala]
 ----
@@ -333,6 +349,9 @@ $ mvn clean package
 [INFO] Finished at: 2024-03-19T16:07:05+01:00
 [INFO] ------------------------------------------------------------------------
 ----
+
+Next step is to actually submit the job to the master along with a bit of
+configuration:
 
 [source,shell]
 ----
