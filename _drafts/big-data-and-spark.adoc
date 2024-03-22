@@ -33,15 +33,15 @@ https://spark.apache.org/docs/latest/cluster-overview.html
 
 I've come a bit late to [Big Data][] game and there is no surprise that even things like
 [MapReduce][] have some strong contenders even on its own platform.
-[Apache Spark][] is probably one of the strongest contender.
 
-During the course of this third post we are going to have a look at the general architecture of
-Spark, talk about differences to the original computing model of [MapReduce][] and tinker with a
-few examples.
+During the course of this third post we are going to have a look at probably the strongest
+contender [Apache Spark][] and its general architecture.
+Afterward we tinker with a few examples and conclude with a comparison to the original
+computing model of [MapReduce][].
 
 Ready? Onwards!
 
-TIP: If you missed the previous posts just have a look here
+TIP: If you've missed the previous posts just have a look over here
      <https://unexist.blog/big-data/2023/10/27/big-data.html> and here
      <https://unexist.blog/big-data/2024/01/05/mapreduce.html>.
 
@@ -52,19 +52,19 @@ large quantities of data for e.g. analytics in a rather unified approach.
 It provides a whole platform for writing Big Data applications under a single umbrella and offers
 a wide range of support for existing technologies.
 
-It can make use of existing [cluster managers][] like [Hadoop YARN][], [Apache Mesos][] or
-[Kubernetes][], but also supports running in standalone mode even on a single machine.
+It can make use of [cluster managers][] like [Hadoop YARN][], [Apache Mesos][] or [Kubernetes][],
+but also supports running in standalone mode even on a single machine.
 
 And this unification idea doesn't stop at the persistence level:
 There is support for traditional storage systems including but not limited to [AWS S3][] and
 obviously [HDFS][], but it also covers messaging systems like [Kafka[][].
 
-All of these components integrate seemingly into the same application and can be assembled from
+All of these components integrate seamless into the same application and can be assembled from
 different API in its primary language [Scala][], but also in the supported programming languages
 [Java[], [Python][], [SQL][] and [R][].
 
-This powerful combination allows different data tasks starting from simple data loading, SQL
-queries and up to streaming computation.
+This powerful combination allows a great deal of different data tasks ranging from simple data
+loading, SQL queries and up to streaming computation.
 
 === Architecture overview
 
@@ -140,16 +140,9 @@ split into stages and ultimately into tasks
 
 == Spark applications
 
-Spark applications can be run either in a **cluster mode** and make use of many worker nodes and
-executors, but also feel at home in a **local mode**, with all processes running on the same
-machine and provides us with enough prowess for the next two examples.
-
-Spark applications can either be run in local or **client mode** in a single [JVM][] instance,
-which is perfectly suited for first steps in tools like [pyspark][] or
-
-There are multiple running modes for spark applications:
-
-- **Local mode** or **client mode**
+Spark applications can be run in local or **client mode** in a single [JVM][] instance,
+which is perfectly suited for first steps with tools like [pyspark][].
+In this mode the driver stays where **spark-submit** actually runs:
 
 ++++
 {% plantuml %}
@@ -176,6 +169,9 @@ master -[hidden]> worker
 {% endplantuml %}
 ++++
 
+This is in contrast to the **cluster mode**, which utilizes cluster technology and moves the
+driver inside the cluster:
+
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
@@ -198,6 +194,12 @@ dev -[hidden]> driver
 master -[hidden]> worker
 {% endplantuml %}
 ++++
+
+Setting up a cluster takes some time and pain, so for the remainder of this blog
+we just stay in **standalone** mode, which provides more than enough prowess for us.
+
+TIP: If you want to run the examples locally here is [Dockerfile][] for a kickstart:
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/spark/Dockerfile>
 
 === Examples
 
@@ -226,7 +228,7 @@ file in0 [
 {% endplantuml %}
 ++++
 
-TIP: Following service writes this kind of data to the underlying HDFS store:
+TIP: Data like this can also be easily written to an underlying HDFS store:
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/todo-service-hadoop>
 
 ==== Spark shell
