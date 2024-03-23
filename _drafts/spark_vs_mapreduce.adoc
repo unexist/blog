@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Spark vs MapReduce
-description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features and the computing model of MapReduce.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features of MapReduce along with its computing model.
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: hadoop mapreduce spark versus showcase
 categories: tech
@@ -19,26 +19,41 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-////
-https://www.goodreads.com/book/show/38467996-spark
-https://sparkbyexamples.com/
-https://www.scala-lang.org/
-https://www.python.org/
-https://www.r-project.org/
-https://mesos.apache.org/
-https://kubernetes.io/
-https://spark.apache.org/
-https://spark.apache.org/docs/latest/cluster-overview.html
-https://docs.redpanda.com/current/get-started/quick-start/
-////
+:1: https://kafka.apache.org/
+:2: https://mesos.apache.org/
+:3: https://spark.apache.org/
+:4: https://aws.amazon.com/s3/
+:5: https://www.oracle.com/big-data/what-is-big-data/
+:6: https://spark.apache.org/docs/latest/cluster-overview.html
+:7: https://www.oracle.com/big-data/what-is-big-data/
+:8: https://docs.docker.com/reference/dockerfile/
+:9: https://hadoop.apache.org/docs/current/hadoop-yarn/hadoop-yarn-site/YARN.html
+:10: https://www.ibm.com/topics/hdfs
+:11: https://www.java.com/en/
+:12: https://en.wikipedia.org/wiki/Java_virtual_machine
+:13: https://www.ibm.com/topics/hdfs
+:14: https://kubernetes.io/
+:15: https://en.wikipedia.org/wiki/MapReduce
+:16: https://spark.apache.org/docs/latest/api/python/index.html
+:17: https://www.python.org/
+:18: https://docs.redpanda.com/current/get-started/quick-start/
+:19: https://www.r-project.org/
+:20: https://www.python.org/
+:21: https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop
+:22: https://www.scala-lang.org/
+:23: https://sparkbyexamples.com/spark/sparksession-explained-with-examples/
+:24: https://spark.apache.org/docs/latest/streaming-programming-guide.html
+:25: https://en.wikipedia.org/wiki/SQL
+:26: https://learnsql.com/blog/sql-view/
+:27: https://blog.unexist.dev/redoc/
 
-I've come a bit late to [Big Data][] game and there is no surprise that even things like
-[MapReduce][] have some strong contenders even on its own platform.
+I've come a bit late to {5}[Big Data] game and there is no surprise that even things like
+{15}[MapReduce] have some strong contenders even on its own platform.
 
 During the course of this third post we are going to have a look at probably the strongest
-contender [Apache Spark][] and its general architecture.
+contender {3}[Apache Spark] and its general architecture.
 Afterward we tinker with a few examples and conclude with a comparison to the original
-computing model of [MapReduce][].
+computing model of {15}[MapReduce].
 
 Ready?
 Onwards!
@@ -54,16 +69,16 @@ large quantities of data for e.g. analytics in a rather unified approach.
 It provides a whole platform for writing Big Data applications under a single umbrella and offers
 a wide range of support for existing technologies.
 
-It can make use of [cluster managers][] like [Hadoop YARN][], [Apache Mesos][] or [Kubernetes][],
+It can make use of {6}[cluster managers] like {9}[Hadoop YARN], {2}[Apache Mesos] or {14}[Kubernetes],
 but also supports running in standalone mode even on a single machine.
 
 And this unification idea doesn't stop at the persistence level:
-There is support for traditional storage systems including but not limited to [AWS S3][] and
-obviously [HDFS][], but it also covers messaging systems like [Kafka[][].
+There is support for traditional storage systems including but not limited to {4}[AWS S3] and
+obviously {10}[HDFS], but it also covers messaging systems like [Kafka{1}[].
 
 All of these components integrate seamless into the same application and can be assembled from
-different API in its primary language [Scala][], but also in the supported programming languages
-[Java[], [Python][], [SQL][] and [R][].
+different API in its primary language {22}[Scala], but also in the supported programming languages
+[Java[], {17}[Python], {25}[SQL] and {19}[R].
 
 This powerful combination allows a great deal of different data tasks ranging from simple data
 loading, SQL queries and up to streaming computation.
@@ -142,8 +157,8 @@ split into stages and ultimately into tasks
 
 == Spark applications
 
-Spark applications can be run in local or **client mode** in a single [JVM][] instance,
-which is perfectly suited for first steps with tools like [pyspark][].
+Spark applications can be run in local or **client mode** in a single {12}[JVM] instance,
+which is perfectly suited for first steps with tools like {16}[pyspark].
 In this mode the driver stays where **spark-submit** actually runs:
 
 ++++
@@ -225,7 +240,7 @@ kindly point your browser to : <http://localhost:8080/>
 
 image::spark_master.png[]
 
-TIP: If you still favor containers and insist, here is [Dockerfile][] for a kickstart, but consider
+TIP: If you still favor containers and insist, here is {8}[Dockerfile] for a kickstart, but consider
 yourself warned.
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/spark/Dockerfile>
 
@@ -235,7 +250,7 @@ Time for fun now!
 === Examples
 
 Big Data without actual data kind of beats the whole idea, so we again rely on our simple
-[todo application][] or rather its really simple data model.
+{27}[todo application] or rather its really simple data model.
 If you haven't seen it before, it just looks like this and should be easy to grasp:
 
 ++++
@@ -264,7 +279,7 @@ TIP: More complexity required? Data like this can also be easily written to an u
 ==== Spark shell
 
 The first example starts low and utilizes the Spark shell.
-It basically acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the
+It basically acts as a kind of Scala {21}[REPL] and is an ideal start for experimentation with the
 API and the building blocks, especially if you've never touched Scala before:
 
 [source,shell]
@@ -297,9 +312,9 @@ scala> idDF.show() // <5>
 |  0|string|false|
 +---+------+-----+
 ----
-<1> The REPL creates a [Spark session][] automatically, and we can directly start ingesting JSON data
-<2> Spark knows how to handle JSON and provides us with a matching [DataFrame][]
-<3> Dataframes are mainly simple data structures and can be easily used to create the [SQL view][] **todo**
+<1> The REPL creates a {23}[Spark session] automatically, and we can directly start ingesting JSON data
+<2> Spark knows how to handle JSON and provides us with a matching {7}[DataFrame]
+<3> Dataframes are mainly simple data structures and can be easily used to create the {26}[SQL view] **todo**
 <4> Once created the view can be accessed like any normal view with SQL
 <5> Evaluations of dataframes are lazy and evaluated only when required like to generate output
 
@@ -309,11 +324,11 @@ The next example adds some more complexity and demonstrates the streaming abilit
 combination with Spark.
 
 Again, the standalone version is more than enough, but additionally we need Kafka.
-Kafka can be a problem class of its own, but thankfully we have with [RedPanda][] another more
+Kafka can be a problem class of its own, but thankfully we have with {20}[RedPanda] another more
 light-weight contender readily available.
 
 If you did go the container way, installing it is quite easy otherwise please consult the
-really good [quickstart guide][].
+really good {18}[quickstart guide].
 
 [source,shell]
 ----
@@ -383,7 +398,7 @@ Another tick on our check-list - done.
 Before we can actually submit the job there better should be something available on a topic
 for our job to consume.
 
-Another handy tool when you work with Kafka is [kcat][], which allows to send content to and
+Another handy tool when you work with Kafka is {13}[kcat], which allows to send content to and
 read directly from the shell:
 
 [source,shell]
@@ -442,10 +457,10 @@ project.
 
 | Processing paradigm
 | Designed for batch processing
-| Spark supports processing of real-time data with [Spark Streaming][]
+| Spark supports processing of real-time data with {24}[Spark Streaming]
 
 | Ease of use
-| Strong programming experience in [Java][] is required
+| Strong programming experience in {11}[Java] is required
 | Spark supports multiple programming languages like Python, Java, Scala and R
 
 | Integration
