@@ -226,7 +226,7 @@ kindly point your browser to : <http://localhost:8080/>
 image::spark_master.png[]
 
 TIP: If you still favor containers and insist, here is [Dockerfile][] for a kickstart, but consider
-yourself being warned.
+yourself warned.
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/spark/Dockerfile>
 
 Everything set?
@@ -265,7 +265,7 @@ TIP: More complexity required? Data like this can also be easily written to an u
 
 The first example starts low and utilizes the Spark shell.
 It basically acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the
-API and the building blocks, especially if you've never touched Scala before.
+API and the building blocks, especially if you've never touched Scala before:
 
 [source,shell]
 ----
@@ -308,11 +308,12 @@ scala> idDF.show() // <5>
 The next example adds some more complexity and demonstrates the streaming abilities of Kafka in
 combination with Spark.
 
-Again, the standalone version is more than enough, we just need start Kafka. Since Kafka itself can
-also be a pain, we will throw in [RedPanda][] as a lightweight alternative.
+Again, the standalone version is more than enough, but additionally we need Kafka.
+Kafka can be a problem class of its own, but thankfully we have with [RedPanda][] another more
+light-weight contender readily available.
 
-If you did go the Podman way, installing it is quite easy otherwise please consult the really good
-[quickstart guide][].
+If you did go the container way, installing it is quite easy otherwise please consult the
+really good [quickstart guide][].
 
 [source,shell]
 ----
@@ -320,6 +321,8 @@ $ podman run -dit --name redpanda --pod=hadoop docker.io/vectorized/redpanda
 ...
 9a084aa8d6fc79a29040f1575ead1dd097d3ec6ce444c7a39018ad251bc406b0
 ----
+
+Let us have a look at the source code:
 
 [source,scala]
 ----
@@ -349,8 +352,7 @@ object TodoSparkSinkSimple {
 
         resDF.writeStream // <4>
           .format("console")
-          .outputMode("complete")
-          .option("path", "todo_catalog.spark.messages")
+          .outputMode("append")
           .start()
           .awaitTermination()
     }
@@ -359,7 +361,7 @@ object TodoSparkSinkSimple {
 <1> Pass the necessary configuration
 <2> Create the Spark session
 <3> Read the Kafka stream from given server and topic
-<4> Write the stream back to a file of the catalog continuously
+<4> Write the output to the console back to a file of the catalog continuously
 
 The compilation of the jar files and rolling the package is a breeze:
 
@@ -377,24 +379,51 @@ $ mvn clean package
 [INFO] ------------------------------------------------------------------------
 ----
 
-Next step is to actually submit the job to the master along with a bit of
-configuration:
+Another tick on our check-list - done.
+Before we can actually submit the job there better should be something available on a topic
+for our job to consume.
+
+Another handy tool when you work with Kafka is [kcat][], which allows to send content to and
+read directly from the shell:
 
 [source,shell]
 ----
-$ spark-submit --master spark://localhost:7077 \
+echo '{ "description": "string", "done": true, "dueDate": { "due": "2021-05-07", "start": "2021-05-07" }, "title": "string" }' | kcat -t todo_created -b localhost:9092 -k todo -P
+----
+
+And finally it is time to actually submit the configured job:
+
+[source,shell]
+----
+$ spark-submit --master spark://${HOST}:7077 \
     --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 \
-    --conf spark.executorEnv.JAVA_HOME=/opt/java/openjdk \
-    --conf spark.yarn.appMasterEnv.JAVA_HOME=/opt/java/openjdk \
+    --conf spark.executorEnv.JAVA_HOME=${JAVA_HOME} \
+    --conf spark.yarn.appMasterEnv.JAVA_HOME=${JAVA_HOME} \
     --conf spark.sql.streaming.checkpointLocation=/tmp/checkpoint \
+    --conf spark.dynamicAllocation.enabled=false \
     --name todosink \
     --deploy-mode client \
     --num-executors 1 \
-    --class dev.unexist.showcase.todo.TodoSparkSinkSimple \
-	./todo-spark-sink/target/todo-spark-sink-0.1.jar
+    --executor-cores 1 \
+    --driver-memory 1G \
+    --executor-memory 1G \
+    --class dev.unexist.showcase.todo.TodoSparkSinkToConsole \
+    ./target/todo-spark-sink-0.1.jar
 ----
 
+The actual outpot of the job is quite messy, but look out for the batch information:
 
+[source,log]
+++++
+-------------------------------------------
+Batch: 1
+-------------------------------------------
++----+--------------------+
+| key|               value|
++----+--------------------+
+|todo|{ "description": ...|
++----+--------------------+
+++++
 
 == Conclusion
 
