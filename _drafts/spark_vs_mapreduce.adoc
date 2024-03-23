@@ -10,10 +10,10 @@ categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/big_data_and_spark
+:imagesdir: {asciidoctorconfigdir}/../assets/images/spark_vs_mapreduce
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/big_data_and_spark
+:imagesdir: /assets/images/spark_vs_mapreduce
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -29,6 +29,7 @@ https://mesos.apache.org/
 https://kubernetes.io/
 https://spark.apache.org/
 https://spark.apache.org/docs/latest/cluster-overview.html
+https://docs.redpanda.com/current/get-started/quick-start/
 ////
 
 I've come a bit late to [Big Data][] game and there is no surprise that even things like
@@ -39,7 +40,8 @@ contender [Apache Spark][] and its general architecture.
 Afterward we tinker with a few examples and conclude with a comparison to the original
 computing model of [MapReduce][].
 
-Ready? Onwards!
+Ready?
+Onwards!
 
 TIP: If you've missed the previous posts just have a look over here
      <https://unexist.blog/big-data/2023/10/27/big-data.html> and here
@@ -199,14 +201,42 @@ Setting up a cluster takes some time and pain, so for the remainder of this blog
 we just stay in **standalone** mode.
 There is sufficient prowess for us to reap.
 
-TIP: If you want to run the examples locally here is a [Dockerfile][] for a kickstart:
+=== Installation
+
+In order to run the examples on your own there should be a Spark installation up and running on
+your machine.
+Since networking in containers can be nasty, especially with the architecture of clustered systems
+like Hadoop and Spark, we just run it locally.
+
+[source,shell]
+----
+$ curl -sL https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz | tar xz -C .
+$ cd spark-3.5.1-bin-hadoop3
+
+$ sbin/start-master.sh
+starting org.apache.spark.deploy.master.Master, logging to /home/unexist/applications/spark-3.5.1-bin-hadoop3/logs/spark-unexist-org.apache.spark.deploy.master.Master-1-meanas.out
+
+$ sbin/start-worker.sh spark://localhost:7077
+starting org.apache.spark.deploy.worker.Worker, logging to /home/unexist/applications/spark-3.5.1-bin-hadoop3/logs/spark-unexist-org.apache.spark.deploy.worker.Worker-1-meanas.out
+----
+
+When both services are up and running you should be greeted with following page, when you
+kindly point your browser to : <http://localhost:8080/>
+
+image::spark_master.png[]
+
+TIP: If you still favor containers and insist, here is [Dockerfile][] for a kickstart, but consider
+yourself being warned.
 <https://github.com/unexist/showcase-hadoop-cdc-quarkus/blob/master/podman/spark/Dockerfile>
+
+Everything set?
+Time for fun now!
 
 === Examples
 
-Like every good post inside of this blog we again are going to use a simple [todo application][]
-and its really simple data model.
-Heavy lifting is a nice exercise for the reader, so we keep it simple and probably stupid, too:
+Big Data without actual data kind of beats the whole idea, so we again rely on our simple
+[todo application][] or rather its really simple data model.
+If you haven't seen it before, it just looks like this and should be easy to grasp:
 
 ++++
 {% plantuml %}
@@ -233,8 +263,9 @@ TIP: More complexity required? Data like this can also be easily written to an u
 
 ==== Spark shell
 
-The Spark shell acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the API and the
-building blocks.
+The first example starts low and utilizes the Spark shell.
+It basically acts as a kind of Scala [REPL][] and is an ideal start for experimentation with the
+API and the building blocks, especially if you've never touched Scala before.
 
 [source,shell]
 ----
@@ -280,8 +311,8 @@ combination with Spark.
 Again, the standalone version is more than enough, we just need start Kafka. Since Kafka itself can
 also be a pain, we will throw in [RedPanda][] as a lightweight alternative.
 
-Installing RedPanda is also pretty painless, here is how it can be done with [Podman][] for the
-existing pod named _hadoop_:
+If you did go the Podman way, installing it is quite easy otherwise please consult the really good
+[quickstart guide][].
 
 [source,shell]
 ----
@@ -295,13 +326,13 @@ $ podman run -dit --name redpanda --pod=hadoop docker.io/vectorized/redpanda
 object TodoSparkSinkSimple {
     def main(args: Array[String]): Unit = {
         val sparkConf = new SparkConf() // <1>
-
-        sparkConf.set("packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1")
+            .set("packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1")
+            .set("spark.cores.max", "1")
 
         val spark = SparkSession // <2>
             .builder()
             .config(sparkConf)
-            .appName("TodoSparkSinkSimple")
+            .appName("TodoSparkSink")
             .getOrCreate()
 
         import spark.implicits._
@@ -313,26 +344,22 @@ object TodoSparkSinkSimple {
             .option("checkpointLocation", "/tmp/checkpoint")
             .load()
 
-    val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
-    val resDF = dataFrame.as[(String, String)].toDF("key", "value")
+        val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+        val resDF = dataFrame.as[(String, String)].toDF("key", "value")
 
-    resDF.writeStream // <4>
-      .format("console")
-      .outputMode("complete")
-      .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
-      .option("path", "todo_catalog.spark.messages")
-      .start()
-
-    spark.streams.awaitAnyTermination() // <5>
-    spark.streams.resetTerminated()
+        resDF.writeStream // <4>
+          .format("console")
+          .outputMode("complete")
+          .option("path", "todo_catalog.spark.messages")
+          .start()
+          .awaitTermination()
     }
 }
 ----
 <1> Pass the necessary configuration
 <2> Create the Spark session
 <3> Read the Kafka stream from given server and topic
-<4> Write the stream back to a file of the catalog
-<5> Wait until everything is done and exit
+<4> Write the stream back to a file of the catalog continuously
 
 The compilation of the jar files and rolling the package is a breeze:
 
