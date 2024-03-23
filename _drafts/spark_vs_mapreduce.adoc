@@ -414,7 +414,7 @@ $ spark-submit --master spark://${HOST}:7077 \
 The actual outpot of the job is quite messy, but look out for the batch information:
 
 [source,log]
-++++
+----
 -------------------------------------------
 Batch: 1
 -------------------------------------------
@@ -423,12 +423,16 @@ Batch: 1
 +----+--------------------+
 |todo|{ "description": ...|
 +----+--------------------+
-++++
+----
 
 == Conclusion
 
-Both frameworks are [FOSS][] and free to use, but there are some key
-differences:
+Both Hadoop and Spark are powerful technologies for data processing, but differ at major points.
+
+- Spark utilizes RAM for faster processing, isn't directly tied to the two-stage paradigm of Hadoop
+and works pretty well for work-loads that fits into the memory.
+- On the other hand, Hadoop is more effective for processing large data sets and is the more mature
+project.
 
 |===
 | Difference | MapReduce | Spark
@@ -446,12 +450,15 @@ differences:
 
 | Integration
 | Primarily designed to work with [HDFS]]
-| Spark has an extensive ecosystem and integrates well with other Big Data tools
+| Spark has an extensive ecosystem and integrates well with other technologies
 |===
+
+And to really conclude here openly: _Whether you pick one over the other is probably dependent
+on the actual task at hand._
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-hadoop-cdc-quarkus/tree/master/todo-mapreduce>
+<https://github.com/unexist/showcase-hadoop-cdc-quarkus>
 
 [bibliography]
 == Bibliography
