@@ -2,11 +2,11 @@
 layout: post
 title: Spark vs MapReduce
 description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features of MapReduce along with its computing model.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-03-23 21:03 +0100
+last_updated: 2024-03-23 21:03 +0100
 author: Christoph Kappel
 tags: hadoop mapreduce spark versus showcase
-categories: tech
+categories: big-data
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -74,11 +74,11 @@ but also supports running in standalone mode even on a single machine.
 
 And this unification idea doesn't stop at the persistence level:
 There is support for traditional storage systems including but not limited to {4}[AWS S3] and
-obviously {10}[HDFS], but it also covers messaging systems like [Kafka{1}[].
+obviously {10}[HDFS], but it also covers messaging systems like {1}[Kafka].
 
 All of these components integrate seamless into the same application and can be assembled from
 different API in its primary language {22}[Scala], but also in the supported programming languages
-[Java[], {17}[Python], {25}[SQL] and {19}[R].
+{11}[Java], {17}[Python], {25}[SQL] and {19}[R].
 
 This powerful combination allows a great deal of different data tasks ranging from simple data
 loading, SQL queries and up to streaming computation.
@@ -394,12 +394,10 @@ $ mvn clean package
 [INFO] ------------------------------------------------------------------------
 ----
 
-Another tick on our check-list - done.
-Before we can actually submit the job there better should be something available on a topic
-for our job to consume.
-
-Another handy tool when you work with Kafka is {13}[kcat], which allows to send content to and
-read directly from the shell:
+Another tick on our checklist, but before we can actually submit the job there better should be something on the
+topic for our job to consume.
+When dealing with Kafka the awesome tool {13}[kcat] shouldn't miss in your toolbox.
+It just turns sending and receiving data on the shell into bliss:
 
 [source,shell]
 ----
@@ -424,9 +422,10 @@ $ spark-submit --master spark://${HOST}:7077 \
     --executor-memory 1G \
     --class dev.unexist.showcase.todo.TodoSparkSinkToConsole \
     ./target/todo-spark-sink-0.1.jar
+...
 ----
 
-The actual outpot of the job is quite messy, but look out for the batch information:
+The actual output of the job is quite messy, but keep looking for the batch information:
 
 [source,log]
 ----
@@ -460,16 +459,17 @@ project.
 | Spark supports processing of real-time data with {24}[Spark Streaming]
 
 | Ease of use
-| Strong programming experience in {11}[Java] is required
+| Strong programming experience in Java is required
 | Spark supports multiple programming languages like Python, Java, Scala and R
 
 | Integration
-| Primarily designed to work with [HDFS]]
+| Primarily designed to work with HDFS
 | Spark has an extensive ecosystem and integrates well with other technologies
 |===
 
-And to really conclude here openly: _Whether you pick one over the other is probably dependent
-on the actual task at hand._
+And to really conclude here openly:
+Whether you pick one over the other is probably up to taste and should as always be dependent on the actual
+task at hand.
 
 All examples can be found here:
 
