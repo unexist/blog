@@ -23,4 +23,13 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
 EOF
