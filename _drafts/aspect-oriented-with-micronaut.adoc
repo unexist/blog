@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Aspect-oriented with Micronaut
+description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel

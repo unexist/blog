@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Storing data with Iceberg
+description: TBD
 date: 2023-09-02 16:05:48 +0200
 last_updated: 2023-09-02 16:05:48 +0200
 author: Christoph Kappel

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Playing with OData
+description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
