@@ -90,6 +90,9 @@ $ make pd-gitlab
 17349b87f81aa9eb7230f414923cf491c84a36a87d61057f8dc2f8f82c7ea60a
 ----
 
+TIP: If you start the container manually please take care of resource limits, otherwise you might
+be surprised how excessive Gitlab can be.
+
 Once everything is ready `podman ps` should show following:
 
 [source,shell]
@@ -109,6 +112,26 @@ The webinterface can be reached at following address:
 Due to the new registration process of Gitlab v16.x tokens are obsolete and the registration must be
 started inside Gitlab via `New instance runner` here:
 <https://localhost:10443/admin/runners>
+
+[source,shell]
+----
+$ gitlab-runner register  --url https://gitlab:443  --token glrt-6kixPTKGk5XLf-QLbdUF
+Runtime platform                                    arch=amd64 os=linux pid=97 revision=81ab07f6 version=16.10.0
+Running in system-mode.
+
+Enter the GitLab instance URL (for example, https://gitlab.com/):
+[https://gitlab:443]:
+Verifying runner... is valid                        runner=6kixPTKGk
+Enter a name for the runner. This is stored only in the local config.toml file:
+[showcase]:
+Enter an executor: custom, docker+machine, docker-autoscaler, virtualbox, docker, docker-windows, kubernetes, instance, shell, ssh, parallels:
+docker
+Enter the default Docker image (for example, ruby:2.7):
+quay.io/podman/stable
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+
+Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
+----
 
 == Conclusion
 
