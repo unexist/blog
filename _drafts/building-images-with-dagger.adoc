@@ -110,7 +110,7 @@ The webinterface can be reached at following address:
 === Register the runner
 
 Due to the new registration process of Gitlab v16.x tokens are obsolete and the registration must be
-started inside Gitlab via `New instance runner` here:
+started inside Gitlab via `New instance runner` at:
 <https://localhost:10443/admin/runners>
 
 [source,shell]
