@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: golang podman dagger showcase
+tags: dagger golang podman showcase
 categories: cicd
 toc: true
 ---
@@ -18,11 +18,11 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-///
+////
 https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
 https://github.com/google/dagger
 https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general
-///
+////
 
 I originally wanted to demonstrate the combination of [Gitlab][], [Podman][] and [Dagger][] in
 a single blog post, but it appears I've made this decision without knowing the hell of Gitlab
@@ -36,9 +36,12 @@ Gitlab both as runner and as service inside of Podman and really see, if this is
 Intrigued? Please follow me to the next chapter.
 
 WARNING: Short disclaimer: This articles revolves around the pipeline handling [Dagger][] and not
-         about the [dependency injector][] named [Dagger][] by [Google][].
+         the [dependency injector][] also named [Dagger][] by [Google][].
 
 == What is Dagger?
+
+
+
 
 === How to build?
 
@@ -101,7 +104,7 @@ func build(ctx *context.Context, client *dagger.Client) error {
 
 Publishing images works quite similar to the build step.
 This time Dagger requires us to provide a container as a blueprint for the actual output artifact and once
-we passt it it happily assembles everything together.
+we pass it it happily assembles everything together.
 
 Containers can also be just supplied by file, so we are using that approach in the next code example:
 
@@ -153,10 +156,10 @@ func publish(ctx *context.Context, client *dagger.Client) {
 NOTE: The used Containerfile can be found here:
       <https://github.com/unexist/showcase-dagger-golang/blob/master/todo-service-gin/ci/Containerfile.dagger>
 
-== Everything comes together
+== Everything together
 
 After all those lines of code here is the full (although partially cached) output of a build - which looks
-even better with colors:
+even better with colors in a shell:
 
 [source,shell]
 ----
@@ -226,12 +229,12 @@ $ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
 Once done the final container can be found on Dockerhub:
 <https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general>
 
-Or easily verified with the help of [dive][] by a pipeline:
+Or easily verified with the help of [dive][] - maybe by another pipeline:
 
 [source,shell]
 ----
 $ dive docker.io/unexist/showcase-dagger-golang:0.1 --ci
-Using default CI config
+  Using default CI config
 Image Source: docker://docker.io/unexist/showcase-dagger-golang:0.1
 Fetching image... (this can take a while for large images)
 Handler not available locally. Trying to pull 'docker.io/unexist/showcase-dagger-golang:0.1'...
