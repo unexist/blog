@@ -44,12 +44,11 @@ WARNING: Short disclaimer: This articles revolves around the pipeline handling [
 
 One of the advantages of Dagger is its way to build inside of a container and therefore makes builds reproducible on
 different machines, if you avoid the usage of any latest tags in required dependencies.
+And additionally build layers are automatically cached and re-used if possible, so the overhead this unfortunately
+creates is only noticeable if the container itself is actually changed.
 
-In order to get started we just have to define the build environment and start with a build container.
-During the build layers are automatically cached and re-used if possible, so the overhead this unfortunately creates
-is only noticeable if the container itself is actually changed.
-
-A simple build pipeline can look like this:
+In order to get started we just have to define the build environment and start with a build container which can look
+like this in a minimal version:
 
 [source,go]
 ----
@@ -98,7 +97,13 @@ func build(ctx *context.Context, client *dagger.Client) error {
 <3> The next few lines are just [Containerfile][] commands called from [Golang][]
 <4> And finally run out pipeline
 
-=== How to deploy?
+=== How to publish?
+
+Publishing images works quite similar to the build step.
+This time Dagger requires us to provide a container as a blueprint for the actual output artifact and once
+we passt it it happily assembles everything together.
+
+Containers can also be just supplied by file, so we are using that approach in the next code example:
 
 [source,go]
 ----
@@ -150,7 +155,7 @@ NOTE: The used Containerfile can be found here:
 
 == Everything comes together
 
-After all those lines of code here is the full (and partially cached) output output of a build - which looks
+After all those lines of code here is the full (although partially cached) output of a build - which looks
 even better with colors:
 
 [source,shell]
@@ -221,7 +226,7 @@ $ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
 Once done the final container can be found on Dockerhub:
 <https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general>
 
-Or easily verified with the help of [dive][]:
+Or easily verified with the help of [dive][] by a pipeline:
 
 [source,shell]
 ----
