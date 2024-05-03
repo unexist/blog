@@ -1,69 +1,22 @@
 ---
 layout: post
-title: Building images with Dagger
+title: Gitlab with Podman
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: golang gitlab dagger showcase
+tags: gitlab podman showcase
 categories: cicd
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/building_images_with_dagger
+:imagesdir: {asciidoctorconfigdir}/../assets/images/gitlab_with_podman
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/building_images_with_dagger
+:imagesdir: /assets/images/gitlab_with_podman
 endif::[]
 :figure-caption!:
 :table-caption!:
-
-== What is Dagger?
-
-=== Examples
-
-[source,go]
-----
-func main() {
-	ctx := context.Background()
-
-	client, err := dagger.Connect(&ctx, dagger.WithLogOutput(os.Stdout)) // <1>
-	if nil != err {
-		panic(err)
-	}
-
-	defer client.Close()
-
-	build(&ctx, client)
-}
-
-func build(ctx *context.Context, client *dagger.Client) error {
-	fmt.Println("Building with Dagger")
-
-	src := client.Host().Directory(".", dagger.HostDirectoryOpts{ // <2>
-		Exclude: []string{"ci/"},
-	})
-
-	const path = "build/"
-
-	golang := client. // <3>
-		Pipeline("Build application").
-		Container().
-		From("golang:latest").
-		WithDirectory("/src", src).
-		WithWorkdir("/src").
-		WithExec([]string{"go", "build", "-o", path})
-
-	output := golang.Directory(path)
-
-	_, err := output.Export(*ctx, path) // <4>
-	if nil != err {
-		return err
-	}
-
-	return nil
-}
-----
 
 == Gitlab and runner
 
