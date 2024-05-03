@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: golang gitlab dagger showcase
+tags: golang podman dagger showcase
 categories: cicd
 toc: true
 ---
@@ -18,7 +18,25 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
+///
+https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
+https://github.com/google/dagger
+///
+
+I originally wanted to demonstrate the combination of [Gitlab][], [Podman][] and [Dagger][] in
+a single blog post, but it appears I've made this decision without knowing the hell of Gitlab
+and the self-signed mess of SSL-certificates.
+
+So let us break this again apart and do another small series with the interesting parts
+about Dagger and Podman upfront and a follow-up about how to integrate [rootless][](?) Podman into
+Gitlab both as runner and as service inside of Podman and really see, if this is better than the
+[Docker-in-Docker][] [hot garbage][].
+
+Intrigued? Please follow me to the next chapter.
+
 == What is Dagger?
+
+
 
 === Examples
 
