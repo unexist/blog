@@ -21,6 +21,7 @@ endif::[]
 ///
 https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
 https://github.com/google/dagger
+https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general
 ///
 
 I originally wanted to demonstrate the combination of [Gitlab][], [Podman][] and [Dagger][] in
@@ -34,54 +35,123 @@ Gitlab both as runner and as service inside of Podman and really see, if this is
 
 Intrigued? Please follow me to the next chapter.
 
+WARNING: Short disclaimer: This articles revolves around the pipeline handling [Dagger][] and not
+         about the [dependency injector][] named [Dagger][] by [Google][].
+
 == What is Dagger?
 
+=== How to build?
 
+One of the advantages of Dagger is its way to build inside of a container and therefore makes builds reproducible on
+different machines, if you avoid the usage of any latest tags in required dependencies.
 
-=== Examples
+In order to get started we just have to define the build environment and start with a build container.
+During the build layers are automatically cached and re-used if possible, so the overhead this unfortunately creates
+is only noticeable if the container itself is actually changed.
+
+A simple build pipeline can look like this:
 
 [source,go]
 ----
 func main() {
-	ctx := context.Background()
+    ctx := context.Background()
 
-	client, err := dagger.Connect(&ctx, dagger.WithLogOutput(os.Stdout)) // <1>
-	if nil != err {
-		panic(err)
-	}
+    client, err := dagger.Connect(&ctx, dagger.WithLogOutput(os.Stdout)) // <1>
+    if nil != err {
+        panic(err)
+    }
 
-	defer client.Close()
+    defer client.Close()
 
-	build(&ctx, client)
+    build(&ctx, client)
 }
 
 func build(ctx *context.Context, client *dagger.Client) error {
-	fmt.Println("Building with Dagger")
+    fmt.Println("Building with Dagger")
 
-	src := client.Host().Directory(".", dagger.HostDirectoryOpts{ // <2>
-		Exclude: []string{"ci/"},
-	})
+    src := client.Host().Directory(".", dagger.HostDirectoryOpts{ // <2>
+        Exclude: []string{"ci/"},
+    })
 
-	const path = "build/"
+    const buildPath = "build/"
 
-	golang := client. // <3>
-		Pipeline("Build application").
-		Container().
-		From("golang:latest").
-		WithDirectory("/src", src).
-		WithWorkdir("/src").
-		WithExec([]string{"go", "build", "-o", path})
+    golang := client. // <3>
+        Pipeline("Build application").
+        Container().
+        From("golang:latest").
+        WithDirectory("/src", src).
+        WithWorkdir("/src").
+        WithExec([]string{"go", "build", "-o", path.Join(buildPath, "todo-showcase")})
 
-	output := golang.Directory(path)
+    output := golang.Directory(buildPath)
 
-	_, err := output.Export(*ctx, path) // <4>
-	if nil != err {
-		return err
-	}
+    _, err := output.Export(*ctx, buildPpath) // <4>
+    if nil != err {
+        return err
+    }
 
-	return nil
+    return nil
 }
 ----
+<1> Connecting the client automatically checks if the dagger engine is running and starts it otherwise
+<2> Our source directory includes everything besides the stuff underneath `ci`
+<3> The next few lines are just [Containerfile][] commands called from [Golang][]
+<4> And finally run out pipeline
+
+=== How to deploy?
+
+[source,go]
+----
+func WithCustomRegistryAuth(client *dagger.Client registryUrl string) dagger.WithContainerFunc { // <5>
+    return func(container *dagger.Container) *dagger.Container {
+        token, exists := os.LookupEnv("REGISTRY_TOKEN")
+        if exists {
+            return container.WithRegistryAuth(registryUrl,
+                os.Getenv("REGISTRY_USER"),
+                client.SetSecret("REGISTRY_TOKEN", token))
+        }
+        return container
+    }
+}
+
+func publish(ctx *context.Context, client *dagger.Client) {
+    fmt.Println("Publishing with Dagger")
+
+    const registryUrl = "docker.io/unexist"
+    const tag = "0.1"
+
+    _, err := client.
+        Pipeline("Publish to registry").
+        Host().
+        Directory(".").
+        DockerBuild(dagger.DirectoryDockerBuildOpts{ // <1>
+            Dockerfile: "./ci/Containerfile.dagger",
+            BuildArgs: []dagger.BuildArg{ // <2>
+                {Name: "RUN_IMAGE", Value: "docker.io/alpine:latest"},
+                {Name: "BINARY_NAME", Value: "todo-showcase")},
+            },
+        }).
+        With(WithCustomRegistryAuth(client, registryUrl)). // <3>
+        Publish(*ctx, fmt.Sprintf("%s/showcase-dagger-golang:%s", registryURL, tag)) // <4>
+
+    if nil != err {
+        panic(err)
+    }
+}
+----
+<1> Another way to use Containerfiles is by directly loading them from the filesystem
+<2> Parametrization can still be done e.g. via [build arguments][] which are baked into the container
+<3> Since Dagger runs itself inside of a container it requires our [Dockerhub][] credentials (also see (5))
+<4> When everything is in place the show can finally start!
+<5> The odd numbering is no accident - this is just a contrived example with command chaining to demonstrate the possibilities of clean pipelines at the end
+
+NOTE: The used Containerfile can be found here:
+      <https://github.com/unexist/showcase-dagger-golang/blob/master/todo-service-gin/ci/Containerfile.dagger>
+
+== Everything comes together
+
+After all those lines of code here is the full (and partially cached) output output of a build - which looks
+even better with colors:
 
 [source,shell]
 ----
@@ -146,7 +216,43 @@ $ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
 ┻ ┻
 • Engine: 18a7ea691821 (version v0.10.2)
 ⧗ 21.42s ✔ 42 ∅ 10
+----
 
+Once done the final container can be found on Dockerhub:
+<https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general>
+
+Or easily verified with the help of [dive][]:
+
+[source,shell]
+----
+$ dive docker.io/unexist/showcase-dagger-golang:0.1 --ci
+Using default CI config
+Image Source: docker://docker.io/unexist/showcase-dagger-golang:0.1
+Fetching image... (this can take a while for large images)
+Handler not available locally. Trying to pull 'docker.io/unexist/showcase-dagger-golang:0.1'...
+Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+Trying to pull docker.io/unexist/showcase-dagger-golang:0.1...
+Getting image source signatures
+Copying blob ff1da1984623 done
+Copying blob 4abcf2066143 done
+Copying blob 8392176c7d6a done
+Copying blob 8a9c5edd599d done
+Copying config e201989f55 done
+Writing manifest to image destination
+Storing signatures
+e201989f555d02d5d8b7ae5f374f2daef5b2918979aa811b487154b407c820d0
+Analyzing image...
+  efficiency: 100.0000 %
+  wastedBytes: 0 bytes (0 B)
+  userWastedPercent: 0.0000 %
+Inefficient Files:
+Count  Wasted Space  File Path
+None
+Results:
+  PASS: highestUserWastedPercent
+  SKIP: highestWastedBytes: rule disabled
+  PASS: lowestEfficiency
+Result:PASS [Total:3] [Passed:2] [Failed:0] [Warn:0] [Skipped:1]
 ----
 
 == Conclusion
