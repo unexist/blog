@@ -1,0 +1,138 @@
+---
+layout: post
+title: Building with Dagger
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: golang gitlab dagger showcase
+categories: cicd
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/building_with_dagger
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/building_with_dagger
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+== What is Dagger?
+
+=== Examples
+
+[source,go]
+----
+func main() {
+	ctx := context.Background()
+
+	client, err := dagger.Connect(&ctx, dagger.WithLogOutput(os.Stdout)) // <1>
+	if nil != err {
+		panic(err)
+	}
+
+	defer client.Close()
+
+	build(&ctx, client)
+}
+
+func build(ctx *context.Context, client *dagger.Client) error {
+	fmt.Println("Building with Dagger")
+
+	src := client.Host().Directory(".", dagger.HostDirectoryOpts{ // <2>
+		Exclude: []string{"ci/"},
+	})
+
+	const path = "build/"
+
+	golang := client. // <3>
+		Pipeline("Build application").
+		Container().
+		From("golang:latest").
+		WithDirectory("/src", src).
+		WithWorkdir("/src").
+		WithExec([]string{"go", "build", "-o", path})
+
+	output := golang.Directory(path)
+
+	_, err := output.Export(*ctx, path) // <4>
+	if nil != err {
+		return err
+	}
+
+	return nil
+}
+----
+
+[source,shell]
+----
+$ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
+█ [1.35s] connect
+┣ [0.10s] starting engine
+┣ [0.09s] starting session
+┃ OK!
+█ [20.06s] go run ci/main.go
+┃ Building with Dagger
+┃ Publishing with Dagger
+┣─╮
+│ ▽ host.directory .
+│ █ [0.02s] upload . from meanas (client id: uhk8ah6k6spg7775kp825tjlk) (exclude: ci/)
+│ ┣ [0.00s] transferring .:
+│ █ [0.00s] blob://sha256:d9173afb7ebb842a73a3514e38cbfb0680524b1e5333ab04179b9197824c92a1
+│ ┣─╮ blob://sha256:d9173afb7ebb842a73a3514e38cbfb0680524b1e5333ab04179b9197824c92a1
+│ ┻ │
+┣─╮ │
+│ ▼ │ Build application
+│ ┣─┼─╮
+│ │ │ ▽ from docker.io/golang:latest
+│ │ │ █ [1.15s] resolve image config for docker.io/library/golang:latest
+┣─┼─┼─┼─╮
+│ │ │ │ ▼ Build application
+│ │ │ █ │ [0.01s] pull docker.io/library/golang:latest
+│ │ │ ┣ │ [0.01s] resolve docker.io/library/golang:latest@sha256:d5302d40dc5fbbf38ec472d1848a9d2391a13f93293a6a5b0b87c99dc0eaa6ae
+│ │ │ ┣─┼─╮ pull docker.io/library/golang:latest
+│ ┻ │ ┻ │ │
+│   ╰──▶█ │ CACHED copy / /src
+│       │ ┻
+│       █ CACHED exec go build -o build/todo-service.bin
+│ ╭─────┫ exec go build -o build/todo-service.bin
+│ │     ┻
+┣─┼─╮
+│ │ ▼ Build application
+│ │ █ [0.16s] export directory /src/build to host build/
+│ ╰▶█ CACHED copy /src/build /
+│   ┻
+┣─╮
+│ ▽ host.directory build
+│ █ [0.00s] upload build from meanas (client id: uhk8ah6k6spg7775kp825tjlk)
+│ ┣ [0.00s] transferring build:
+│ █ [0.00s] blob://sha256:d8f7d9beecbd43c9016754eea21a5ce80dc7d3fa180f0ea7efc124f0573fb996
+│ ┣─╮ blob://sha256:d8f7d9beecbd43c9016754eea21a5ce80dc7d3fa180f0ea7efc124f0573fb996
+│ ┻ │
+┣─╮ │
+│ ▼ │ Publish to Gitlab
+│ ┣─┼─╮
+│ │ │ ▽ from docker.io/alpine:latest
+│ │ │ █ [0.64s] resolve image config for docker.io/library/alpine:latest
+│ │ │ █ [0.01s] pull docker.io/library/alpine:latest
+│ │ │ ┣ [0.01s] resolve docker.io/library/alpine:latest@sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b
+│ │ │ ┣─╮ pull docker.io/library/alpine:latest
+│ ┻ │ ┻ │
+┣─╮ │   │
+│ ▼ │   │ Publish to Gitlab
+│ █◀╯   │ CACHED copy / /build
+│ │     ┻
+│ █ CACHED exec mkdir -p /app
+│ █ CACHED exec cp /build/todo-service.bin /app
+┻ ┻
+• Engine: 18a7ea691821 (version v0.10.2)
+⧗ 21.42s ✔ 42 ∅ 10
+
+----
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-dagger-golang>
