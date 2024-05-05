@@ -130,7 +130,7 @@ specific deployments to service vendors
 === How to build?
 
 One of the advantages of Dagger is its way to build inside of a container and therefore makes builds reproducible on
-different machines, if you avoid the usage of any latest tags of required dependencies.
+different machines, if you avoid the usage of any latest tag of required dependencies.
 And additionally build layers are automatically cached and re-used if possible, so the overhead this unfortunately
 creates is only noticeable if the container itself is actually changed.
 
@@ -179,7 +179,7 @@ func build(ctx *context.Context, client *dagger.Client) error {
     return nil
 }
 ----
-<1> Connecting the client automatically checks if the dagger engine is running and starts it otherwise
+<1> Connecting the client automatically checks if the Dagger engine is running and starts it otherwise
 <2> Our source directory includes everything besides the stuff underneath `ci`
 <3> The next few lines are just [Containerfile][] commands called from [Golang][]
 <4> And finally run out pipeline
@@ -349,6 +349,20 @@ Result:PASS [Total:3] [Passed:2] [Failed:0] [Warn:0] [Skipped:1]
 
 == Conclusion
 
-All examples can be found here:
+Dagger offers a different way to create pipeline for supported languages and although
+we have seen a working example, the question still remains who is this for and is a migration
+worth the pain?
+
+Using a full-fledged programming language surely doesn't get rid of the complexity of building
+software, but it moves the whole process from a kind of niche-existence to a first-grade citizen
+and let's more persons learn, play and adapt it to their needs.
+
+This directly distributes the arcane knowledge in the team and maybe reduces the bottlenecks
+when builds suddenly break.
+
+So ultimately Dagger is for any person and/or any team interested in improving productivity,
+reproducibility and who do not shy way from new technology.
+
+As always, all examples can be found here:
 
 <https://github.com/unexist/showcase-dagger-golang>
