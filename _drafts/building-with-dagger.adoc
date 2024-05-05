@@ -41,6 +41,19 @@ WARNING: Short disclaimer: This articles revolves around the pipeline handling [
 
 == What is Dagger?
 
+Building software is usually a burdensome task and oftentimes involves lengthy and - I am most
+certain you have seen it for yourself - messy pipeline scripts in [line-through]#strange#
+exotic [configuration languages][].
+
+Theses scripts quickly earn the reputation do **not** mess with them and you have to rely on the
+single person responsible knowledgeable in the arcane.
+
+Dagger approaches this quite differently and provides a programmable CICD engine with bindings
+for actual programming languages with the aim to be run inside of build systems but also on
+developer machines on a daily basis.
+
+On a high-level the architecture of Dagger looks like this:
+
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
@@ -49,59 +62,74 @@ skinparam linetype ortho
 skinparam nodesep 5
 skinparam ranksep 5
 
-together {
-    card "Driver program (1)" as driver {
-      rectangle "Spark context" as context
-    }
-
-    card "Execution engine (2)" as engine {
-        rectangle "RDD" as rdd
-        rectangle "DAG" as dag
-    }
+card "CI (6)" as ci {
+    rectangle "github" as github
+    rectangle "Gitlab" as gitlab
+    rectangle "Jenkins" as jenkins
 }
 
-card "Cluster manager (3)" as cluster {
-    rectangle "Standalone"
-    rectangle "Apache Mesos"
-    rectangle "Kubernetes"
-    rectangle "Hadoop YARN"
+rectangle "Dagger Engine (1)" as engine
+
+rectangle "Dagger GraphQL API (3)" as api
+
+card "Runtime (2)" as runtime {
+    rectangle "Docker or compatible" as docker
+    rectangle "kubernetes" as kubernetes
+    rectangle "Dagger Cloud" as cloud
 }
 
-together {
-    card "Worker node (4)" as worker {
-          card "Executor (5)" as exec {
-              rectangle "Cache (6)" as cache
-              file "Task" as task1
-              file "Task" as task2
-          }
-    }
-
-    card "Storage (7)" as storage {
-        rectangle "Hadoop HDFS" as hdfs
-        rectangle "AWS S3" as s3
-    }
+card "Dagger SDK (4)" as sdk {
+    rectangle "Golang" as golang
+    rectangle "Python" as python
+    rectangle "NodeJS" as node
+    rectangle "Cue" as cue
 }
 
-driver -r--> engine
-engine -d--> cluster
-cluster -r--> worker
-worker -d--> storage
+card "Daggerverse (5)" as daggerverse {
+    rectangle "Netlify" as netlify
+    rectangle "AWS Secrets" as aws
+    rectangle "HashiCorp Vault" as hashicorp
+}
 
-driver -[hidden]d-> worker
-cluster -[hidden]r-> worker
-worker -[hidden]d-> storage
+rectangle "Dagger CLI (7)" as cli
 
-rdd -[hidden]r-> dag
+daggerverse <-u-> sdk
+sdk -l-> api
+api -l-> engine
+runtime <-d-> engine
+ci -d-> api
+cli -d-> api
 
-cache -[hidden]r-> task1
-task1 -[hidden]r-> task2
+docker -r[hidden]-> kubernetes
+kubernetes -r[hidden]-> cloud
 
+golang -r[hidden]-> python
+python -r[hidden]-> node
+node -r[hidden]-> cue
+
+github -r[hidden]-> gitlab
+gitlab -r[hidden]-> jenkins
+
+netlify -r[hidden]-> aws
+aws -r[hidden]->hashicorp
+
+runtime -d[hidden]-> sdk
+engine -d[hidden]-> cli
 {% endplantuml %}
+++++
+<1> The main engine must be running and handles all the coordination
+<2> There are multiple options to run the actual engine - like clouds or containerized on your local machine
+<3> Everything is handled via Dagger's GrapQL API
+<4> Various SDK for popular languages allow integration and interaction
+<5> The [Daggerverse][] contains user-contributed functions and modules for common tasks like handling secrets or
+specific deployments to service vendors
+<6> [CI][] can also directly interact with the API
+<7> And the same is also true for the commandline
 
 === How to build?
 
 One of the advantages of Dagger is its way to build inside of a container and therefore makes builds reproducible on
-different machines, if you avoid the usage of any latest tags in required dependencies.
+different machines, if you avoid the usage of any latest tags of required dependencies.
 And additionally build layers are automatically cached and re-used if possible, so the overhead this unfortunately
 creates is only noticeable if the container itself is actually changed.
 
