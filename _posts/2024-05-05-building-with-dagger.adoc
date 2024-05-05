@@ -2,8 +2,8 @@
 layout: post
 title: Building with Dagger
 description: This blog post explores the pipeline-as-code options of the programmable CICD system Dagger.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2024-05-05 17:13 +0200
+last_updated: 2024-05-05 17:13 +0200
 author: Christoph Kappel
 tags: dagger golang podman showcase
 categories: cicd
