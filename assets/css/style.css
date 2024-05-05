@@ -152,6 +152,8 @@ hr {
     flex-grow: 1;
     flex-shrink: 1;
     min-width: 0;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 #content img {
@@ -570,12 +572,12 @@ p.tableblock {
 
     #headline, #split, nav, footer {
         width: auto;
+        border: none;
     }
 
     nav, footer {
         border-radius: 0;
-        border-left: var(--border);
-        border-right: var(--border);
+        border: none;
     }
 
     #headline h1, #headline h2 {
@@ -583,7 +585,20 @@ p.tableblock {
         padding-left: 0;
     }
 
+    #headline h2 {
+        display: none;
+    }
+
+    #headline span.separator {
+        display: none;
+    }
+
     #split {
         flex-direction: column;
+    }
+
+    #table-of-contents {
+        float: none;
+        margin-left: 0px;
     }
 }
