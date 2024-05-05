@@ -18,6 +18,11 @@
             <div id="header">
                <div id="headline">
                    <h1>{{ site.title }}</h1>
+                   {% if page.title != nil %}
+                       &sol;
+                       <h2>{{ page.title }}</h2>
+                   {% endif %}
+
                    <p>{{ site.description }}</p>
                </div>
                <nav>

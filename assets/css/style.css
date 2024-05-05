@@ -69,6 +69,65 @@ footer a:not(:hover) {
     opacity: .8;
 }
 
+/* Text */
+a:link, a:visited {
+    text-decoration: none;
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--hover-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 10px 0px;
+}
+
+h1 {
+    color: var(--h1-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--h1-color);
+}
+
+h2 {
+    color: var(--h2-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--h2-color);
+}
+
+h3 {
+    color: var(--h3-color);
+    border-bottom: 1px solid var(--h3-color);
+}
+
+h4 {
+    color: var(--h4-color);
+    border-bottom: 1px solid var(--h4-color);
+    margin-bottom: 15px;
+}
+
+h3, h4 {
+    text-decoration: none;
+    padding-top: 10px;
+}
+
+h6 {
+    color: var(--h4-color);
+    text-decoration: underline;
+    background-color: black;
+    display: none; /*inline; */
+    padding: var(--padding);
+    border: var(--border);
+    border-bottom: 1px solid #000;
+    padding-bottom: 1px;
+    border-radius: var(--radius) var(--radius) 0px 0px;
+}
+
+hr {
+    color: var(--link-color);
+    border-style: solid;
+}
+
 #container, #main {
     width: 100%;
 }
@@ -105,7 +164,6 @@ footer a:not(:hover) {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-
 }
 
 #content table {
@@ -195,14 +253,16 @@ footer a:not(:hover) {
 #headline h1 {
     display: inline-block;
     text-decoration: none;
-    border-bottom: none;
-    font-size: 1.5em;
+    border-bottom: 0px;
+    margin-bottom: 0px;
+    font-size: 2em;
 }
 
 #headline h2 {
     display: inline-block;
-    padding-left: var(--padding);
+    padding-left: 0px;
     border-bottom: none;
+    margin-bottom: 0px;
     font-size: 1.5em;
 }
 
@@ -246,65 +306,6 @@ footer a:not(:hover) {
 
 .tags a:before {
     content: "#";
-}
-
-/* Text */
-a:link, a:visited {
-    text-decoration: none;
-    color: var(--link-color);
-}
-
-a:hover {
-    color: var(--hover-color);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    margin: 10px 0px;
-}
-
-h1 {
-    color: var(--h1-color);
-    text-decoration: none;
-    border-bottom: 1px solid var(--h1-color);
-}
-
-h2 {
-    color: var(--h2-color);
-    text-decoration: none;
-    border-bottom: 1px solid var(--h2-color);
-}
-
-h3 {
-    color: var(--h3-color);
-    border-bottom: 1px solid var(--h3-color);
-}
-
-h4 {
-    color: var(--h4-color);
-    border-bottom: 1px solid var(--h4-color);
-    margin-bottom: 15px;
-}
-
-h3, h4 {
-    text-decoration: none;
-    padding-top: 10px;
-}
-
-h6 {
-    color: var(--h4-color);
-    text-decoration: underline;
-    background-color: black;
-    display: none; /*inline; */
-    padding: var(--padding);
-    border: var(--border);
-    border-bottom: 1px solid #000;
-    padding-bottom: 1px;
-    border-radius: var(--radius) var(--radius) 0px 0px;
-}
-
-hr {
-    color: var(--link-color);
-    border-style: solid;
 }
 
 .line-through {
