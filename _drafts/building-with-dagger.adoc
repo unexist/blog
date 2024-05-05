@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Building with Dagger
-description: TBD
+description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features of MapReduce along with its computing model.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 ////
 https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
@@ -40,8 +41,62 @@ WARNING: Short disclaimer: This articles revolves around the pipeline handling [
 
 == What is Dagger?
 
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
+skinparam linetype ortho
+skinparam nodesep 5
+skinparam ranksep 5
 
+together {
+    card "Driver program (1)" as driver {
+      rectangle "Spark context" as context
+    }
+
+    card "Execution engine (2)" as engine {
+        rectangle "RDD" as rdd
+        rectangle "DAG" as dag
+    }
+}
+
+card "Cluster manager (3)" as cluster {
+    rectangle "Standalone"
+    rectangle "Apache Mesos"
+    rectangle "Kubernetes"
+    rectangle "Hadoop YARN"
+}
+
+together {
+    card "Worker node (4)" as worker {
+          card "Executor (5)" as exec {
+              rectangle "Cache (6)" as cache
+              file "Task" as task1
+              file "Task" as task2
+          }
+    }
+
+    card "Storage (7)" as storage {
+        rectangle "Hadoop HDFS" as hdfs
+        rectangle "AWS S3" as s3
+    }
+}
+
+driver -r--> engine
+engine -d--> cluster
+cluster -r--> worker
+worker -d--> storage
+
+driver -[hidden]d-> worker
+cluster -[hidden]r-> worker
+worker -[hidden]d-> storage
+
+rdd -[hidden]r-> dag
+
+cache -[hidden]r-> task1
+task1 -[hidden]r-> task2
+
+{% endplantuml %}
 
 === How to build?
 
@@ -87,7 +142,7 @@ func build(ctx *context.Context, client *dagger.Client) error {
 
     output := golang.Directory(buildPath)
 
-    _, err := output.Export(*ctx, buildPpath) // <4>
+    _, err := output.Export(*ctx, buildPath) // <4>
     if nil != err {
         return err
     }
@@ -226,7 +281,7 @@ $ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
 ⧗ 21.42s ✔ 42 ∅ 10
 ----
 
-Once done the final container can be found on Dockerhub:
+Once done the final container can be found on any registry by choice - like Dockerhub:
 <https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general>
 
 Or easily verified with the help of [dive][] - maybe by another pipeline:
