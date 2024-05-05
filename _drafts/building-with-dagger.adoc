@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Building with Dagger
-description: This third blog post of the Big Data series introduces Apache Spark and compares it with the features of MapReduce along with its computing model.
+description: This blog post explores the pipeline-as-code options of the programmable CICD system Dagger.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -20,30 +20,45 @@ endif::[]
 :page-liquid:
 
 ////
-https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
-https://github.com/google/dagger
 https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general
 ////
 
-I originally wanted to demonstrate the combination of [Gitlab][], [Podman][] and [Dagger][] in
+:1: https://docs.docker.com/build/guide/build-args/
+:2: https://en.wikipedia.org/wiki/Continuous_integration
+:3: https://www.jenkins.io/doc/book/pipeline/syntax/
+:4: https://github.com/containers/common/blob/main/docs/Containerfile.5.md
+:5: https://dagger.io/
+:6: https://github.com/google/dagger
+:7: https://daggerverse.dev/
+:8: https://en.wikipedia.org/wiki/Dependency_injection
+:9: https://github.com/wagoodman/dive
+:10: https://hub.docker.com/
+:11: https://www.docker.com/blog/docker-can-now-run-within-docker/
+:12: https://about.gitlab.com/
+:13: https://go.dev/
+:14: https://www.reddit.com/r/Ryukahr/comments/lj7bq3/hot_garbage/
+:15: https://podman.io/
+:16: https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md
+
+I originally wanted to demonstrate the combination of {12}[Gitlab], {15}[Podman] and {5}[Dagger] in
 a single blog post, but it appears I've made this decision without knowing the hell of Gitlab
 and the self-signed mess of SSL-certificates.
 
 So let us break this again apart and do another small series with the interesting parts
-about Dagger and Podman upfront and a follow-up about how to integrate [rootless][](?) Podman into
+about Dagger and Podman upfront and a follow-up about how to integrate {16}[rootless](?) Podman into
 Gitlab both as runner and as service inside of Podman and really see, if this is better than the
-[Docker-in-Docker][] [hot garbage][].
+{11}[Docker-in-Docker] {14}[hot garbage].
 
 Intrigued? Please follow me to the next chapter.
 
-WARNING: Short disclaimer: This articles revolves around the pipeline handling [Dagger][] and not
-         the [dependency injector][] also named [Dagger][] by [Google][].
+WARNING: Short disclaimer: This articles revolves around the pipeline handling {5}[Dagger] and not
+         the {8}[dependency injector] also named {6}[Dagger by Google].
 
 == What is Dagger?
 
 Building software is usually a burdensome task and oftentimes involves lengthy and - I am most
 certain you have seen it for yourself - messy pipeline scripts in [line-through]#strange#
-exotic [configuration languages][].
+exotic {3}[configuration languages].
 
 Theses scripts quickly earn the reputation do **not** mess with them and you have to rely on the
 single person responsible knowledgeable in the arcane - sounds familiar?
@@ -122,9 +137,9 @@ engine -d[hidden]-> cli
 <2> There are multiple options to run the actual engine - like clouds or containerized on your local machine
 <3> Everything is handled via Dagger's GrapQL API
 <4> Various SDK for popular languages allow integration and interaction
-<5> The [Daggerverse][] contains user-contributed functions and modules for common tasks like handling secrets or
+<5> The {7}[Daggerverse] contains user-contributed functions and modules for common tasks like handling secrets or
 specific deployments to service vendors
-<6> [CI][] can also directly interact with the API
+<6> {2}[CI] can also directly interact with the API
 <7> And the same is also true for the commandline
 
 === How to build?
@@ -181,7 +196,7 @@ func build(ctx *context.Context, client *dagger.Client) error {
 ----
 <1> Connecting the client automatically checks if the Dagger engine is running and starts it otherwise
 <2> Our source directory includes everything besides the stuff underneath `ci`
-<3> The next few lines are just [Containerfile][] commands called from [Golang][]
+<3> The next few lines are just {4}[Containerfile] commands called from {13}[Golang]
 <4> And finally run out pipeline
 
 === How to publish?
@@ -232,8 +247,8 @@ func publish(ctx *context.Context, client *dagger.Client) {
 }
 ----
 <1> Another way to use Containerfiles is by directly loading them from the filesystem
-<2> Parametrization can still be done e.g. via [build arguments][] which are baked into the container
-<3> Since Dagger runs itself inside of a container it requires our [Dockerhub][] credentials (also see (5))
+<2> Parametrization can still be done e.g. via {1}[build arguments] which are baked into the container
+<3> Since Dagger runs itself inside of a container it requires our {10}[Dockerhub] credentials (also see (5))
 <4> When everything is in place the show can finally start!
 <5> The odd numbering is no accident - this is just a contrived example with command chaining to demonstrate the possibilities of clean pipelines at the end
 
@@ -313,7 +328,7 @@ $ REGISTRY_USER=unexist REGISTRY_TOKEN=xxx make dagger-publish-docker
 Once done the final container can be found on any registry by choice - like Dockerhub:
 <https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general>
 
-Or easily verified with the help of [dive][] - maybe by another pipeline:
+Or easily verified with the help of {9}[dive] - maybe by another pipeline:
 
 [source,shell]
 ----
@@ -361,7 +376,7 @@ This directly distributes the arcane knowledge in the team and maybe reduces the
 when builds suddenly break.
 
 So ultimately Dagger is for any person and/or any team interested in improving productivity,
-reproducibility and who do not shy way from new technology.
+reproducibility and who does not shy way from new technology.
 
 As always, all examples can be found here:
 
