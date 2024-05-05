@@ -28,8 +28,8 @@
     --admon-note: var(--link-color);
     --admon-important: var(--border-color);
     --admon-tip: var(--h4-color);
-    --admon-caution: var(--link-visited);
-    --admon-warning: var(--link-visited);
+    --admon-caution: var(--highlight-color);
+    --admon-warning: var(--highlight-color);
 }
 
 * {
