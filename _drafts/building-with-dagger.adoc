@@ -46,11 +46,12 @@ certain you have seen it for yourself - messy pipeline scripts in [line-through]
 exotic [configuration languages][].
 
 Theses scripts quickly earn the reputation do **not** mess with them and you have to rely on the
-single person responsible knowledgeable in the arcane.
+single person responsible knowledgeable in the arcane - sounds familiar?
 
 Dagger approaches this quite differently and provides a programmable CICD engine with bindings
-for actual programming languages with the aim to be run inside of build systems but also on
-developer machines on a daily basis.
+for actual programming languages with the aim to create pipelines-as-code.
+These pipelines can then be used inside of CICD systems and also directly on developer machines
+on a daily basis.
 
 On a high-level the architecture of Dagger looks like this:
 
