@@ -18,9 +18,19 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-== Gitlab and runner
+== Gitlab with Podman
 
-=== Setup
+My ultimate goal for my previous post was to demonstrate the combination of [Gitlab][], [Podman][]
+and [Dagger][], but unfortunately I ran into so many different problems I made the decision to
+break it apart.
+
+This is second part of the small series and explains how to set up Gitlab with Podman-in-Podman
+and various pitfalls on the way.
+
+NOTE: If you are looking for the first part just follow this link over here:
+<https://unexist.blog/cicd/2024/05/05/building-with-dagger.html>
+
+=== Setting everything up
 
 This example uses [Podman][] and provides a Makefile to set up everything via CLI.
 
