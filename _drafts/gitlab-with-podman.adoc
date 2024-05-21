@@ -32,7 +32,18 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 === Setting everything up
 
-The first step is to run Gitlab itself and this is kind of piecemeal:
+The first step is to run Gitlab itself and this requires a self-signed SSL certs, just to make our
+lives more miserable:
+
+[source,shell]
+----
+$ @openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
+    -out gitlab.crt -keyout gitlab.key \
+    -addext "subjectAltName=DNS:gitlab" \ # <1>
+    -subj "/C=DE/ST=DE/L=DE/O=unexist.dev/OU=showcase/CN=gitlab" # <2>
+----
+<1> This line is essential, otherwise Gitlab won't accept this cert
+<2> We are going to use `gitlab` as the hostname, so make sure to add it to your hosts file
 
 [source,shell]
 ----
