@@ -18,6 +18,10 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
+////
+https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
+////
+
 == Gitlab with Podman
 
 My ultimate goal for my previous post was to demonstrate the combination of [Gitlab][], [Podman][]
@@ -32,18 +36,55 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 === Setting everything up
 
-The first step is to run Gitlab itself and this requires a self-signed SSL certs, just to make our
-lives more miserable:
+The first step is to start Gitlab itself and this requires a SSL cert - so just to make our
+lives more miserable we a creating a self-signed one:
 
 [source,shell]
 ----
-$ @openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
+$ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
     -out gitlab.crt -keyout gitlab.key \
     -addext "subjectAltName=DNS:gitlab" \ # <1>
     -subj "/C=DE/ST=DE/L=DE/O=unexist.dev/OU=showcase/CN=gitlab" # <2>
 ----
 <1> This line is essential, otherwise Gitlab won't accept this cert
-<2> We are going to use `gitlab` as the hostname, so make sure to add it to your hosts file
+<2> We are going to use *gitlab* for the hostname, so make sure to add it to your hosts file
+
+Next up is the actual config of Gitlab.
+There is plenty of stuff that can actually be configured, especially in
+[constrained environments][] it is beneficial to disable services like [Prometheus][], but this
+excerpt includes the bare minimum to run Gitlab only.
+
+[source,ruby]
+----
+external_url 'https://gitlab:10443/'
+registry_external_url 'https://gitlab:4567' # <1>
+
+registry_nginx['enable'] = true
+registry_nginx['listen_port'] = 4567 # <2>
+
+nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
+nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
+nginx['listen_port'] = 10443 # <3>
+----
+<1> Setting the ports here cases problems elsewhere, so better also set the ports in <2> and <3>
+<2> My initial idea was to use the registry as a cache, but more to that later
+<3> Nginx usually picks the port from _external_url_, which is not what we want to do
+
+Almost there.
+I prefer to group container inside of [pods][] like you would do in [kubernetes][],
+so let us quickly create one:
+
+[source,shell]
+----
+$ podman pod create -n gitlab --network bridge \
+    -p 10022:22 -p 10080:80 -p 10443:10443 \
+    -p 4567:4567
+991e7a69b59e76e051d87ef756169c9ed53e4b4090650a0e41cd09cf6ffd7eb9
+----
+
+TIP: This can be done with the make target `pd-pod-create`.
+
+And with everything in place we can fire up Gitlab:
 
 [source,shell]
 ----
@@ -55,18 +96,19 @@ $ podman run -dit --name gitlab --pod=gitlab \
     -v ./gitlab-data:/var/opt/gitlab \
     -e GITLAB_ROOT_EMAIL=admin@local -e GITLAB_ROOT_PASSWORD=YourPassword \ #<3>
     docker.io/gitlab/gitlab-ce:latest
+17349b87f81aa9eb7230f414923cf491c84a36a87d61057f8dc2f8f82c7ea60a
 ----
 <1> We pass our new certs via volume mounts to Gitlab
 <2> Our previously modified minimal config
 <3> Let us be creative
+
+TIP: This can also be done with the make target `pd-gitlab`.
 
 Following commands are required to start the required containers:
 
 [source,shell]
 ----
 $ cd podman
-$ make pd-pod-create
-991e7a69b59e76e051d87ef756169c9ed53e4b4090650a0e41cd09cf6ffd7eb9
 $ make pd-runner
 ccae50ee774957a4c0daf47b5ed15f40353ead1304e232b16924bc4026db2029
 $ make pd-gitlab
