@@ -49,16 +49,16 @@ $ @openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
 ----
 $ podman run -dit --name gitlab --pod=gitlab \
     --memory=4096m --cpus=4 \
-    -v ./gitlab.crt:/etc/gitlab/ssl/gitlab.crt \
+    -v ./gitlab.crt:/etc/gitlab/ssl/gitlab.crt \ # <1>
     -v ./gitlab.key:/etc/gitlab/ssl/gitlab.key \
-    -v ./gitlab.rb:/etc/gitlab/gitlab.rb \
+    -v ./gitlab.rb:/etc/gitlab/gitlab.rb \ # <2>
     -v ./gitlab-data:/var/opt/gitlab \
-    -e GITLAB_ROOT_EMAIL=admin@local -e GITLAB_ROOT_PASSWORD=YourPassword \
+    -e GITLAB_ROOT_EMAIL=admin@local -e GITLAB_ROOT_PASSWORD=YourPassword \ #<3>
     docker.io/gitlab/gitlab-ce:latest
-
-$ hg clone https://hg.unexist.dev/showcase-dagger-golang
-$ cd showcase-dagger-golang
 ----
+<1> We pass our new certs via volume mounts to Gitlab
+<2> Our previously modified minimal config
+<3> Let us be creative
 
 Following commands are required to start the required containers:
 
