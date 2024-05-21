@@ -32,10 +32,19 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 === Setting everything up
 
-This example uses [Podman][] and provides a Makefile to set up everything via CLI.
+The first step is to run Gitlab itself and this is kind of piecemeal:
 
 [source,shell]
 ----
+$ podman run -dit --name gitlab --pod=gitlab \
+    --memory=4096m --cpus=4 \
+    -v ./gitlab.crt:/etc/gitlab/ssl/gitlab.crt \
+    -v ./gitlab.key:/etc/gitlab/ssl/gitlab.key \
+    -v ./gitlab.rb:/etc/gitlab/gitlab.rb \
+    -v ./gitlab-data:/var/opt/gitlab \
+    -e GITLAB_ROOT_EMAIL=admin@local -e GITLAB_ROOT_PASSWORD=YourPassword \
+    docker.io/gitlab/gitlab-ce:latest
+
 $ hg clone https://hg.unexist.dev/showcase-dagger-golang
 $ cd showcase-dagger-golang
 ----
