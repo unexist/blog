@@ -37,7 +37,7 @@ NOTE: If you are looking for the first part just follow this link over here:
 === Setting everything up
 
 The first step is to start Gitlab itself and this requires a SSL cert - so just to make our
-lives more miserable we a creating a self-signed one:
+lives more miserable we create a self-signed one:
 
 [source,shell]
 ----
@@ -48,6 +48,8 @@ $ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
 ----
 <1> This line is essential, otherwise Gitlab won't accept this cert
 <2> We are going to use *gitlab* for the hostname, so make sure to add it to your hosts file
+
+==== Starting Gitlab
 
 Next up is the actual config of Gitlab.
 There is plenty of stuff that can actually be configured, especially in
@@ -103,6 +105,8 @@ $ podman run -dit --name gitlab --pod=gitlab \
 <3> Let us be creative
 
 TIP: This can also be done with the make target `pd-gitlab`.
+
+==== Starting a runner
 
 Following commands are required to start the required containers:
 
