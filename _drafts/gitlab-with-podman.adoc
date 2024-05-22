@@ -73,8 +73,8 @@ nginx['listen_port'] = 10443 # <3>
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
 Almost there.
-I prefer to group container inside of [pods][] like you would do in [kubernetes][],
-so let us quickly create one:
+Like [Kubernetes][] Podman allows to group or rather encapsulate container
+in [pods][] and also to convert them afterwards, so let us quickly create one:
 
 [source,shell]
 ----
@@ -110,17 +110,7 @@ TIP: This can also be done with the make target `pd-gitlab`.
 
 Following commands are required to start the required containers:
 
-[source,shell]
-----
-$ cd podman
-$ make pd-runner
-ccae50ee774957a4c0daf47b5ed15f40353ead1304e232b16924bc4026db2029
-$ make pd-gitlab
-17349b87f81aa9eb7230f414923cf491c84a36a87d61057f8dc2f8f82c7ea60a
-----
-
-TIP: If you start the container manually please take care of resource limits, otherwise you might
-be surprised how excessive Gitlab can be.
+==== Summing up
 
 Once everything is ready `podman ps` should show following:
 
