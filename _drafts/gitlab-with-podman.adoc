@@ -36,8 +36,8 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 === Setting everything up
 
-The first step is to start Gitlab itself and this requires a SSL cert - so just to make our
-lives more miserable we create a self-signed one:
+The first step is to start Gitlab itself and this requires a SSL cert - so just to make this
+a lot more interesting we create a self-signed one:
 
 [source,shell]
 ----
@@ -54,7 +54,7 @@ $ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
 Next up is the actual config of Gitlab.
 There is plenty of stuff that can actually be configured, especially in
 [constrained environments][] it is beneficial to disable services like [Prometheus][], but this
-excerpt includes the bare minimum to run Gitlab only.
+excerpt includes only the bare minimum to run Gitlab.
 
 [source,ruby]
 ----
