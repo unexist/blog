@@ -115,15 +115,12 @@ end
 <2> We aren't using many features like attributes yet, but this is just to get us started
 <3> And lastly we need to register our new extension in the registry
 
-Inside of a document this macro can be used like any other internals:
-
-[source,adoc]
-----
-hello::[name="World"]
-----
+Inside a document this macro can be used like any other internals:
 
 [source,shell]
 ----
+$ cat hello.adoc
+hello::[name="World"]
 $ asciidoctor -r ./hello_inline_macro.rb hello.adoc # <1>
 $ htmlq -f hello.html div.paragraph p # <2>
 <p>Hello, World!</p>
