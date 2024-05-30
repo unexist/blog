@@ -2,8 +2,8 @@
 layout: post
 title: Extending Asciidoctor
 description: This blog post explains how Asciidoctor can easily be extended with new macros for custom functionality like collecting versions.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2024-05-30 17:37 +0200
+last_updated: 2024-05-30 17:37 +0200
 author: Christoph Kappel
 tags: showcase asciidoc asciidoctor asciidoctorj ruby java docs-as-code
 categories: tech
@@ -338,7 +338,7 @@ class CheckversionInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
             'accept' => 'application/json'
         }
 
-        JSON.parse(data)['results'].first['version'].gsub(/[^0-9\.]/, '') rescue "x.x" # <5>
+        JSON.parse(data)['results'].first['version'].gsub(/[^0-9\.]/, '') rescue 'x.x' # <5>
     end
 
     def load_from_playstore url
@@ -365,7 +365,7 @@ class CheckversionInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
             'API-Key' => apiKey,
         }
 
-        JSON.parse(data)['version'].gsub(/[^0-9\.]/, '') rescue "x.x" # <7>
+        JSON.parse(data)['version'].gsub(/[^0-9\.]/, '') rescue 'x.x' # <7>
     end
 end
 ----
