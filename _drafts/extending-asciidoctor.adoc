@@ -21,6 +21,8 @@ endif::[]
 ////
 https://www.youtube.com/watch?v=2XcJY7abovM
 https://docs.freebsd.org/en/books/fdp-primer/asciidoctor-primer/
+https://en.wikipedia.org/wiki/AsciiDoc
+https://github.com/asciidoctor/asciidoctorj
 ////
 
 I am still in the mid of polishing my post about [Gitlab][] and [Podman][] to conclude the
@@ -32,10 +34,27 @@ is worth my time writing about it and maybe yours as well reading it?
 
 If you've never heard about Asciidoc before there are plenty of good resources for a primer,
 like this article from the [FreeBSD docs][] or even full talks like this one
-[Docs-as-Code @ DevConv][] if you want to something to watch.
+[Docs-as-Code @ DevConf][] if you want to something to watch.
 
 My own rationale to favor asciidoc over like [Markdown][] is the support of [admonitions][],
-easy, [source code linking][] and the nice [extensibility][] we are looking into now.
+easy, [callouts][], [source code linking][] and the nice [extensibility][] we are going to
+look into now.
+Obviously since this blog uses AsciiDoc under the hood, many of the named features are used
+to bring this to you.
+
+== Tooling and support
+
+Originally written in [Python][], the new reference implementation is its [Ruby][] rewrite under
+the same name, which is ultimately used at various prominent places like [Github][] or even at
+[O'Reilly][].
+
+I think everything has a fork that runs on the [JVM][] and probably is suprised this is also true
+for Ruby and [JRruby][], so we ultimately are going to use [AsciidoctorJ][].
+One advantage of this language mix is we are able to write extensions either Java or in Ruby
+and for the ease of use and good sports are picking the latter.
+
+== Writing an extension
+
 
 == Conclusion
 
