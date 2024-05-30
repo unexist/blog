@@ -5,7 +5,7 @@ description: This blog post explains how Asciidoctor can easily be extended with
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase asciidoc asciidoctor asciidoctorj ruby java
+tags: showcase asciidoc asciidoctor asciidoctorj ruby java docs-as-code
 categories: tech
 toc: true
 ---
@@ -18,46 +18,63 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-////
-https://www.youtube.com/watch?v=2XcJY7abovM
-https://docs.freebsd.org/en/books/fdp-primer/asciidoctor-primer/
-https://en.wikipedia.org/wiki/AsciiDoc
-https://github.com/asciidoctor/asciidoctorj
-https://github.com/asciidoctor/asciidoctor/blob/main/lib/asciidoctor/extensions.rb
-https://github.com/mgdm/htmlq
-https://github.com/asciidoctor/asciidoctor
-https://www.baeldung.com/java-spi
-https://docs.asciidoctor.org/asciidoc/latest/verbatim/callouts/
-https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-blocks/
-https://github.com/confluence-publisher/confluence-publisher
-////
+:1: https://docs.asciidoctor.org/asciidoc/latest/blocks/admonitions/
+:2: https://www.apple.com/
+:3: https://asciidoctor.org/
+:4: https://github.com/asciidoctor/asciidoctor
+:5: https://github.com/asciidoctor/asciidoctorj
+:6: https://docs.asciidoctor.org/asciidoc/latest/verbatim/callouts/
+:7: https://www.atlassian.com/software/confluence
+:8: https://github.com/confluence-publisher/confluence-publisher
+:9: https://www.youtube.com/watch?v=2XcJY7abovM
+:10: https://en.wikipedia.org/wiki/Domain-specific_language
+:11: https://docs.asciidoctor.org/asciidoctor.js/latest/extend/extensions/
+:12: https://docs.freebsd.org/en/books/fdp-primer/asciidoctor-primer/
+:13: https://github.com/
+:14: https://about.gitlab.com/
+:15: https://www.google.com/
+:16: https://github.com/mgdm/htmlq
+:17: https://en.wikipedia.org/wiki/JAR_(file_format)
+:18: https://www.jruby.org/
+:19: https://en.wikipedia.org/wiki/Java_virtual_machine
+:20: https://docs.asciidoctor.org/asciidoctor/latest/manpage-backend/
+:21: https://en.wikipedia.org/wiki/Markdown
+:22: https://docs.atlas.oreilly.com/writing_in_asciidoc.html
+:23: https://docs.asciidoctor.org/pdf-converter/latest/
+:24: https://podman.io/
+:25: https://maven.apache.org/guides/introduction/introduction-to-the-pom.html
+:26: https://www.python.org/
+:27: https://www.ruby-lang.org/en/
+:28: https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-blocks/
+:29: https://www.baeldung.com/java-spi
+:30: https://github.com/asciidoctor/asciidoctor/blob/main/lib/asciidoctor/extensions.rb
 
-I am still in the mid of polishing my post about [Gitlab][] and [Podman][] to conclude the
-mini series, but had to dive into extending [Asciidoctor][] recently to extend our documentation
-on [Confluence][].
-This required a bit of good 'ol trial & error and reading code on [Github][], so it probably
+I am still in the mid of polishing my post about {14}[Gitlab] and {24}[Podman] to conclude my
+mini-series, but had to dive into extending {3}[Asciidoctor] recently to extend our {7}[Confluence]
+documentation.
+This required a bit of good 'ol trial & error and reading code on {13}[Github], so it probably
 is worth my time writing about it and maybe yours as well reading it?
 
 == What is AsciiDoc?
 
 If you've never heard about AsciiDoc before there are plenty of good resources for a primer,
-like this article from the [FreeBSD docs][] or even full talks like this one
-[Docs-as-Code @ DevConf][] if you want to something to watch.
+like this article from the {12}[FreeBSD docs] or even full talks like this one
+{9}[Docs-as-Code @ DevConf] if you want to something to watch.
 
-My own rationale to favor it over like [Markdown][] is the support of [admonitions][],
-[callouts][], easy [source code linking][] and the nice [extensibility][] we are going to
+My own rationale to favor it over like {21}[Markdown] is the support of {1}[admonitions],
+{6}[callouts], easy {28}[source code linking] and the nice {11}[extensibility] we are going to
 look into now.
 Obviously since this blog uses AsciiDoc under the hood, many of the named features are also used
 to bring this to you.
 
 == Tooling and support
 
-Originally written in [Python][], the new reference implementation is its [Ruby][] rewrite under
-the same name, which is ultimately used at various prominent places like [Github][] or even at
-[O'Reilly][].
+Originally written in {26}[Python], the new reference implementation is its {27}[Ruby] rewrite under
+the same name, which is ultimately used at various prominent places like {13}[Github] or even at
+{22}[O'Reilly].
 
-I think everything has a fork that runs on the [JVM][] and probably nobody is surprised this also
-applies to Ruby (hello [JRruby][]), so we ultimately are going to use [AsciidoctorJ][].
+I think everything has a fork that runs on the {19}[JVM] and probably nobody is surprised this also
+applies to Ruby (hello {18}[JRruby]), so we ultimately are going to use {5}[AsciidoctorJ].
 One advantage of this language mix is we are able to write extensions either Java or in Ruby.
 
 For the ease of use and good sports we are picking the latter.
@@ -66,8 +83,8 @@ For the ease of use and good sports we are picking the latter.
 
 I haven't found a good documentation of the Ruby API besides the actual code on Github, but since
 it contains loads of commentary it is quite sufficient.
-There are a few different types of extensions that are possible, the one we need is an [inline
-macro][].
+There are a few different types of extensions that are possible, the one we need is an
+{30}[inline macro].
 
 The bare minimum that is required for any extension to work is this:
 
@@ -94,7 +111,7 @@ Asciidoctor::Extensions.register do # <3>
     end
 end
 ----
-<1> The [DSL][] hopefully is quite easy to read, so this defines the actual name of the macro
+<1> The {10}[DSL] hopefully is quite easy to read, so this defines the actual name of the macro
 <2> We aren't using many features like attributes yet, but this is just to get us started
 <3> And lastly we need to register our new extension in the registry
 
@@ -111,8 +128,8 @@ $ asciidoctor -r ./hello_inline_macro.rb hello.adoc # <1>
 $ htmlq -f hello.html div.paragraph p # <2>
 <p>Hello, World!</p>
 ----
-<1> This uses the [asciidoctor gem][]
-<2> Never heard of [htmlq][] before? You should have!
+<1> This uses the {4}[asciidoctor gem]
+<2> Never heard of {16}[htmlq] before? You should have!
 
 This was quite easy, but the original goal is to update docs on Confluence so let us moving forward.
 
@@ -122,7 +139,7 @@ Achieving the same with AsciidoctorJ requires a bit of more boilerplate, but sti
 is quite doable.
 
 Registration at the registry is a bit more exhaustive and uses a classpath loader and later on
-[SPI][]-magic as we are going to see.
+{29}[SPI]-magic as we are going to see.
 
 Registry loader ahead:
 
@@ -154,7 +171,7 @@ dev.unexist.asciidoctor.HelperRegistry
 ----
 <1> This facilitates the Java service loader to provide access and a way to extend applications
 
-And easily the messiest part to throw everything into a [pom.xml][]:
+And easily the messiest part to throw everything into a {25}[pom.xml]:
 
 [source,xml]
 ----
@@ -175,7 +192,7 @@ And easily the messiest part to throw everything into a [pom.xml][]:
    </plugins>
 </build>
 ----
-<1> Everything has to be bottled up into a [jar][] - a complete example can be found here:
+<1> Everything has to be bottled up into a {17}[jar] - a complete example can be found here:
 <https://github.com/unexist/showcase-asciidoc-extensions/blob/master/asciidoctor-helper-macros/pom.xml>
 
 Why, but why is all of this necessary?
@@ -186,7 +203,7 @@ We are getting closer!
 Pushing stuff to Confluence can be done via their REST-API, but fortunately for us there is an easier
 way that nicely integrates in all the moving parts we have assembled now.
 
-The [Confluence-Publisher][] plugin comes bundled with Asciidoc support and can nicely talk to the
+The {8}[Confluence-Publisher] plugin comes bundled with Asciidoc support and can nicely talk to the
 REST API.
 The only drawback here is not all of the features of Asciidoc are currently supported yet (like
 tables and having a look at the last change probably never will) yet.
@@ -356,8 +373,8 @@ end
 <2> Targets are another way to parameterize macro calls, this makes following possible: checkversion:apps[component=..]
 <3> Don't even think about other options to pass stuff like this from the outside!
 <4> There are lots of options available, but we stick to the standard tools
-<5> I never imagined [Apple][] would offer a more sane way to actually fetch app versions
-<6> Here be dragons: [Google][] hides the actual version behind a dynamically loaded layer, but data
+<5> I never imagined {2}[Apple] would offer a more sane way to actually fetch app versions
+<6> Here be dragons: {15}[Google] hides the actual version behind a dynamically loaded layer, but data
 has to go somewhere and fortunately versions are easy to distinguish. (_Might change any minute.._)
 <7> Be creative what kind of reply you receive here..
 
@@ -391,7 +408,7 @@ a| checkversion:backends[component="blog" stage="prod"]
 
 AsciiDoc and the toolchain around it allow to create optically appealing documentation from an
 easy to grasp syntax.
-Supported by a wide array of output formats like [pdf][] or even [manpages][] it fits perfectly
+Supported by a wide array of output formats like {23}[pdf] or even {20}[manpages] it fits perfectly
 well into any documentation-as-code approach.
 
 Run either manually or in a pipeline the Confluence plugin updates wiki pages on changes and
