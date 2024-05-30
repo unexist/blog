@@ -26,6 +26,10 @@ https://github.com/asciidoctor/asciidoctorj
 https://github.com/asciidoctor/asciidoctor/blob/main/lib/asciidoctor/extensions.rb
 https://github.com/mgdm/htmlq
 https://github.com/asciidoctor/asciidoctor
+https://www.baeldung.com/java-spi
+https://docs.asciidoctor.org/asciidoc/latest/verbatim/callouts/
+https://docs.asciidoctor.org/asciidoc/latest/verbatim/source-blocks/
+https://github.com/confluence-publisher/confluence-publisher
 ////
 
 I am still in the mid of polishing my post about [Gitlab][] and [Podman][] to conclude the
@@ -53,9 +57,10 @@ the same name, which is ultimately used at various prominent places like [Github
 [O'Reilly][].
 
 I think everything has a fork that runs on the [JVM][] and probably nobody is surprised this also
-applies to Ruby and [JRruby][], so we ultimately are going to use [AsciidoctorJ][].
-One advantage of this language mix is we are able to write extensions either Java or in Ruby
-and for the ease of use and good sports are picking the latter.
+applies to Ruby (hello [JRruby][]), so we ultimately are going to use [AsciidoctorJ][].
+One advantage of this language mix is we are able to write extensions either Java or in Ruby.
+
+For the ease of use and good sports we are picking the latter.
 
 == Writing an extension
 
@@ -107,11 +112,140 @@ $ htmlq -f hello.html div.paragraph p # <2>
 <p>Hello, World!</p>
 ----
 <1> This uses the [asciidoctor gem][]
-<2> Never heard of [htmlq][] before? You should!
+<2> Never heard of [htmlq][] before? You should have!
 
 This was quite easy, but the original goal is to update docs on Confluence so let us moving forward.
 
 === Adding a J
+
+Achieving the same with AsciidoctorJ requires a bit of more boilerplate, but still this whole endeavor
+is quite doable.
+
+Registration at the registry is a bit more exhaustive and uses a classpath loader and later on
+[SPI][]-magic as we are going to see.
+
+Registry loader ahead:
+
+[source,java]
+----
+package dev.unexist.asciidoctor;
+
+import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.jruby.extension.spi.ExtensionRegistry;
+
+public class HelperRegistry implements ExtensionRegistry {
+
+    @Override
+    public void register(Asciidoctor asciidoctor) {
+        asciidoctor.rubyExtensionRegistry()
+            .loadClass(HelperRegistry.class.getResourceAsStream("/extensions/hello-inline-macro.rb"))
+            .inlineMacro("hello", "HelloInlineMacro"); # <1>
+    }
+}
+----
+<1> See how nice callouts are? Fortunately here is nothing worrying enough for a real comment.
+
+Followed by the magical part:
+
+[source,shell]
+----
+$ cat src/main/resources/META-INF/services/org.asciidoctor.jruby.extension.spi.ExtensionRegistry # <1>
+dev.unexist.asciidoctor.HelperRegistry
+----
+<1> This facilitates the Java service loader to provide access and a way to extend applications
+
+And easily the messiest part to throw everything into a [pom.xml][]:
+
+[source,xml]
+----
+<build>
+   <plugins>
+       <plugin>
+           <groupId>org.asciidoctor</groupId>
+           <artifactId>asciidoctor-maven-plugin</artifactId>
+           <version>${asciidoctor.maven-plugin.version}</version>
+           <dependencies>
+               <dependency> <!--1-->
+                   <groupId>dev.unexist.showcase</groupId>
+                   <artifactId>asciidoctor-helper-macros</artifactId>
+                   <version>0.1</version>
+               </dependency>
+           </dependencies>
+       </plugin>
+   </plugins>
+</build>
+----
+<1> Everything has to be bottled up into a [jar][] - a complete example can be found here:
+<https://github.com/unexist/showcase-asciidoc-extensions/blob/master/asciidoctor-helper-macros/pom.xml>
+
+Why, but why is all of this necessary?
+We are getting closer!
+
+## Getting this to Confluence
+
+Pushing stuff to Confluence can be done via their REST-API, but fortunately for us there is an easier
+way that nicely integrates in all the moving parts we have assembled now.
+
+The [Confluence-Publisher][] plugin comes bundled with Asciidoc support and can nicely talk to the
+REST API.
+The only drawback here is not all of the features of Asciidoc are currently supported yet (like
+tables and having a look at the last change probably never will) yet.
+
+Among the unsupported options is the support to pass Ruby extensions easily, but alas we can add
+Java dependencies and follow the SPI approach from before.
+
+I'd like to shorten the mess, but all of this is somehow required:
+
+[source,xml]
+----
+<build>
+   <plugins>
+        <plugin>
+            <groupId>org.sahli.asciidoc.confluence.publisher</groupId>
+            <artifactId>asciidoc-confluence-publisher-maven-plugin</artifactId>
+            <version>${confluence.publisher.version}</version>
+            <configuration>
+                <asciidocRootFolder>${asciidocDirectory}</asciidocRootFolder> <!--1-->
+                <sourceEncoding>UTF-8</sourceEncoding>
+                <rootConfluenceUrl>${confluence.url}</rootConfluenceUrl>
+                <spaceKey>${confluence.spaceKey}</spaceKey> <!--1-->
+                <ancestorId>${confluence.ancestorId}</ancestorId>
+                <username>${confluence.publisherUserName}</username>
+                <password>${confluence.publisherPassword}</password>
+                <pageTitlePrefix xml:space="preserve"/>
+                <publishingStrategy>${confluence.publishingStrategy}
+                </publishingStrategy>
+                <orphanRemovalStrategy>KEEP_ORPHANS</orphanRemovalStrategy>
+                <pageTitleSuffix
+                        xml:space="preserve"> [${project.version}]</pageTitleSuffix>
+                <versionMessage>Version ${project.version}</versionMessage>
+                <attributes>
+                    <version>${project.version}</version>
+                </attributes>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>publish-documentation</id>
+                    <phase>generate-resources</phase>
+                    <goals>
+                        <goal>publish</goal>
+                    </goals>
+                </execution>
+            </executions>
+           <dependencies>
+               <dependency> <!--2-->
+                   <groupId>dev.unexist.showcase</groupId>
+                   <artifactId>asciidoctor-helper-macros</artifactId>
+                   <version>0.1</version>
+               </dependency>
+           </dependencies>
+        </plugin>
+   </plugins>
+</build>
+----
+<1> The list of supported attributes and flags can be found here:
+<https://confluence-publisher.atlassian.net/wiki/spaces/CPD/overview?mode=global>
+<2> Remember this from before?
 
 == Conclusion
 
