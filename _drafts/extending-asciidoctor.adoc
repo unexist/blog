@@ -1,0 +1,47 @@
+---
+layout: post
+title: Extending Asciidoctor
+description: This blog post explains how Asciidoctor can easily be extended with new macros with custom functionality like version- and healthchecks.
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase asciidic
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/extending_asciidoc
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/extending_asciidoc
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+////
+https://www.youtube.com/watch?v=2XcJY7abovM
+https://docs.freebsd.org/en/books/fdp-primer/asciidoctor-primer/
+////
+
+I am still in the mid of polishing my post about [Gitlab][] and [Podman][] to conclude the
+mini series, but had to dive into extending [Asciidoctor][] recently to extend our documentation.
+This required a bit of good 'ol trial & error and reading code on [Github][], so it probably
+is worth my time writing about it and maybe yours as well reading it?
+
+== What is AsciiDoc?
+
+If you've never heard about Asciidoc before there are plenty of good resources for a primer,
+like this article from the [FreeBSD docs][] or even full talks like this one
+[Docs-as-Code @ DevConv][] if you want to something to watch.
+
+My own rationale to favor asciidoc over like [Markdown][] is the support of [admonitions][],
+easy, [source code linking][] and the nice [extensibility][] we are looking into now.
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-asciidoc-extensions>
+
+[bibliography]
+== Bibliography
