@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Extending Asciidoctor
-description: This blog post explains how Asciidoctor can easily be extended with new macros with custom functionality like version- and healthchecks.
+description: This blog post explains how Asciidoctor can easily be extended with new macros for custom functionality like collecting versions.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase asciidoc asciidoctor asciidoctorj ruby
+tags: showcase asciidoc asciidoctor asciidoctorj ruby java
 categories: tech
 toc: true
 ---
@@ -139,7 +139,7 @@ public class HelperRegistry implements ExtensionRegistry {
     public void register(Asciidoctor asciidoctor) {
         asciidoctor.rubyExtensionRegistry()
             .loadClass(HelperRegistry.class.getResourceAsStream("/extensions/hello-inline-macro.rb"))
-            .inlineMacro("hello", "HelloInlineMacro"); # <1>
+            .inlineMacro("hello", "HelloInlineMacro"); /// <1>
     }
 }
 ----
@@ -226,14 +226,14 @@ I'd like to shorten the mess, but all of this is somehow required:
             <executions>
                 <execution>
                     <id>publish-documentation</id>
-                    <phase>generate-resources</phase>
+                    <phase>generate-resources</phase> <!--2-->
                     <goals>
                         <goal>publish</goal>
                     </goals>
                 </execution>
             </executions>
            <dependencies>
-               <dependency> <!--2-->
+               <dependency> <!--3-->
                    <groupId>dev.unexist.showcase</groupId>
                    <artifactId>asciidoctor-helper-macros</artifactId>
                    <version>0.1</version>
@@ -245,13 +245,162 @@ I'd like to shorten the mess, but all of this is somehow required:
 ----
 <1> The list of supported attributes and flags can be found here:
 <https://confluence-publisher.atlassian.net/wiki/spaces/CPD/overview?mode=global>
-<2> Remember this from before?
+<2> Hook into the lifecycle: Render and deploy our asciidoc in the _generate-resources_ phase
+<3> Remember this from before?
+
+== Real world example: Collect versions
+
+[source,ruby]
+----
+class CheckversionInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
+    use_dsl
+
+    named :checkversion
+    name_positional_attributes 'component', 'stage' # <1>
+
+    def process parent, target, attrs
+        case target # <2>
+        when 'apps'
+            create_inline_pass parent, handle_apps(attrs)
+        when 'backends'
+            create_inline_pass parent, handle_backends(attrs)
+        end
+    end
+
+    private
+
+    def handle_apps(attrs)
+        case attrs['component']
+        when 'maps'
+            case attrs['stage']
+            when 'appstore'
+                case attrs['os']
+                when 'ios'
+                    load_from_appstore ENV['URL_APPSTORE_IOS']
+                end
+            when 'playstore'
+                when 'android'
+                    load_from_playstore ENV['URL_APPSTORE_ANDROID']
+            end
+        end
+    end
+
+    def handle_backends(attrs)
+        case attrs['component']
+        when 'blog'
+            load_from_backend ENV['URL_BLOG_%s' % attrs['stage'].upcase], ENV['API-KEY'] # <3>
+        end
+    end
+
+    def fetch_data uri, headers = {}
+        retVal = ''
+
+        begin
+            request = Net::HTTP::Get.new uri # <4>
+
+            headers.each do |key, value|
+                request[key] = value
+            end unless headers.nil?
+
+            response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: 'https' == uri.scheme) { |http|
+                http.request request
+            }
+
+            unless response.nil? and 200 != response.code.to_i
+                retVal = response.body
+            end
+        rescue => err
+            p err
+        end
+
+        retVal
+    end
+
+    def load_from_appstore url
+        data = fetch_data URI.parse(url), {
+            'accept' => 'application/json'
+        }
+
+        JSON.parse(data)['results'].first['version'].gsub(/[^0-9\.]/, '') rescue "x.x" # <5>
+    end
+
+    def load_from_playstore url
+        retVal = ''
+        data = fetch_data URI.parse(url)
+
+        data.scan(/<script nonce=\"\S+\">AF_initDataCallback\((.*?)\);/) do |match| # <6>
+            begin
+                matches = match.first.scan(/(\d+\.\d+\.\d+)/)
+
+                retVal = matches.first.first unless matches.nil? or matches.empty?
+            rescue => err
+                p err
+                retVal = 'x.x'
+            end unless match.nil?
+        end unless data.nil?
+
+        retVal
+    end
+
+    def load_from_backend url, apiKey = nil
+        data = fetch_data URI.parse(url), {
+            'accept' => 'application/json',
+            'API-Key' => apiKey,
+        }
+
+        JSON.parse(data)['version'].gsub(/[^0-9\.]/, '') rescue "x.x" # <7>
+    end
+end
+----
+<1> Here we use some more positional attributes
+<2> Targets are another way to parameterize macro calls, this makes following possible: checkversion:apps[component=..]
+<3> Don't even think about other options to pass stuff like this from the outside!
+<4> There are lots of options available, but we stick to the standard tools
+<5> I never imagined [Apple][] would offer a more sane way to actually fetch app versions
+<6> Here be dragons: [Google][] hides the actual version behind a dynamically loaded layer, but data
+has to go somewhere and fortunately versions are easy to distinguish. (_Might change any minute.._)
+<7> Be creative what kind of reply you receive here..
+
+If you have read so far it should be just a flick of your fingers to get it working and to be
+able to render this doc:
+
+[source,adoc]
+----
+[IMPORTANT]
+====
+This page is automatically updated, so please *do not* update manually.
+====
+
+|===
+| Component | DEV | Test | Staging | Prod | iOS | Android
+
+| Maps
+4+h|
+a| checkversion:apps[component="maps" stage="appstore"]
+a| checkversion:apps[component="maps" stage="playtore"]
+
+| Blog
+a| checkversion:backends[component="blog" stage="dev"]
+a| checkversion:backends[component="blog" stage="test"]
+a| checkversion:backends[component="blog" stage="staging"]
+a| checkversion:backends[component="blog" stage="prod"]
+2+h|
+----
 
 == Conclusion
+
+AsciiDoc and the toolchain around it allow to create optically appealing documentation from an
+easy to grasp syntax.
+Supported by a wide array of output formats like [pdf][] or even [manpages][] it fits perfectly
+well into any documentation-as-code approach.
+
+Run either manually or in a pipeline the Confluence plugin updates wiki pages on changes and
+allows access to all kind of interesting parties without the hurdle to have a look at any
+repository.
+
+Additionally the good extensibility allows customization for any domain requirement or just
+to ease up writing and/or structuring.
 
 All examples can be found here:
 
 <https://github.com/unexist/showcase-asciidoc-extensions>
-
-[bibliography]
-== Bibliography
