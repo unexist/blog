@@ -5,15 +5,15 @@ description: This blog post explains how Asciidoctor can easily be extended with
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase asciidic
+tags: showcase asciidoc asciidoctor asciidoctorj ruby
 categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/extending_asciidoc
+:imagesdir: {asciidoctorconfigdir}/../assets/images/extending_asciidoctor
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/extending_asciidoc
+:imagesdir: /assets/images/extending_asciidoctor
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -23,23 +23,27 @@ https://www.youtube.com/watch?v=2XcJY7abovM
 https://docs.freebsd.org/en/books/fdp-primer/asciidoctor-primer/
 https://en.wikipedia.org/wiki/AsciiDoc
 https://github.com/asciidoctor/asciidoctorj
+https://github.com/asciidoctor/asciidoctor/blob/main/lib/asciidoctor/extensions.rb
+https://github.com/mgdm/htmlq
+https://github.com/asciidoctor/asciidoctor
 ////
 
 I am still in the mid of polishing my post about [Gitlab][] and [Podman][] to conclude the
-mini series, but had to dive into extending [Asciidoctor][] recently to extend our documentation.
+mini series, but had to dive into extending [Asciidoctor][] recently to extend our documentation
+on [Confluence][].
 This required a bit of good 'ol trial & error and reading code on [Github][], so it probably
 is worth my time writing about it and maybe yours as well reading it?
 
 == What is AsciiDoc?
 
-If you've never heard about Asciidoc before there are plenty of good resources for a primer,
+If you've never heard about AsciiDoc before there are plenty of good resources for a primer,
 like this article from the [FreeBSD docs][] or even full talks like this one
 [Docs-as-Code @ DevConf][] if you want to something to watch.
 
-My own rationale to favor asciidoc over like [Markdown][] is the support of [admonitions][],
-easy, [callouts][], [source code linking][] and the nice [extensibility][] we are going to
+My own rationale to favor it over like [Markdown][] is the support of [admonitions][],
+[callouts][], easy [source code linking][] and the nice [extensibility][] we are going to
 look into now.
-Obviously since this blog uses AsciiDoc under the hood, many of the named features are used
+Obviously since this blog uses AsciiDoc under the hood, many of the named features are also used
 to bring this to you.
 
 == Tooling and support
@@ -48,13 +52,66 @@ Originally written in [Python][], the new reference implementation is its [Ruby]
 the same name, which is ultimately used at various prominent places like [Github][] or even at
 [O'Reilly][].
 
-I think everything has a fork that runs on the [JVM][] and probably is suprised this is also true
-for Ruby and [JRruby][], so we ultimately are going to use [AsciidoctorJ][].
+I think everything has a fork that runs on the [JVM][] and probably nobody is surprised this also
+applies to Ruby and [JRruby][], so we ultimately are going to use [AsciidoctorJ][].
 One advantage of this language mix is we are able to write extensions either Java or in Ruby
 and for the ease of use and good sports are picking the latter.
 
 == Writing an extension
 
+I haven't found a good documentation of the Ruby API besides the actual code on Github, but since
+it contains loads of commentary it is quite sufficient.
+There are a few different types of extensions that are possible, the one we need is an [inline
+macro][].
+
+The bare minimum that is required for any extension to work is this:
+
+[source,ruby]
+----
+require 'asciidoctor/extensions' unless RUBY_ENGINE == 'opal'
+
+include Asciidoctor
+
+class HelloInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
+    use_dsl
+
+    named :hello # <1>
+    name_positional_attributes 'name'
+
+    def process parent, target, attrs # <2>
+        create_inline_pass parent, 'Hello, %s!' % attrs['name']
+    end
+end
+
+Asciidoctor::Extensions.register do # <3>
+    if @document.basebackend? 'html'
+        inline_macro HelloInlineMacro
+    end
+end
+----
+<1> The [DSL][] hopefully is quite easy to read, so this defines the actual name of the macro
+<2> We aren't using many features like attributes yet, but this is just to get us started
+<3> And lastly we need to register our new extension in the registry
+
+Inside of a document this macro can be used like any other internals:
+
+[source,adoc]
+----
+hello::[name="World"]
+----
+
+[source,shell]
+----
+$ asciidoctor -r ./hello_inline_macro.rb hello.adoc # <1>
+$ htmlq -f hello.html div.paragraph p # <2>
+<p>Hello, World!</p>
+----
+<1> This uses the [asciidoctor gem][]
+<2> Never heard of [htmlq][] before? You should!
+
+This was quite easy, but the original goal is to update docs on Confluence so let us moving forward.
+
+=== Adding a J
 
 == Conclusion
 
