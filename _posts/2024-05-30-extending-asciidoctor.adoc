@@ -264,6 +264,10 @@ I'd like to shorten the mess, but all of this is somehow required:
 
 == Real world example: Collect versions
 
+The next example aggregates versions from two different types of endpoints and can be used to
+create an overview e.g. via CICD.
+If you have read so far it should be just a flick of your fingers to get this extension working:
+
 [source,ruby]
 ----
 class CheckversionInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
@@ -366,17 +370,16 @@ class CheckversionInlineMacro < Asciidoctor::Extensions::InlineMacroProcessor
     end
 end
 ----
-<1> Here we use some more positional attributes
-<2> Targets are another way to parameterize macro calls, this makes following possible: checkversion:apps[component=..]
-<3> Don't even think about other options to pass stuff like this from the outside!
+<1> Here we use some more positional attributes to pass information
+<2> Targets are another way to parameterize macro calls, this makes following call possible: checkversion:apps[component=..]
+<3> Don't even think about other ways of passing credentials like this from the outside!
 <4> There are lots of options available, but we stick to the standard tools
 <5> I never imagined {2}[Apple] would offer a more sane way to actually fetch app versions
 <6> Here be dragons: {15}[Google] hides the actual version behind a dynamically loaded layer, but data
 has to go somewhere and fortunately versions are easy to distinguish. (_Might change any minute.._)
 <7> Be creative what kind of reply you receive here..
 
-If you have read so far it should be just a flick of your fingers to get it working and to be
-able to render this doc:
+And finally above can be used to render a simple page like this:
 
 [source,adoc]
 ----
@@ -399,6 +402,7 @@ a| checkversion:backends[component="blog" stage="test"]
 a| checkversion:backends[component="blog" stage="staging"]
 a| checkversion:backends[component="blog" stage="prod"]
 2+h|
+|===
 ----
 
 == Conclusion
