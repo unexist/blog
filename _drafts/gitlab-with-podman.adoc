@@ -20,6 +20,7 @@ endif::[]
 
 ////
 https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
+https://gist.github.com/Mearman/318b96efb31ed33d9c2efa959784d6d8
 ////
 
 == Gitlab with Podman
