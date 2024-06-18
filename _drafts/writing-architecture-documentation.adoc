@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Writing architecture documentation
-description: This blog post lays out an automatic and a DSL-based approach of generating C4-based architecture documentation with the help of Structurizr.
+description: This blog post lays out how a scraper and a DSL-based approach of generating C4-based architecture documentation with the help of Structurizr.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 [quote,Dick Brandon]
 Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is
@@ -36,19 +37,268 @@ not tests, which are in my personal opinion the best way to document behaviour.
 ====
 
 So in this blog post we are going to have a look at two different ways to create architecture
-diagrams with the help of [C4][] and [Struturizr][]:
+diagrams with the help of [C4][], [Struturizr][] and [Golang][]:
 
-. Automatically with [go-structurizr][]
-. Based on a DSL with [goadesign][]
+. Scraping with [go-structurizr][]
+. Using a domain-specific language with [goadesign][]
 
-Everything is again based on the typical [Todo-application][] well-known from basically every
-other post of this blog.
+Everything is again based on the well-known [Todo-application][] basically used in every other
+post of this blog.
 
-== Introduction to C4
+== Introduction time
 
-== Automatically
+There are many model based approaches especially for creating diagrams
 
-== DSL-approach
+== Scraping the model
+
+Go-structurizr is based on Structurizr and allows to create a single model and used it to create
+different kind and levels of diagrams.
+
+
+[source,yaml]
+----
+configuration:
+    title: Test
+    pkgs:
+        - "github.com"
+
+rules:
+    -   name_regexp: ".*"
+        pkg_regexps:
+            - ".*/adapter"
+        component:
+            description: "adapter component"
+            tags:
+                - ADAPTER
+----
+
+[source,yaml]
+----
+view:
+    title: Todo service components
+    line_color: 000000ff
+    styles:
+        -   id: ADAPTER
+            background_color: 2d69b7ff
+            font_color: ffffffff
+            border_color: 000000ff
+            shape: artifact
+    root_component_tags:
+        - ADAPTER
+    component_tags:
+        - ADAPTER
+----
+
+Once both configs are set we can write the actual program:
+
+[source,go]
+----
+func main() {
+	scraper, err := structScaper.NewScraperFromConfigFile("scraper.yaml") // <1>
+	if err != nil {
+		panic(err)
+	}
+
+	/* Create business stuff */
+	var todoRepository *infrastructure.TodoFakeRepository
+
+	todoRepository = infrastructure.NewTodoFakeRepository()
+
+	defer todoRepository.Close()
+
+	todoService := domain.NewTodoService(todoRepository)
+	todoResource := adapter.NewTodoResource(todoService)
+
+	structure := scraper.Scrape(todoResource) // <2>
+
+	view, err := structView.NewViewFromConfigFile("view.yaml") // <3>
+	if err != nil {
+		panic(err)
+	}
+
+	outFile, err := os.Create("c4.plantuml")
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	err = view.RenderStructureTo(structure, outFile) // <4>
+	if err != nil {
+		panic(err)
+	}
+}
+----
+<1> This instructs the scraper which packages are interesting and how they should be tagged
+<2> The scraper does whatever a scraper does
+<3> Here we source the styling informationen of the diagram
+<4> And finally the output file is rendered to disk
+
+The final output looks like this - depending on the [Grahpviz][] gods your mileage
+may vary:
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+title Service components
+
+skinparam {
+  shadowing false
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
+}
+hide stereotype
+top to bottom direction
+
+scale 4096 width
+
+skinparam rectangle<<_GROUP>> {
+  FontColor #ffffff
+  BorderColor #ffffff
+}
+
+skinparam artifact<<ADAPTER>> {
+  BackgroundColor #2d69b7
+  FontColor #ffffff
+  BorderColor #000000
+}
+
+skinparam usecase<<DOMAIN>> {
+  BackgroundColor #ffffff
+  FontColor #000000
+  BorderColor #000000
+}
+
+skinparam database<<INFRASTRUCTURE>> {
+  BackgroundColor #c8c8c8
+  FontColor #000000
+  BorderColor #000000
+}
+
+rectangle 0ADAPTER <<_GROUP>> {
+	artifact "==adapter.TodoResource\n<size:10>[component]</size>\n\nadapter component" <<ADAPTER>> as 3081293365
+}
+rectangle 30812933651DOMAIN <<_GROUP>> {
+	usecase "==domain.TodoService\n<size:10>[component]</size>\n\ndomain component" <<DOMAIN>> as 2425084387
+}
+3081293365 .[#000000].> 2425084387 : ""
+rectangle 24250843872INFRASTRUCTURE <<_GROUP>> {
+	database "==infrastructure.TodoFakeRepository\n<size:10>[component]</size>\n\ninfrastructure component" <<INFRASTRUCTURE>> as 2184463684
+}
+2425084387 .[#000000].> 2184463684 : ""
+rectangle 24250843872DOMAIN <<_GROUP>> {
+	usecase "==domain.Todo\n<size:10>[component]</size>\n\ndomain component" <<DOMAIN>> as 542314480
+}
+2425084387 .[#000000].> 542314480 : ""
+2184463684 .[#000000].> 542314480 : ""
+@enduml
+{% endplantuml %}
+++++
+
+== Using a domain-specific language
+
+[source,go]
+----
+var _ = Design("Todo design", "This is a design of the todo service", func() {
+	Version("0.1")
+	Enterprise("Todo Showcase Service")
+
+	var system = SoftwareSystem("Software System", "The todo software system", func() {
+		Tag("system")
+		URL("https://unexist.blog")
+
+		container_webserver = Container("Webserver", "A webserver to deliver the frontend", "Nginx", func() {
+			Tag("infrastructure")
+			URL("https://nginx.org/")
+		})
+
+		container_frontend = Container("Web Frontend", "A Angular-based web frontend", "Angular + REST", func() {
+			Tag("frontend")
+
+			Uses("Webserver", "Is delivered by", "HTTP", Asynchronous)
+			Uses("Web API", "Makes API calls to", "HTTP", Asynchronous)
+		})
+
+		container_backend = Container("Web API", "A backend service", "GinTonic + REST", func() {
+			Tag("backend")
+
+			Uses("Database", "Reads from and writes to", "SQL/TCP", Asynchronous)
+
+			Component("Todo Service", "Domain logic for todo", "Golang", func() {
+				Tag("service")
+			})
+		})
+
+		Container("Database", "A RDBMS to handle the data", "Postgresql", func() {
+			Tag("infrastructure")
+			URL("https://postgresql.org")
+		})
+	})
+
+	DeploymentEnvironment("Dev", func() {
+		DeploymentNode("Cloud", func() {
+			ContainerInstance("Software System/Webserver")
+			ContainerInstance("Software System/Web Frontend")
+			ContainerInstance("Software System/Web API")
+			ContainerInstance("Software System/Database")
+		})
+	})
+
+	Person("User", "A user of the software system.", func() {
+		Tag("person")
+
+		Uses(system, "Uses")
+		Uses("Software System/Web Frontend", "Creates, views, edits and delete todos using", "HTTP", Asynchronous)
+	})
+
+	Views(func() {
+		SystemLandscapeView("SystemLandscapeView", "A System Landscape View", func() {
+			Title("Overview of the system landscape")
+			AddAll()
+			AutoLayout(RankLeftRight)
+		})
+
+		SystemContextView(system, "SystemContext", "A System Context diagram.", func() {
+			Title("Overview of the system")
+			AddAll()
+			AutoLayout(RankLeftRight)
+		})
+
+		ContainerView(system, "ContainerView", "A Container View", func() {
+			Title("Overview of the containers")
+			AddAll()
+			AutoLayout(RankLeftRight)
+		})
+
+		ComponentView(container_frontend, "ComponentView Frontend", "A Component View of the web frontend", func() {
+			Title("Overview of the frontend components")
+			AddComponents()
+			AutoLayout(RankLeftRight)
+		})
+
+		ComponentView(container_backend, "ComponentView Backend", "A Component View of the web backend", func() {
+			Title("Overview of the backend components")
+			AddComponents()
+			AutoLayout(RankLeftRight)
+		})
+
+		DeploymentView(Global, "Dev", "deployment", "A Deployment View", func() {
+			Title("Overview of the deployment on Dev")
+			AddAll()
+			AutoLayout(RankLeftRight)
+		})
+
+		Styles(func() {
+			ElementStyle("infrastructure", func() {
+				Shape(ShapeComponent)
+				Background("#1168bd")
+				Color("#ffffff")
+			})
+		})
+	})
+})
+----
 
 == Conclusion
 
