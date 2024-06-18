@@ -1,0 +1,51 @@
+---
+layout: post
+title: Writing architecture documentation
+description: This blog post lays out an automatic and a DSL-based approach of generating C4-based architecture documentation with the help of Structurizr.
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: golang c4 structurizr showcase
+categories: architecture
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/writing_architecture_documentation
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/writing_architecture_documentation
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+[quote,Dick Brandon]
+Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is
+better than nothing.
+
+Got your attention? Alright!
+
+Writing documentation is rarely a welcome task and most of the time the thing that should be
+documented is in a state that rather justifies a re-write than many hours of labor to document it.
+Still, when you stumble upon a new code base every bit of documentation can help and save some
+headaches.
+
+[TIP]
+====
+If we talk about documentation here we are strictly speaking about any kind of written form and
+not tests, which are in my personal opinion the best way to document behaviour.
+====
+
+So in this blog post we are going to have a look at two different ways to create architecture
+diagrams with the help of [C4][] and [Struturizr][]:
+
+- Automatically with [go-structurizr][]
+- Based on a DSL with [goadesign][]
+
+Everything is again based on the typical [Todo-application][] well-known from basically every
+other post of this blog.
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-architecture-documentation>
