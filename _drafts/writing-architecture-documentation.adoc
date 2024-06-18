@@ -38,11 +38,17 @@ not tests, which are in my personal opinion the best way to document behaviour.
 So in this blog post we are going to have a look at two different ways to create architecture
 diagrams with the help of [C4][] and [Struturizr][]:
 
-- Automatically with [go-structurizr][]
-- Based on a DSL with [goadesign][]
+. Automatically with [go-structurizr][]
+. Based on a DSL with [goadesign][]
 
 Everything is again based on the typical [Todo-application][] well-known from basically every
 other post of this blog.
+
+== Introduction to C4
+
+== Automatically
+
+== DSL-approach
 
 == Conclusion
 
