@@ -65,10 +65,10 @@ Testing won't obviously be easier that way, too.
 === Check flags per runtime
 
 I can't really explain why, but I never thought about checking feature flags per runtime of the
-application which is really effective way to handle the above problems.
+application which is really an effective way to handle the above problems.
 
 When you can call an endpoint that has some information about which feature is activated this can
-counter the problems from above and reduce the number of artifacts to a hopefully manageable level.
+alleviate the problems from above and reduce the number of artifacts to a hopefully manageable level.
 
 This requires some careful consideration of the requests, error handling and caching, because it
 creates another level of coupling and single-point-of-failure, but this trade-off might worth it.
@@ -115,10 +115,77 @@ default:
     doSomeOtherThingB()
 }
 ----
-<1> Include some information about the client
-<2> The following path is dependent on the return value (variant)
+<1> Include some information about the client to feed into a *rule*
+<2> The next path is dependent on the return value (or *variant*)
+
+So far we spoke about a theoretical endpoint that can do all the magic for us, time to turn that
+from a theoretical into a practical.
+I am absolutely certain we can build the backend endpoint on our own, but let me suggest a different
+strategy this time:
+
+[link=https://xkcd.com/2140/]
+.Source <https://xkcd.com/2140/>
+image::reinvent_the_wheel.png[]
 
 == Unleash unleashed
+
+Unleash provides us with all the technical means we identified so far and packs it into a nice
+management console.
+Setting it up is just a quick flex of your [line-through]#[Docker][]# [Podman][] muscles and
+should be running in no time:
+
+<https://github.com/unexist/showcase-feature-flags/tree/master/infrastructure>
+
+The UI of the console is pretty much self-explanatory and a new feature flag can be created like
+this:
+
+image::feature_flag.png[]
+
+Once this is set we can update our application and include the specific SDK and request:
+
+[source,go]
+----
+ctx := unleashContext.Context{ // <1>
+    UserId:        "1",
+    SessionId:     "some-session-id",
+    RemoteAddress: context.RemoteIP(),
+}
+
+if unleash.IsEnabled("feat.CheckBadwords", unleash.WithContext(ctx)) { // <2>
+    if containsBadword(todo.Title) {
+        context.JSON(http.StatusExpectationFailed, gin.H{"error": "Title contains badword"})
+
+        return
+    }
+}
+----
+<1> As before we provide a bit background infos
+<2> And ask for the state of the actual flag - which always evaluate to false if non-existent
+
+With our changes up and running we can head back to our fancy management console and enable
+our new feature flag:
+
+image::feature_flag_enabled.png[]
+
+Enabling the flags also enables the new behaviour and forbids todo with a crappy name, after a bit
+of propagating time.
+
+[WARNING]
+The showcases uses both intervals `unleash.WithRefreshInterval(1*time.Second)` and
+`unleash.WithMetricsInterval(1*time.Second)` at non-productive-ready values, to make demonstration
+easier, but this strictly requires some fine-tuning. The default of *60s* is probably a good
+value to start.
+
+I recently discovered [slumber][] and greatly fell in love with it, so instead of typical
+[curl][]-output here screenshot of slumber in action:
+
+image::slumber.png[]
+
+
+
+image::feature_flag_strategy.png[]
+
+
 
 == Deployment vs release
 
