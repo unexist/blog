@@ -2,8 +2,8 @@
 layout: post
 title: Deployment with feature flags
 description: This blog post demonstrates how deployments and actual releases can be decoupled with the help of feature flags.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
 categories: tech
@@ -18,9 +18,18 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-////
-https://featureflagsbook.com/
-////
+:1: https://en.wikipedia.org/wiki/A/B_testing
+:2: https://en.wikipedia.org/wiki/Feature_toggle#Canary_release
+:3: https://curl.se/
+:4: https://www.docker.com/
+:5: https://en.wikipedia.org/wiki/Law_of_the_instrument
+:6: https://podman.io/
+:7: https://www.atlassian.com/incident-management/kpis/error-budget
+:8: https://slumber.lucaspickering.me/
+:9: https://featureflagsbook.com/
+:10: https://www.getunleash.io/
+:11: https://en.wikipedia.org/wiki/Single_point_of_failure
+:12: https://en.wikipedia.org/wiki/Coupling_(computer_programming)
 
 In your typical enterprise project there is everything aplenty and you rarely have to downsize to
 match the available resources.
@@ -30,10 +39,10 @@ maintain the objectively best approach of the dev-test-stage-prod quadruplet?
 
 So in this blog we are going to shed some light on the feature flags idea and cover things that
 actually surprised me forced me to recalculate my mental model of feature flags as just stupid
-booleans on a simple, but effective use-case with the help of [unleash][].
+booleans on a simple, but effective use-case with the help of {10}[Unleash].
 
 [TIP]
-I can highly recommend the book [The Feature Flag Book][] <<featflag>>, which helped me along the
+I can highly recommend the book {9}[The Feature Flag Book] <<featflag>>, which helped me along the
 road and provided me with some funny rollercoaster-moments, especially at the end.
 
 So hold your breath!
@@ -55,7 +64,7 @@ if featAIsEnabled {
 
 This is true for the most basic part of them and can be done without much work, if you can live
 with the additional time to compile, release and deploy the new versions and of course downtime,
-which might bite away a bit of your [SLA][] time budget.
+which might bite away a bit of your {7}[SLA error budget].
 
 Unfortunately this also burdens the team with handling of many more different artifacts, code
 bases, pull requests and also increases the cognitive complexity of the additional code paths.
@@ -71,7 +80,8 @@ When you can call an endpoint that has some information about which feature is a
 alleviate the problems from above and reduce the number of artifacts to a hopefully manageable level.
 
 This requires some careful consideration of the requests, error handling and caching, because it
-creates another level of coupling and single-point-of-failure, but this trade-off might worth it.
+creates another level of {12}[coupling] and {11}[single-point-of-failure], but this trade-off
+might worth it.
 
 Once we have everything in place - what else can be done with feature flags?
 
@@ -129,9 +139,9 @@ image::reinvent_the_wheel.png[]
 
 == Unleash unleashed
 
-Unleash provides us with all the technical means we identified so far and packs it into a nice
+Unleash provides us with all the technical means we've identified so far and packs it into a nice
 management console.
-Setting it up is just a quick flex of your [line-through]#[Docker][]# [Podman][] muscles and
+Setting it up is just a quick flex of your [line-through]#{4}[Docker]# {6}[Podman] muscles and
 should be running in no time:
 
 <https://github.com/unexist/showcase-feature-flags/tree/master/infrastructure>
@@ -176,8 +186,8 @@ The showcases uses both intervals `unleash.WithRefreshInterval(1*time.Second)` a
 easier, but this strictly requires some fine-tuning. The default of *60s* is probably a good
 value to start.
 
-I recently discovered [slumber][] and greatly fell in love with it, so instead of the typical
-[curl][]-output here a screenshot of slumber in action:
+I recently discovered {8}[slumber] and greatly fell in love with it, so instead of the typical
+{3}[curl]-output here a screenshot of slumber in action:
 
 image::slumber.png[]
 
@@ -200,7 +210,7 @@ From my opinion the real benefit is a deployment and a release are disjunct from
 We can do one without the other and therefore can easily deploy versions, test a new feature
 and disable it again when something goes wrong.
 
-This is similar to the benefits of  [A/B testing][] or [canary rollouts][], which require
+This is similar to the benefits of  {1}[A/B testing] or {2}[canary rollouts], which require
 actual deployments and a concept to avoid downtimes.
 
 And the option to target specific user groups based on information of e.g. the session might
@@ -210,7 +220,7 @@ a way to disable certain features and this might also be done by non-tech-savvy 
 
 == Conclusion
 
-Like every fancy new idea this might sound like [Maslow's golden hammer][] and there are many more
+Like every fancy new idea this might sound like {5}[Maslow's golden hammer] and there are many more
 things that could be done with feature flags, but not necessarily *should* be done with it.
 In the aforementioned book <<featflag>> the author kind of lost me with the idea to do
 authorization with feature flags, but gladly put that into context in the later chapters.
@@ -229,3 +239,4 @@ All examples can be found here:
 == Bibliography
 
 * [[[featflag]]] Ben Nadel, Feature Flags Book
+
