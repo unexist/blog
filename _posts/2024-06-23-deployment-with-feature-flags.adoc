@@ -5,7 +5,7 @@ description: This blog post demonstrates how deployments and actual releases can
 date: 2024-06-23 15:57 +0200
 last_updated: 2024-06-23 15:57 +0200
 author: Christoph Kappel
-tags: showcase
+tags: showcase unleash architecture
 categories: tech
 toc: true
 ---
