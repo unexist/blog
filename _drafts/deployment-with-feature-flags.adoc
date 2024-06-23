@@ -1,0 +1,134 @@
+---
+layout: post
+title: Deployment with feature flags
+description: This blog post demonstrates how deployments and actual releases can be decoupled with feature flags.
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/deployment_with_feature_flags
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/deployment_with_feature_flags
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+////
+https://featureflagsbook.com/
+////
+
+In your typical enterprise project there is everything aplenty and you rarely have to downsize to
+match the available resources.
+Well - until you actual have to do that.
+What is when your team consists of only a few people and you cannot afford time and money-wise to
+maintain the objectively best approach of the dev-test-stage-prod quadruplet?
+
+So in this blog we are going to shed some light on the feature flags idea and cover things that
+actually surprised me forced me to recalculate my mental model of feature flags as just stupid
+booleans on a simple, but effective use-case with the help of [unleash][].
+
+[TIP]
+I can highly recommend the book [The Feature Flag Book][] <<featflag>>, which helped me along the
+road and provided me with some funny rollercoaster-moments, especially at the end.
+
+So hold your breath!
+(Breathe..)
+
+== What are feature flags?
+
+Like I've said before, when I started this journey feature flags for me were just mere booleans,
+that can be set or unset to enable resp. disable sections of the code:
+
+[source,go]
+----
+if featAIsEnabled {
+    doSomeThingA()
+} else {
+    doSomeOtherThingB()
+}
+----
+
+This is true for the most basic part of them and can be done without much work, if you can live
+with the additional time to compile, release and deploy the new versions and of course downtime,
+which might bite away a bit of your [SLA][] time budget.
+
+Unfortunately this also burdens the team with handling of many more different artifacts, code
+bases, pull requests and also increases the cognitive complexity of the additional code paths.
+
+Testing won't obviously be easier that way, too.
+
+=== Check flags per runtime
+
+I can't really explain why, but I never thought about checking feature flags per runtime of the
+application which is really effective way to handle the above problems.
+
+When you can call an endpoint that has some information about which feature is activated this can
+counter the problems from above and reduce the number of artifacts to a hopefully manageable level.
+
+This requires some careful consideration of the requests, error handling and caching, because it
+creates another level of coupling and single-point-of-failure, but this trade-off might worth it.
+
+Once we have everything in place - what else can be done with feature flags?
+
+=== Rules and variants
+
+Let us reconsider our original idea of simple booleans and replace it with a more some kind of
+nifty rule:
+
+[source,go]
+----
+if featAIsEnabled {
+    if "127.0.0.1" == remoteIP { // <1>
+        doSomeThingA1()
+    } else {
+        doSomeThingA2()
+    }
+} else {
+    doSomeOtherThingB()
+}
+----
+<1> Stupid; but you probably get the gist of it.
+
+This way rules can be used to add conditions to the flags and e.g. enable specific behaviour just
+for small and targeted audience.
+
+Since we don't want to cycle back to the original problem of the different builds and handle this
+outside of our actual application:
+
+[source,go]
+----
+variant := featAIsEnabledFor("127.0.1.1") // <1>
+
+switch variant { // <2>
+case "a1":
+    doSomeThingA1()
+    break
+case "a2":
+    doSomeThingA2()
+    break
+default:
+    doSomeOtherThingB()
+}
+----
+<1> Include some information about the client
+<2> The following path is dependent on the return value (variant)
+
+== Unleash unleashed
+
+== Deployment vs release
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-feature-flags>
+
+[bibliography]
+== Bibliography
+
+* [[[featflag]]] Ben Nadel, Feature Flags Book
