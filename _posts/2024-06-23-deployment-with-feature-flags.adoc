@@ -2,8 +2,8 @@
 layout: post
 title: Deployment with feature flags
 description: This blog post demonstrates how deployments and actual releases can be decoupled with the help of feature flags.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-06-23 15:57 +0200
+last_updated: 2024-06-23 15:57 +0200
 author: Christoph Kappel
 tags: showcase
 categories: tech
@@ -31,8 +31,8 @@ endif::[]
 :11: https://en.wikipedia.org/wiki/Single_point_of_failure
 :12: https://en.wikipedia.org/wiki/Coupling_(computer_programming)
 
-In your typical enterprise project there is everything aplenty and you rarely have to downsize to
-match the available resources.
+In your typical enterprise project there probably is everything aplenty and you rarely have to
+downsize to match the available resources.
 Well - until you actual have to do that.
 What is when your team consists of only a few people and you cannot afford time and money-wise to
 maintain the objectively best approach of the dev-test-stage-prod quadruplet?
@@ -238,5 +238,5 @@ All examples can be found here:
 [bibliography]
 == Bibliography
 
-* [[[featflag]]] Ben Nadel, Feature Flags Book
+* [[[featflag]]] Ben Nadel, Feature Flags Book, <https://featureflagsbook.com>
 
