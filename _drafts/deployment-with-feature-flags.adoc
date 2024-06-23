@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Deployment with feature flags
-description: This blog post demonstrates how deployments and actual releases can be decoupled with feature flags.
+description: This blog post demonstrates how deployments and actual releases can be decoupled with the help of feature flags.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -191,9 +191,35 @@ image::feature_flag_strategy.png[]
 At the bottom you can see another bonus of using a full-fledged feature flag system:
 *We get exposure and request stats for free!*
 
+It is probably easy to see why this is a nice gimmick for the technical folks and also for the
+targeted users of management consoles, but what have we actually won here?
+
 == Deployment vs release
 
+From my opinion the real benefit is a deployment and a release are disjunct from each other.
+We can do one without the other and therefore can easily deploy versions, test a new feature
+and disable it again when something goes wrong.
+
+This is similar to the benefits of  [A/B testing][] or [canary rollouts][], which require
+actual deployments and a concept to avoid downtimes.
+
+And the option to target specific user groups based on information of e.g. the session might
+allow to make four stages obsolete.
+Additionally this might increase the trust in deployments to production, because there is always
+a way to disable certain features and this might also be done by non-tech-savvy folks.
+
 == Conclusion
+
+Like every fancy new idea this might sound like [Maslow's golden hammer][] and there are many more
+things that could be done with feature flags, but not necessarily *should* be done with it.
+In the aforementioned book <<featflag>> the author kind of lost me with the idea to do
+authorization with feature flags, but gladly put that into context in the later chapters.
+
+This solution like every other elses harbors some trade-offs and every architectural change should
+be done after proper consideration.
+When this works our for you and your organization it might speed up the development time and
+also reduces a bit of the drag to manage all the different stages, so it is up to you to give it
+try.
 
 All examples can be found here:
 
