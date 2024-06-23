@@ -176,16 +176,20 @@ The showcases uses both intervals `unleash.WithRefreshInterval(1*time.Second)` a
 easier, but this strictly requires some fine-tuning. The default of *60s* is probably a good
 value to start.
 
-I recently discovered [slumber][] and greatly fell in love with it, so instead of typical
-[curl][]-output here screenshot of slumber in action:
+I recently discovered [slumber][] and greatly fell in love with it, so instead of the typical
+[curl][]-output here a screenshot of slumber in action:
 
 image::slumber.png[]
 
-
+So far we haven't covered the rules and variants idea and this and more is certainly possible
+with unleash.
+There are many options to choose from, so how about a gradual rollout just for the user with the
+id `1` which happens to be our sole user?
 
 image::feature_flag_strategy.png[]
 
-
+At the bottom you can see another bonus of using a full-fledged feature flag system:
+*We get exposure and request stats for free!*
 
 == Deployment vs release
 
