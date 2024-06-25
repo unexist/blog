@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Writing architecture documentation
-description: This blog post lays out how a scraper and a DSL-based approach of generating C4-based architecture documentation with the help of Structurizr.
+description: This blog post illustrates how C4-based architecture documentation can be derived from a simple model with the help of Struturizr.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -33,11 +33,11 @@ headaches.
 [TIP]
 ====
 If we talk about documentation here we are strictly speaking about any kind of written form and
-not tests, which are in my personal opinion the best way to document behaviour.
+not tests, which are in my personal opinion the best way to document every kind of behaviour.
 ====
 
-So in this blog post we are going to have a look at two different ways to create architecture
-diagrams with the help of [C4][], [Struturizr][] and [Golang][]:
+So in this blog post we are going to have a look at [Struturizr][] along with [C4][] and check
+different ways of building up our model:
 
 . Scraping with [go-structurizr][]
 . Using a domain-specific language with [goadesign][]
