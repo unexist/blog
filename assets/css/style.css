@@ -459,6 +459,25 @@ svg.linkedin #path28, svg.linkedin #path30 {
     caption-side: bottom;
 }
 
+.post-content a[href^="http://"]::after,
+.post-content a[href^="https://"]::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='10' width='10' viewBox='0 0 512 512'%3E%3C!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--%3E%3Cpath fill='%23aaaaaa' d='M304 41c0 10.9 4.3 21.3 12 29L362.1 116 207 271c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l155-155L442.1 196c7.7 7.7 18.1 12 29 12c22.6 0 41-18.3 41-41V40c0-22.1-17.9-40-40-40H345c-22.6 0-41 18.3-41 41zm57.9 7H464V150.1L361.9 48zM72 32C32.2 32 0 64.2 0 104V440c0 39.8 32.2 72 72 72H408c39.8 0 72-32.2 72-72V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V440c0 13.3-10.7 24-24 24H72c-13.3 0-24-10.7-24-24V104c0-13.3 10.7-24 24-24H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H72z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    color: var(--h3-color);
+}
+
+a[href^="https://blog.unexist.dev"]::after,
+a[href^="https://unexist.blog"]::after {
+    display: none !important;
+}
+
 .rss-subscribe {
     display: none;
 }
