@@ -51,12 +51,74 @@ post of this blog.
 There are many ways to create software architecture diagrams and most of them heavily utilize
 [UML][] which can be difficult to write and later read for the targeted audience.
 
-Struturizr follows a slightly different approach and provides its own set of elements and relation
-ships to establish a simple model.
-Based on this model different views can be extracted they can vary from a kind of birds-eye view to
-something and ant would see.
+Struturizr follows a slightly different approach and provides its own set of elements and
+relationships to establish a simple model.
+And then based on this model different views can be extracted they can vary from a kind of
+birds-eye view to something and ant would see.
 
 == Creating the model manually
+
+[source,text]
+----
+workspace {
+    model {
+        user = person "User"
+        softwareSystem = softwareSystem "Software System" {
+            frontend = container "Web Frontend" {
+                user -> this "Uses"
+            }
+            backend = container "Web API" {
+                frontend -> this "Makes API calls to"
+            }
+            container "Database" {
+                backend -> this "Reads from and writes to"
+            }
+        }
+    }
+
+    views {
+        systemContext softwareSystem {
+            include *
+            autolayout lr
+        }
+
+        container softwareSystem {
+            include *
+            autolayout lr
+        }
+
+        theme default
+    }
+}
+----
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+set separator none
+title Software System - Containers
+
+left to right direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+Person(User, "User", $descr="", $tags="", $link="")
+
+System_Boundary("SoftwareSystem_boundary", "Software System", $tags="") {
+  Container(SoftwareSystem.WebFrontend, "Web Frontend", $techn="", $descr="", $tags="", $link="")
+  Container(SoftwareSystem.WebAPI, "Web API", $techn="", $descr="", $tags="", $link="")
+  Container(SoftwareSystem.Database, "Database", $techn="", $descr="", $tags="", $link="")
+}
+
+Rel(User, SoftwareSystem.WebFrontend, "Uses", $techn="", $tags="", $link="")
+Rel(SoftwareSystem.WebFrontend, SoftwareSystem.WebAPI, "Makes API calls to", $techn="", $tags="", $link="")
+Rel(SoftwareSystem.WebAPI, SoftwareSystem.Database, "Reads from and writes to", $techn="", $tags="", $link="")
+
+SHOW_LEGEND(true)
+{% endplantuml %}
+++++
 
 == Scraping the code
 
@@ -160,8 +222,6 @@ skinparam {
 hide stereotype
 top to bottom direction
 
-scale 4096 width
-
 skinparam rectangle<<_GROUP>> {
   FontColor #ffffff
   BorderColor #ffffff
@@ -201,7 +261,6 @@ rectangle 24250843872DOMAIN <<_GROUP>> {
 }
 2425084387 .[#000000].> 542314480 : ""
 2184463684 .[#000000].> 542314480 : ""
-@enduml
 {% endplantuml %}
 ++++
 
