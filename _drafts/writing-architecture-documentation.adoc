@@ -36,10 +36,11 @@ If we talk about documentation here we are strictly speaking about any kind of w
 not tests, which are in my personal opinion the best way to document every kind of behaviour.
 ====
 
-So in this blog post we are going to have a look at [Struturizr][] along with [C4][] and check
-different ways of building up our model:
+So in this blog post we are going to have a look at [Struturizr][] and check
+different ways of building up our model which can be used to create [C4][] views:
 
-. Scraping with [go-structurizr][]
+. Creating the Structurizr model manually
+. Scraping code with [go-structurizr][]
 . Using a domain-specific language with [goadesign][]
 
 Everything is again based on the well-known [Todo-application][] basically used in every other
@@ -47,11 +48,19 @@ post of this blog.
 
 == Introduction time
 
-There are many model based approaches especially for creating diagrams
+There are many ways to create software architecture diagrams and most of them heavily utilize
+[UML][] which can be difficult to write and later read for the targeted audience.
 
-== Scraping the model
+Struturizr follows a slightly different approach and provides its own set of elements and relation
+ships to establish a simple model.
+Based on this model different views can be extracted they can vary from a kind of birds-eye view to
+something and ant would see.
 
-Go-structurizr is based on Structurizr and allows to create a single model and used it to create
+== Creating the model manually
+
+== Scraping the code
+
+As the name probably implies Go-structurizr is based on Structurizr and allows to create a single model and used it to create
 different kind and levels of diagrams.
 
 
