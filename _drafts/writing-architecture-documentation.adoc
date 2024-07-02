@@ -49,12 +49,17 @@ post of this blog.
 == Introduction time
 
 There are many ways to create software architecture diagrams and most of them heavily utilize
-[UML][] which can be difficult to write and later read for the targeted audience.
+[UML][], which can be difficult to write and later read for the targeted audience.
 
-Struturizr follows a slightly different approach and provides its own set of elements and
+Struturizr follows a slightly different approach and provides its own sets of elements and
 relationships to establish a simple model.
-And then based on this model different views can be extracted they can vary from a kind of
-birds-eye view to something and ant would see.
+Once defined this model can be used to extract different views like the [system context][] to see
+an overview of the system, its neighbours and actors or the [container view][] to basically list
+all deployable units.
+
+Both views are part of the [C4][] model and represent the first two of the four parts of the model.
+The remaining ones are the [component diagram][] and the [code diagram][] which provide further
+more fine grained details of container internals respective the structure of the actual code base.
 
 == Creating the model manually
 
@@ -96,6 +101,24 @@ workspace {
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 set separator none
+title Software System - System Context
+
+left to right direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+Person(User, "User", $descr="", $tags="", $link="")
+System(SoftwareSystem, "Software System", $descr="", $tags="", $link="")
+
+Rel(User, SoftwareSystem, "Uses", $techn="", $tags="", $link="")
+{% endplantuml %}
+++++
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+set separator none
 title Software System - Containers
 
 left to right direction
@@ -115,8 +138,6 @@ System_Boundary("SoftwareSystem_boundary", "Software System", $tags="") {
 Rel(User, SoftwareSystem.WebFrontend, "Uses", $techn="", $tags="", $link="")
 Rel(SoftwareSystem.WebFrontend, SoftwareSystem.WebAPI, "Makes API calls to", $techn="", $tags="", $link="")
 Rel(SoftwareSystem.WebAPI, SoftwareSystem.Database, "Reads from and writes to", $techn="", $tags="", $link="")
-
-SHOW_LEGEND(true)
 {% endplantuml %}
 ++++
 
