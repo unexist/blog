@@ -30,21 +30,20 @@ documented is in a state that rather justifies a re-write than many hours of lab
 Still, when you stumble upon a new code base every bit of documentation can help and save some
 headaches.
 
-[TIP]
-====
-If we talk about documentation here we are strictly speaking about any kind of written form and
-not tests, which are in my personal opinion the best way to document every kind of behaviour.
-====
-
+Usually tests are the best type of documentation for behaviour, but unfortunately this doesn't
+apply to architectures.
 So in this blog post we are going to have a look at [Struturizr][] and check
 different ways of building up our model which can be used to create [C4][] views:
 
-. Creating the Structurizr model manually
+. Creating the model manually
 . Scraping code with [go-structurizr][]
 . Using a domain-specific language with [goadesign][]
 
-Everything is again based on the well-known [Todo-application][] basically used in every other
+[TIP]
+====
+Everything is again based on our well-known [Todo-application][] basically used in every other
 post of this blog.
+====
 
 == Introduction time
 
@@ -97,6 +96,8 @@ workspace {
 }
 ----
 
+=== System context
+
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
@@ -114,6 +115,8 @@ System(SoftwareSystem, "Software System", $descr="", $tags="", $link="")
 Rel(User, SoftwareSystem, "Uses", $techn="", $tags="", $link="")
 {% endplantuml %}
 ++++
+
+=== Container view
 
 ++++
 {% plantuml %}
