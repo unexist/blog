@@ -25,15 +25,17 @@ better than nothing.
 
 Got your attention? Alright!
 
-Writing documentation is rarely a welcome task and most of the time the thing that should be
-documented is in a state that rather justifies a re-write than many hours of labor to document it.
+Writing documentation is rarely a welcome task and people usually shy away with various types of excuses.
+Like it is hard to keep the documentation up-to-date or [ain't nobody got time for that][].
+And sometimes the piece of software that should be documented is in a state that rather justifies a
+complete re-write than many hours of labor to document it.
 Still, when you stumble upon a new code base every bit of documentation can help and save some
 headaches.
 
 Usually tests are the best type of documentation for behaviour, but unfortunately this doesn't
-apply to architectures.
+directly apply to architectures.
 So in this blog post we are going to have a look at [Struturizr][] and check
-different ways of building up our model which can be used to create [C4][] views:
+different ways of building up a model which can be used to create [C4][] views:
 
 . Creating the model manually
 . Scraping code with [go-structurizr][]
@@ -48,17 +50,24 @@ post of this blog.
 == Introduction time
 
 There are many ways to create software architecture diagrams and most of them heavily utilize
-[UML][], which can be difficult to write and later read for the targeted audience.
+[UML][], which can initially be difficult to write and even more difficult to read for the targeted
+audience later.
+And afterwards the resulting documentation is stowed away in rare places like a company fileshare for
+various document types of the [Office][]-family or sometimes even worse in an semi-unstructured
+company [Confluence][].
 
 Struturizr follows a slightly different approach and provides its own sets of elements and
-relationships to establish a simple model.
+relationships to establish a simple model in a documentation-as-code fashion.
 Once defined this model can be used to extract different views like the [system context][] to see
 an overview of the system, its neighbours and actors or the [container view][] to basically list
 all deployable units.
 
-Both views are part of the [C4][] model and represent the first two of the four parts of the model.
+Both views are part of the C4 model and represent the first two of the four (HINT: **CC**CC) letters
+of the model.
 The remaining ones are the [component diagram][] and the [code diagram][] which provide further
 more fine grained details of container internals respective the structure of the actual code base.
+
+Next up is to actually make use of the model.
 
 == Creating the model manually
 
