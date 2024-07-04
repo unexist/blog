@@ -52,12 +52,12 @@ post of this blog.
 There are many ways to create software architecture diagrams and most of them heavily utilize
 [UML][], which can initially be difficult to write and even more difficult to read for the targeted
 audience later.
-And afterwards the resulting documentation is stowed away in rare places like a company fileshare for
-various document types of the [Office][]-family or sometimes even worse in an semi-unstructured
-company [Confluence][].
+And afterwards the resulting documentation is stowed away in rare places like a company fileshare in
+various formats of the [Office][]-family or sometimes even worse in an semi-unstructured company
+[Confluence][].
 
 Struturizr follows a slightly different approach and provides its own sets of elements and
-relationships to establish a simple model in a documentation-as-code fashion.
+relationships to establish a simple model in a [documentation-as-code][] fashion.
 Once defined this model can be used to extract different views like the [system context][] to see
 an overview of the system, its neighbours and actors or the [container view][] to basically list
 all deployable units.
@@ -104,6 +104,16 @@ workspace {
     }
 }
 ----
+
+=== Conversion to Plantuml
+
+[source,shell]
+----
+$ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
+  -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system docker.io/structurizr/lite
+----
+
+
 
 === System context
 
