@@ -19,6 +19,13 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+////
+https://docs.structurizr.com/dsl
+https://github.com/structurizr/cli
+https://docs.structurizr.com/dsl/expressions
+https://docs.structurizr.com/dsl/adrs
+////
+
 [quote,Dick Brandon]
 Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is
 better than nothing.
@@ -39,7 +46,7 @@ different ways of building up a model which can be used to create [C4][] views:
 
 . Creating the model manually
 . Scraping code with [go-structurizr][]
-. Using a domain-specific language with [goadesign][]
+. Using a Golang domain-specific language with [goadesign][]
 
 [TIP]
 ====
@@ -71,14 +78,20 @@ Next up is to actually make use of the model.
 
 == Creating the model manually
 
+Structurizr comes with its own [DSL][] to describe both the model with various elements and their
+relationship to each other and the actual views we would like to see.
+
+The actual language is quite easy to understand and read, so let us directly head to a short
+example:
+
 [source,text]
 ----
 workspace {
-    model {
-        user = person "User"
-        softwareSystem = softwareSystem "Software System" {
-            frontend = container "Web Frontend" {
-                user -> this "Uses"
+    model { // <1>
+        user = person "User" // <2>
+        softwareSystem = softwareSystem "Software System" { // <3>
+            frontend = container "Web Frontend" { // <4>
+                user -> this "Uses" // <5>
             }
             backend = container "Web API" {
                 frontend -> this "Makes API calls to"
@@ -89,13 +102,13 @@ workspace {
         }
     }
 
-    views {
-        systemContext softwareSystem {
+    views { // <6>
+        systemContext softwareSystem { // <7>
             include *
             autolayout lr
         }
 
-        container softwareSystem {
+        container softwareSystem { // <8>
             include *
             autolayout lr
         }
@@ -104,38 +117,73 @@ workspace {
     }
 }
 ----
+<1> This block contains all elements of the [model][]
+<2> Actors should be part of every system, so welcome our sole user
+<3> The system is the main entry point and describes the actual software
+<4> Container are the building blocks of the model
+<5> [Expressions][] are used to define a relationship from one element to another in arrow direction
+<6> The next bigger block contains the actual [views][]
+<7> This defines the system context diagram
+<8> And this the container diagram
 
-=== Conversion to Plantuml
+There are various ways to generate the actual model:
+
+- Head to <https://struturizr.com> and upload the model there
+- Install the [struturizr-cli][] and convert it on the shell
+- Fire up the [struturizr-lite][] container locally
+
+Since the first options involves account creation and the second installation of packages,
+let us pick the third and start [Podman][] (or any other engine if you insist).
+
+=== Generating the model
+
+Option three is the most convenient and the only thing we have to do is store the model from above
+in a file locally.
+
+[TIP]
+====
+The tooling supports the file extensions `.dsl` and `.json`, but the latter might confuse
+your editor, so it is probably better to just stick with  `.dsl`.
+====
+
+Once everything is set let us fire up the container:
 
 [source,shell]
 ----
 $ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
-  -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system docker.io/structurizr/lite
+  -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system.dsl docker.io/structurizr/lite
+...
+2024-07-06T19:20:56.207Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Started StructurizrLite in 7.733 seconds (process running for 8.074)
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : ***********************************************************************************
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :   _____ _                   _              _
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  / ____| |                 | |            (_)
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :
+2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Structurizr Lite
+2024-07-06T19:20:56.211Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - build: 2024.07.02 (2024-07-02T12:09:42Z)
+2024-07-06T19:20:56.212Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-java: v2.2.0
+2024-07-06T19:20:56.216Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-dsl: v2.2.0
+2024-07-06T19:20:56.217Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-import: v2.2.0
+2024-07-06T19:20:56.217Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-graphviz: v2.2.0
+...
 ----
 
+The output is a bit messy, but once you see the above point your browser into this direction: <http://localhost:8080>
 
+If everything went well you should be greeted with something similar to this:
 
-=== System context
+image::structurizr-lite_webview.png[]
 
-++++
-{% plantuml %}
-!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-set separator none
-title Software System - System Context
+=== Conversion to Plantuml
 
-left to right direction
+There are many different options to interact with the diagrams and you can modify and convert them to various
+other file formats like `.png` or `.svg` directly from the web.
 
-!include <C4/C4>
-!include <C4/C4_Context>
-
-Person(User, "User", $descr="", $tags="", $link="")
-System(SoftwareSystem, "Software System", $descr="", $tags="", $link="")
-
-Rel(User, SoftwareSystem, "Uses", $techn="", $tags="", $link="")
-{% endplantuml %}
-++++
-
-=== Container view
+My personal favorite is the option to convert them to Plantuml diagrams and use them in
+[diagram-as-code][] fashion like this container view:
 
 ++++
 {% plantuml %}
