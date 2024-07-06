@@ -1,19 +1,19 @@
 ---
 layout: post
-title: Writing architecture documentation
+title: Architecture diagrams
 description: This blog post illustrates how C4-based architecture diagrams can be derived from a simple model with the help of Struturizr.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: golang c4 structurizr showcase
+tags: golang c4 structurizr goadesign showcase
 categories: architecture
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/writing_architecture_documentation
+:imagesdir: {asciidoctorconfigdir}/../assets/images/architecture_diagrams
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/writing_architecture_documentation
+:imagesdir: /assets/images/architecture_diagrams
 endif::[]
 :figure-caption!:
 :table-caption!:
