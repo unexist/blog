@@ -177,10 +177,16 @@ If everything went well you should be greeted with something similar to this:
 
 image::structurizr-lite_webview.png[]
 
+There are many different options to interact with the diagrams and you can modify them, present them and even
+convert them to `.png` or `.svg` directly from the web.
+
+[TIP]
+====
+It is also possible to modify the diagrams on-the-fly in the browser when [autolayout][] is disabled.
+====
+
 === Conversion to Plantuml
 
-There are many different options to interact with the diagrams and you can modify and convert them to various
-other file formats like `.png` or `.svg` directly from the web.
 
 My personal favorite is the option to convert them to Plantuml diagrams and use them in
 [diagram-as-code][] fashion like this container view:
