@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Writing architecture documentation
-description: This blog post illustrates how C4-based architecture documentation can be derived from a simple model with the help of Struturizr.
+description: This blog post illustrates how C4-based architecture diagrams can be derived from a simple model with the help of Struturizr.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -24,6 +24,7 @@ https://docs.structurizr.com/dsl
 https://github.com/structurizr/cli
 https://docs.structurizr.com/dsl/expressions
 https://docs.structurizr.com/dsl/adrs
+https://docs.structurizr.com/export/plantuml#c4plantumlexporter
 ////
 
 [quote,Dick Brandon]
@@ -182,7 +183,7 @@ convert them to `.png` or `.svg` directly from the web.
 
 [TIP]
 ====
-It is also possible to modify the diagrams on-the-fly in the browser when [autolayout][] is disabled.
+Modification of the example from above isn't possible due to enabled [autolayout][].
 ====
 
 === Conversion to Plantuml
