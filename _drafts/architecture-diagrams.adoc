@@ -5,7 +5,7 @@ description: This blog post illustrates how C4-based architecture diagrams can b
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: golang c4 structurizr goadesign showcase
+tags: golang c4 structurizr goadesign plantuml showcase
 categories: architecture
 toc: true
 ---
@@ -26,12 +26,12 @@ endif::[]
 :5: https://c4model.com/#CodeDiagram
 :6: https://c4model.com/#ComponentDiagram
 :7: https://www.atlassian.com/software/confluence
-:8: <container>
+:8: https://c4model.com/#ContainerDiagram
 :9: https://c4model.com/#ContainerDiagram
-:10: <Deployenvironments>
+:10: https://pkg.go.dev/goa.design/model@v1.9.8/dsl#DeploymentEnvironment
 :11: https://docsascode.org/
 :12: https://en.wikipedia.org/wiki/Domain-specific_language
-:13: <embed>
+:13: https://docs.structurizr.com/products#comparison
 :14: https://docs.structurizr.com/dsl/expressions
 :15: https://github.com/
 :16: https://github.com/goadesign
@@ -39,25 +39,25 @@ endif::[]
 :18: https://graphviz.org/
 :19: https://github.com/goadesign/model?tab=readme-ov-file#installation
 :20: https://mermaid.js.org/
-:21: <model>
+:21: https://docs.structurizr.com/dsl/language#model
 :22: https://www.office.com/
-:23: <Person>
+:23: https://pkg.go.dev/goa.design/model@v1.9.8/dsl#Person
 :24: https://github.com/plantuml/plantuml
 :25: https://podman.io/
-:26: <Rules>
-:27: https://github.com/krzysztofreczek/go-structurizr?tab=readme-ov-file#scraper
-:28: <Struturizr>
+:26: https://github.com/goadesign/model?tab=readme-ov-file#rules
+:27: https://pkg.go.dev/github.com/krzysztofreczek/go-structurizr#readme-scraper
+:28: https://structurizr.com/
 :29: https://github.com/structurizr/cli
 :30: https://docs.structurizr.com/lite
-:31: <styles>
+:31: https://pkg.go.dev/goa.design/model@v1.9.8/dsl#Styles
 :32: https://github.com/goadesign/model?tab=readme-ov-file#installation
-:33: <system>
+:33: https://pkg.go.dev/goa.design/model@v1.9.8/dsl#SoftwareSystem
 :34: https://c4model.com/#SystemContextDiagram
-:35: <tags>
+:35: https://threedots.tech/post/auto-generated-c4-architecture-diagrams-in-go/
 :36: https://blog.unexist.dev/redoc/
 :37: https://en.wikipedia.org/wiki/Unified_Modeling_Language
-:38: <views>
-:39: https://github.com/krzysztofreczek/go-structurizr?tab=readme-ov-file#view
+:38: https://docs.structurizr.com/ui/diagrams/filtered-view
+:39: https://pkg.go.dev/github.com/krzysztofreczek/go-structurizr#readme-view
 
 [quote,Dick Brandon]
 Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is
@@ -542,7 +542,7 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 })
 ----
 <1> The {33}[system] is the main entry point and supports various additional information
-<2> As before, {8}[container] describe the building blocks of he system
+<2> As before, {8}[container] describe the building blocks of the system
 <3> {10}[Deploy environments] allow to define deployment stages
 <4> {23}[Person] are again the actors of the system
 <5> There is broad range of different {38}[views] than can be defined here
