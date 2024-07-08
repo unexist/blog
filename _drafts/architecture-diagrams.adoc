@@ -154,23 +154,23 @@ Once everything is set let us fire up the container:
 [source,shell]
 ----
 $ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
-  -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system.dsl docker.io/structurizr/lite
+  -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system docker.io/structurizr/lite
 ...
-2024-07-06T19:20:56.207Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Started StructurizrLite in 7.733 seconds (process running for 8.074)
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : ***********************************************************************************
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :   _____ _                   _              _
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  / ____| |                 | |            (_)
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :
-2024-07-06T19:20:56.209Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Structurizr Lite
-2024-07-06T19:20:56.211Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - build: 2024.07.02 (2024-07-02T12:09:42Z)
-2024-07-06T19:20:56.212Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-java: v2.2.0
-2024-07-06T19:20:56.216Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-dsl: v2.2.0
-2024-07-06T19:20:56.217Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-import: v2.2.0
-2024-07-06T19:20:56.217Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-graphviz: v2.2.0
+2024-07-08T15:10:03.792Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Started StructurizrLite in 10.637 seconds (process running for 10.983)
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : ***********************************************************************************
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :   _____ _                   _              _
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  / ____| |                 | |            (_)
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :
+2024-07-08T15:10:03.794Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Structurizr Lite
+2024-07-08T15:10:03.796Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - build: 2024.07.02 (2024-07-02T12:09:42Z)
+2024-07-08T15:10:03.797Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-java: v2.2.0
+2024-07-08T15:10:03.802Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-dsl: v2.2.0
+2024-07-08T15:10:03.802Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-import: v2.2.0
+2024-07-08T15:10:03.803Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     :  - structurizr-graphviz: v2.2.0
 ...
 ----
 
@@ -184,7 +184,7 @@ the diagrams directly and allows to convert and store them as `.png` or `.svg` t
 
 [TIP]
 ====
-Modification of the example from above isn't possible due to enabled [autolayout][].
+Modification of the example from above isn't possible unless you disable [autolayout][] in the example.
 ====
 
 === Conversion to Plantuml
