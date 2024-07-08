@@ -88,7 +88,7 @@ relationship to each other and the actual views we would like to see.
 The actual language is quite easy to understand and read, so let us directly head into a short
 example:
 
-[source,text]
+[source,json]
 ----
 workspace {
     model { // <1>
@@ -258,18 +258,24 @@ User .[#707070,thickness=2].> SoftwareSystem : "<color:#707070>Uses"
 
 == Scraping the code
 
-As the name probably implies Go-structurizr is based on Structurizr and allows to create a single model and used it to create
-different kind and levels of diagrams.
+As the name probably implies Go-structurizr is based on Structurizr and creates the model
+automatically from scraped code per runtime.
 
+=== Generating the model
+
+In order to do there is a bit of configuration required to mark and kind of style what we would
+like to see.
+
+The first one is [scraper.yml][] to define which packages and paths should be inspected:
 
 [source,yaml]
 ----
 configuration:
-    title: Test
-    pkgs:
+    title: Todo Software System
+    pkgs: # <1>
         - "github.com"
 
-rules:
+rules: # <2>
     -   name_regexp: ".*"
         pkg_regexps:
             - ".*/adapter"
@@ -278,13 +284,17 @@ rules:
             tags:
                 - ADAPTER
 ----
+<1> This limits the scraper to packages from [Github][]
+<2> [Rules][] connect packages, components and tags with each other
+
+And the second one [view.yaml][] instructs the viewer how everything should look:
 
 [source,yaml]
 ----
 view:
     title: Todo service components
     line_color: 000000ff
-    styles:
+    styles: # <1>
         -   id: ADAPTER
             background_color: 2d69b7ff
             font_color: ffffffff
@@ -292,9 +302,14 @@ view:
             shape: artifact
     root_component_tags:
         - ADAPTER
-    component_tags:
+    component_tags: # <2>
         - ADAPTER
 ----
+<1> Probably surprising, but [styles][] define the actual styling of the elements based on
+their [tags][]
+<2> And this just tell the view which tags mst be included
+
+=== Conversion to Plantuml
 
 Once both configs are set we can write the actual program:
 
@@ -340,8 +355,8 @@ func main() {
 <3> Here we source the styling informationen of the diagram
 <4> And finally the output file is rendered to disk
 
-The final output looks like this - depending on the [Grahpviz][] gods your mileage
-may vary:
+When run the final output of the created file `c4.plantuml` file looks like this - depending on
+the [Grahpviz][] gods your mileage may vary:
 
 ++++
 {% plantuml %}
