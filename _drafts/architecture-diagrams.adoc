@@ -42,8 +42,8 @@ headaches.
 
 A corner-piece of every good documentation is proper architecture diagrams and this justifies a closer look
 at any help we can get.
-So during the course of this blog post showcases [Struturizr][] along with three different ways of building up
-a model which can be used to create [C4][] views:
+Therefore this blog post showcases [Struturizr][] along with three different ways of building up a model which
+can be used to create [C4][] views:
 
 . Creating the model manually
 . Scraping code with [go-structurizr][]
@@ -55,37 +55,36 @@ Everything is again based on our well-known [Todo-application][] basically used 
 post of this blog.
 ====
 
-Although in my opinion the phrase "A picture is worth a thousand words" is utter non-sense, they still are the
-required to understand many aspects of modern systems.
-
 == Introduction time
 
 There are many ways to create software architecture diagrams and most of them heavily utilize
-[UML][], which can initially be difficult to write and even more difficult to read for the targeted
-audience later.
-And afterwards the resulting documentation is stowed away in rare places like a company fileshare in
-various formats of the [Office][]-family or sometimes even worse in an semi-unstructured company
+[UML][].
+If you have ever seen UML it can be difficult to write and even more difficult to read even for
+the targeted audience later.
+And once done the resulting documentation is stowed away in rare places like a company fileshare
+in various formats of the [Office][]-family or sometimes even worse in a semi-unstructured
 [Confluence][].
 
 Struturizr follows a slightly different approach and provides its own sets of elements and
 relationships to establish a simple model in a [documentation-as-code][] fashion.
 Once defined this model can be used to extract different views like the [system context][] to see
 an overview of the system, its neighbours and actors or the [container view][] to basically list
-all deployable units.
+all deployable units in rendered diagrams and a live view in any browser.
 
-Both views are part of the C4 model and represent the first two of the four (HINT: **CC**CC) letters
-of the model.
-The remaining ones are the [component diagram][] and the [code diagram][] which provide further
-more fine grained details of container internals respective the structure of the actual code base.
+Both nammed views are part of the C4 model and represent the first two of the four (HINT: **CC**CC)
+letters of the model.
+The two missing are the [component diagram][] and the [code diagram][] which provide further
+and more fine grained details of container internals respective the structure of the actual
+code base.
 
-Next up is to actually make use of the model.
+Next up is how to create an actual model.
 
 == Creating the model manually
 
 Structurizr comes with its own [DSL][] to describe both the model with various elements and their
 relationship to each other and the actual views we would like to see.
 
-The actual language is quite easy to understand and read, so let us directly head to a short
+The actual language is quite easy to understand and read, so let us directly head into a short
 example:
 
 [source,text]
@@ -136,13 +135,13 @@ There are various ways to generate the actual model:
 - Install the [struturizr-cli][] and convert it on the shell
 - Fire up the [struturizr-lite][] container locally
 
-Since the first options involves account creation and the second installation of packages,
-let us pick the third and start [Podman][] (or any other engine if you insist).
+Creating an account isn't that attractive, as is the installation of dozens of packages, so let us pick
+the third option and start [Podman][] (or any other engine if you insist).
 
 === Generating the model
 
-Option three is the most convenient and the only thing we have to do is store the model from above
-in a file locally.
+Since we just have to download and run the container, the only thing we have to do in advance is take
+the model from above and store it into a file locally.
 
 [TIP]
 ====
@@ -175,14 +174,13 @@ $ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
 ...
 ----
 
-The output is a bit messy, but once you see the above point your browser into this direction: <http://localhost:8080>
-
-If everything went well you should be greeted with something similar to this:
+The output is a bit messy, but once you see the above point your browser into this direction <http://localhost:8080>
+and you should be greeted with something similar to this screenshot:
 
 image::structurizr-lite_webview.png[]
 
-There are many different options to interact with the diagrams and you can modify them, present them and even
-convert them to `.png` or `.svg` directly from the web.
+The webpage itself is a simple viewer, that allows to cycle through the defined views, is also capable of editing
+the diagrams directly and allows to convert and store them as `.png` or `.svg` to your disk.
 
 [TIP]
 ====
