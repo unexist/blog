@@ -204,7 +204,7 @@ This time we need another container with the actual CLI:
 [source,shell]
 ----
 $ podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
-    export --workspace todo-system.dsl --format plantuml --output diagrams/
+    export --workspace todo-system.dsl --format plantuml/c4plantuml --output diagrams/
 ...
 Exporting workspace from todo-system.dsl
  - exporting with StructurizrPlantUMLExporter
@@ -222,37 +222,19 @@ we can see following output:
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 set separator none
-title Software System - System Context
+title Todo Software System - System Context
 
 left to right direction
 
-skinparam {
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
+!include <C4/C4>
+!include <C4/C4_Context>
 
-hide stereotype
+Person(User, "User", $descr="", $tags="", $link="")
+System(TodoSoftwareSystem, "Todo Software System", $descr="", $tags="", $link="")
 
-skinparam rectangle<<SoftwareSystem>> {
-  BackgroundColor #1168bd
-  FontColor #ffffff
-  BorderColor #0b4884
-  roundCorner 20
-  shadowing false
-}
-skinparam person<<User>> {
-  BackgroundColor #08427b
-  FontColor #ffffff
-  BorderColor #052e56
-  shadowing false
-}
+Rel(User, TodoSoftwareSystem, "Uses", $techn="", $tags="", $link="")
 
-person "==User\n<size:10>[Person]</size>" <<User>> as User
-rectangle "==Software System\n<size:10>[Software System]</size>" <<SoftwareSystem>> as SoftwareSystem
-
-User .[#707070,thickness=2].> SoftwareSystem : "<color:#707070>Uses"
+SHOW_LEGEND(true)
 {% endplantuml %}
 ++++
 
@@ -561,15 +543,55 @@ This webview directly allows modification and there is also a limited exporter t
 
 === Conversion to Plantuml
 
-Conversion to PlantUml is bit more tricky (like it always is), since there is no native way in
+Conversion to PlantUml is bit more tricky (like it usually is), since there is no native way in
 goadesign to archive that.
 
 [source,shell]
 ----
 $ go install goa.design/model/cmd/stz@latest
 ...
-$ stz gen github.com/unexist/showcase-architecture-documentation/model -out todo.dsl
+$ stz gen github.com/unexist/showcase-architecture-documentation/model -out todo.json
+$ podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
+    export --workspace todo-stz.json --format plantuml/c4plantuml --output diagrams/
+Exporting workspace from todo-stz.json
+ - exporting with StructurizrPlantUMLExporter
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemLandscapeView.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemLandscapeView-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemContext.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemContext-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ContainerView.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ContainerView-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ComponentView Backend.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ComponentView Backend-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ComponentView Frontend.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-ComponentView Frontend-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-deployment.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-deployment-key.puml
+ - finished
 ----
+
+Once again if we render the result e.g. from the file `diagrams/structurizr-SystemContext.puml`:
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+set separator none
+title Overview of the system
+
+left to right direction
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+System(SoftwareSystem, "Software System", $descr="The todo software system", $tags="", $link="https://unexist.blog")
+Person(User, "User", $descr="A user of the software system.", $tags="", $link="")
+
+Rel(User, SoftwareSystem, "Uses", $techn="", $tags="", $link="")
+
+SHOW_LEGEND(true)
+{% endplantuml %}
+++++
 
 == Conclusion
 
