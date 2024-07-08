@@ -203,7 +203,7 @@ This time we need another container with the actual CLI:
 
 [source,shell]
 ----
- podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
+$ podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
     export --workspace todo-system.dsl --format plantuml --output diagrams/
 ...
 Exporting workspace from todo-system.dsl
@@ -417,12 +417,14 @@ rectangle 24250843872DOMAIN <<_GROUP>> {
 
 == Using a domain-specific language
 
-The third example mixes both previous ways together and intertwines the power of Golang and DSL.
+The third example mixes both previous ways together and intertwines the power of Golang and DSL
+with the flexibility of Structurizr.
 
 === Generating the model
 
-Here is a more complete version of the previous model, just to see how easy it actually is to
-wire the elements together:
+The previous examples contained the absolute basics for the hands-on feeling, but it is about time
+to show off a bit.
+So following example is more complete and demonstrate how easy it is to write everything together:
 
 [source,go]
 ----
@@ -532,18 +534,58 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 <5> There is broad range of different [views][] than can be defined here
 <6> And [styles][] handle again the visual cues the model
 
-=== Conversion to Plantuml
+Goadesign follows a batteries included approach and comes with two CLI tools:
+
+|===
+| [mdl][] | Generate the model and serve it locally
+| [stz][] | Upload the model to <https://structurizr.com>
+|===
+
+The next steps are close to the ones of plain Structurizr, but require far less overhead like
+containers (at the cost of installation - bruh):
 
 [source,shell]
 ----
-$ mdl serve github.com/unexist/showcase-architecture-documentation/model -dir gen
+$ go install goa.design/model/cmd/mdl@latest
+...
+$ mdl serve github.com/unexist/showcase-architecture-documentation/model
 Watching: /home/unexist/projects/showcase-architecture-documentation/todo-service-goadesign/model
 mdl v1.9.8, editor started. Open http://localhost:8080 in your browser.
 ----
 
+And if you point your browser to <http://localhost:8080> you should see something like this:
+
 image::goadesign_webview.png[]
 
+This webview directly allows modification and there is also a limited exporter to `.svg`.
+
+=== Conversion to Plantuml
+
+Conversion to PlantUml is bit more tricky (like it always is), since there is no native way in
+goadesign to archive that.
+
+[source,shell]
+----
+$ go install goa.design/model/cmd/stz@latest
+...
+$ stz gen github.com/unexist/showcase-architecture-documentation/model -out todo.dsl
+----
+
 == Conclusion
+
+All the ways ease the creation of architecture diagrams and allow to either convert them directly
+into documentation-as-code formats or statically serve them.
+This doesn't ease the cognitive load to actual create the model, but the put the fun back into
+playing with new tech and write code for visualization.
+
+*Structurizr* offers a powerful and easy way to create and update architecture diagrams and is
+already entitled to be enterprise ready.
+*go-structurizr* is a nice addition to the idea, but due to the automatic scraping might require
+a bit of tinkering to see the desired results.
+And lastly *goadesign* is the batteries-include approach of the two others and combines their
+powers nicely into a package.
+
+*Pick whatever you prefer, but please write documentation. Future you will thank you.*
 
 All examples can be found here:
 
