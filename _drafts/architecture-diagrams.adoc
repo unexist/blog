@@ -33,17 +33,18 @@ better than nothing.
 
 Got your attention? Alright!
 
-Writing documentation is rarely a welcome task and people usually shy away with various types of excuses.
+Writing documentation is rarely a welcome task and people usually shy away with various types of
+excuses.
 Like it is hard to keep the documentation up-to-date or [ain't nobody got time for that][].
-And sometimes the piece of software that should be documented is in a state that rather justifies a
-complete re-write than many hours of labor to document it.
+And sometimes the piece of software that should be documented is in a state that rather justifies
+a complete re-write than many hours of labor to document it.
 Still, when you stumble upon a new code base every bit of documentation can help and save hours of
 headaches.
 
-A corner-piece of every good documentation is proper architecture diagrams and this justifies a closer look
-at any help we can get.
-Therefore this blog post showcases [Struturizr][] along with three different ways of building up a model which
-can be used to create [C4][] views:
+A corner-piece of every good documentation is proper architecture diagrams and this justifies a
+closer look at any help we can get.
+Therefore this blog post showcases [Struturizr][] along with three different ways of building up a
+model which can be used to create [C4][] views:
 
 . Creating the model manually
 . Scraping code with [go-structurizr][]
@@ -61,7 +62,7 @@ There are many ways to create software architecture diagrams and most of them he
 [UML][].
 If you have ever seen UML it can be difficult to write and even more difficult to read even for
 the targeted audience later.
-And once done the resulting documentation is stowed away in rare places like a company fileshare
+And once done the resulting documentation is stowed away in rare places like a company file share
 in various formats of the [Office][]-family or sometimes even worse in a semi-unstructured
 [Confluence][].
 
@@ -71,7 +72,7 @@ Once defined this model can be used to extract different views like the [system 
 an overview of the system, its neighbours and actors or the [container view][] to basically list
 all deployable units in rendered diagrams and a live view in any browser.
 
-Both nammed views are part of the C4 model and represent the first two of the four (HINT: **CC**CC)
+Both named views are part of the C4 model and represent the first two of the four (HINT: **CC**CC)
 letters of the model.
 The two missing are the [component diagram][] and the [code diagram][] which provide further
 and more fine grained details of container internals respective the structure of the actual
@@ -135,13 +136,13 @@ There are various ways to generate the actual model:
 - Install the [struturizr-cli][] and convert it on the shell
 - Fire up the [struturizr-lite][] container locally
 
-Creating an account isn't that attractive, as is the installation of dozens of packages, so let us pick
-the third option and start [Podman][] (or any other engine if you insist).
+Creating an account isn't that attractive, as is the installation of dozens of packages, so let
+us pick the third option and start [Podman][] (or any other engine if you insist).
 
 === Generating the model
 
-Since we just have to download and run the container, the only thing we have to do in advance is take
-the model from above and store it into a file locally.
+Since we just have to download and run the container, the only thing we have to do in advance is
+take the model from above and store it into a file locally.
 
 [TIP]
 ====
@@ -153,7 +154,7 @@ Once everything is set let us fire up the container:
 
 [source,shell]
 ----
-$ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
+$ podman run -it --rm -p 8080:8080 -v .:/usr/local/structurizr \
   -e STRUCTURIZR_WORKSPACE_FILENAME=todo-system docker.io/structurizr/lite
 ...
 2024-07-08T15:10:03.792Z  INFO 1 --- [           main] com.structurizr.lite.StructurizrLite     : Started StructurizrLite in 10.637 seconds (process running for 10.983)
@@ -174,48 +175,84 @@ $ podman run -it --rm -p 8080:8080 -v /home/unexist:/usr/local/structurizr \
 ...
 ----
 
-The output is a bit messy, but once you see the above point your browser into this direction <http://localhost:8080>
-and you should be greeted with something similar to this screenshot:
+The output is a bit messy, but once you see the above point your browser into this direction
+<http://localhost:8080> and you should be greeted with something similar to this screenshot:
 
 image::structurizr-lite_webview.png[]
 
-The webpage itself is a simple viewer, that allows to cycle through the defined views, is also capable of editing
-the diagrams directly and allows to convert and store them as `.png` or `.svg` to your disk.
+The webpage itself is a simple viewer, that allows to cycle through the defined views, is also
+capable of editing the diagrams directly and allows to convert and store them as `.png` or
+`.svg` to your disk.
+In comparison to the cloud version it lacks the feature to [embed][] diagrams, but there are
+others ways of archiving that if needed.
 
 [TIP]
 ====
-Modification of the example from above isn't possible unless you disable [autolayout][] in the example.
+Modification of the example from above isn't possible unless you disable [autolayout][] in
+the example.
 ====
 
 === Conversion to Plantuml
 
+The webview itself doesn't support other formats than the two from above, but the [CLI][] is
+capable of keep us documentation-as-code enthusiasts happy.
+It is probably a matter of taste and [Mermaid][] is a supported and strong competitor, but since
+most of the diagrams inside of this blog are [PlantUML][] we stick to it.
 
-My personal favorite is the option to convert them to Plantuml diagrams and use them in
-[diagram-as-code][] fashion like this container view:
+This time we need another container with the actual CLI:
+
+[source,shell]
+----
+ podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
+    export --workspace todo-system.dsl --format plantuml --output diagrams/
+...
+Exporting workspace from todo-system.dsl
+ - exporting with StructurizrPlantUMLExporter
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemContext-001.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-SystemContext-001-key.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-Container-001.puml
+ - writing /usr/local/structurizr/diagrams/structurizr-Container-001-key.puml
+ - finished
+----
+
+And if we render the result e.g. from the file `diagrams/structurizr-SystemContext-001.puml`
+we can see following output:
 
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 set separator none
-title Software System - Containers
+title Software System - System Context
 
 left to right direction
 
-!include <C4/C4>
-!include <C4/C4_Context>
-!include <C4/C4_Container>
-
-Person(User, "User", $descr="", $tags="", $link="")
-
-System_Boundary("SoftwareSystem_boundary", "Software System", $tags="") {
-  Container(SoftwareSystem.WebFrontend, "Web Frontend", $techn="", $descr="", $tags="", $link="")
-  Container(SoftwareSystem.WebAPI, "Web API", $techn="", $descr="", $tags="", $link="")
-  Container(SoftwareSystem.Database, "Database", $techn="", $descr="", $tags="", $link="")
+skinparam {
+  arrowFontSize 10
+  defaultTextAlignment center
+  wrapWidth 200
+  maxMessageSize 100
 }
 
-Rel(User, SoftwareSystem.WebFrontend, "Uses", $techn="", $tags="", $link="")
-Rel(SoftwareSystem.WebFrontend, SoftwareSystem.WebAPI, "Makes API calls to", $techn="", $tags="", $link="")
-Rel(SoftwareSystem.WebAPI, SoftwareSystem.Database, "Reads from and writes to", $techn="", $tags="", $link="")
+hide stereotype
+
+skinparam rectangle<<SoftwareSystem>> {
+  BackgroundColor #1168bd
+  FontColor #ffffff
+  BorderColor #0b4884
+  roundCorner 20
+  shadowing false
+}
+skinparam person<<User>> {
+  BackgroundColor #08427b
+  FontColor #ffffff
+  BorderColor #052e56
+  shadowing false
+}
+
+person "==User\n<size:10>[Person]</size>" <<User>> as User
+rectangle "==Software System\n<size:10>[Software System]</size>" <<SoftwareSystem>> as SoftwareSystem
+
+User .[#707070,thickness=2].> SoftwareSystem : "<color:#707070>Uses"
 {% endplantuml %}
 ++++
 
