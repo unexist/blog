@@ -2,8 +2,8 @@
 layout: post
 title: Architecture diagrams
 description: This blog post illustrates how C4-based architecture diagrams can be derived from a simple model with the help of Struturizr.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: golang c4 structurizr goadesign showcase
 categories: architecture
@@ -19,13 +19,45 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-////
-https://docs.structurizr.com/dsl
-https://github.com/structurizr/cli
-https://docs.structurizr.com/dsl/expressions
-https://docs.structurizr.com/dsl/adrs
-https://docs.structurizr.com/export/plantuml#c4plantumlexporter
-////
+:1: https://knowyourmeme.com/memes/sweet-brown-aint-nobody-got-time-for-that
+:2: https://docs.structurizr.com/ui/diagrams/automatic-layout
+:3: https://c4model.com/
+:4: https://en.wikipedia.org/wiki/Command-line_interface
+:5: https://c4model.com/#CodeDiagram
+:6: https://c4model.com/#ComponentDiagram
+:7: https://www.atlassian.com/software/confluence
+:8: <container>
+:9: https://c4model.com/#ContainerDiagram
+:10: <Deployenvironments>
+:11: https://docsascode.org/
+:12: https://en.wikipedia.org/wiki/Domain-specific_language
+:13: <embed>
+:14: https://docs.structurizr.com/dsl/expressions
+:15: https://github.com/
+:16: https://github.com/goadesign
+:17: https://github.com/krzysztofreczek/go-structurizr
+:18: https://graphviz.org/
+:19: https://github.com/goadesign/model?tab=readme-ov-file#installation
+:20: https://mermaid.js.org/
+:21: <model>
+:22: https://www.office.com/
+:23: <Person>
+:24: https://github.com/plantuml/plantuml
+:25: https://podman.io/
+:26: <Rules>
+:27: https://github.com/krzysztofreczek/go-structurizr?tab=readme-ov-file#scraper
+:28: <Struturizr>
+:29: https://github.com/structurizr/cli
+:30: https://docs.structurizr.com/lite
+:31: <styles>
+:32: https://github.com/goadesign/model?tab=readme-ov-file#installation
+:33: <system>
+:34: https://c4model.com/#SystemContextDiagram
+:35: <tags>
+:36: https://blog.unexist.dev/redoc/
+:37: https://en.wikipedia.org/wiki/Unified_Modeling_Language
+:38: <views>
+:39: https://github.com/krzysztofreczek/go-structurizr?tab=readme-ov-file#view
 
 [quote,Dick Brandon]
 Documentation is like sex: when it is good, it is very, very good; and when it is bad, it is
@@ -35,7 +67,7 @@ Got your attention? Alright!
 
 Writing documentation is rarely a welcome task and people usually shy away with various types of
 excuses.
-Like it is hard to keep the documentation up-to-date or [ain't nobody got time for that][].
+Like it is hard to keep the documentation up-to-date or {1}[ain't nobody got time for that].
 And sometimes the piece of software that should be documented is in a state that rather justifies
 a complete re-write than many hours of labor to document it.
 Still, when you stumble upon a new code base every bit of documentation can help and save hours of
@@ -43,38 +75,38 @@ headaches.
 
 A corner-piece of every good documentation is proper architecture diagrams and this justifies a
 closer look at any help we can get.
-Therefore this blog post showcases [Struturizr][] along with three different ways of building up a
-model which can be used to create [C4][] views:
+Therefore this blog post showcases {28}[Struturizr] along with three different ways of building up a
+model which can be used to create {3}[C4] views:
 
 . Creating the model manually
-. Scraping code with [go-structurizr][]
-. Using a Golang domain-specific language with [goadesign][]
+. Scraping code with {17}[go-structurizr]
+. Using a Golang domain-specific language with {16}[goadesign]
 
 [TIP]
 ====
-Everything is again based on our well-known [Todo-application][] basically used in every other
+Everything is again based on our well-known {36}[Todo-application] basically used in every other
 post of this blog.
 ====
 
 == Introduction time
 
 There are many ways to create software architecture diagrams and most of them heavily utilize
-[UML][].
+{37}[UML].
 If you have ever seen UML it can be difficult to write and even more difficult to read even for
 the targeted audience later.
 And once done the resulting documentation is stowed away in rare places like a company file share
-in various formats of the [Office][]-family or sometimes even worse in a semi-unstructured
-[Confluence][].
+in various formats of the {22}[Office]-family or sometimes even worse in a semi-unstructured
+{7}[Confluence].
 
 Struturizr follows a slightly different approach and provides its own sets of elements and
-relationships to establish a simple model in a [documentation-as-code][] fashion.
-Once defined this model can be used to extract different views like the [system context][] to see
-an overview of the system, its neighbours and actors or the [container view][] to basically list
-all deployable units in rendered diagrams and a live view in any browser.
+relationships to establish a simple model in a {11}[documentation-as-code] fashion.
+Once defined this model can be used to extract different views like the {34}[system context] to see
+an overview of the system, its neighbours and actors or the {9}[container diagram] to basically
+list all deployable units in rendered diagrams and a live view in any browser.
 
 Both named views are part of the C4 model and represent the first two of the four (HINT: **CC**CC)
 letters of the model.
-The two missing are the [component diagram][] and the [code diagram][] which provide further
+The two missing are the {6}[component diagram] and the {5}[code diagram] which provide further
 and more fine grained details of container internals respective the structure of the actual
 code base.
 
@@ -82,7 +114,7 @@ Next up is how to create an actual model.
 
 == Creating the model manually
 
-Structurizr comes with its own [DSL][] to describe both the model with various elements and their
+Structurizr comes with its own {12}[DSL] to describe both the model with various elements and their
 relationship to each other and the actual views we would like to see.
 
 The actual language is quite easy to understand and read, so let us directly head into a short
@@ -121,23 +153,23 @@ workspace {
     }
 }
 ----
-<1> This block contains all elements of the [model][]
+<1> This block contains all elements of the {21}[model]
 <2> Actors should be part of every system, so welcome our sole user
 <3> The system is the main entry point and describes the actual software
 <4> Container are the building blocks of the model
-<5> [Expressions][] are used to define a relationship from one element to another in arrow direction
-<6> The next bigger block contains the actual [views][]
+<5> {14}[Expressions] are used to define a relationship from one element to another in arrow direction
+<6> The next bigger block contains the actual {38}[views]
 <7> This defines the system context diagram
 <8> And this the container diagram
 
 There are various ways to generate the actual model:
 
 - Head to <https://struturizr.com> and upload the model there
-- Install the [struturizr-cli][] and convert it on the shell
-- Fire up the [struturizr-lite][] container locally
+- Install the {29}[struturizr-cli] and convert it on the shell
+- Fire up the {30}[struturizr-lite] container locally
 
 Creating an account isn't that attractive, as is the installation of dozens of packages, so let
-us pick the third option and start [Podman][] (or any other engine if you insist).
+us pick the third option and start {25}[Podman] (or any other engine if you insist).
 
 === Generating the model
 
@@ -183,21 +215,21 @@ image::structurizr-lite_webview.png[]
 The webpage itself is a simple viewer, that allows to cycle through the defined views, is also
 capable of editing the diagrams directly and allows to convert and store them as `.png` or
 `.svg` to your disk.
-In comparison to the cloud version it lacks the feature to [embed][] diagrams, but there are
+In comparison to the cloud version it lacks the feature to {13}[embed] diagrams, but there are
 others ways of archiving that if needed.
 
 [TIP]
 ====
-Modification of the example from above isn't possible unless you disable [autolayout][] in
+Modification of the example from above isn't possible unless you disable {2}[autolayout] in
 the example.
 ====
 
 === Conversion to Plantuml
 
-The webview itself doesn't support other formats than the two from above, but the [CLI][] is
+The webview itself doesn't support other formats than the two from above, but the {4}[CLI] is
 capable of keep us documentation-as-code enthusiasts happy.
-It is probably a matter of taste and [Mermaid][] is a supported and strong competitor, but since
-most of the diagrams inside of this blog are [PlantUML][] we stick to it.
+It is probably a matter of taste and {20}[Mermaid] is a supported and strong competitor, but since
+most of the diagrams inside of this blog are {24}[PlantUML] we stick to it.
 
 This time we need another container with the actual CLI:
 
@@ -248,7 +280,7 @@ automatically from scraped code per runtime.
 In order to do there is a bit of configuration required to mark and kind of style what we would
 like to see.
 
-The first one is [scraper.yml][] to define which packages and paths should be inspected:
+The first one is {27}[scraper.yml] to define which packages and paths should be inspected:
 
 [source,yaml]
 ----
@@ -266,10 +298,10 @@ rules: # <2>
             tags:
                 - ADAPTER
 ----
-<1> This limits the scraper to packages from [Github][]
-<2> [Rules][] connect packages, components and tags with each other
+<1> This limits the scraper to packages from {15}[Github]
+<2> {26}[Rules] connect packages, components and tags with each other
 
-And the second one [view.yaml][] instructs the viewer how everything should look:
+And the second one {39}[view.yaml] instructs the viewer how everything should look:
 
 [source,yaml]
 ----
@@ -287,8 +319,8 @@ view:
     component_tags: # <2>
         - ADAPTER
 ----
-<1> Probably surprising, but [styles][] define the actual styling of the elements based on
-their [tags][]
+<1> Probably surprising, but {31}[styles] define the actual styling of the elements based on
+their {35}[tags]
 <2> And this just tell the view which tags mst be included
 
 === Conversion to Plantuml
@@ -338,7 +370,7 @@ func main() {
 <4> And finally the output file is rendered to disk
 
 When run the final output of the created file `c4.plantuml` file looks like this - depending on
-the [Grahpviz][] gods your mileage may vary:
+the {18}[Grahpviz] gods your mileage may vary:
 
 ++++
 {% plantuml %}
@@ -509,18 +541,18 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 	})
 })
 ----
-<1> The [system][] is the main entry point and supports various additional information
-<2> As before, [container][] describe the building blocks of he system
-<3> [Deploy environments][] allow to define deployment stages
-<4> [Person][] are again the actors of the system
-<5> There is broad range of different [views][] than can be defined here
-<6> And [styles][] handle again the visual cues the model
+<1> The {33}[system] is the main entry point and supports various additional information
+<2> As before, {8}[container] describe the building blocks of he system
+<3> {10}[Deploy environments] allow to define deployment stages
+<4> {23}[Person] are again the actors of the system
+<5> There is broad range of different {38}[views] than can be defined here
+<6> And {31}[styles] handle again the visual cues the model
 
 Goadesign follows a batteries included approach and comes with two CLI tools:
 
 |===
-| [mdl][] | Generate the model and serve it locally
-| [stz][] | Upload the model to <https://structurizr.com>
+| {19}[mdl] | Generate the model and serve it locally
+| {32}[stz] | Upload the model to <https://structurizr.com>
 |===
 
 The next steps are close to the ones of plain Structurizr, but require far less overhead like
