@@ -93,7 +93,7 @@ example:
 workspace {
     model { // <1>
         user = person "User" // <2>
-        softwareSystem = softwareSystem "Software System" { // <3>
+        softwareSystem = softwareSystem "Todo Software System" { // <3>
             frontend = container "Web Frontend" { // <4>
                 user -> this "Uses" // <5>
             }
@@ -258,7 +258,7 @@ User .[#707070,thickness=2].> SoftwareSystem : "<color:#707070>Uses"
 
 == Scraping the code
 
-As the name probably implies Go-structurizr is based on Structurizr and creates the model
+As the name probably implies go-structurizr is based on Structurizr and creates the model
 automatically from scraped code per runtime.
 
 === Generating the model
@@ -417,17 +417,24 @@ rectangle 24250843872DOMAIN <<_GROUP>> {
 
 == Using a domain-specific language
 
+The third example mixes both previous ways together and intertwines the power of Golang and DSL.
+
+=== Generating the model
+
+Here is a more complete version of the previous model, just to see how easy it actually is to
+wire the elements together:
+
 [source,go]
 ----
 var _ = Design("Todo design", "This is a design of the todo service", func() {
 	Version("0.1")
 	Enterprise("Todo Showcase Service")
 
-	var system = SoftwareSystem("Software System", "The todo software system", func() {
+	var system = SoftwareSystem("Software System", "The todo software system", func() { // <1>
 		Tag("system")
 		URL("https://unexist.blog")
 
-		container_webserver = Container("Webserver", "A webserver to deliver the frontend", "Nginx", func() {
+		container_webserver = Container("Webserver", "A webserver to deliver the frontend", "Nginx", func() { // <2>
 			Tag("infrastructure")
 			URL("https://nginx.org/")
 		})
@@ -455,7 +462,7 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 		})
 	})
 
-	DeploymentEnvironment("Dev", func() {
+	DeploymentEnvironment("Dev", func() { // <3>
 		DeploymentNode("Cloud", func() {
 			ContainerInstance("Software System/Webserver")
 			ContainerInstance("Software System/Web Frontend")
@@ -464,14 +471,14 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 		})
 	})
 
-	Person("User", "A user of the software system.", func() {
+	Person("User", "A user of the software system.", func() { // <4>
 		Tag("person")
 
 		Uses(system, "Uses")
 		Uses("Software System/Web Frontend", "Creates, views, edits and delete todos using", "HTTP", Asynchronous)
 	})
 
-	Views(func() {
+	Views(func() { // <5>
 		SystemLandscapeView("SystemLandscapeView", "A System Landscape View", func() {
 			Title("Overview of the system landscape")
 			AddAll()
@@ -508,7 +515,7 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 			AutoLayout(RankLeftRight)
 		})
 
-		Styles(func() {
+		Styles(func() { // <6>
 			ElementStyle("infrastructure", func() {
 				Shape(ShapeComponent)
 				Background("#1168bd")
@@ -518,6 +525,23 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 	})
 })
 ----
+<1> The [system][] is the main entry point and supports various additional information
+<2> As before, [container][] describe the building blocks of he system
+<3> [Deploy environments][] allow to define deployment stages
+<4> [Person][] are again the actors of the system
+<5> There is broad range of different [views][] than can be defined here
+<6> And [styles][] handle again the visual cues the model
+
+=== Conversion to Plantuml
+
+[source,shell]
+----
+$ mdl serve github.com/unexist/showcase-architecture-documentation/model -dir gen
+Watching: /home/unexist/projects/showcase-architecture-documentation/todo-service-goadesign/model
+mdl v1.9.8, editor started. Open http://localhost:8080 in your browser.
+----
+
+image::goadesign_webview.png[]
 
 == Conclusion
 
