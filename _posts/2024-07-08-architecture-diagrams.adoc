@@ -2,8 +2,8 @@
 layout: post
 title: Architecture diagrams
 description: This blog post illustrates how C4-based architecture diagrams can be derived from a simple model with the help of Struturizr.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-07-08 19:39 +0200
+last_updated: 2024-07-08 19:39 +0200
 author: Christoph Kappel
 tags: golang c4 structurizr goadesign plantuml showcase
 categories: architecture
