@@ -37,13 +37,13 @@ Writing documentation is rarely a welcome task and people usually shy away with 
 Like it is hard to keep the documentation up-to-date or [ain't nobody got time for that][].
 And sometimes the piece of software that should be documented is in a state that rather justifies a
 complete re-write than many hours of labor to document it.
-Still, when you stumble upon a new code base every bit of documentation can help and save some
+Still, when you stumble upon a new code base every bit of documentation can help and save hours of
 headaches.
 
-Usually tests are the best type of documentation for behaviour, but unfortunately this doesn't
-directly apply to architectures.
-So in this blog post we are going to have a look at [Struturizr][] and check
-different ways of building up a model which can be used to create [C4][] views:
+A corner-piece of every good documentation is proper architecture diagrams and this justifies a closer look
+at any help we can get.
+So during the course of this blog post showcases [Struturizr][] along with three different ways of building up
+a model which can be used to create [C4][] views:
 
 . Creating the model manually
 . Scraping code with [go-structurizr][]
@@ -54,6 +54,9 @@ different ways of building up a model which can be used to create [C4][] views:
 Everything is again based on our well-known [Todo-application][] basically used in every other
 post of this blog.
 ====
+
+Although in my opinion the phrase "A picture is worth a thousand words" is utter non-sense, they still are the
+required to understand many aspects of modern systems.
 
 == Introduction time
 
