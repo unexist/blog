@@ -584,8 +584,8 @@ $ go install goa.design/model/cmd/stz@latest
 ...
 $ stz gen github.com/unexist/showcase-architecture-documentation/model -out todo.json
 $ podman run --rm -v .:/usr/local/structurizr docker.io/structurizr/cli \
-    export --workspace todo-stz.json --format plantuml/c4plantuml --output diagrams/
-Exporting workspace from todo-stz.json
+    export --workspace todo.json --format plantuml/c4plantuml --output diagrams/
+Exporting workspace from todo.json
  - exporting with StructurizrPlantUMLExporter
  - writing /usr/local/structurizr/diagrams/structurizr-SystemLandscapeView.puml
  - writing /usr/local/structurizr/diagrams/structurizr-SystemLandscapeView-key.puml
