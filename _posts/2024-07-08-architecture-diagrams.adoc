@@ -541,10 +541,10 @@ var _ = Design("Todo design", "This is a design of the todo service", func() {
 	})
 })
 ----
-<1> The {33}[system] is the main entry point and supports various additional information
+<1> {33}[System] is the main entry point and supports various additional information
 <2> As before, {8}[container] describe the building blocks of the system
 <3> {10}[Deploy environments] allow to define deployment stages
-<4> {23}[Person] are again the actors of the system
+<4> {23}[Person] is again the actor of the system
 <5> There is broad range of different {38}[views] than can be defined here
 <6> And {31}[styles] handle again the visual cues the model
 
@@ -556,7 +556,7 @@ Goadesign follows a batteries included approach and comes with two CLI tools:
 |===
 
 The next steps are close to the ones of plain Structurizr, but require far less overhead like
-containers (at the cost of installation - bruh):
+containers (at the cost of installation):
 
 [source,shell]
 ----
@@ -637,7 +637,7 @@ already entitled to be enterprise ready.
 *go-structurizr* is a nice addition to the idea, but due to the automatic scraping might require
 a bit of tinkering to see the desired results.
 And lastly *goadesign* is the batteries-include approach of the two others and combines their
-powers nicely into a package.
+powers nicely into a simple package.
 
 *Pick whatever you prefer, but please write documentation. Future you will thank you.*
 
