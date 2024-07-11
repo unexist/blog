@@ -25,3 +25,7 @@ endif::[]
 === Query, Filter, Expand
 
 == Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-odata-quarkus>
