@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Playing with OData
-description: TBD
+description: This blog introduces OData and summarizes the main similarities and differences between itself and plain REST.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -17,6 +17,20 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+
+////
+https://www.sap.com/products/technology-platform.html
+https://olingo.apache.org/
+////
+
+Last year I briefly dived into the world of [SAP][] and its new [Business Technology Platform][]
+(BTP) and tried to make sense of everything there.
+During that time I discovered [OData][] or Open Data protocol is the communication protocol by
+choice and wondered why it is favored over traditional [REST][].
+
+So during the course of this blog post we are going to have a look at the main differences of
+both and also at a basic implementation with the help of the Apache project [Olingo][] and
+[Quarkus][].
 
 == What is OData
 
