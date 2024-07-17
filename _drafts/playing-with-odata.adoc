@@ -23,6 +23,7 @@ https://www.sap.com/products/technology-platform.html
 https://olingo.apache.org/
 https://www.mydbsync.com/blogs/odata-and-rest-apis-a-comparison
 https://restfulapi.net/
+https://learn.microsoft.com/en-us/openspecs/dev_center/ms-devcentlp/1c24c7c8-28b0-4ce1-a47d-95fe1ff504bc?redirectedfrom=MSDN
 ////
 
 Last year I briefly dived into the world of [SAP][] and its new [Business Technology Platform][]
@@ -55,7 +56,26 @@ between web services:
 
 == And what is OData?
 
-Open Data protocol or OData is an application protocol
+Open Data protocol or OData is a standardized application protocol for RESTful services.
+It has initially been created by [Microsoft][] in 2007, but was later included in the
+[Microsoft Open Specification Promise][] and therefore opened for everyone to support freely.
+
+The protocol follows following principles and specifications:
+
+- OData *MUST* follow REST-principles *UNLESS* there is a good reason not to
+- OData Services *MUST* support ATOM encoding
+- OData services *SHOULD* support JSON encoding
+
+=== Data models
+
+OData uses Atom or JSON to define the data schema, and it provides two important models for the management of data.
+
+They are:
+
+|====
+| Entity Data Model or EDM | This is an abstract data model that *MUST* be used to describe the data exposed by the service.
+| Service Model | This includes two static resources to provide information about the served data and a set of dynamic resources to offers data management capabilities
+|====
 
 === Metadata
 
