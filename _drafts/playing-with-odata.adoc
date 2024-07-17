@@ -27,8 +27,8 @@ https://restfulapi.net/
 
 Last year I briefly dived into the world of [SAP][] and its new [Business Technology Platform][]
 (BTP) and tried to make sense of everything there.
-During that time I discovered [OData][] or Open Data protocol is the communication protocol by
-choice and wondered why it is favored over traditional [REST][].
+During that time I discovered [OData][] is the communication protocol by choice and wondered about
+its relationship to traditional [REST][].
 
 So during the course of this blog post we are going to have a look at the main differences of
 both and also at a rudimentary implementation based on the projects [Apache Olingo][] and our
@@ -41,19 +41,21 @@ Before we can actually start to compare both, let us quickly recap what REST act
 [Represental State Transfer][] or REST is an architecture style based on doctoral thesis by
 [Roy Fielding].
 
-He defined a set of six easy principles, properties and constraints for easy communication between
-web services:
+There he defined a set of six easy principles, properties and constraints for easy communication
+between web services:
 
 |====
 | *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform representation
 | *Client-Server* | [Separation of concern][] allows client and server to evolve independently
 | *Stateless* | Each request must contain all the necessary information to handle it
-| *Cachable* | A response can either be re-used (cached) or marked as non-cachable
+| *Cachable* | A response can either be re-used (cached) or marked as non-reusable (non-cachable)
 | *Layered System* | Hierarchical components cannot see beyond their immediate layer
 | *Code on demand* (optional) | Client functionality can be extended by downloading and executing scripts or applets
 |====
 
 == And what is OData?
+
+Open Data protocol or OData is an application protocol
 
 === Metadata
 
