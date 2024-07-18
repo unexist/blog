@@ -32,19 +32,18 @@ Last year I briefly dived into the world of [SAP][] and its new [Business Techno
 During that time I discovered [OData][] is the communication protocol by choice and wondered about
 its relationship to traditional [REST][].
 
-So during the course of this blog post we are going to have a look at the main differences of
-both and also at a rudimentary implementation based on the projects [Apache Olingo][] and our
-good fellow [Quarkus][].
+So during the course of this blog post we are going to have a look and compare both with each other,
+and look at examples of a rudimentary implementation based on the projects [Apache Olingo][] and
+our good fellow [Quarkus][].
 
 Before we can actually start to compare both, let us quickly recap what REST actually is.
 
 == What is REST?
 
-[Representational State Transfer][] or REST is an architecture style based on doctoral thesis by
-[Roy Fielding].
+[Representational State Transfer][] (or REST) is an _architecture style_ originated from the
+doctoral thesis by [Roy Fielding].
 
-There he defined a set of six easy principles, properties and constraints for easy communication
-between web services:
+The key take away there is the definition of the six easy principles:
 
 |====
 | *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform representation
@@ -55,11 +54,14 @@ between web services:
 | *Code on demand* (optional) | Client functionality can be extended by downloading and executing scripts or applets
 |====
 
+Combined they build the foundation for easy communication between web services.
+The probably best known example here is [Hypertext Transfer Protocol][] (or HTTP).
+
 == And what is OData?
 
-Open Data protocol or OData is a standardized application protocol for RESTful services.
+Open Data protocol (or OData) is a standardized _application protocol_ for RESTful services.
 It has initially been created by [Microsoft][] in 2007, but was later included in the
-[Microsoft Open Specification Promise][] and therefore opened for everyone to support freely.
+[Microsoft Open Specification Promise][] and therefore opened for everyone to use freely.
 
 The protocol follows following principles and specifications:
 
