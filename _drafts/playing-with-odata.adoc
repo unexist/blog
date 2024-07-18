@@ -5,7 +5,7 @@ description: This blog introduces OData and summarizes its main similarities and
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
+tags: rest odata showcase
 categories: tech
 toc: true
 
@@ -43,15 +43,17 @@ Before we can actually start to compare both, let us quickly recap what REST act
 [Representational State Transfer][] (or REST) is an _architecture style_ originated from the
 doctoral thesis by [Roy Fielding].
 
-The key take away there is the definition of the six easy principles:
+The key take away there is the definition of six easy principles:
 
 |====
-| *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform representation
+| *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform
+representation
 | *Client-Server* | [Separation of concern][] allows client and server to evolve independently
 | *Stateless* | Each request must contain all the necessary information to handle it
 | *Cachable* | A response can either be re-used (cached) or marked as non-reusable (non-cachable)
 | *Layered System* | Hierarchical components cannot see beyond their immediate layer
-| *Code on demand* (optional) | Client functionality can be extended by downloading and executing scripts or applets
+| *Code on demand* (optional) | Client functionality can be extended by downloading and executing
+scripts or applets
 |====
 
 Combined they build the foundation for easy communication between web services.
@@ -63,7 +65,7 @@ Open Data protocol (or OData) is a standardized _application protocol_ for RESTf
 It has initially been created by [Microsoft][] in 2007, but was later included in the
 [Microsoft Open Specification Promise][] and therefore opened for everyone to use freely.
 
-The protocol follows following principles and specifications:
+The protocol adheres to following principles and specifications:
 
 - OData *MUST* follow REST-principles *UNLESS* there is a good reason not to
 - OData Services *MUST* support ATOM encoding
@@ -71,13 +73,16 @@ The protocol follows following principles and specifications:
 
 === Data models
 
-OData uses Atom or JSON to define the data schema, and it provides two important models for the management of data.
+OData uses Atom or JSON to define the data schema, and it provides two important models for the
+management of data.
 
 They are:
 
 |====
-| Entity Data Model or EDM | This is an abstract data model that *MUST* be used to describe the data exposed by the service.
-| Service Model | This includes two static resources to provide information about the served data and a set of dynamic resources to offers data management capabilities
+| Entity Data Model or EDM | This is an abstract data model that *MUST* be used to describe the
+data exposed by the service
+| Service Model | This includes two static resources to provide information about the served data
+and a set of dynamic resources to offers data management capabilities
 |====
 
 === Metadata
