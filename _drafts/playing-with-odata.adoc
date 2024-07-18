@@ -1,13 +1,14 @@
 ---
 layout: post
 title: Playing with OData
-description: This blog introduces OData and summarizes the main similarities and differences between itself and plain REST.
+description: This blog introduces OData and summarizes its main similarities and differences to plain REST.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
 categories: tech
 toc: true
+
 ---
 ifdef::asciidoctorconfigdir[]
 :imagesdir: {asciidoctorconfigdir}/../assets/images/playing_with_odata
@@ -39,7 +40,7 @@ Before we can actually start to compare both, let us quickly recap what REST act
 
 == What is REST?
 
-[Represental State Transfer][] or REST is an architecture style based on doctoral thesis by
+[Representational State Transfer][] or REST is an architecture style based on doctoral thesis by
 [Roy Fielding].
 
 There he defined a set of six easy principles, properties and constraints for easy communication
