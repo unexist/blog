@@ -71,7 +71,7 @@ The protocol adheres to following principles and specifications:
 - OData Services *MUST* support ATOM encoding
 - OData services *SHOULD* support JSON encoding
 
-=== Data models
+=== Data models and concepts
 
 OData uses Atom or JSON to define the data schema, and it provides two important models for the
 management of data.
