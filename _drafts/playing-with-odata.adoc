@@ -43,7 +43,8 @@ Before we can actually start, let us quickly recap what REST actually is.
 [Representational State Transfer][] (or REST) is an _architecture style_ originated from the
 doctoral thesis by [Roy Fielding].
 
-The key take away there is the definition of six easy principles:
+There is lots of good documentation about the general ideas, but the key takeaways for us are
+following six easy principles:
 
 |====
 | *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform
@@ -56,14 +57,14 @@ representation
 scripts or applets
 |====
 
-Combined they build the foundation for easy communication between web services.
-The probably best known example here is [Hypertext Transfer Protocol][] (or HTTP).
+Together the are the foundation of easy communication between web services with the well-known
+example [Hypertext Transfer Protocol][] (or HTTP).
 
 == And what is OData?
 
-Open Data protocol (or OData) is a standardized _application protocol_ for RESTful services.
-It has initially been created by [Microsoft][] in 2007, but was later included in the
-[Microsoft Open Specification Promise][] and therefore opened for everyone to use freely.
+Open Data protocol (or OData) is a standardized _application protocol_ for [RESTful][] services.
+Initially been created by [Microsoft][] in 2007, it was later included in the
+[Microsoft Open Specification Promise][] and therefore opened for everyone else to use freely.
 
 The protocol adheres to following principles and specifications:
 
