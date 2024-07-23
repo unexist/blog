@@ -72,7 +72,18 @@ The protocol adheres to following principles and specifications:
 - OData Services *MUST* support ATOM encoding
 - OData services *SHOULD* support JSON encoding
 
-=== Data models and concepts
+=== Concepts and data models
+
+A core concept of the OData protocol is the [Entity Data Model] or EDM, which is the used to
+describe the served data via a metadata document.
+
+This document contains following types:
+
+|====
+| *Entity type | Domain objects with their properties like Todo
+| *Complex types* | Types that are included into other ones
+| *Entity sets* | Aggregate entities of a given type
+|====
 
 OData uses Atom or JSON to define the data schema, and it provides two important models for the
 management of data.
