@@ -32,11 +32,11 @@ Last year I briefly dived into the world of [SAP][] and its new [Business Techno
 During that time I discovered [OData][] is the communication protocol by choice and wondered about
 its relationship to traditional [REST][].
 
-So during the course of this blog post we are going to have a look and compare both with each other,
+So during the course of this blog post we are going to have a look at OData, compare it to REST
 and look at examples of a rudimentary implementation based on the projects [Apache Olingo][] and
 our good fellow [Quarkus][].
 
-Before we can actually start to compare both, let us quickly recap what REST actually is.
+Before we can actually start, let us quickly recap what REST actually is.
 
 == What is REST?
 
