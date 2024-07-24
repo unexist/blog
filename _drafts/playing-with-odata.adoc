@@ -85,7 +85,7 @@ This service document contains following types:
 | *Entity sets* | Aggregate entities of a given type
 |====
 
-
+==== Metadata
 
 [source,bash]
 ----
@@ -112,19 +112,8 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
 }
 ----
 
-OData uses Atom or JSON to define the data schema, and it provides two important models for the
-management of data.
-
-They are:
-
-|====
-| Entity Data Model or EDM | This is an abstract data model that *MUST* be used to describe the
-data exposed by the service
-| Service Model | This includes two static resources to provide information about the served data
-and a set of dynamic resources to offers data management capabilities
-|====
-
-=== Metadata
+A second model is the *service model* and this includes information about the actual served data
+and a set of dynamic resources to offer data management capabilities.
 
 === Query, Filter, Expand
 
