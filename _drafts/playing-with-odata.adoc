@@ -87,6 +87,8 @@ This service document contains following types:
 
 ==== Metadata
 
+
+
 [source,bash]
 ----
 $ curl -s http://localhost:8080/odata/$metadata | jq .
