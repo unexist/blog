@@ -72,10 +72,32 @@ The protocol adheres to following principles and specifications:
 - OData Services *MUST* support ATOM encoding
 - OData services *SHOULD* support JSON encoding
 
-=== Concepts and data models
+=== Service documents
 
-A core concept of the OData protocol is the [Entity Data Model] or EDM, which is the used to
-describe the served data via a metadata document.
+A good starting point for interaction with OData is the *atom service document* at
+the root of the service, which gives a brief list of the names and feeds provided here:
+
+[source,bash]
+----
+$ curl -s -H "accept: application/json" http://localhost:8080/odata/ | jq .
+{
+  "@odata.context": "$metadata",
+  "value": [
+    {
+      "name": "Todos",
+      "url": "Todos"
+    },
+    {
+      "name": "Tasks",
+      "url": "Tasks"
+    }
+  ]
+}
+----
+
+More fined grained details can be fetched via the *metadata document*, which contains a
+complete description of the feeds, types, properties and relationships exposed by this
+service.
 
 This service document contains following types:
 
@@ -84,9 +106,6 @@ This service document contains following types:
 | *Complex types* | Keyless value types belonging to an entity
 | *Entity sets* | Aggregate entities of a given type
 |====
-
-==== Metadata
-
 
 
 [source,bash]
@@ -108,14 +127,30 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
       },
       "Description": {
         "$Type": "Edm.String"
+      },
+      "Tasks": {
+        "$Kind": "NavigationProperty",
+        "$Type": "OData.Todo.Task",
+        "$Collection": true,
+        "$Partner": "Todo",
+        "$ContainsTarget": true
       }
+    },
+...
+    "Container": {
+      "$Kind": "EntityContainer",
+      "Todos": {
+        "$Kind": "EntitySet",
+        "$Type": "OData.Todo.Todo",
+        "$NavigationPropertyBinding": {
+          "Tasks": "Tasks"
+        }
+      },
+...
     }
   }
 }
 ----
-
-A second model is the *service model* and this includes information about the actual served data
-and a set of dynamic resources to offer data management capabilities.
 
 === Query, Filter, Expand
 
