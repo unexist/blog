@@ -97,7 +97,7 @@ $ curl -s -H "accept: application/json" http://localhost:8080/odata/ | jq .
 
 More fined grained details can be fetched via the *metadata document*, which contains a
 complete description of the feeds, types, properties and relationships exposed by this
-service.
+service in [EDM][].
 
 This service document contains following types:
 
@@ -153,6 +153,39 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
 ----
 
 === Query, Filter, Expand
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(1) | jq .
+{
+  "@odata.context": "$metadata#Todos/$entity",
+  "ID": 1,
+  "Title": "Todo string",
+  "Description": "Todo string"
+}
+----
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(ID=1) | jq .
+{
+  "@odata.context": "$metadata#Todos/$entity",
+  "ID": 1,
+  "Title": "Todo string",
+  "Description": "Todo string"
+}
+----
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
+{
+  "@odata.context": "$metadata#Todos(ID,Title)/$entity",
+  "@odata.id": "Todos(1)",
+  "ID": 1,
+  "Title": "Todo string"
+}
+----
 
 == Conclusion
 
