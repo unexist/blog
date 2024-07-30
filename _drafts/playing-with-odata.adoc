@@ -187,6 +187,25 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
 }
 ----
 
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
+{
+  "@odata.context": "$metadata#Todos(Tasks())/$entity",
+  "ID": 1,
+  "Title": "Todo string",
+  "Description": "Todo string",
+  "Tasks": [
+    {
+      "ID": 1,
+      "TodoID": 1,
+      "Title": "Task string",
+      "Description": "Task string"
+    }
+  ]
+}
+----
+
 == Conclusion
 
 All examples can be found here:
