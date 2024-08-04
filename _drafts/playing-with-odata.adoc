@@ -450,6 +450,20 @@ $ curl -s http://localhost:8080/odata/Todos(3) | jq .
 
 == Conclusion
 
+If we put aside the initial idea to compare an architectural style (REST) with an actual
+communication protocol (OData), it is probably save to say both can be used to query data from a
+service and interact with it in a [CRUD][] manner.
+
+By default and when properly implemented, OData allows a wide array of different ways to select
+and narrow down the amount of delivered data on a protocol level, without further ado of the
+requesting side via a defined interface.
+
+On the other hand implementing the complete protocol e.g. based on Olingo is lots of work, if you
+won't rely on something like [olingo-jpa-processor-v4][].
+
+Still, implementing Olingo was quite funny and a perfect target for [TDD][] due to the
+step-by-step tutorials and easy derivable tests there and I might consider it one day.
+
 All examples can be found here:
 
 <https://github.com/unexist/showcase-odata-quarkus>
