@@ -19,33 +19,50 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-////
-https://www.sap.com/products/technology-platform.html
-https://olingo.apache.org/
-https://www.mydbsync.com/blogs/odata-and-rest-apis-a-comparison
-https://restfulapi.net/
-https://learn.microsoft.com/en-us/openspecs/dev_center/ms-devcentlp/1c24c7c8-28b0-4ce1-a47d-95fe1ff504bc?redirectedfrom=MSDN
-////
+:1: https://olingo.apache.org/
+:2: https://www.sap.com/products/technology-platform.html
+:3: https://en.wikipedia.org/wiki/Create,_read,_update_and_delete
+:4: https://curl.se/
+:5: https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_DataModel
+:6: https://en.wikipedia.org/wiki/HTTP
+:7: https://en.wikipedia.org/wiki/JSON
+:8: https://learn.microsoft.com/en-us/openspecs/dev_center/ms-devcentlp/1c24c7c8-28b0-4ce1-a47d-95fe1ff504bc?redirectedfrom=MSDN
+:9: https://www.microsoft.com/
+:10: https://learn.microsoft.com/en-us/odata/overview
+:11: https://github.com/SAP/olingo-jpa-processor-v4
+:12: https://quarkus.io/
+:13: https://en.wikipedia.org/wiki/REST
+:14: https://restfulapi.net/
+:15: https://en.wikipedia.org/wiki/REST
+:16: https://www.sap.com/
+:17: https://en.wikipedia.org/wiki/Separation_of_concerns
+:18: https://en.wikipedia.org/wiki/SQL
+:19: https://en.wikipedia.org/wiki/Test-driven_development
+:20: https://blog.unexist.dev/redoc/
+:21: https://en.wikipedia.org/wiki/URL
+:22: https://xkcd.com/1172/
+:23: https://en.wikipedia.org/wiki/XML
+:24: https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#_Toc31358935
 
-Last year I briefly dived into the world of [SAP][] and its new [Business Technology Platform][]
+Last year I briefly dived into the world of {16}[SAP] and its new {2}[Business Technology Platform]
 (BTP) and tried to make sense of everything there.
-During that time I discovered [OData][] is the communication protocol by choice and wondered about
-its relationship to traditional [REST][].
+During that time I discovered {10}[OData] is the communication protocol by choice and wondered about
+its relationship to traditional {15}[REST].
 
 So during the course of this blog post we are going to have a look at OData, compare it to REST
-and look at examples of a rudimentary implementation based on the projects [Apache Olingo][] and
-our good fellow [Quarkus][].
+and look at examples of a rudimentary implementation based on the projects {1}[Apache Olingo] and
+our good fellow {12}[Quarkus].
 
 Before we can actually start, let us quickly recap what REST actually is.
 
 [NOTE]
-Many of the following [URL][]s used in examples need to be specially encoded when used directly
-on the shell with [curl][].
+Many of the following {21}[URL]s used in examples need to be specially encoded when used directly
+on the shell with {4}[curl].
 We will omit that here to increase readability and obviously for brevity.
 
 == What is REST?
 
-[Representational State Transfer][] (or REST) is an _architecture style_ originated from the
+{13}[Representational State Transfer] (or REST) is an _architecture style_ originated from the
 doctoral thesis by [Roy Fielding].
 
 There is lots of good documentation about the general ideas, but the key takeaways for us are
@@ -55,7 +72,7 @@ following six easy principles:
 |====
 | *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform
 representation
-| *Client-Server* | [Separation of concern][] allows client and server to evolve independently
+| *Client-Server* | {17}[Separation of concern] allows client and server to evolve independently
 | *Stateless* | Each request must contain all the necessary information to handle it
 | *Cachable* | A response can either be re-used (cached) or marked as non-reusable (non-cachable)
 | *Layered System* | Hierarchical components cannot see beyond their immediate layer
@@ -64,13 +81,13 @@ scripts or applets
 |====
 
 Together they are the foundation of easy communication between web services with the well-known
-example [Hypertext Transfer Protocol][] (or HTTP).
+example {6}[Hypertext Transfer Protocol] (or HTTP).
 
 == And what is OData?
 
-Open Data protocol (or OData) is a standardized _application protocol_ for [RESTful][] services.
-Initially been created by [Microsoft][] in 2007, it was later included in the
-[Microsoft Open Specification Promise][] and therefore opened for everyone else to use freely.
+Open Data protocol (or OData) is a standardized _application protocol_ for {14}[RESTful] services.
+Initially been created by {9}[Microsoft] in 2007, it was later included in the
+{8}[Microsoft Open Specification Promise] and therefore opened for everyone else to use freely.
 
 The protocol adheres to following principles and specifications:
 
@@ -110,18 +127,18 @@ by this service.
 In case you have wondered about the particular format of the previous document, the next
 own follows suit, but includes more objects and probably justifies some explanations in
 advance.
-The general format is called [Entity Data Model][] (or EDM respectively EDMX
-if you insist on [XML][]) and mainly consists of these types:
+The general format is called {5}[Entity Data Model] (or EDM respectively EDMX
+if you insist on {23}[XML]) and mainly consists of these types:
 
 [cols="1,5"]
 |====
-| *Entity types* | Domain objects with a key, properties and relationships - like [Todo][]
+| *Entity types* | Domain objects with a key, properties and relationships - like {20}[Todo]
 | *Complex types* | Keyless value types belonging to an entity
 | *Entity sets* | Aggregate entities of a given type
 |====
 
 The output can be pretty long, but a redacted version of the Todo entity looks like this in
-[JSON][]:
+{7}[JSON]:
 
 [source,bash]
 ----
@@ -318,7 +335,7 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?$expand=Tasks | jq .
 }
 ----
 
-Ordering is also possible and works a bit like the order by clause of [SQL][]:
+Ordering is also possible and works a bit like the order by clause of {18}[SQL]:
 
 [source,bash]
 ----
@@ -340,6 +357,8 @@ $ curl -s http://localhost:8080/odata/Todos?$orderby=ID desc | jq . # <1>
 }
 ----
 
+TIP: This wasn't an exhaustive list, there is many more to discover in the {24}[official documentation].
+
 #### Arithmetic expressions
 
 Interestingly arithmetic expressions are also supported, so we can use operators like
@@ -359,7 +378,7 @@ $ curl -s http://localhost:8080/odata/Todos?$filter=ID mul 1 eq 1 | jq . # <1>
   ]
 }
 ----
-<1> I am quite sure someone has a valid use-case for this. (see [xkcd 1127][])
+<1> I am quite sure someone has a valid use-case for this. (see {22}[xkcd 1127])
 
 #### Complex queries
 
@@ -390,7 +409,7 @@ $ curl -s http://localhost:8080/odata/Todos?$filter=ID div 1 eq 1&$select=Title&
 
 ### Rest of CRUD
 
-Lastly the missing [CRUD][] operations can be used in a similar fashion as above and should not
+Lastly the missing {3}[CRUD] operations can be used in a similar fashion as above and should not
 provoke anymore questions:
 
 #### Create an entity
@@ -452,16 +471,16 @@ $ curl -s http://localhost:8080/odata/Todos(3) | jq .
 
 If we put aside the initial idea to compare an architectural style (REST) with an actual
 communication protocol (OData), it is probably save to say both can be used to query data from a
-service and interact with it in a [CRUD][] manner.
+service and interact with it in a {3}[CRUD] manner.
 
 By default and when properly implemented, OData allows a wide array of different ways to select
 and narrow down the amount of delivered data on a protocol level, without further ado of the
 requesting side via a defined interface.
 
 On the other hand implementing the complete protocol e.g. based on Olingo is lots of work, if you
-won't rely on something like [olingo-jpa-processor-v4][].
+won't rely on something like {11}[olingo-jpa-processor-v4].
 
-Still, implementing Olingo was quite funny and a perfect target for [TDD][] due to the
+Still, implementing Olingo was quite funny and a perfect target for {19}[TDD] due to the
 step-by-step tutorials and easy derivable tests there and I might consider it one day.
 
 All examples can be found here:
