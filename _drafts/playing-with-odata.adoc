@@ -38,6 +38,11 @@ our good fellow [Quarkus][].
 
 Before we can actually start, let us quickly recap what REST actually is.
 
+[NOTE]
+Many of the following [URL][]s used in examples need to be specially encoded when used directly
+on the shell with [curl][].
+We will omit that here to increase readability and obviously for brevity.
+
 == What is REST?
 
 [Representational State Transfer][] (or REST) is an _architecture style_ originated from the
@@ -46,6 +51,7 @@ doctoral thesis by [Roy Fielding].
 There is lots of good documentation about the general ideas, but the key takeaways for us are
 following six easy principles:
 
+[cols="1,5"]
 |====
 | *Uniform interface* | Interfaces must be unique identifiable, self-descriptive and have a uniform
 representation
@@ -57,7 +63,7 @@ representation
 scripts or applets
 |====
 
-Together the are the foundation of easy communication between web services with the well-known
+Together they are the foundation of easy communication between web services with the well-known
 example [Hypertext Transfer Protocol][] (or HTTP).
 
 == And what is OData?
@@ -76,12 +82,12 @@ The protocol adheres to following principles and specifications:
 
 A good starting point for interaction with every OData service is the *atom service document* at
 the root of it.
-It can be requested with a simple call with e.g. [curl][] and includes a brief list of the
+It can be requested with a simple call with e.g. curl and includes a brief list of the
 names and feeds handled by the service:
 
 [source,bash]
 ----
-$ curl -s -H "accept: application/json" http://localhost:8080/odata/ | jq .
+$ curl -s http://localhost:8080/odata/ | jq .
 {
   "@odata.context": "$metadata",
   "value": [
@@ -107,13 +113,14 @@ advance.
 The general format is called [Entity Data Model][] (or EDM respectively EDMX
 if you insist on [XML][]) and mainly consists of these types:
 
+[cols="1,5"]
 |====
 | *Entity types* | Domain objects with a key, properties and relationships - like [Todo][]
 | *Complex types* | Keyless value types belonging to an entity
 | *Entity sets* | Aggregate entities of a given type
 |====
 
-The output can be pretty long, but a shorted version of the Todo entity looks like this in
+The output can be pretty long, but a redacted version of the Todo entity looks like this in
 [JSON][]:
 
 [source,bash]
@@ -124,11 +131,11 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
   "OData.Todo": {
     "Todo": {
       "$Kind": "EntityType",
-      "$Key": [
+      "$Key": [ # <1>
         "ID"
       ],
       "ID": {
-        "$Type": "Edm.Int32" # <1>
+        "$Type": "Edm.Int32" # <2>
       },
       "Title": {
         "$Type": "Edm.String"
@@ -136,8 +143,8 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
       "Description": {
         "$Type": "Edm.String"
       },
-      "Tasks": { # <2>
-        "$Kind": "NavigationProperty", # <3>
+      "Tasks": { # <3>
+        "$Kind": "NavigationProperty", # <4>
         "$Type": "OData.Todo.Task",
         "$Collection": true,
         "$Partner": "Todo",
@@ -145,7 +152,7 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
       }
     },
 ...
-    "Container": { # <4>
+    "Container": { # <5>
       "$Kind": "EntityContainer",
       "Todos": {
         "$Kind": "EntitySet",
@@ -159,17 +166,20 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
   }
 }
 ----
-<1> Primitives and basic types
-<2> Tasks is an embedded entity type
-<3> Navigational properties allow access to related entities
-<4> The enclosing container that holds the sets and imports
+<1> Key property of the entity
+<2> Primitives and basic types
+<3> Tasks is an embedded entity type
+<4> Navigational properties allow access to related entities
+<5> The enclosing container that holds the sets and imports
 
 Next up we are going to see how the service can actually be queries for data.
 
-=== Query, Filter, Expand and Order
+=== Query, Expand, Filter and Order
 
 OData provides by default lots of different ways to query for the actual data of
 the service.
+
+==== Simple queries
 
 Listing all data can be archived by this easy call:
 
@@ -214,6 +224,8 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1) | jq .
 }
 ----
 
+==== System queries
+
 System queries allow further control of the amount and order of the data and
 can be used in the used manner.
 
@@ -221,7 +233,7 @@ Counting the actual data can be done with `$count`:
 
 [source,bash]
 ----
-$ curl -s http://localhost:8080/odata/Todos?\$count=true | jq .
+$ curl -s http://localhost:8080/odata/Todos?$count=true | jq .
 {
   "@odata.context": "$metadata#Todos",
   "@odata.count": 2, # <1>
@@ -245,7 +257,7 @@ Further limiting the data can be done via `$top` and `$skip`:
 
 [source,bash]
 ----
-$ curl -s http://localhost:8080/odata/Todos?\$skip=1 | jq .
+$ curl -s http://localhost:8080/odata/Todos?$skip=1 | jq .
 {
   "@odata.context": "$metadata#Todos",
   "value": [
@@ -256,7 +268,7 @@ $ curl -s http://localhost:8080/odata/Todos?\$skip=1 | jq .
     }
   ]
 }
-$ curl -s http://localhost:8080/odata/Todos?\$top=1 | jq .
+$ curl -s http://localhost:8080/odata/Todos?$top=1 | jq .
 {
   "@odata.context": "$metadata#Todos",
   "value": [
@@ -273,7 +285,7 @@ And limiting the number of actual properties can be done with `$select`:
 
 [source,bash]
 ----
-$ curl -s http://localhost:8080/odata/Todos(ID=1)?\$select=Title | jq .
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
 {
   "@odata.context": "$metadata#Todos(ID,Title)/$entity",
   "@odata.id": "Todos(1)",
@@ -281,14 +293,15 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?\$select=Title | jq .
   "Title": "Todo string"
 }
 ----
-<1> This doesn't apply to key properties; they are always included.
+<1> This doesn't apply to key properties; they are always included
 
-Our service document from above included the navigational properties Tasks and
-this can be used to also request related entities and expand them via `$expand`:
+Our service document from above included a navigational properties called Tasks
+and this can be used to also request related entities and expand them via
+`$expand`:
 
 [source,bash]
 ----
-$ curl -s http://localhost:8080/odata/Todos(ID=1)?\$expand=Tasks | jq .
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?$expand=Tasks | jq .
 {
   "@odata.context": "$metadata#Todos(Tasks())/$entity",
   "ID": 1,
@@ -302,6 +315,98 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?\$expand=Tasks | jq .
       "Description": "Task string"
     }
   ]
+}
+----
+
+#### Arithmetic expressions
+
+Interestingly arithmetic expressions are also supported, so we can use operators like
+`add`, `sub`, `mod`, `div` and `mul` e.g. on ID:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos?$filter=ID mul 1 eq 1 | jq . # <1>
+{
+  "@odata.context": "$metadata#Todos",
+  "value": [
+    {
+      "ID": 1,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    }
+  ]
+}
+----
+<1> I am quite sure someone has a valid use-case for this. (see [xkcd 1127][])
+
+#### Complex queries
+
+And to conclude and make it a bit worse everything from above can be freely combined into
+beauties like this:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos?$filter=ID div 1 eq 1&$select=Title&$expand=Tasks($select=Title) | jq .
+{
+  "@odata.context": "$metadata#Todos(ID,Title,Tasks(ID,Title))",
+  "value": [
+    {
+      "@odata.id": "Todos(1)",
+      "ID": 1,
+      "Title": "Todo string",
+      "Tasks": [
+        {
+          "@odata.id": "Tasks(1)",
+          "ID": 1,
+          "Title": "Task string"
+        }
+      ]
+    }
+  ]
+}
+----
+
+### Rest of CRUD
+
+Lastly the missing [CRUD][] operations can be used in a similar fashion as above and should not
+provoke anymore questions:
+
+#### Create an entity
+
+[source,bash]
+----
+$ curl -s -X POST --json '{"Title":"test", "Description":"test"}' http://localhost:8080/odata/Todos | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "ID": 3,
+  "Title": "test",
+  "Description": "test"
+}
+----
+
+#### Update an entity
+
+[source,bash]
+----
+$ curl -s -X PATCH --json '{"Title":"test3", "Description":"test3"}' http://localhost:8080/odata/Todos(3) | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "ID": 3,
+  "Title": "test",
+  "Description": "test"
+}
+----
+
+#### Delete an entity
+
+[source,bash]
+----
+$ curl -s -X DELETE http://localhost:8080/odata/Todos(3) | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "ID": 3,
+  "Title": "test",
+  "Description": "test"
 }
 ----
 
