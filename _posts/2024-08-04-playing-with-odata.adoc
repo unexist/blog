@@ -2,8 +2,8 @@
 layout: post
 title: Playing with OData
 description: This blog introduces OData and summarizes its main similarities and differences to plain REST.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2024-08-04 17:23 +0200
+last_updated: 2024-08-04 17:23 +0200
 author: Christoph Kappel
 tags: rest odata showcase
 categories: tech
