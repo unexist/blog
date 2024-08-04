@@ -160,11 +160,35 @@ $ curl -s http://localhost:8080/odata/$metadata | jq .
 }
 ----
 <1> Primitives and basic types
-<2> Tasks is an embedded type
-<3> Navigational property
-<4> The enclosing container that holds the sets and imports.
+<2> Tasks is an embedded entity type
+<3> Navigational properties allow access to related entities
+<4> The enclosing container that holds the sets and imports
 
-=== Query, Filter, Expand
+Next up we are going to see how the service can actually be queries for data.
+
+=== Query, Filter, Expand and Order
+
+OData provides by default lots of different ways to query for the actual data of
+the service.
+
+Listing all data can be archived by this easy call:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "value": [
+    {
+      "ID": 1,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    }
+  ]
+}
+----
+
+Querying for more specific data can be done either by key properties:
 
 [source,bash]
 ----
@@ -177,6 +201,8 @@ $ curl -s http://localhost:8080/odata/Todos(1) | jq .
 }
 ----
 
+Or more generally by all kind of properties directly via URL:
+
 [source,bash]
 ----
 $ curl -s http://localhost:8080/odata/Todos(ID=1) | jq .
@@ -188,20 +214,81 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1) | jq .
 }
 ----
 
-[source,bash]
-----
-$ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
-{
-  "@odata.context": "$metadata#Todos(ID,Title)/$entity",
-  "@odata.id": "Todos(1)",
-  "ID": 1,
-  "Title": "Todo string"
-}
-----
+System queries allow further control of the amount and order of the data and
+can be used in the used manner.
+
+Counting the actual data can be done with `$count`:
 
 [source,bash]
 ----
-$ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
+$ curl -s http://localhost:8080/odata/Todos?\$count=true | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "@odata.count": 2, # <1>
+  "value": [
+    {
+      "ID": 1,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    },
+    {
+      "ID": 2,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    }
+  ]
+}
+----
+<1> The count of items is included at the root level of the document
+
+Further limiting the data can be done via `$top` and `$skip`:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos?\$skip=1 | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "value": [
+    {
+      "ID": 1,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    }
+  ]
+}
+$ curl -s http://localhost:8080/odata/Todos?\$top=1 | jq .
+{
+  "@odata.context": "$metadata#Todos",
+  "value": [
+    {
+      "ID": 2,
+      "Title": "Todo string",
+      "Description": "Todo string"
+    }
+  ]
+}
+----
+
+And limiting the number of actual properties can be done with `$select`:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?\$select=Title | jq .
+{
+  "@odata.context": "$metadata#Todos(ID,Title)/$entity",
+  "@odata.id": "Todos(1)",
+  "ID": 1, # <1>
+  "Title": "Todo string"
+}
+----
+<1> This doesn't apply to key properties; they are always included.
+
+Our service document from above included the navigational properties Tasks and
+this can be used to also request related entities and expand them via `$expand`:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos(ID=1)?\$expand=Tasks | jq .
 {
   "@odata.context": "$metadata#Todos(Tasks())/$entity",
   "ID": 1,
