@@ -176,8 +176,8 @@ Next up we are going to see how the service can actually be queries for data.
 
 === Query, Expand, Filter and Order
 
-OData provides by default lots of different ways to query for the actual data of
-the service.
+OData provides by default a wide range of different ways to query for the
+actual data of the service.
 
 ==== Simple queries
 
@@ -262,7 +262,7 @@ $ curl -s http://localhost:8080/odata/Todos?$skip=1 | jq .
   "@odata.context": "$metadata#Todos",
   "value": [
     {
-      "ID": 1,
+      "ID": 2,
       "Title": "Todo string",
       "Description": "Todo string"
     }
@@ -273,7 +273,7 @@ $ curl -s http://localhost:8080/odata/Todos?$top=1 | jq .
   "@odata.context": "$metadata#Todos",
   "value": [
     {
-      "ID": 2,
+      "ID": 1,
       "Title": "Todo string",
       "Description": "Todo string"
     }
@@ -295,7 +295,7 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?$select=Title | jq .
 ----
 <1> This doesn't apply to key properties; they are always included
 
-Our service document from above included a navigational properties called Tasks
+Our service document from above included a navigational property called Tasks
 and this can be used to also request related entities and expand them via
 `$expand`:
 
@@ -313,6 +313,28 @@ $ curl -s http://localhost:8080/odata/Todos(ID=1)?$expand=Tasks | jq .
       "TodoID": 1,
       "Title": "Task string",
       "Description": "Task string"
+    }
+  ]
+}
+----
+
+Ordering is also possible and works a bit like the order by clause of [SQL][]:
+
+[source,bash]
+----
+$ curl -s http://localhost:8080/odata/Todos?$orderby=ID desc | jq . # <1>
+{
+  "@odata.context": "$metadata#Todos",
+  "value": [
+    {
+      "ID": 2,
+      "Title": "test",
+      "Description": "test"
+    },
+    {
+      "ID": 1,
+      "Title": "test",
+      "Description": "test"
     }
   ]
 }
@@ -388,12 +410,20 @@ $ curl -s -X POST --json '{"Title":"test", "Description":"test"}' http://localho
 
 [source,bash]
 ----
-$ curl -s -X PATCH --json '{"Title":"test3", "Description":"test3"}' http://localhost:8080/odata/Todos(3) | jq .
+$ curl -v -X PUT --json '{"Title":"test3", "Description":"test3"}' http://localhost:8080/odata/Todos(3)
+> PUT /odata/Todos(3) HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.1.2
+> Accept: */*
+>
+< HTTP/1.1 204 No Content
+...
+$ curl -s http://localhost:8080/odata/Todos(3) | jq .
 {
   "@odata.context": "$metadata#Todos",
   "ID": 3,
-  "Title": "test",
-  "Description": "test"
+  "Title": "test3",
+  "Description": "test3"
 }
 ----
 
@@ -401,12 +431,20 @@ $ curl -s -X PATCH --json '{"Title":"test3", "Description":"test3"}' http://loca
 
 [source,bash]
 ----
-$ curl -s -X DELETE http://localhost:8080/odata/Todos(3) | jq .
+$ curl -v -X DELETE http://localhost:8080/odata/Todos(3)
+> PUT /odata/Todos(3) HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.1.2
+> Accept: */*
+>
+< HTTP/1.1 204 No Content
+...
+$ curl -s http://localhost:8080/odata/Todos(3) | jq .
 {
-  "@odata.context": "$metadata#Todos",
-  "ID": 3,
-  "Title": "test",
-  "Description": "test"
+  "error": {
+    "code": null,
+    "message": "Entity for requested key doesn't exist"
+  }
 }
 ----
 
