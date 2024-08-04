@@ -74,8 +74,10 @@ The protocol adheres to following principles and specifications:
 
 === Service documents
 
-A good starting point for interaction with OData is the *atom service document* at
-the root of the service, which gives a brief list of the names and feeds provided here:
+A good starting point for interaction with every OData service is the *atom service document* at
+the root of it.
+It can be requested with a simple call with e.g. [curl][] and includes a brief list of the
+names and feeds handled by the service:
 
 [source,bash]
 ----
@@ -95,11 +97,15 @@ $ curl -s -H "accept: application/json" http://localhost:8080/odata/ | jq .
 }
 ----
 
-More fined grained details can be fetched via the *metadata document*, which contains a
-complete description of the feeds, types, properties and relationships exposed by this
-service in [Entity Data Model][] (or EDM respectively EDMX if you insist on [XML][]).
+If you require more details the next best option is the *metadata document*, which
+contains a complete description of the feeds, types, properties and relationships exposed
+by this service.
 
-This model contains following basic types:
+In case you have wondered about the particular format of the previous document, the next
+own follows suit, but includes more objects and probably justifies some explanations in
+advance.
+The general format is called [Entity Data Model][] (or EDM respectively EDMX
+if you insist on [XML][]) and mainly consists of these types:
 
 |====
 | *Entity types* | Domain objects with a key, properties and relationships - like [Todo][]
@@ -107,8 +113,8 @@ This model contains following basic types:
 | *Entity sets* | Aggregate entities of a given type
 |====
 
-The output can be pretty long, but here is a sample of the Todo entity in a few dozen
-lines of [JSON][]:
+The output can be pretty long, but a shorted version of the Todo entity looks like this in
+[JSON][]:
 
 [source,bash]
 ----
