@@ -1,0 +1,34 @@
+---
+layout: post
+title: The many facets of domain-driven design
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: ddd
+categories: software-design myself
+toc: true
+---
+Discovering [domain-driven design][] has been an interesting journey for me.
+Over the course of the last fives years I discovered more and more
+different facets of it and I am still amazed how this model helps to understand
+me to different old and new domain contexts.
+
+This in this more theoretical blog post I want to talk about the different
+phases and explain what has been the real benefit for me.
+
+== Tactically and strategically?
+
+== Where is the framework?
+
+== Inside and outside of bounded contexts
+
+== Discovering old and new
+
+== Conclusion
+
+----
+https://www.agile-academy.com/en/agile-dictionary/persona/
+https://martinfowler.com/bliki/UbiquitousLanguage.html
+https://egon.io
+----
