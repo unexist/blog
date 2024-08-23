@@ -10,12 +10,11 @@ categories: software-design myself
 toc: true
 ---
 Discovering [domain-driven design][] has been an interesting journey for me.
-Over the course of the last fives years I discovered more and more
-different facets of it and I am still amazed how this model helps to understand
-me to different old and new domain contexts.
+Over the course of the last fives years I discovered more and more different facets of it and I am
+still amazed how this model helps to understand me to different old and new domain contexts.
 
-This in this more theoretical blog post I want to talk about the different
-phases and explain what has been the real benefit for me.
+This in this more theoretical blog post I want to talk about the different phases and facets and
+also lay out what has been the real benefit for me.
 
 == Tactically and strategically?
 
@@ -27,8 +26,17 @@ phases and explain what has been the real benefit for me.
 
 == Conclusion
 
+[bibliography]
+== Bibliography
+
+* [[[ddd]]] Eric Evans, Domain-Driven Design: Tackling Complexity in the Heart of Software, Addison-Wesley Professional 2003
+* [[[implddd]]] Vernon Vaughn, Matei Zaharia, Implementing Domain-Driven Design, Addison-Wesley Professional 2013
+* [[[learnddd]]] Vladik Khononov, Learning Domain-Driven Design: Aligning Software Architecture and Business Strategy, O'Reilly 2021
+* [[[patternsddd]]] Scott Millett, Nick Tune, Patterns Principles and Practices of Domain Driven Design, Wrox 2015
+* [[[eventstorm]]] Alberto Brandolini, Introducing EventStorming, LeanPub 2015
+* [[[storytelling]]] Henning Schwentner, Stefan Hofer , Domain Storytelling: A Collaborative, Visual, and Agile Way to Build Domain-Driven Software, Addison-Wesley Professional 2021
+
 ----
-https://www.agile-academy.com/en/agile-dictionary/persona/
 https://martinfowler.com/bliki/UbiquitousLanguage.html
 https://egon.io
 ----
