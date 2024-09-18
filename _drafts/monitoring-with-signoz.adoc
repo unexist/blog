@@ -19,25 +19,48 @@ endif::[]
 :table-caption!:
 
 It has been a while since my last excursion into the world of monitoring or rather
-observability and meanwhile I'd say my own understanding of the whole idea has improved.
+[observability][] and meanwhile I'd say my own understanding of the whole idea has improved.
 
-So right about time to put the EFK stack by side and try something different.
+So for the course of this blog post we put the [EFK][] stack along with [jaeger] from my previous
+post away and create an easier, but more complete example with Golang and [SigNoz][].
 
-== Logging
+Ready? Go!
+
+== What is SigNoz?
+
+== Pillars in practice
+
+=== Logging
+
+==== Instrumentation
+
+==== Examples
 
 image::logs.png[]
 
 image::logs-aggregate.png[]
 
-== Tracing
+=== Tracing
+
+==== Instrumentation
+
+==== Examples
 
 image::traces.png[]
 
-== Metrics
+=== Metrics
+
+==== Instrumentation
+
+==== Examples
 
 image::metrics.png[]
 
-== Alerts
+=== Alerts
+
+==== Instrumentation
+
+==== Examples
 
 image::alerts.png[]
 
