@@ -1,0 +1,48 @@
+---
+layout: post
+title: Monitoring with SigNoz
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/monitoring_with_signoz
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/monitoring_with_signoz
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+It has been a while since my last excursion into the world of monitoring or rather
+observability and meanwhile I'd say my own understanding of the whole idea has improved.
+
+So right about time to put the EFK stack by side and try something different.
+
+== Logging
+
+image::logs.png[]
+
+image::logs-aggregate.png[]
+
+== Tracing
+
+image::traces.png[]
+
+== Metrics
+
+image::metrics.png[]
+
+== Alerts
+
+image::alerts.png[]
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase-microservices-golang>
