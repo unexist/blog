@@ -28,6 +28,11 @@ Ready? Go!
 
 == What is SigNoz?
 
+When you visit the frontpage of the project this probably catches your attention pretty early on:
+
+[quote,https://signoz.io]
+OpenTelemetry-Native Logs, Metrics and Traces in a single pane
+
 == Pillars in practice
 
 === Logging
