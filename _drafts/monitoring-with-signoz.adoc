@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 It has been a while since my last excursion into the world of monitoring or rather
 [observability][] and meanwhile I'd say my own understanding of the whole idea has improved.
@@ -32,6 +33,44 @@ When you visit the frontpage of the project this probably catches your attention
 
 [quote,https://signoz.io]
 OpenTelemetry-Native Logs, Metrics and Traces in a single pane
+
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+rectangle "App1" as app1
+rectangle "App2" as app2
+rectangle "Otel Collector 1" as otel1
+rectangle "Otel Collector 2" as otel2
+
+card "SigNoz" as signoz {
+    rectangle "SigNoz Otel Collector" as sigotel
+    database "Clickhouse" as clickhouse
+    rectangle "Query Service" as query
+    rectangle "Alert Manager" as alert
+    rectangle "Frontend" as fe
+}
+
+app1 -[hidden]d-> app2
+app2 -[hidden]d-> otel1
+otel1 -[hidden]d-> otel2
+
+app1 -r-> sigotel
+app2 -r-> sigotel
+otel1 -r-> sigotel
+otel2 -r-> sigotel
+
+sigotel -> clickhouse
+clickhouse -> query
+query <----> alert
+query <----> fe
+
+{% endplantuml %}
+++++
 
 == Pillars in practice
 
