@@ -5,8 +5,8 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
-categories: tech
+tags: tracing opentelemetry logging prometheus logsprout alertmanager signozshowcase
+categories: observability
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -19,20 +19,31 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-It has been a while since my last excursion into the world of monitoring or rather
-[observability][] and meanwhile I'd say my own understanding of the whole idea has improved.
+Finding good examples for monitoring or rather [observability] is really difficult, because either they are heavily
+contrived like the one I've used in my last blogpost about <Logging vs Tracing> and/or there wasn't the singular
+impact on production, that made you wish for better monitoring yet and it is difficult to understand the merit.
 
-So for the course of this blog post we put the [EFK][] stack along with [jaeger] from my previous
-post away and create an easier, but more complete example with Golang and [SigNoz][].
-
-Ready? Go!
+Still, nobody got fired from [line-through]#buying IBM# ramping up monitoring, so let us - for the course of this
+post - put our [EFK][] stack along with [jaeger]  away and get started with something fancy new.
 
 == What is SigNoz?
 
-When you visit the frontpage of the project this probably catches your attention pretty early on:
+If you are like me and you haven't heard SigNoz before the first and foremost questions are probably what is SigNoz
+and why not [insert random other solution here] to the same problem.
+
+From a marketing perspective the key selling point for me probably was the headline on the frontpage:
 
 [quote,https://signoz.io]
 OpenTelemetry-Native Logs, Metrics and Traces in a single pane
+
+Without further knowing, this was exactly what I need:
+
+- FOSS
+- Single solution to the three pillars
+- Nice and complete package
+
+That sounds rather good, but time to put my technical hat and check the brief.
+Thankfully they provide an architecture overview as well and this quickly caught my eye:
 
 ++++
 {% plantuml %}
@@ -42,12 +53,8 @@ skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-together {
-    rectangle "App1 (1)" as app1
-    rectangle "App2" as app2
-    rectangle "Otel Collector 1 (2)" as otel1
-    rectangle "Otel Collector 2" as otel2
-}
+rectangle "App (1))" as app
+rectangle "Otel Collector (2)" as otel
 
 card "SigNoz (3)" as signoz {
     rectangle "SigNoz Otel Collector" as sigotel
@@ -57,19 +64,15 @@ card "SigNoz (3)" as signoz {
     rectangle "Frontend" as fe
 }
 
-app1 -[hidden]d-> app2
-app2 -[hidden]d-> otel1
-otel1 -[hidden]d-> otel2
+app -[hidden]d-> otel
 
-app1 -r-> sigotel
-app2 -r-> sigotel
-otel1 -r-> sigotel
-otel2 -r-> sigotel
+app -r-> sigotel
+otel -l-> sigotel
 
-sigotel -> clickhouse
-clickhouse -> query
-query <----> alert
-query <-r----> fe
+sigotel --> clickhouse
+clickhouse --> query
+query <--> alert
+query <-> fe
 {% endplantuml %}
 ++++
 
