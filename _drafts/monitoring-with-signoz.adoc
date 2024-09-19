@@ -78,11 +78,11 @@ query <-> fe
 ++++
 <1> Apps directly send data to SigNoz
 <2> [Otel collectors][] can transmit data as well
-<3> Internal there is another collector to provide the endpoints to receive data
+<3> Internally sits another collector to provide the endpoints to receive data
 <4> Columnar storage? Though I haven't heared of [Clickhouse][] either before
 <5> Some abstraction to query the actual data
 <6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
-<7> We talked about shiny - there it is
+<7> And the shiny bit we've spoken of before
 
 == Pillars in practice
 
