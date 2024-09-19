@@ -42,12 +42,14 @@ skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-rectangle "App1" as app1
-rectangle "App2" as app2
-rectangle "Otel Collector 1" as otel1
-rectangle "Otel Collector 2" as otel2
+together {
+    rectangle "App1 (1)" as app1
+    rectangle "App2" as app2
+    rectangle "Otel Collector 1 (2)" as otel1
+    rectangle "Otel Collector 2" as otel2
+}
 
-card "SigNoz" as signoz {
+card "SigNoz (3)" as signoz {
     rectangle "SigNoz Otel Collector" as sigotel
     database "Clickhouse" as clickhouse
     rectangle "Query Service" as query
@@ -67,8 +69,7 @@ otel2 -r-> sigotel
 sigotel -> clickhouse
 clickhouse -> query
 query <----> alert
-query <----> fe
-
+query <-r----> fe
 {% endplantuml %}
 ++++
 
