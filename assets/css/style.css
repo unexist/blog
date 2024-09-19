@@ -434,6 +434,11 @@ svg.linkedin #path28, svg.linkedin #path30 {
     color: var(--code-color);
 }
 
+.post-content p code {
+    background-color: var(--top-color);
+    color: var(--code-color);
+}
+
 .post-content pre {
     display: grid;
     text-align: left;
