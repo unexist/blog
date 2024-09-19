@@ -24,25 +24,26 @@ contrived like the one I've used in my last blogpost about <Logging vs Tracing> 
 impact on production, that made you wish for better monitoring yet and it is difficult to understand the merit.
 
 Still, nobody got fired from [line-through]#buying IBM# ramping up monitoring, so let us - for the course of this
-post - put our [EFK][] stack along with [jaeger]  away and get started with something fancy new.
+post - put our [EFK][] stack along with [jaeger] away and get started with something shiny new.
 
 == What is SigNoz?
 
-If you are like me and you haven't heard SigNoz before the first and foremost questions are probably what is SigNoz
-and why not [insert random other solution here] to the same problem.
+If you are like me and you haven't heard the name [SigNoz][] before the first and foremost questions are probably
+what is SigNoz and why not one of these solutions `insert random product here`.
 
-From a marketing perspective the key selling point for me probably was the headline on the frontpage:
+From a marketing perspective the key selling point for me probably and honestly was the headline on the
+frontpage:
 
 [quote,https://signoz.io]
 OpenTelemetry-Native Logs, Metrics and Traces in a single pane
 
-Without further knowing, this was exactly what I need:
+Without further knowing before, this was exactly what I need:
 
-- FOSS
-- Single solution to the three pillars
-- Nice and complete package
+. [FOSS][]
+. Single solution to address the [three pillars][]
+. Nice and complete package
 
-That sounds rather good, but time to put my technical hat and check the brief.
+That sounds rather good, but time to put my technical hat and to check the brief.
 Thankfully they provide an architecture overview as well and this quickly caught my eye:
 
 ++++
@@ -56,12 +57,12 @@ skinparam ranksep 20
 rectangle "App (1))" as app
 rectangle "Otel Collector (2)" as otel
 
-card "SigNoz (3)" as signoz {
-    rectangle "SigNoz Otel Collector" as sigotel
-    database "Clickhouse" as clickhouse
-    rectangle "Query Service" as query
-    rectangle "Alert Manager" as alert
-    rectangle "Frontend" as fe
+card "SigNoz" as signoz {
+    rectangle "SigNoz Otel Collector (3)" as sigotel
+    database "Clickhouse (4)" as clickhouse
+    rectangle "Query Service (5)" as query
+    rectangle "Alert Manager (6)" as alert
+    rectangle "Frontend (7)" as fe
 }
 
 app -[hidden]d-> otel
@@ -75,14 +76,17 @@ query <--> alert
 query <-> fe
 {% endplantuml %}
 ++++
+<1> Apps directly send data to SigNoz
+<2> [Otel collectors][] can transmit data as well
+<3> Internal there is another collector to provide the endpoints to receive data
+<4> Columnar storage? Though I haven't heared of [Clickhouse][] either before
+<5> Some abstraction to query the actual data
+<6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
+<7> We talked about shiny - there it is
 
 == Pillars in practice
 
 === Logging
-
-==== Instrumentation
-
-==== Examples
 
 image::logs.png[]
 
@@ -90,25 +94,13 @@ image::logs-aggregate.png[]
 
 === Tracing
 
-==== Instrumentation
-
-==== Examples
-
 image::traces.png[]
 
 === Metrics
 
-==== Instrumentation
-
-==== Examples
-
 image::metrics.png[]
 
 === Alerts
-
-==== Instrumentation
-
-==== Examples
 
 image::alerts.png[]
 
