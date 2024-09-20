@@ -26,7 +26,8 @@ difficult to understand the merit and invest of time.
 And even when you make the decision to dive into it, a good advise is probably not to start on production, but with
 a simple example.
 Simple examples on the other hand rarely show the real powers, so it usually ends in heavily contrived ones like
-the one I've used in my last blogpost about <Logging vs Tracing>.
+the one I've used in my last blogpost about
+{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
 Still, nobody got fired from [line-through]#buying IBM# ramping up monitoring, so let us - for the course of this
 post - put our [EFK][] stack and friends aside and get started with something shiny new.
@@ -42,14 +43,15 @@ frontpage:
 [quote,https://signoz.io]
 OpenTelemetry-Native Logs, Metrics and Traces in a single pane
 
-Without further knowing before, this was exactly what I need:
+Without knowing prior to that, this was exactly what I need, so well done marketing:
 
 . [FOSS][]
 . Single solution to address the [three pillars][]
 . Nice and complete package
 
-That sounds rather good, but time to put my technical hat and to check the brief.
-Thankfully they provide an architecture overview as well and this quickly caught my eye:
+That sounds rather too good, but time to put my wizard hat and to check the brief.
+Before even messing with [docker-compose][] they thankfully provide an architecture overview and this looks like
+they hold their part of the deal:
 
 ++++
 {% plantuml %}
