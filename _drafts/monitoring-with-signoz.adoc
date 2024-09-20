@@ -95,7 +95,33 @@ query <-> fe
 
 == Pillars in practice
 
+There is plenty of explanation and definition out there, way better than I can ever provide, but just to
+call the three back to your memory:
+
+[cols="1,5"]
+|===
+| Logging
+| Historical records of system events and errors
+
+| Tracing
+| Visualization of requests flowing through (distributed) systems
+
+| Metrics
+| Numerical data like e.g. performance, response time, memory consumption
+|===
+
 === Logging
+
+[source,go]
+----
+logEvent.Str("client_id", param.ClientIP).
+    Str("method", param.Method).
+    Int("status_code", param.StatusCode).
+    Int("body_size", param.BodySize).
+    Str("path", param.Path).
+    Str("latency", param.Latency.String()).
+    Msg(param.ErrorMessage)
+----
 
 image::logs.png[]
 
