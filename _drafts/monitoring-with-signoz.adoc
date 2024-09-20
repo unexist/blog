@@ -41,7 +41,9 @@ From a marketing perspective the key selling point for me probably and honestly 
 frontpage:
 
 [quote,https://signoz.io]
+____
 OpenTelemetry-Native Logs, Metrics and Traces in a single pane
+____
 
 Without knowing prior to that, this was exactly what I need, so well done marketing:
 
@@ -61,12 +63,12 @@ skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-rectangle "App (1))" as app
-rectangle "Otel Collector (2)" as otel
+rectangle "App (1))" as app #crimson
+rectangle "Otel Collector (2)" as otel #green
 
 card "SigNoz" as signoz {
     rectangle "SigNoz Otel Collector (3)" as sigotel
-    database "Clickhouse (4)" as clickhouse
+    database "Clickhouse (4)" as clickhouse #navy
     rectangle "Query Service (5)" as query
     rectangle "Alert Manager (6)" as alert
     rectangle "Frontend (7)" as fe
