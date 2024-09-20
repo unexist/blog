@@ -93,6 +93,8 @@ query <-> fe
 <6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
 <7> And the shiny bit we've spoken of before
 
+== Collecting data
+
 == Pillars in practice
 
 There is plenty of explanation and definition out there, way better than I can ever provide, but just to
@@ -112,6 +114,9 @@ call the three back to your memory:
 
 === Logging
 
+My previous article explain in detail why [structured logging][] in general is a good idea, so we can just reap
+the fruits and throw in [zerolog][] in a [Gin-gonic middleware][]:
+
 [source,go]
 ----
 logEvent.Str("client_id", param.ClientIP).
@@ -123,7 +128,12 @@ logEvent.Str("client_id", param.ClientIP).
     Msg(param.ErrorMessage)
 ----
 
+SigNoz offers lots of different options to search data and if ever tried to use [Kibana][] and the likes you
+propaly feel at home right away:
+
 image::logs.png[]
+
+There is also no reason to shy away if you require some kind of aggregation and diagrams with bars:
 
 image::logs-aggregate.png[]
 
