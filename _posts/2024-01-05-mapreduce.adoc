@@ -47,11 +47,9 @@ This is from a technical point interesting, but storage alone is only half the f
 So in this follow-up we are going to dive into the world of {10}[MapReduce], the unit-test framework
 {13}[MRUnit] and a really simple {18}[todo] example to demonstrate the advantages of the whole idea.
 
-While not strictly required to understand why Hadoop is an excellent choice for storage, it really
-helps to have a bit of understanding for the course of this article, so if you haven't read the
-previous post yet, we will wait - promised:
-
-<https://unexist.blog/big-data/2023/10/27/big-data.html>
+TIP: While not strictly required to understand why Hadoop is an excellent choice for storage, it really
+     helps to have a bit of understanding for the course of this article, so if you haven't read the
+     previous post yet, we will wait - promised: {{ site.url }}{% post_url 2023-10-27-big-data %}[Introduction to Big Data]
 
 Ready? So without further ado let us start.
 

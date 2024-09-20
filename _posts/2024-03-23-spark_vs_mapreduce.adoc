@@ -59,8 +59,8 @@ Ready?
 Onwards!
 
 TIP: If you've missed the previous posts just have a look over here
-     <https://unexist.blog/big-data/2023/10/27/big-data.html> and here
-     <https://unexist.blog/big-data/2024/01/05/mapreduce.html>.
+     {{ site.url }}{% post_url 2023-10-27-big-data %}[Introduction to Big Data] and here
+     {{ site.url }}{% post_url 2024-01-05-mapreduce %}[MapReduce for Big Data].
 
 == What is Spark?
 
