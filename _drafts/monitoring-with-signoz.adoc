@@ -19,12 +19,17 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-Finding good examples for monitoring or rather [observability] is really difficult, because either they are heavily
-contrived like the one I've used in my last blogpost about <Logging vs Tracing> and/or there wasn't the singular
-impact on production, that made you wish for better monitoring yet and it is difficult to understand the merit.
+Finding good reasoning to explore different options for monitoring or better [observability] is difficult.
+Either there wasn't the singular impact on production yet, that made you lust for better monitoring and/or it is
+difficult to understand the merit and invest of time.
+
+And even when you make the decision to dive into it, a good advise is probably not to start on production, but with
+a simple example.
+Simple examples on the other hand rarely show the real powers, so it usually ends in heavily contrived ones like
+the one I've used in my last blogpost about <Logging vs Tracing>.
 
 Still, nobody got fired from [line-through]#buying IBM# ramping up monitoring, so let us - for the course of this
-post - put our [EFK][] stack along with [jaeger] away and get started with something shiny new.
+post - put our [EFK][] stack and friends aside and get started with something shiny new.
 
 == What is SigNoz?
 
@@ -76,9 +81,9 @@ query <--> alert
 query <-> fe
 {% endplantuml %}
 ++++
-<1> Apps directly send data to SigNoz
+<1> Apps can directly send data to SigNoz
 <2> [Otel collectors][] can transmit data as well
-<3> Internally sits another collector to provide the endpoints to receive data
+<3> Internally another collector provides the endpoints to receive data
 <4> Columnar storage? Though I haven't heared of [Clickhouse][] either before
 <5> Some abstraction to query the actual data
 <6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
