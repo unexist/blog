@@ -23,13 +23,13 @@ Finding good reasoning to explore different options for monitoring or better [ob
 Either there wasn't the singular impact on production yet, that made you lust for better monitoring and/or it is
 difficult to understand the merit and invest of time.
 
-And even when you make the decision to dive into it, a good advise is probably not to start on production, but with
+And even when you make the decision to dive into it, it is always a good idea not to start on production, but with
 a simple example.
 Simple examples on the other hand rarely show the real powers, so it usually ends in heavily contrived ones like
-the one I've used in my last blogpost about
+the one I've used in my last post about
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
-Still, nobody got fired from [line-through]#buying IBM# ramping up monitoring, so let us - for the course of this
+Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for the course of this
 post - put our [EFK][] stack and friends aside and get started with something shiny new.
 
 == What is SigNoz?
@@ -47,13 +47,13 @@ ____
 
 Without knowing prior to that, this was exactly what I need, so well done marketing:
 
-. [FOSS][]
+. Seems to be [FOSS][]
 . Single solution to address the [three pillars][]
 . Nice and complete package
 
-That sounds rather too good, but time to put my wizard hat and to check the brief.
-Before even messing with [docker-compose][] they thankfully provide an architecture overview and this looks like
-they hold their part of the deal:
+That sounds rather too good, but time to put on my wizard hat and to check the brief.
+Before messing with [docker-compose][], I checked the documentation and discovered an architecture overview and
+this looks like they hold their part of the bargain:
 
 ++++
 {% plantuml %}
@@ -87,26 +87,27 @@ query <-> fe
 ++++
 <1> Apps can directly send data to SigNoz
 <2> [Otel collectors][] can transmit data as well
-<3> Internally another collector provides the endpoints to receive data
-<4> Columnar storage? Though I haven't heared of [Clickhouse][] either before
+<3> Internally another custom collector provides the endpoints to receive data
+<4> Though I haven't heared of [Clickhouse][] either before, but columnar storage sounds about right
 <5> Some abstraction to query the actual data
 <6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
 <7> And the shiny bit we've spoken of before
 
 == Collecting data
 
-Once Signoz is running, which basically boils down to calling docker-compose, a nice trick question is how to
+Once Signoz is running, which basically boils down to calling docker-compose, a nice starter question is how to
 deliver your actual data to it.
 
 [Opentelemetry][] is the defacto standard for that and offers many ways to gather, collect and transmit
 data via highly configurable [pipelines][].
-The only noteworthy thing here to pay attention to the size of the generated logs file - which may cause some
-headaches as it did for me.
+The only noteworthy thing here to pay attention to the size of the generated logs - which may cause some
+headaches as it did for me during my vacation.
 
 While playing with SigNoz I discovered it doesn't connect each of its containers separately to an
-[Opentelemetry Collector][].footnote:[otelcol in short], but passes this task to [logspout][].
+[Opentelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a container
+with [logspout][].
 
-We've already know marketing works for me, so try to guess what their words did to me:
+After a quick glance at the [Github][] page marketing did its thing again:
 
 [quote,https://github.com/gliderlabs/logspout]
 ____
@@ -114,8 +115,8 @@ Logspout is a log router for Docker containers that runs inside Docker. It attac
 then routes their logs wherever you want. It also has an extensible module system.
 ____
 
-Right, this sounded like a splendid idea and is exactly what I do inside of my example.
-In fact, there isn't much we have to do at all config-wise:
+Right, this sounded like a splendid idea and is exactly what I do in my example.
+In fact, there isn't much we have to configure at all:
 
 . [Docker][] needs a minimal config to get us started:
 +
@@ -127,13 +128,14 @@ In fact, there isn't much we have to do at all config-wise:
     pull_policy: if_not_present
     volumes:
       - /etc/hostname:/etc/host_hostname:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock # (2)
     command: syslog+tcp://otelcol:2255 # (1)
     depends_on:
       - otelcol
     restart: on-failure
 ----
-<1> This configures a connection to a receiver of our otelcol instance and comes up next
+<1> Logspout needs access to Dockler
+<2> This configures a connection to a receiver of our otelcol instance and comes up next
 
 . And we have to define a receiver in otelcol:
 +
@@ -142,24 +144,27 @@ In fact, there isn't much we have to do at all config-wise:
 receivers:
   tcplog/docker:
     listen_address: "0.0.0.0:2255"
-    operators:
-      - type: regex_parser
+    operators: # (1)
+      - type: regex_parser # (2)
         regex: '^<([0-9]+)>[0-9]+ (?P<timestamp>[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?) (?P<container_id>\S+) (?P<container_name>\S+) [0-9]+ - -( (?P<body>.*))?'
         timestamp:
           parse_from: attributes.timestamp
           layout: '%Y-%m-%dT%H:%M:%S.%LZ'
-      - type: move
+      - type: move # (3)
         from: attributes["body"]
         to: body
       - type: remove
         field: attributes.timestamp
-      - type: filter
+      - type: filter # (4)
         id: logs_filter
-        expr: 'attributes.container_name matches "^todo-(postgres|otelcol|logsput)"'
+        expr: 'attributes.container_name matches "^todo-(postgres|otelcol|logspout)"'
       - type: json_parser
         parse_form: body
 ----
-
+<1> Operators allow to parse, modify and filter entries
+<2> This is the default format of the messages logspout forwards to otelcol
+<3> We basically move our content to the actual body of the entry
+<4> There might be lots of different containers running, so we limit the entries based on container names
 
 == Pillars in practice
 
