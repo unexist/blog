@@ -186,7 +186,7 @@ recall the three back to our memory:
 === Logging
 
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#structured-logs[Structured logging] is in general a really
-good idea, so we throw in [zerolog][] and do all the handling in a simle [Gin-gonic middleware][]:
+good idea, so we throw in [zerolog][] and do all the handling in a simple [Gin-gonic middleware][]:
 
 [source,go]
 ----
