@@ -185,15 +185,16 @@ recall the three back to our memory:
 
 === Logging
 
+The first pillar is probably the easiest and there is also lots of help and reasoning out there,
+{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#logging[including this blog].
 
-{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#logging[Logging] is in general a really
-
-{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#structured-logs[Structured logging] is in general a really
-good idea, so we throw in [zerolog][] and do all the handling in a simple [Gin-gonic middleware][]:
+So best we can do is throw in [zerolog][], add some handling in a [Gin-gonic middleware][] and
+move on:
 
 [source,go]
 ----
 logEvent.Str("client_id", param.ClientIP). // <1>
+    Str("correlation_id", correlationId). // <2>
     Str("method", param.Method).
     Int("status_code", param.StatusCode).
     Int("body_size", param.BodySize).
@@ -202,6 +203,8 @@ logEvent.Str("client_id", param.ClientIP). // <1>
     Msg(param.ErrorMessage)
 ----
 <1> The essential mapping magic happens here
+<2> A {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#correlation-between-messages[correlation id]
+can help to aggregate log messages of the same origin
 
 SigNoz offers lots of different options to search data and if you have any experience with [Kibana][] and the likes
 you will probably feel right away at home:
@@ -298,6 +301,17 @@ image::traces.png[]
 image::metrics.png[]
 
 === Alerts
+
+Although not directly related to the three pillars, [alerts][] are a nice mechanic to define thresholds and
+intervals to receive notification over various kind of channels.
+
+The [documentation][] is as usual quite nice and there isn't much to add here, besides the fact a paid
+subscription is required to connect SigNoz to teams.
+There is also a way to fallback to [Power Automate][], but unfortunately this requires another subscription.
+
+An easy way out is to use connectors for [Prometheus][]:
+
+<https://github.com/prometheus-msteams/prometheus-msteams>
 
 image::alerts.png[]
 
