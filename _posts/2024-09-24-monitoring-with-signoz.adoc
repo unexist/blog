@@ -2,8 +2,8 @@
 layout: post
 title: Monitoring with SigNoz
 description: This blog post summarizes observability, briefly explains the missing pillar from a previous post and introduces the monitoring platform SigNoz.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-09-24 17:57 +0200
+last_updated: 2024-09-24 17:57 +0200
 author: Christoph Kappel
 tags: golang tracing opentelemetry logging prometheus logsprout alertmanager signoz showcase
 categories: observability
