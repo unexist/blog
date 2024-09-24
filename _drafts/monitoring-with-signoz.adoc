@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Monitoring with SigNoz
-description: This blog post summarizes observability, briefly explains the missing pillar from a previous post and introduces the platform SigNoz.
+description: This blog post summarizes observability, briefly explains the missing pillar from a previous post and introduces the monitoring platform SigNoz.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -19,6 +19,35 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+:1: https://prometheus.io/docs/alerting/latest/alertmanager/
+:2: https://medium.com/@letathenasleep/alerting-the-dos-and-don-ts-for-effective-observability-139db9fb49d1
+:3: https://clickhouse.com/
+:4: https://docs.docker.com/compose/
+:5: https://www.docker.com/
+:6: https://signoz.io/docs/userguide/alerts-management/
+:7: https://www.digitalocean.com/community/tutorials/elasticsearch-fluentd-and-kibana-open-source-log-search-and-visualization
+:8: https://itsfoss.com/what-is-foss/
+:9: https://gin-gonic.com/docs/examples/using-middleware/
+:10: https://github.com/
+:11: https://go.dev/
+:12: https://www.elastic.co/kibana
+:14: https://github.com/gliderlabs/logspout
+:15: https://opentelemetry.io/docs/collector/
+:16: https://opentelemetry.io/
+:17: https://opentelemetry.io/docs/collector/
+:18: https://pkg.go.dev/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp
+:19: https://opentelemetry.io/docs/collector/configuration/
+:20: https://make.powerautomate.com/
+:21: https://prometheus.io/
+:22: https://signoz.io/
+:23: https://opentelemetry.io/docs/concepts/signals/traces/#attributes
+:24: https://opentelemetry.io/docs/concepts/signals/traces/#spans
+:25: https://www.crowdstrike.com/cybersecurity-101/observability/three-pillars-of-observability/
+:26: https://opentelemetry.io/docs/concepts/signals/traces/#tracer
+:27: https://github.com/rs/zerolog
+:28: https://prometheus.io/docs/concepts/metric_types/
+:29: https://grafana.com/
+
 Finding good reasoning to explore different options for monitoring or better [observability] is
 difficult.
 Either there wasn't the singular impact on production yet, that made you lust for better monitoring
@@ -31,12 +60,12 @@ contrived ones like the one I've used in my last post about
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
 Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for
-the course of this post - put our [EFK][] stack and friends aside and get started with something
-shiny new in [Golang][].
+the course of this post - put our {7}[EFK] stack and friends aside and get started with something
+shiny new in {11}[Golang].
 
 == What is SigNoz?
 
-If you are like me and you haven't heard the name [SigNoz][] before the first and foremost
+If you are like me and you haven't heard the name {22}[SigNoz] before the first and foremost
 questions are probably what is SigNoz and why not one of these solutions
 `insert random product here`.
 
@@ -50,12 +79,12 @@ ____
 
 Without knowing prior to that, this was exactly what I need, so well done marketing:
 
-. Seems to be [FOSS][]
-. Single solution to address the [three pillars][]
+. Seems to be {8}[FOSS]
+. Single solution to address the {25}[three pillars]
 . Nice and complete package
 
 That sounds rather too good, but time to put on my wizard hat and to check the brief.
-Before messing with [Docker][], I checked the documentation and discovered an architecture
+Before messing with {5}[Docker], I checked the documentation and discovered an architecture
 overview and this looks like they hold their part of the bargain:
 
 ++++
@@ -89,28 +118,28 @@ query <-> fe
 {% endplantuml %}
 ++++
 <1> Apps can directly send data to SigNoz
-<2> [Otel collectors][] can transmit data as well
+<2> {17}[Otel collectors] can transmit data as well
 <3> Internally another custom collector provides the endpoints to receive data
-<4> Though I haven't heared of [Clickhouse][] either before, but columnar storage sounds about right
+<4> Though I haven't heared of {3}[Clickhouse] either before, but columnar storage sounds about right
 <5> Some abstraction to query the actual data
-<6> [Alert Manager][] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
+<6> {1}[Alert Manager] keeps tracks and handles all the various alerts - glad they haven't reinvented the wheel
 <7> And the shiny bit we've spoken of before
 
 == Collecting data
 
-Once Signoz is running, which basically boils down to calling [docker-compose][], a nice starter
+Once Signoz is running, which basically boils down to calling {4}[docker-compose], a nice starter
 question is how to deliver your actual data to it.
 
-[OpenTelemetry][] is the defacto standard for that and offers many ways to gather, collect and
-transmit data via highly configurable [pipelines][].
+{16}[OpenTelemetry] is the defacto standard for that and offers many ways to gather, collect and
+transmit data via highly configurable {19}[pipelines].
 The only noteworthy thing here to pay attention to the size of the generated logs - which may cause
 some headaches as it did for me during my vacation.
 
 While playing with SigNoz I discovered it doesn't connect each of its containers separately to an
-[OpenTelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a
-container with [logspout][].
+{15}[OpenTelemetry Collector].footnote:[otelcol in short], but passes this task entirely to a
+container with {14}[logspout].
 
-After a quick glance at the [Github][] page marketing did its thing again:
+After a quick glance at the {10}[Github] page marketing did its thing again:
 
 [quote,https://github.com/gliderlabs/logspout]
 ____
@@ -122,7 +151,7 @@ ____
 Alright, this still sounds like a splendid idea and is exactly we do in the example.
 In fact, there isn't much we have to configure at all:
 
-. [Docker][] needs a minimal config to get us started:
+. {5}[Docker] needs a minimal config to get us started:
 +
 [source,yaml]
 ----
@@ -192,7 +221,7 @@ but just to recall the three back to our memory:
 The first pillar is probably the easiest and there is also lots of help and reasoning out there,
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#logging[including this blog].
 
-So best we can do is throw in [zerolog][], add some handling in a [Gin-gonic middleware][] and
+So best we can do is throw in {27}[zerolog], add some handling in a {9}[Gin-gonic middleware] and
 move on:
 
 [source,go]
@@ -211,7 +240,7 @@ logEvent.Str("client_id", param.ClientIP). // <1>
 can help to aggregate log messages of the same origin
 
 SigNoz offers lots of different options to search data and if you have any experience with
-[Kibana][] and the likes you will probably feel right away at home:
+{12}[Kibana] and the likes you will probably feel right away at home:
 
 image::logs.png[]
 
@@ -226,7 +255,7 @@ The second pillar is a slightly different beast and requires special code to enh
 a trace - this is generally called
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#tracing[instrumentation].
 
-OpenTelemetry provides the required toolkit to start a tracer and also add [spans][]:
+OpenTelemetry provides the required toolkit to start a tracer and also add {24}[spans]:
 
 [source,go]
 ----
@@ -271,10 +300,10 @@ func (resource *TodoResource) createTodo(context *gin.Context) {
     context.JSON(http.StatusCreated, todo)
 }
 ----
-<1> This creates a [tracer][] based on the current context
-<2> [Spans][] as working unit of a trace can include a status
+<1> This creates a {26}[tracer] based on the current context
+<2> {24}[Spans] as working unit of a trace can include a status
 <3> Error messages can also be thrown in
-<4> And they can also include different types of general [span attributes][]
+<4> And they can also include different types of general {23}[span attributes]
 
 The above code calls the `id-service` and demonstrates how traces can be continued and passed
 between service boundaries:
@@ -306,7 +335,7 @@ func (service *IdService) GetId(ctx context.Context) (string, error) {
     return reply.UUID, nil
 }
 ----
-<1> The [otelhttp][] package makes it really easy to propagate traces
+<1> The {18}[otelhttp] package makes it really easy to propagate traces
 
 When everything is set up correctly propagated traces look like this:
 
@@ -317,7 +346,7 @@ image::traces.png[]
 The last pillar is one of the most interesting and probably the most troublesome, since there
 is no easy recipe what could and what should be done.
 
-Metrics can generally be of following types:
+Metrics can generally be of following {28}[types]:
 
 [cols="1,5"]
 |===
@@ -343,15 +372,15 @@ image::metrics.png[]
 
 === Alerts
 
-Although not directly related to the three pillars, [alerts][] are a nice mechanic to define
+Although not directly related to the three pillars, {2}[alerts] are a nice mechanic to define
 thresholds and intervals to receive notification over various kind of channels.
 
-The [documentation][] is as usual quite nice and there isn't much to add here, besides the fact
+The {6}[documentation] is as usual quite nice and there isn't much to add here, besides the fact
 a paid subscription is required to connect SigNoz to teams.
-There is also a way to fallback to [Power Automate][], unfortunately this requires another
+There is also a way to fallback to {20}[Power Automate], unfortunately this requires another
 subscription.
 
-A little hack is to use connectors for [Prometheus][], but please consider supporting the good work of the
+A little hack is to use connectors for {21}[Prometheus], but please consider supporting the good work of the
 folks of SigNoz:
 
 <https://github.com/prometheus-msteams/prometheus-msteams>
@@ -360,7 +389,7 @@ image::alerts.png[]
 
 == Conclusion
 
-SigNoz is a great alternative to the established different solutions like EFK or Grafana in a
+SigNoz is a great alternative to the established different solutions like EFK or {29}[Grafana] in a
 well-rounded package.
 It is easy to install and so far as I can say easy to maintain and definitely worth a try.
 
