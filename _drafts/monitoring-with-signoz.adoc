@@ -115,7 +115,7 @@ Logspout is a log router for Docker containers that runs inside Docker. It attac
 then routes their logs wherever you want. It also has an extensible module system.
 ____
 
-Right, this sounded like a splendid idea and is exactly what I do in my example.
+Alright, this still sounds like a splendid idea and is exactly we do in the example.
 In fact, there isn't much we have to configure at all:
 
 . [Docker][] needs a minimal config to get us started:
@@ -134,7 +134,7 @@ In fact, there isn't much we have to configure at all:
       - otelcol
     restart: on-failure
 ----
-<1> Logspout needs access to Dockler
+<1> Logspout needs access to the Docker socket and hostmapping
 <2> This configures a connection to a receiver of our otelcol instance and comes up next
 
 . And we have to define a receiver in otelcol:
@@ -198,10 +198,10 @@ logEvent.Str("client_id", param.ClientIP). // <1>
     Str("latency", param.Latency.String()).
     Msg(param.ErrorMessage)
 ----
-<1> All the mapping and magic happens here
+<1> The essential mapping magic happens here
 
-SigNoz offers lots of different options to search data and if ever tried to use [Kibana][] and the likes you
-propaly feel at home right away:
+SigNoz offers lots of different options to search data and if you habe any experience with [Kibana][] and the likes
+you will probably feel right away at home:
 
 image::logs.png[]
 
