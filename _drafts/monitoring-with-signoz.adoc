@@ -98,13 +98,13 @@ query <-> fe
 Once Signoz is running, which basically boils down to calling docker-compose, a nice starter question is how to
 deliver your actual data to it.
 
-[Opentelemetry][] is the defacto standard for that and offers many ways to gather, collect and transmit
+[OpenTelemetry][] is the defacto standard for that and offers many ways to gather, collect and transmit
 data via highly configurable [pipelines][].
 The only noteworthy thing here to pay attention to the size of the generated logs - which may cause some
 headaches as it did for me during my vacation.
 
 While playing with SigNoz I discovered it doesn't connect each of its containers separately to an
-[Opentelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a container
+[OpenTelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a container
 with [logspout][].
 
 After a quick glance at the [Github][] page marketing did its thing again:
@@ -217,18 +217,19 @@ image::logs-aggregate.png[]
 
 === Tracing
 
+The second pillar is a slightly different beast and requires special code to enhance and propagate
+a trace - this is generally called
+{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#tracing[instrumentation].
 
-{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#structured-logs[Structured logging] is in general a really
+OpenTelemetry provides the required toolkit to start a tracer and also add [spans][]:
 
 [source,go]
 ----
 func (resource *TodoResource) createTodo(context *gin.Context) {
-    tracer := otel.GetTracerProvider().Tracer("todo-resource")
+    tracer := otel.GetTracerProvider().Tracer("todo-resource") // <1>
     ctx, span := tracer.Start(context.Request.Context(), "create-todo",
         trace.WithSpanKind(trace.SpanKindServer))
     defer span.End()
-
-    todoActionCounter.WithLabelValues("createTodo").Inc()
 
     var todo domain.Todo
 
@@ -241,8 +242,8 @@ func (resource *TodoResource) createTodo(context *gin.Context) {
         if nil != err {
             context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
-            span.SetStatus(http.StatusBadRequest, "UUID failed")
-            span.RecordError(err)
+            span.SetStatus(http.StatusBadRequest, "UUID failed") // <2>
+            span.RecordError(err) // <3>
 
             return
         }
@@ -260,11 +261,13 @@ func (resource *TodoResource) createTodo(context *gin.Context) {
     }
 
     span.SetStatus(http.StatusCreated, "Todo created")
-    span.SetAttributes(attribute.Int("id", todo.ID), attribute.String("uuid", todo.UUID))
+    span.SetAttributes(attribute.Int("id", todo.ID), attribute.String("uuid", todo.UUID)) // <4>
 
     context.JSON(http.StatusCreated, todo)
 }
 ----
+
+Traces can be continued and passed between service boundaries:
 
 [source,go]
 ----
@@ -274,7 +277,7 @@ func (service *IdService) GetId(ctx context.Context) (string, error) {
     defer span.End()
 
     response, err := otelhttp.Get(ctx, fmt.Sprintf("http://%s/id",
-        utils.GetEnvOrDefault("APP_ID_HOST_PORT", "localhost:8081")))
+        utils.GetEnvOrDefault("APP_ID_HOST_PORT", "localhost:8081"))) // <1>
 
     if err != nil {
         return "", err
@@ -293,6 +296,9 @@ func (service *IdService) GetId(ctx context.Context) (string, error) {
     return reply.UUID, nil
 }
 ----
+<1> The [otelhttp][] package makes it really easy to propagate traces
+
+When everything is set up correctly propagated traces look like this:
 
 image::traces.png[]
 
