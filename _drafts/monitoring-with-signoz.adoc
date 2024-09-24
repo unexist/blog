@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: tracing opentelemetry logging prometheus logsprout alertmanager signozshowcase
+tags: golang tracing opentelemetry logging prometheus logsprout alertmanager signoz showcase
 categories: observability
 toc: true
 ---
@@ -30,7 +30,7 @@ the one I've used in my last post about
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
 Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for the course of this
-post - put our [EFK][] stack and friends aside and get started with something shiny new.
+post - put our [EFK][] stack and friends aside and get started with something shiny new in [Golang][].
 
 == What is SigNoz?
 
@@ -126,15 +126,15 @@ In fact, there isn't much we have to configure at all:
     container_name: todo-logspout
     image: "docker.io/gliderlabs/logspout:latest"
     pull_policy: if_not_present
-    volumes:
+    volumes: # <1>
       - /etc/hostname:/etc/host_hostname:ro
-      - /var/run/docker.sock:/var/run/docker.sock # <2>
-    command: syslog+tcp://otelcol:2255 # <1>
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: syslog+tcp://otelcol:2255 # <2>
     depends_on:
       - otelcol
     restart: on-failure
 ----
-<1> Logspout needs access to the Docker socket and hostmapping
+<1> Logspout needs access to the Docker socket and hostmapping for convenience
 <2> This configures a connection to a receiver of our otelcol instance and comes up next
 
 . And we have to define a receiver in otelcol:
@@ -185,6 +185,9 @@ recall the three back to our memory:
 
 === Logging
 
+
+{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#logging[Logging] is in general a really
+
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#structured-logs[Structured logging] is in general a really
 good idea, so we throw in [zerolog][] and do all the handling in a simple [Gin-gonic middleware][]:
 
@@ -200,7 +203,7 @@ logEvent.Str("client_id", param.ClientIP). // <1>
 ----
 <1> The essential mapping magic happens here
 
-SigNoz offers lots of different options to search data and if you habe any experience with [Kibana][] and the likes
+SigNoz offers lots of different options to search data and if you have any experience with [Kibana][] and the likes
 you will probably feel right away at home:
 
 image::logs.png[]
@@ -210,6 +213,83 @@ There is also no reason to shy away if you require some kind of aggregation and 
 image::logs-aggregate.png[]
 
 === Tracing
+
+
+{{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#structured-logs[Structured logging] is in general a really
+
+[source,go]
+----
+func (resource *TodoResource) createTodo(context *gin.Context) {
+    tracer := otel.GetTracerProvider().Tracer("todo-resource")
+    ctx, span := tracer.Start(context.Request.Context(), "create-todo",
+        trace.WithSpanKind(trace.SpanKindServer))
+    defer span.End()
+
+    todoActionCounter.WithLabelValues("createTodo").Inc()
+
+    var todo domain.Todo
+
+    if nil == context.Bind(&todo) {
+        var err error
+
+        // Fetch id
+        todo.UUID, err = resource.idService.GetId(ctx)
+
+        if nil != err {
+            context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+            span.SetStatus(http.StatusBadRequest, "UUID failed")
+            span.RecordError(err)
+
+            return
+        }
+
+        // Create todo
+        if err = resource.todoService.CreateTodo(ctx, &todo); nil != err {
+            context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+            return
+        }
+    } else {
+        context.JSON(http.StatusBadRequest, "Invalid request payload")
+
+        return
+    }
+
+    span.SetStatus(http.StatusCreated, "Todo created")
+    span.SetAttributes(attribute.Int("id", todo.ID), attribute.String("uuid", todo.UUID))
+
+    context.JSON(http.StatusCreated, todo)
+}
+----
+
+[source,go]
+----
+func (service *IdService) GetId(ctx context.Context) (string, error) {
+    tracer := otel.GetTracerProvider().Tracer("todo-service")
+    _, span := tracer.Start(ctx, "get-id")
+    defer span.End()
+
+    response, err := otelhttp.Get(ctx, fmt.Sprintf("http://%s/id",
+        utils.GetEnvOrDefault("APP_ID_HOST_PORT", "localhost:8081")))
+
+    if err != nil {
+        return "", err
+    }
+
+    jsonBytes, _ := io.ReadAll(response.Body)
+
+    var reply IdServiceReply
+
+    err = json.Unmarshal(jsonBytes, &reply)
+
+    if err != nil {
+        return "", err
+    }
+
+    return reply.UUID, nil
+}
+----
 
 image::traces.png[]
 
