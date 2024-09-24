@@ -19,26 +19,29 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-Finding good reasoning to explore different options for monitoring or better [observability] is difficult.
-Either there wasn't the singular impact on production yet, that made you lust for better monitoring and/or it is
-difficult to understand the merit and invest of time.
+Finding good reasoning to explore different options for monitoring or better [observability] is
+difficult.
+Either there wasn't the singular impact on production yet, that made you lust for better monitoring
+and/or it is difficult to understand the merit and invest of time.
 
-And even when you make the decision to dive into it, it is always a good idea not to start on production, but with
-a simple example.
-Simple examples on the other hand rarely show the real powers, so it usually ends in heavily contrived ones like
-the one I've used in my last post about
+And even when you make the decision to dive into it, it is always a good idea not to start on
+production, but with a simple example.
+Simple examples on the other hand rarely show the real powers, so it usually ends in heavily
+contrived ones like the one I've used in my last post about
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
-Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for the course of this
-post - put our [EFK][] stack and friends aside and get started with something shiny new in [Golang][].
+Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for
+the course of this post - put our [EFK][] stack and friends aside and get started with something
+shiny new in [Golang][].
 
 == What is SigNoz?
 
-If you are like me and you haven't heard the name [SigNoz][] before the first and foremost questions are probably
-what is SigNoz and why not one of these solutions `insert random product here`.
+If you are like me and you haven't heard the name [SigNoz][] before the first and foremost
+questions are probably what is SigNoz and why not one of these solutions
+`insert random product here`.
 
-From a marketing perspective the key selling point for me probably and honestly was the headline on the
-frontpage:
+From a marketing perspective the key selling point for me probably and honestly was the headline
+on the frontpage:
 
 [quote,https://signoz.io]
 ____
@@ -52,8 +55,8 @@ Without knowing prior to that, this was exactly what I need, so well done market
 . Nice and complete package
 
 That sounds rather too good, but time to put on my wizard hat and to check the brief.
-Before messing with [docker-compose][], I checked the documentation and discovered an architecture overview and
-this looks like they hold their part of the bargain:
+Before messing with [Docker][], I checked the documentation and discovered an architecture
+overview and this looks like they hold their part of the bargain:
 
 ++++
 {% plantuml %}
@@ -95,24 +98,25 @@ query <-> fe
 
 == Collecting data
 
-Once Signoz is running, which basically boils down to calling docker-compose, a nice starter question is how to
-deliver your actual data to it.
+Once Signoz is running, which basically boils down to calling [docker-compose][], a nice starter
+question is how to deliver your actual data to it.
 
-[OpenTelemetry][] is the defacto standard for that and offers many ways to gather, collect and transmit
-data via highly configurable [pipelines][].
-The only noteworthy thing here to pay attention to the size of the generated logs - which may cause some
-headaches as it did for me during my vacation.
+[OpenTelemetry][] is the defacto standard for that and offers many ways to gather, collect and
+transmit data via highly configurable [pipelines][].
+The only noteworthy thing here to pay attention to the size of the generated logs - which may cause
+some headaches as it did for me during my vacation.
 
 While playing with SigNoz I discovered it doesn't connect each of its containers separately to an
-[OpenTelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a container
-with [logspout][].
+[OpenTelemetry Collector][].footnote:[otelcol in short], but passes this task entirely to a
+container with [logspout][].
 
 After a quick glance at the [Github][] page marketing did its thing again:
 
 [quote,https://github.com/gliderlabs/logspout]
 ____
-Logspout is a log router for Docker containers that runs inside Docker. It attaches to all containers on a host,
-then routes their logs wherever you want. It also has an extensible module system.
+Logspout is a log router for Docker containers that runs inside Docker. It attaches to all
+containers on a host, then routes their logs wherever you want. It also has an extensible module
+system.
 ____
 
 Alright, this still sounds like a splendid idea and is exactly we do in the example.
@@ -168,8 +172,8 @@ receivers:
 
 == Pillars in practice
 
-There is plenty of explanation and definition out there, way better than I can ever provide, but just to
-recall the three back to our memory:
+There is plenty of explanation and definition out there, way better than I can ever provide,
+but just to recall the three back to our memory:
 
 [cols="1,5"]
 |===
@@ -206,12 +210,13 @@ logEvent.Str("client_id", param.ClientIP). // <1>
 <2> A {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}#correlation-between-messages[correlation id]
 can help to aggregate log messages of the same origin
 
-SigNoz offers lots of different options to search data and if you have any experience with [Kibana][] and the likes
-you will probably feel right away at home:
+SigNoz offers lots of different options to search data and if you have any experience with
+[Kibana][] and the likes you will probably feel right away at home:
 
 image::logs.png[]
 
-There is also no reason to shy away if you require some kind of aggregation and diagrams with bars:
+There is also no reason to shy away if you require some kind of aggregation and diagrams with
+fancy bars:
 
 image::logs-aggregate.png[]
 
@@ -266,8 +271,13 @@ func (resource *TodoResource) createTodo(context *gin.Context) {
     context.JSON(http.StatusCreated, todo)
 }
 ----
+<1> This creates a [tracer][] based on the current context
+<2> [Spans][] as working unit of a trace can include a status
+<3> Error messages can also be thrown in
+<4> And they can also include different types of general [span attributes][]
 
-Traces can be continued and passed between service boundaries:
+The above code calls the `id-service` and demonstrates how traces can be continued and passed
+between service boundaries:
 
 [source,go]
 ----
@@ -304,8 +314,8 @@ image::traces.png[]
 
 === Metrics
 
-The last pillar is one of the most interesting and troublesome, since there is no easy
-recipe what could and what should be done.
+The last pillar is one of the most interesting and probably the most troublesome, since there
+is no easy recipe what could and what should be done.
 
 Metrics can generally be of following types:
 
@@ -324,20 +334,22 @@ Metrics can generally be of following types:
 | A histogram with a sum and quantile over a sliding window
 |===
 
-
 This allows a broad range of measurements like the count of requests or the avg latency between
-each of them.
+each of them and has to be figured out for each service or rather service landscape individually.
+
+Still, when there are metrics they can be displayed on dashboards like this:
 
 image::metrics.png[]
 
 === Alerts
 
-Although not directly related to the three pillars, [alerts][] are a nice mechanic to define thresholds and
-intervals to receive notification over various kind of channels.
+Although not directly related to the three pillars, [alerts][] are a nice mechanic to define
+thresholds and intervals to receive notification over various kind of channels.
 
-The [documentation][] is as usual quite nice and there isn't much to add here, besides the fact a paid
-subscription is required to connect SigNoz to teams.
-There is also a way to fallback to [Power Automate][], unfortunately this requires another subscription.
+The [documentation][] is as usual quite nice and there isn't much to add here, besides the fact
+a paid subscription is required to connect SigNoz to teams.
+There is also a way to fallback to [Power Automate][], unfortunately this requires another
+subscription.
 
 A little hack is to use connectors for [Prometheus][], but please consider supporting the good work of the
 folks of SigNoz:
@@ -348,6 +360,10 @@ image::alerts.png[]
 
 == Conclusion
 
+SigNoz is a great alternative to the established different solutions like EFK or Grafana in a
+well-rounded package.
+It is easy to install and so far as I can say easy to maintain and definitely worth a try.
+
 All examples can be found here:
 
-<https://github.com/unexist/showcase-microservices-golang>
+<https://github.com/unexist/showcase-signoz-golang>
