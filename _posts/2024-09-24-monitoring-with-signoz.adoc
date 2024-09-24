@@ -47,6 +47,7 @@ endif::[]
 :27: https://github.com/rs/zerolog
 :28: https://prometheus.io/docs/concepts/metric_types/
 :29: https://grafana.com/
+:30: https://www.forbes.com/sites/duenablomstrom1/2018/11/30/nobody-gets-fired-for-buying-ibm-but-they-should/
 
 Finding good reasoning to explore different options for monitoring or better [observability] is
 difficult.
@@ -59,7 +60,7 @@ Simple examples on the other hand rarely show the real powers, so it usually end
 contrived ones like the one I've used in my last post about
 {{ site.url }}{% post_url 2022-02-18-logging-vs-tracing %}[Logging vs Tracing].
 
-Still, [nobody got fired from [line-through]#buying IBM#][] ramping up monitoring, so let us - for
+Still, [line-through]#{30}[nobody got fired for buying IBM]# ramping up monitoring, so let us - for
 the course of this post - put our {7}[EFK] stack and friends aside and get started with something
 shiny new in {11}[Golang].
 
