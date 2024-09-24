@@ -304,6 +304,30 @@ image::traces.png[]
 
 === Metrics
 
+The last pillar is one of the most interesting and troublesome, since there is no easy
+recipe what could and what should be done.
+
+Metrics can generally be of following types:
+
+[cols="1,5"]
+|===
+| Counter
+| A simple monotonically increasing counter which can be reset
+
+| Gauge
+| A single value that can go arbitrarily up and down
+
+| Histogram
+| A time series of counter values and a sum
+
+| Summary
+| A histogram with a sum and quantile over a sliding window
+|===
+
+
+This allows a broad range of measurements like the count of requests or the avg latency between
+each of them.
+
 image::metrics.png[]
 
 === Alerts
@@ -313,9 +337,10 @@ intervals to receive notification over various kind of channels.
 
 The [documentation][] is as usual quite nice and there isn't much to add here, besides the fact a paid
 subscription is required to connect SigNoz to teams.
-There is also a way to fallback to [Power Automate][], but unfortunately this requires another subscription.
+There is also a way to fallback to [Power Automate][], unfortunately this requires another subscription.
 
-An easy way out is to use connectors for [Prometheus][]:
+A little hack is to use connectors for [Prometheus][], but please consider supporting the good work of the
+folks of SigNoz:
 
 <https://github.com/prometheus-msteams/prometheus-msteams>
 
