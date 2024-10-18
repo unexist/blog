@@ -6,7 +6,7 @@ date: 2021-03-15 17:45 +0100
 last_updated: 2021-03-15 17:45 +0100
 author: Christoph Kappel
 tags: validation adr asciidoc jqassistant showcase
-categories: testing
+categories: documentation testing
 toc: true
 ---
 :1: https://jqassistant.org
