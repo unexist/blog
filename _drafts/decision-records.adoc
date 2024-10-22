@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:experimental:
 
 :1: https://github.com/unexist/record-tools
 :2: https://github.com/unexist/adr-tools
@@ -25,9 +26,11 @@ endif::[]
 :4: https://github.com/ms1963/TechnicalDebtRecords
 :5: https://github.com/ms1963
 :6: https://github.com/npryce
+:7: https://github.com/rs/zerolog
 
 I can probably cite myself from this blog, but writing documentation (not necessarily good
-documentation, but any at all) is really difficult and keeping it up-to-date nigh on impossible.
+documentation mind you, but any at all) is really difficult and keeping it up-to-date nigh on
+impossible.
 To ease the pain, some clever people invented tools to write [documentation-as-code], so docs can
 co-exist next to the source and have a better chance of being touched, whenever something is
 changed.
@@ -35,14 +38,20 @@ changed.
 Based on my personal experience I can say the same is true for any kind of project decisions and
 good luck finding any hint about them.
 
+== Record types
+
+Next up are the two types of records that I currently use.
+
+=== Architecture Decision Records
+
 When I first heard about
-{{ site.url }}{% post_url 2020-09-15-architecture-decisions %}[architecture decisions] I was
-directly
-intrigued, but it took a while for me to actually see the real benefit of them.
+{{ site.url }}{% post_url 2020-09-15-architecture-decisions %}[architecture decisions]
+I was directly intrigued and blogged about, so there is no need to reiterate on this right now,
+but in hindsight I can say it really took a while for me to actually see the real benefit of them.
 
 It never came to my mind, but why should we stop here?
 
-== Technical Debts Records
+=== Technical Debts Records
 
 [Michael Stal] pretty much got the gist of it and his suggestion is to handle [technical debts] in
 the same lieu as architecture decisions.
@@ -144,9 +153,7 @@ of its inventor [Nat Pryce].
 I added some more features like the pending [AsciiDoc] support, added a database layer to speed up
 the generation and added simple rss/atom feeds.
 
-== Records and culture
-
-== Example
+== Examples
 
 The following example demonstrates how we actually use the records and contains all the bolts
 and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately
@@ -200,6 +207,8 @@ There are several options from here on:
 - Calling the [AsciiDoc CLI] manually, which is perfectly capable of generating all of the documents
 - Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
 
+=== Generate with CLI
+
 Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
 based on the good ol' CLI:
 
@@ -227,6 +236,59 @@ image::index-page.png[]
 
 .ADR page
 image::adr-page.png[]
+
+NOTE: The same can be achieved with `make generate`.
+
+=== Create new records
+
+The record-tools support the same easy way to create new cords like the original version:
+
+[source,shell]
+----
+$ ../src/record-tdb new Usage of log4j # <1>
+----
+<1> This command create a new record and opens it in your default $EDITOR
+
+image::tdb-log4j.png[]
+
+If you consider the name there comes probably a lot to your mind what you would like to add,
+but let us shorten this phase and accept the record as-is and [line-through]#press save# press
+btn:[:]+btn:[w].
+
+=== Supersede old records
+
+Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
+once we've gathered more information and/or gained experience with out decision.
+
+[source,shell]
+----
+$ ../src/record-tdr new -s 2 Usage of zerolog # <1>
+----
+
+=== Overview in plantuml
+
+++++
+{% plantuml %}
+@startdot
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+digraph tdr {
+    node [shape=plaintext];
+
+    subgraph {
+        _1 [label="1. Record technical debt decisions"; URL="0001-technical-debt-decision.html"];
+        _2 [label="2. Usage of log4j"; URL="0002-usage-of-log4j.html"];
+        _1 -> _2 [style="dotted", weight=1];
+        _3 [label="3. Usage of log4j"; URL="0003-usage-of-log4j.html"];
+        _2 -> _3 [style="dotted", weight=1];
+        _4 [label="4. Usage of zerolog"; URL="0004-usage-of-zerolog.html"];
+        _3 -> _4 [style="dotted", weight=1];
+    }
+}
+@enddot
+{% endplantuml %}
+++++
+
+== Records and culture
 
 == Conclusion
 
