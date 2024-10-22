@@ -1,12 +1,12 @@
 ---
 layout: post
 title: Decision records
-description: This blog post summarizes observability, briefly explains the missing pillar from a previous post and introduces the monitoring platform SigNoz.
+description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debts records (TDB) and demonstrates how everything can be combined.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: adr tdr showcase
-categories: documentation
+tags: adr tdr asciidoc markdown showcase
+categories: documentation myself
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -22,15 +22,111 @@ endif::[]
 :2: https://github.com/unexist/adr-tools
 :3: https://github.com/npryce/adr-tools
 :4: https://github.com/ms1963/TechnicalDebtRecords
+:5: https://github.com/ms1963
 
 I can probably cite myself from this blog, but writing documentation (not necessarily good
 documentation, but any at all) is really difficult and keeping it up-to-date nigh on impossible.
-To ease the pain, some clever people invented tools to write documentation-as-code, so docs can
+To ease the pain, some clever people invented tools to write [documentation-as-code], so docs can
 co-exist next to the source and have a better chance of being touched, whenever something is
 changed.
 
 Based on my personal experience I can say the same is true for any kind of project decisions and
 good luck finding any hint about them.
+
+When I first heard about
+{{ site.url }}{% post_url 2020-09-15-architecture-decisions %}[architecture decisions] I was
+directly
+intrigued, but it took a while for me to actually see the real benefit of them.
+
+It never came to my mind, but why should we stop here?
+
+== Technical Debts Records
+
+[Michael Stal] pretty much got the gist of it and his suggestion is to handle [technical debts] in
+the same lieu as architecture decisions.
+Documented as code, well placed next to the actual code or any other kind of source code
+repository with some mandatory fields and an open format as a guide rail.
+
+In comparison with architecture decision records, the format of these new records looks a bit
+different, but we are going to cover that later on.
+
+[source,markdown]
+----
+Technical Debt Record
+====================
+
+Title:
+------
+A concise name for the technical debt.
+
+Author:
+-------
+The individual who identified or is documenting the debt.
+
+Version:
+--------
+The version of the project or component where the debt exists.
+
+Date:
+-----
+The date when the debt was identified or recorded.
+
+State:
+------
+The current workflow stage of the technical debt (e.g., Identified, Analyzed, Approved, In Progress, Resolved, Closed, Rejected).
+
+Relations:
+----------
+Links to other related TDRs to establish connections between different debt items.
+
+Summary:
+--------
+A brief overview explaining the nature and significance of the technical debt.
+
+Context:
+--------
+Detailed background information, including why the debt was incurred (e.g., time constraints, outdated technologies).
+
+Impact:
+-------
+Technical Impact:
+- How the debt affects system performance, scalability, maintainability, etc.
+
+Business Impact:
+- The repercussions on business operations, customer satisfaction, risk levels, etc.
+
+Symptoms:
+---------
+Observable signs indicating the presence of technical debt (e.g., frequent bugs, slow performance).
+
+Severity:
+---------
+The criticality level of the debt (Critical, High, Medium, Low).
+
+Potential Risks:
+----------------
+Possible adverse outcomes if the debt remains unaddressed (e.g., security vulnerabilities, increased costs).
+
+Proposed Solution:
+-------------------
+Recommended actions or strategies to resolve the debt.
+
+Cost of Delay:
+---------------
+Consequences of postponing the resolution of the debt.
+
+Effort to Resolve:
+-------------------
+Estimated resources, time, and effort required to address the debt.
+
+Dependencies:
+-------------
+Other tasks, components, or external factors that the resolution of the debt depends on.
+
+Additional Notes:
+-----------------
+Any other relevant information or considerations related to the debt.
+----
 
 
 
@@ -38,7 +134,7 @@ good luck finding any hint about them.
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase->
+<https://github.com/unexist/record-tools>
 
 [bibliography]
 == Bibliography
