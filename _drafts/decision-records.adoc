@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 :1: https://github.com/unexist/record-tools
 :2: https://github.com/unexist/adr-tools
@@ -52,6 +53,9 @@ the same lieu as architecture decisions.
 
 In comparison with architecture decision records, the format of these new records (especially since
 it is [Markdown]) looks a bit different, but we are going to cover that later on.
+
+NOTE: I included the descriptions of the fields in the actual document, just because I cannot
+explain the fields any better.
 
 [source,markdown]
 ----
@@ -145,12 +149,84 @@ the generation and added simple rss/atom feeds.
 == Example
 
 The following example demonstrates how we actually use the records and contains all the bolts
-and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately always
-pays off to increase the targeted non-tech-savy audience.
+and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately
+always pays off to increase the targeted non-tech-savy audience.
 
-[source,]
+Our example come with one record of each type and the decision to switch to the new format.
+
+[source,asciidoc]
 ----
+= 1. Record architecture decisions
+
+:1: https://unexist.blog/documentation/myself/2024/10/22/decision-records.html
+
+|===
+| Proposed Date: | 2024-10-22
+| Decision Date: | 2024-10-22
+| Proposer:      | Christoph Kappel
+| Deciders:      | Christoph Kappel
+| Status:        | accepted
+| Issues:        | none
+| References:    | none
+| Priority:      | high
+|===
+
+NOTE: *Status types:* drafted | proposed | rejected | accepted | deprecated | superseded +
+      *Priority:* low | medium | high
+
+== Context
+
+We need to record the architectural decisions made on this project.
+
+== Proposed Solution
+
+Architecture Decision Records as {1}[summarised by Christoph] might help us as a format.
+
+== Decision
+
+We will use Architecture Decision Records.
+
+== Consequences
+
+None foreseeable.
+
+== Further Information
+
+== Comments
 ----
+
+There are several options from here on:
+
+- Calling the [AsciiDoc CLI] manually, which is perfectly capable of generating all of the documents
+- Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
+
+Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
+based on the good ol' CLI:
+
+[source,shell]
+----
+$ hg clone https://hg.unexist.dev/record-tools # <1>
+...
+$ cd record-tools/example
+$ ../src/record-adr generate database # <2>
+$ ../src/record-adr generate index > _adr_autogen.adoc # <3>
+$ asciidoctor -D architecture-decision-records src/site/asciidoc/architecture-decision-records/*.adoc # <4>
+$ asciidoctor -D . -I architecture-decision-records /site/asciidoc/architecture-decision-records.adoc # <3>
+$ asciidoctor -r asciidoctor-pdf -b pdf -D . src/site/asciidoc/architecture-decision-records.adoc # <5>
+----
+<1> OR: git clone <https://github.com/unexist/record-tools>
+<2> Generate the database for both types
+<3> Generate a neat index page for both types
+<4> Render the actual documents now
+<5> Optional step - just in case a PDF version is required
+
+Once rendered the pages should look like this:
+
+.Index page
+image::index-page.png[]
+
+.ADR page
+image::adr-page.png[]
 
 == Conclusion
 
