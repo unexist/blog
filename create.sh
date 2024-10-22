@@ -1,6 +1,6 @@
 #!/bin/zsh
 TITLE="$*"
-FILENAME="`echo $* | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`"
+FILENAME="`echo ${TITLE} | tr '[:upper:]' '[:lower:]' | tr ' ' '-'`"
 PATHNAME="${FILENAME//-/_}"
 
 cat > "_drafts/${FILENAME}.adoc" <<EOF
