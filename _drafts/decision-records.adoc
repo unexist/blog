@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Decision records
-description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debts records (TDB) and demonstrates how everything can be combined.
+description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debt records (TDB) and demonstrates how everything can be combined.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -23,6 +23,7 @@ endif::[]
 :3: https://github.com/npryce/adr-tools
 :4: https://github.com/ms1963/TechnicalDebtRecords
 :5: https://github.com/ms1963
+:6: https://github.com/npryce
 
 I can probably cite myself from this blog, but writing documentation (not necessarily good
 documentation, but any at all) is really difficult and keeping it up-to-date nigh on impossible.
@@ -44,11 +45,13 @@ It never came to my mind, but why should we stop here?
 
 [Michael Stal] pretty much got the gist of it and his suggestion is to handle [technical debts] in
 the same lieu as architecture decisions.
-Documented as code, well placed next to the actual code or any other kind of source code
-repository with some mandatory fields and an open format as a guide rail.
 
-In comparison with architecture decision records, the format of these new records looks a bit
-different, but we are going to cover that later on.
+- Documented as code
+- Well placed next to the actual code or any other kind of source code repository
+- With some mandatory fields and an open format as a guide rail.
+
+In comparison with architecture decision records, the format of these new records (especially since
+it is [Markdown]) looks a bit different, but we are going to cover that later on.
 
 [source,markdown]
 ----
@@ -128,7 +131,26 @@ Additional Notes:
 Any other relevant information or considerations related to the debt.
 ----
 
+He also provides [tooling] along with the definition, which is quite nice for a starter.
 
+== Record tools
+
+During the course of the last few years I played with the original [adr-tools] based on the  work
+of its inventor [Nat Pryce].
+I added some more features like the pending [AsciiDoc] support, added a database layer to speed up
+the generation and added simple rss/atom feeds.
+
+== Records and culture
+
+== Example
+
+The following example demonstrates how we actually use the records and contains all the bolts
+and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately always
+pays off to increase the targeted non-tech-savy audience.
+
+[source,]
+----
+----
 
 == Conclusion
 
