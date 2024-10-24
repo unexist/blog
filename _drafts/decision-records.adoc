@@ -158,17 +158,24 @@ handle TDR yet.
 == Record tools
 
 During the course of the last few years I played with the original [adr-tools] based on the work
-of its inventor [Nat Pryce].
-I added some more features like the pending [AsciiDoc] support, added a database layer to speed up
-some of the generators and added simple rss/atom feeds for easier aggregation.
+of its inventor [Nat Pryce] and added some missing features.
+Like the pending [AsciiDoc] support, a simple database layer to speed up some of the generators
+and added simple rss/atom feeds for easier aggregation.
+
+This put me in a perfect position to adapt the tools even further and hack a new format into it
+under a new umbrella.
+
+TIP: I am still playing with the idea to port the shellscripts to [Rust] - does anyone fancy
+`record-tools-rs`?
 
 === Examples
 
-The following example demonstrates how we actually use the records and contains all the bolts
-and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately
-always pays off to increase the targeted non-tech-savy audience.
+The following examples demonstrates how the record-tools can be used, starting with the basic steps
+up to deploying rendered versions to a [Confluence] instance, since it always pays off to include
+non-tech-savvy folks.
 
-Our example come with one record of each type and the decision to switch to the new format.
+The record-tools include two examples, one of each kind to kickstart the decision to actually use
+these formats and keep the thought of the original:
 
 [source,asciidoc]
 ----
@@ -213,7 +220,8 @@ None foreseeable.
 
 ==== Create new records
 
-The record-tools support the same easy way to create new cords like the original version:
+Besides the name, the record-tools basically behave in the same manner like the original version
+of the tools and for example a new TDB can be created like this:
 
 [source,shell]
 ----
@@ -227,7 +235,7 @@ If you consider the name there comes probably a lot to your mind what you would 
 but let us shorten this phase and accept the record as-is and [line-through]#press save# press
 btn:[:]+btn:[w].
 
-==== Supercede old records
+==== Supersede old records
 
 Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
 once we've gathered more information and/or gained experience with out decision.
@@ -236,6 +244,18 @@ once we've gathered more information and/or gained experience with out decision.
 ----
 $ ../src/record-tdr new -s 2 Usage of zerolog # <1>
 ----
+<1> Let us mix languages here, but [zerolog] is always worth mentioning
+
+==== Link records
+
+Under the hood, supersede just overwrites the status of the previous record and applies links in
+both directions and obviously this can also be done directly:
+
+[source,shell]
+----
+$ ./src/record-tdr link 3 Amends 1 "Amended by" # <1>
+----
+<1> This command links record 3 to 1 long with the relationship of the link forwards and backwards
 
 ==== Generate output
 
