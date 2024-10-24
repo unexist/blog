@@ -249,8 +249,9 @@ like to add, but let us shorten this phase and accept the record as-is and press
 
 === Supersede old records
 
-Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
-once we've gathered more information and/or gained experience with out decision.
+Sometimes decisions have to be revised (or superseded) and that couldn't be more true with
+technical matters, once more information has been gathered and/or experience with the actual
+decision could be gained.
 
 [source,shell]
 ----
@@ -260,8 +261,9 @@ $ ../src/record-tdr new -s 2 Usage of zerolog # <.>
 
 === Link records
 
-Under the hood, supersede just overwrites the status of the previous record and applies links in
-both directions and obviously this can also be done directly:
+Under the hood, _supersede_ just overwrites the status of the previous record with *supersded* and
+applies links in both directions.
+This can also be done manually with arbitrary links:
 
 [source,shell]
 ----
@@ -315,28 +317,28 @@ $ ../src/record-tdr generate plantuml
 ----
 <.> We omit the output here, because it looks way better directly rendered with [Plantuml] below
 
+.Rendered diagram
 ++++
 {% plantuml %}
-
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
-
 @startdot
 digraph tdr {
     node [shape=plaintext];
+    bgcolor="transparent"
 
     subgraph {
-        _1 [label="1. Record technical debt decisions"; URL="0001-technical-debt-decision.html"];
-        _2 [label="2. Usage of log4j"; URL="0002-usage-of-log4j.html"];
-        _1 -> _2 [style="dotted", weight=1];
-        _3 [label="3. Usage of zerolog"; URL="0003-usage-of-zerolog.html"];
-        _2 -> _3 [style="dotted", weight=1];
+        _1 [label="1. Record technical debt decisions"; URL="0001-technical-debt-decision.html", color="white", fontcolor="white"];
+        _2 [label="2. Usage of log4j"; URL="0002-usage-of-log4j.html", color="white", fontcolor="white"];
+        _1 -> _2 [style="dotted", weight=1, color="white", fontcolor="white"];
+        _3 [label="3. Usage of zerolog"; URL="0003-usage-of-zerolog.html", fontcolor="white"];
+        _2 -> _3 [style="dotted", weight=1, color="white", fontcolor="white"];
     }
-  _2 -> _1 [label="Amends", weight=0]
-  _3 -> _1 [label="Supersedes", weight=0]
+    _2 -> _1 [label="Amends", weight=0, color="white", fontcolor="white"];
+    _3 -> _1 [label="Supersedes", weight=0, color="white", fontcolor="white"];
 }
 @enddot
 {% endplantuml %}
@@ -351,6 +353,11 @@ $ ../src/record-tdr generate digraph | dot -Tsvg > graph.svg
 ----
 
 ==== Index
+
+The index page accumulates all known records, groups them based on different properties like
+the severity and combines everything into a single and clickable page.
+
+NOTE: Generating the index page requires a populated database, due to the heavy usage of the tools.
 
 [source,shell]
 ----
