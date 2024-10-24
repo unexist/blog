@@ -168,14 +168,12 @@ under a new umbrella.
 TIP: I am still playing with the idea to port the shellscripts to [Rust] - does anyone fancy
 `record-tools-rs`?
 
-=== Examples
-
 The following examples demonstrates how the record-tools can be used, starting with the basic steps
 up to deploying rendered versions to a [Confluence] instance, since it always pays off to include
 non-tech-savvy folks.
 
 The record-tools include two examples, one of each kind to kickstart the decision to actually use
-these formats and keep the thought of the original:
+these formats and keep the intention of the original along with some shameful self advertisement:
 
 [source,asciidoc]
 ----
@@ -218,35 +216,49 @@ None foreseeable.
 == Comments
 ----
 
-==== Create new records
+[NOTE]
+--
+It isn't strictly necessary to checkout the example, but if you want to play with the tooling:
+
+[source,shell]
+----
+$ hg clone https://hg.unexist.dev/record-tools # <.>
+...
+$ cd record-tools/example
+----
+<.> OR: git clone <https://github.com/unexist/record-tools>
+--
+
+=== Create new records
 
 Besides the name, the record-tools basically behave in the same manner like the original version
 of the tools and for example a new TDB can be created like this:
 
 [source,shell]
 ----
-$ ../src/record-tdb new Usage of log4j # <1>
+$ ../src/record-tdb new Usage of log4j # <.>
 ----
-<1> This command create a new record and opens it in your default $EDITOR
+<.> This command creates a new record and opens it in your default $EDITOR
 
+.Vim with a lovely default color scheme
 image::tdb-log4j.png[]
 
-If you consider the name there comes probably a lot to your mind what you would like to add,
-but let us shorten this phase and accept the record as-is and [line-through]#press save# press
-btn:[:]+btn:[w].
+If you consider the topic of this record there probably comes a lot to your mind what you would
+like to add, but let us shorten this phase and accept the record as-is and press
+[line-through]#save# press btn:[:]+btn:[w].
 
-==== Supersede old records
+=== Supersede old records
 
 Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
 once we've gathered more information and/or gained experience with out decision.
 
 [source,shell]
 ----
-$ ../src/record-tdr new -s 2 Usage of zerolog # <1>
+$ ../src/record-tdr new -s 2 Usage of zerolog # <.>
 ----
-<1> Let us mix languages here, but [zerolog] is always worth mentioning
+<.> Let us mix languages here, but [zerolog] is always worth mentioning
 
-==== Link records
+=== Link records
 
 Under the hood, supersede just overwrites the status of the previous record and applies links in
 both directions and obviously this can also be done directly:
@@ -257,11 +269,127 @@ $ ./src/record-tdr link 3 Amends 1 "Amended by" # <1>
 ----
 <1> This command links record 3 to 1 long with the relationship of the link forwards and backwards
 
-==== Generate output
+There isn't much direct visible effect besides the addition of the links to the
+*Further Information* field, but more on this in the next section:
+
+[source,asciidoc]
+----
+== Further Information
+
+Any other relevant information or considerations related to the debt.
+
+Supersedes link:0002-usage-of-log4j.adoc[2. Usage of Log4j]
+
+Amends link:0001-technical-debt-decision.adoc[1. Record technical debt decisions]
+----
+
+=== Using generators
+
+The tools include various generators that can be used to generate listings, graphs and even feeds.
+
+==== TOC
+
+[source,shell]
+----
+$ ../src/record-tdr generate toc -i Intro -o Outro
+= TDR records
+
+Intro
+
+* link:0001-technical-debt-decision.adoc[1. Record technical debt decisions]
+* link:0002-usage-of-log4j.adoc[2. Usage of log4j]
+* link:0003-usage-of-zerolog.adoc[3. Usage of zerolog]
+
+Outro
+----
+
+==== Digraph & Plantuml
+
+Both generators create a graph based on [dot] - the plantuml version just neatly wraps the output
+between `@startdot` and `@enddot`:
+
+[source,shell]
+----
+$ ../src/record-tdr generate plantuml
+... # <.>
+----
+<.> We omit the output here, because it looks way better directly rendered with [Plantuml] below
+
+++++
+{% plantuml %}
+
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startdot
+digraph tdr {
+    node [shape=plaintext];
+
+    subgraph {
+        _1 [label="1. Record technical debt decisions"; URL="0001-technical-debt-decision.html"];
+        _2 [label="2. Usage of log4j"; URL="0002-usage-of-log4j.html"];
+        _1 -> _2 [style="dotted", weight=1];
+        _3 [label="3. Usage of zerolog"; URL="0003-usage-of-zerolog.html"];
+        _2 -> _3 [style="dotted", weight=1];
+    }
+  _2 -> _1 [label="Amends", weight=0]
+  _3 -> _1 [label="Supersedes", weight=0]
+}
+@enddot
+{% endplantuml %}
+++++
+
+The resulting graph includes the links between the records and when embedded as a vector graphic
+([svg]) also includes links:
+
+[source,shell]
+----
+$ ../src/record-tdr generate digraph | dot -Tsvg > graph.svg
+----
+
+==== Index
+
+[source,shell]
+----
+$ ../src/record-tdr generate database
+$ ../src/record-tdr generate index
+...
+== List of all TDR with high severity
+
+[cols="3,1,1,1,1", options="header"]
+|===
+|Name|Proposed Date|Decision Date|Status|Severity
+|<<technical-debt-records/0001-technical-debt-decision.adoc#, 1. Record technical debt decisions>>|2024-10-24|2024-10-24|superseded|high
+|===
+
+== List of all TDR with critical severity
+
+[cols="3,1,1,1,1", options="header"]
+|===
+|Name|Proposed Date|Decision Date|Status|Severity
+
+|===
+
+== List of all TDR
+
+[cols="3,1,1,1,1", options="header"]
+|===
+|Name|Proposed Date|Decision Date|Status|Severity
+|<<technical-debt-records/0001-technical-debt-decision.adoc#, 1. Record technical debt decisions>>|2024-10-24|2024-10-24|superseded|high
+|<<technical-debt-records/0002-usage-of-log4j.adoc#, 2. Usage of log4j>>|2024-10-24|?|superseded|low
+|<<technical-debt-records/0003-usage-of-zerolog.adoc#, 3. Usage of zerolog>>|2024-10-24|?|drafted|low
+|===
+...
+----
+
+==== Publish everything
 
 There are several options from here on:
 
-- Calling the [AsciiDoc CLI] manually, which is perfectly capable of generating all of the documents
+- Calling the [Asciidoc CLI] manually, which is perfectly capable of generating all of the documents
 - Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
 
 
@@ -270,20 +398,16 @@ based on the good ol' CLI:
 
 [source,shell]
 ----
-$ hg clone https://hg.unexist.dev/record-tools # <1>
-...
-$ cd record-tools/example
-$ ../src/record-adr generate database # <2>
-$ ../src/record-adr generate index > _adr_autogen.adoc # <3>
-$ asciidoctor -D architecture-decision-records src/site/asciidoc/architecture-decision-records/*.adoc # <4>
-$ asciidoctor -D . -I architecture-decision-records /site/asciidoc/architecture-decision-records.adoc # <3>
-$ asciidoctor -r asciidoctor-pdf -b pdf -D . src/site/asciidoc/architecture-decision-records.adoc # <5>
+$ ../src/record-adr generate database # <.>
+$ ../src/record-adr generate index > _adr_autogen.adoc # <.>
+$ asciidoctor -D architecture-decision-records src/site/asciidoc/architecture-decision-records/*.adoc # <.>
+$ asciidoctor -D . -I architecture-decision-records /site/asciidoc/architecture-decision-records.adoc # <.>
+$ asciidoctor -r asciidoctor-pdf -b pdf -D . src/site/asciidoc/architecture-decision-records.adoc # <.>
 ----
-<1> OR: git clone <https://github.com/unexist/record-tools>
-<2> Generate the database for both types
-<3> Generate a neat index page for both types
-<4> Render the actual documents now
-<5> Optional step - just in case a PDF version is required
+<.> Generate the database for both types
+<.> Generate a neat index page for both types
+<.> Render the actual documents now
+<.> Optional step - just in case a PDF version is required
 
 Once rendered the pages should look like this:
 
@@ -294,29 +418,6 @@ image::index-page.png[]
 image::adr-page.png[]
 
 NOTE: The same can be achieved with `make generate`.
-
-==== Overview in plantuml
-
-++++
-{% plantuml %}
-@startdot
-!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-digraph tdr {
-    node [shape=plaintext];
-
-    subgraph {
-        _1 [label="1. Record technical debt decisions"; URL="0001-technical-debt-decision.html"];
-        _2 [label="2. Usage of log4j"; URL="0002-usage-of-log4j.html"];
-        _1 -> _2 [style="dotted", weight=1];
-        _3 [label="3. Usage of log4j"; URL="0003-usage-of-log4j.html"];
-        _2 -> _3 [style="dotted", weight=1];
-        _4 [label="4. Usage of zerolog"; URL="0004-usage-of-zerolog.html"];
-        _3 -> _4 [style="dotted", weight=1];
-    }
-}
-@enddot
-{% endplantuml %}
-++++
 
 == Records and culture
 
