@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Decision records
-description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debt records (TDB) and demonstrates how everything can be combined.
+description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debt records (TDB) and demonstrates how everything can be nicely combined document and culture wise.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -36,11 +36,14 @@ co-exist next to the source and have a better chance of being touched, whenever 
 changed.
 
 Based on my personal experience I can say the same is true for any kind of project decisions and
-good luck finding any hint about them.
+good luck finding any hint about them - until I discovered records.
 
 == Record types
 
-Next up are the two types of records that I currently use.
+During the course of this post we are going to do a quick recap of ADR mostly by pointing to
+links ([DRY], you know?), introduce a new type for [technical debt] (aptly named [TDR]), have a
+look at some examples some examples with adapted tooling and talk a bit about the power of the
+idea, that isn't covered by the documents alone.
 
 === Architecture Decision Records
 
@@ -53,7 +56,7 @@ It never came to my mind, but why should we stop here?
 
 === Technical Debts Records
 
-[Michael Stal] pretty much got the gist of it and his suggestion is to handle [technical debts] in
+[Michael Stal] pretty much got the gist of it and his suggestion is to handle technical debt in
 the same lieu as architecture decisions.
 
 - Documented as code
@@ -146,14 +149,20 @@ Any other relevant information or considerations related to the debt.
 
 He also provides [tooling] along with the definition, which is quite nice for a starter.
 
+The format is really close to the one of the ADR, so I did the obvious migration and adapted it
+to the format already used there.
+
+The drawback of this is the previous tools cannot handle this new format and the adr-tools cannot
+handle TDR yet.
+
 == Record tools
 
-During the course of the last few years I played with the original [adr-tools] based on the  work
+During the course of the last few years I played with the original [adr-tools] based on the work
 of its inventor [Nat Pryce].
 I added some more features like the pending [AsciiDoc] support, added a database layer to speed up
-the generation and added simple rss/atom feeds.
+some of the generators and added simple rss/atom feeds for easier aggregation.
 
-== Examples
+=== Examples
 
 The following example demonstrates how we actually use the records and contains all the bolts
 and glue to deploy rendered versions to your own [Confluence] instance, which unfortunately
@@ -202,12 +211,39 @@ None foreseeable.
 == Comments
 ----
 
+==== Create new records
+
+The record-tools support the same easy way to create new cords like the original version:
+
+[source,shell]
+----
+$ ../src/record-tdb new Usage of log4j # <1>
+----
+<1> This command create a new record and opens it in your default $EDITOR
+
+image::tdb-log4j.png[]
+
+If you consider the name there comes probably a lot to your mind what you would like to add,
+but let us shorten this phase and accept the record as-is and [line-through]#press save# press
+btn:[:]+btn:[w].
+
+==== Supercede old records
+
+Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
+once we've gathered more information and/or gained experience with out decision.
+
+[source,shell]
+----
+$ ../src/record-tdr new -s 2 Usage of zerolog # <1>
+----
+
+==== Generate output
+
 There are several options from here on:
 
 - Calling the [AsciiDoc CLI] manually, which is perfectly capable of generating all of the documents
 - Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
 
-=== Generate with CLI
 
 Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
 based on the good ol' CLI:
@@ -239,33 +275,7 @@ image::adr-page.png[]
 
 NOTE: The same can be achieved with `make generate`.
 
-=== Create new records
-
-The record-tools support the same easy way to create new cords like the original version:
-
-[source,shell]
-----
-$ ../src/record-tdb new Usage of log4j # <1>
-----
-<1> This command create a new record and opens it in your default $EDITOR
-
-image::tdb-log4j.png[]
-
-If you consider the name there comes probably a lot to your mind what you would like to add,
-but let us shorten this phase and accept the record as-is and [line-through]#press save# press
-btn:[:]+btn:[w].
-
-=== Supersede old records
-
-Sometimes decisions have to be revised and that couldn't be more true with technical decisions,
-once we've gathered more information and/or gained experience with out decision.
-
-[source,shell]
-----
-$ ../src/record-tdr new -s 2 Usage of zerolog # <1>
-----
-
-=== Overview in plantuml
+==== Overview in plantuml
 
 ++++
 {% plantuml %}
