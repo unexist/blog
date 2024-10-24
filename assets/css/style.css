@@ -452,6 +452,18 @@ svg.linkedin #path28, svg.linkedin #path30 {
     color: var(--font-color2) !important;
 }
 
+.post-content b.button {
+    background-color: var(--callout-color);
+    color: #fff;
+    display: inline-block;
+    line-height: 1;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.2), 0 2px 0 0 rgba(255,255,255,0.7) inset;
+    padding: 2px 5px;
+    white-space: nowrap;
+}
+
 .post-tags {
     font-size: 70%;
 }
