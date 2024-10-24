@@ -289,7 +289,10 @@ Amends link:0001-technical-debt-decision.adoc[1. Record technical debt decisions
 
 The tools include various generators that can be used to generate listings, graphs and even feeds.
 
-==== TOC
+==== Table of Contents (TOC)
+
+The table of contents generates a nice overview of the known records and can additionally prepend and
+append an intro and an outro, to allow further customization:
 
 [source,shell]
 ----
@@ -303,6 +306,25 @@ Intro
 * link:0003-usage-of-zerolog.adoc[3. Usage of zerolog]
 
 Outro
+----
+
+==== Atom & RSS
+
+[source,shell]
+----
+$ ../src/record-tdr generate rss
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>List of all tdr records</title>
+    <description>List of all created tdr records</description>
+    <ttl>240</ttl>
+    <lastBuildDate>2024-10-24 12:05</lastBuildDate>
+    <generator>record-tools</generator>
+    <webmaster>christoph@unexist.dev</webmaster>
+<item><title>1. Record technical debt decisions</title><link>0001-technical-debt-decision.adoc</link><category>high</category><pubDate>2024-10-24</pubDate><description>Status: superseded</description></item> <item><title>2. Usage of log4j</title><link>0002-usage-of-log4j.adoc</link><category>low</category><pubDate>2024-10-22</pubDate><description>Status: superseded</description></item> <item><title>3. Usage of zerolog</title><link>0003-usage-of-zerolog.adoc</link><category>low</category><pubDate>2024-10-23</pubDate><description>Status: drafted</description></item>
+  </channel>
+</rss>
 ----
 
 ==== Digraph & Plantuml
@@ -344,8 +366,8 @@ digraph tdr {
 {% endplantuml %}
 ++++
 
-The resulting graph includes the links between the records and when embedded as a vector graphic
-([svg]) also includes links:
+Plantuml doesn't use the passed links, but when the graph is directly renderes as a a vector graphic
+([svg]) it also includes links:
 
 [source,shell]
 ----
@@ -357,7 +379,8 @@ $ ../src/record-tdr generate digraph | dot -Tsvg > graph.svg
 The index page accumulates all known records, groups them based on different properties like
 the severity and combines everything into a single and clickable page.
 
-NOTE: Generating the index page requires a populated database, due to the heavy usage of the tools.
+NOTE: This uses the tools quite heavily or in other words is pretty slow.
+Therefore it relies on the database to speed this up, which must be populated first.
 
 [source,shell]
 ----
@@ -392,16 +415,7 @@ $ ../src/record-tdr generate index
 ...
 ----
 
-=== Publish everything
-
-There are several options from here on:
-
-- Calling the [Asciidoc CLI] manually, which is perfectly capable of generating all of the documents
-- Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
-
-
-Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
-based on the good ol' CLI:
+This page can be converted via [asciidoctor] and its various backends:
 
 [source,shell]
 ----
@@ -425,6 +439,16 @@ image::index-page.png[]
 image::adr-page.png[]
 
 NOTE: The same can be achieved with `make generate`.
+
+=== Publish everything
+
+ Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
+
+Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
+based on the good ol' CLI:
+
+
+
 
 == Records and culture
 
