@@ -182,8 +182,8 @@ these formats and keep the intention of the original along with some shameful se
 :1: https://unexist.blog/documentation/myself/2024/10/22/decision-records.html
 
 |===
-| Proposed Date: | 2024-10-22
-| Decision Date: | 2024-10-22
+| Proposed Date: | 2024-10-24
+| Decision Date: | 2024-10-24
 | Proposer:      | Christoph Kappel
 | Deciders:      | Christoph Kappel
 | Status:        | accepted
@@ -222,11 +222,11 @@ It isn't strictly necessary to checkout the example, but if you want to play wit
 
 [source,shell]
 ----
-$ hg clone https://hg.unexist.dev/record-tools # <.>
+$ hg clone https://hg.unexist.dev/record-tools
+$ # OR: git clone https://github.com/unexist/record-tools
 ...
 $ cd record-tools/example
 ----
-<.> OR: git clone <https://github.com/unexist/record-tools>
 --
 
 === Create new records
@@ -245,7 +245,7 @@ image::tdb-log4j.png[]
 
 If you consider the topic of this record there probably comes a lot to your mind what you would
 like to add, but let us shorten this phase and accept the record as-is and press
-[line-through]#save# press btn:[:]+btn:[w].
+[line-through]#save# btn:[:]+btn:[w].
 
 === Supersede old records
 
@@ -256,7 +256,7 @@ once we've gathered more information and/or gained experience with out decision.
 ----
 $ ../src/record-tdr new -s 2 Usage of zerolog # <.>
 ----
-<.> Let us mix languages here, but [zerolog] is always worth mentioning
+<.> Both are quite incompatible, but [zerolog] is always worth mentioning
 
 === Link records
 
@@ -385,7 +385,7 @@ $ ../src/record-tdr generate index
 ...
 ----
 
-==== Publish everything
+=== Publish everything
 
 There are several options from here on:
 
