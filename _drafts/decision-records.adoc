@@ -310,9 +310,11 @@ Outro
 
 ==== Atom & RSS
 
+These two generators should be pretty self-explanatory:
+
 [source,shell]
 ----
-$ ../src/record-tdr generate rss
+$ ../src/record-tdr generate rss # <.>
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
   <channel>
@@ -326,11 +328,12 @@ $ ../src/record-tdr generate rss
   </channel>
 </rss>
 ----
+<.> Either use `rss` `atom` for the specific type
 
 ==== Digraph & Plantuml
 
-Both generators create a graph based on [dot] - the plantuml version just neatly wraps the output
-between `@startdot` and `@enddot`:
+Both generators create a graph based on [dot] - the sole difference is the plantuml version just
+neatly wraps the output between `@startdot` and `@enddot`:
 
 [source,shell]
 ----
@@ -366,6 +369,7 @@ digraph tdr {
 {% endplantuml %}
 ++++
 
+
 Plantuml doesn't use the passed links, but when the graph is directly renderes as a a vector graphic
 ([svg]) it also includes links:
 
@@ -376,11 +380,11 @@ $ ../src/record-tdr generate digraph | dot -Tsvg > graph.svg
 
 ==== Index
 
-The index page accumulates all known records, groups them based on different properties like
-the severity and combines everything into a single and clickable page.
+And index accumulates all known records, groups them based on different properties like
+the severity and combines everything into a clickable page.
 
-NOTE: This uses the tools quite heavily or in other words is pretty slow.
-Therefore it relies on the database to speed this up, which must be populated first.
+NOTE: This uses the tools quite heavily - or in other words is pretty slow.
+Therefore it relies on the database to speed things up, which needs to be populated first.
 
 [source,shell]
 ----
@@ -438,17 +442,52 @@ image::index-page.png[]
 .ADR page
 image::adr-page.png[]
 
-NOTE: The same can be achieved with `make generate`.
+Another way of generating the page is via [Maven], which is quite handy since it is prerequisite
+for the next step anyway.
+Fortunately the example contains all required configuration and all that needs to be done is this:
+
+[source,shell]
+----
+$ mvn -P generate-docs exec:exec generate-resources # <.>
+----
+<.> The [maven exec plugin] handles the database generation and index page part
+
+TIP: There is a Makefile included in the example that provides convenience targets for the
+commands like `make generate` and `make publish` which will come in handy for the next step.
 
 === Publish everything
 
- Relying on [Maven], which is used anyway with the [Confluence Publisher] plugin
+And finally we want to publish our documents, to make them easy accessible for everyone.
+There are many different options to pick from, but one of the easiest is to use the
+[Confluence Publish] and put our documents to a [Confluence] instance of our choice.
 
-Since the [Makefile] already packages the commands necessary for Maven, so we are going to do it
-based on the good ol' CLI:
+Spinning up a confluence instance for this example is quite pointless without a license, so if
+you really want to see it in action there is some config required in the `pom.xml` file:
 
+[source,xml]
+----
+<!-- Confluence config -->
+<!-- NOTE: Be careful with the ancestorID, everything will be overwritten -->
+<confluence.url>${env.CONFLUENCE_URL}</confluence.url> <!--.-->
+<confluence.publishingStrategy>APPEND_TO_ANCESTOR</confluence.publishingStrategy>
 
+<!-- Provide these values from env; don't commit them! -->
+<confluence.spaceKey>${env.CONFLUENCE_SPACE}</confluence.spaceKey> <!--.-->
+<confluence.ancestorId>${env.CONFLUENCE_ANCESTOR}</confluence.ancestorId> <!--.-->
+<confluence.publisherUserName>${env.CONFLUENCE_USER}</confluence.publisherUserName>
+<confluence.publisherPassword>${env.CONFLUENCE_TOKEN}</confluence.publisherPassword>
+----
+<.> The configuration can either passed by environment variables or be hardcoded - this is up to you
+<.> This is the normally two letter abbreviation of the space, which can be found within the space settings
+<.> And finally we also need the ancestor id to append our records to. Problems to find it? Just open the page
+settings and have a look at the address bar of your browser.
 
+And once everything is set up correctly just fire up following:
+
+[source,shell]
+----
+$ CONFLUENCE_USER=USER_NAME CONFLUENCE_TOKEN=USER_TOKEN mvn -P generate-docs-and-publish exec:exec generate-resources
+----
 
 == Records and culture
 
