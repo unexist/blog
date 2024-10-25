@@ -478,9 +478,10 @@ you really want to see it in action there is some config required in the `pom.xm
 <confluence.publisherPassword>${env.CONFLUENCE_TOKEN}</confluence.publisherPassword>
 ----
 <.> The configuration can either passed by environment variables or be hardcoded - this is up to you
-<.> This is the normally two letter abbreviation of the space, which can be found within the space settings
-<.> And finally we also need the ancestor id to append our records to. Problems to find it? Just open the page
-settings and have a look at the address bar of your browser.
+<.> This is normally the two letter abbreviation of the space, which can be found within the
+space settings
+<.> And finally we also need the ancestor id to append our records to. Problems to find it? Just
+open the page settings and have a look at the address bar of your browser.
 
 And once everything is set up correctly just fire up following:
 
@@ -490,6 +491,21 @@ $ CONFLUENCE_USER=USER_NAME CONFLUENCE_TOKEN=USER_TOKEN mvn -P generate-docs-and
 ----
 
 == Records and culture
+
+Aside from the documentation aspect and way to have these documents kind of guided to the fixed
+chapter layout, we haven't spoken of the real power of this yet.
+
+Records shouldn't be drafted by single persons and allow people of the teams to contribute to and
+suggest changes of the overall architecture in the case of ADR and point to critical problems
+within TDR.
+
+This can be a culture change of the involved teams, since it allows a more active participation
+in the process and also provides an opportunity to devise improvements in [PoC] or simple showcases.
+Naturally this is best done in pairs or more, but this depends on the topic and preferences of the
+participants.
+
+And there are many more ways for active collaboration like [Writer's Workshops], which work
+splendidly with this approach.
 
 == Conclusion
 
