@@ -9,8 +9,8 @@ while read LINK; do
     LINKNAME_UP=`echo ${LINKNAME:0:1} | tr '[:lower:]' '[:upper:]'`${LINKNAME:1}
     LINKNAME_DOWN=`echo ${LINKNAME:0:1} | tr '[:upper:]' '[:lower:]'`${LINKNAME:1}
 
-    sed -i -e "s#\[${LINKNAME_UP}\]\[[0-9]*\]#{${IDX}}\[${LINKNAME_UP}\]#g" $FILE
-    sed -i -e "s#\[${LINKNAME_DOWN}\]\[[0-9]*\]#{${IDX}}\[${LINKNAME_DOWN}\]#g" $FILE
+    sed -i "s#\[${LINKNAME_UP}\]\[[0-9]*\]#{${IDX}}\[${LINKNAME_UP}\]#g" $FILE
+    sed -i "s#\[${LINKNAME_DOWN}\]\[[0-9]*\]#{${IDX}}\[${LINKNAME_DOWN}\]#g" $FILE
 
     LINKNAME=`echo $LINKNAME | tr -d ' '`
 
