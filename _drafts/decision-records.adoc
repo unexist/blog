@@ -2,8 +2,8 @@
 layout: post
 title: Decision records
 description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debt records (TDB) and demonstrates how everything can be nicely combined document and culture wise.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: adr tdr asciidoc markdown showcase
 categories: documentation myself
@@ -20,18 +20,33 @@ endif::[]
 :page-liquid:
 :experimental:
 
-:1: https://github.com/unexist/record-tools
-:2: https://github.com/unexist/adr-tools
-:3: https://github.com/npryce/adr-tools
-:4: https://github.com/ms1963/TechnicalDebtRecords
-:5: https://github.com/ms1963
-:6: https://github.com/npryce
-:7: https://github.com/rs/zerolog
+:1: https://github.com/npryce/adr-tools
+:2: https://asciidoctor.org/
+:3: https://asciidoc.org/
+:4: https://confluence-publisher.atlassian.net/wiki/spaces/CPD/overview?mode=global
+:5: https://confluence.com/
+:6: https://docsascode.org/
+:7: https://graphviz.org/doc/info/lang.html
+:8: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+:9: https://en.wikipedia.org/wiki/Markdown
+:10: https://www.mojohaus.org/exec-maven-plugin/
+:11: https://maven.apache.org/
+:12: https://github.com/ms1963
+:13: https://github.com/npryce
+:14: https://github.com/plantuml/plantuml
+:15: https://en.wikipedia.org/wiki/Proof_of_concept
+:16: https://www.rust-lang.org/
+:17: https://en.wikipedia.org/wiki/SVG
+:18: https://github.com/ms1963/TechnicalDebtRecords
+:19: https://en.wikipedia.org/wiki/Technical_debt
+:20: https://github.com/ms1963/TechnicalDebtRecords
+:21: https://en.wikipedia.org/wiki/Writers_workshop_(activity)
+:22: https://github.com/rs/zerolog
 
 I can probably cite myself from this blog, but writing documentation (not necessarily good
 documentation mind you, but any at all) is really difficult and keeping it up-to-date nigh on
 impossible.
-To ease the pain, some clever people invented tools to write [documentation-as-code][], so docs can
+To ease the pain, some clever people invented tools to write {6}[documentation-as-code], so docs can
 co-exist next to the source and have a better chance of being touched, whenever something is
 changed.
 
@@ -41,7 +56,7 @@ good luck finding any hint about them - until I discovered records.
 == Record types
 
 During the course of this post we are going to do a quick recap of ADR mostly by pointing to
-links ([DRY][], you know?), introduce a new type for [technical debt][] (aptly named [TDR][]),
+links ({8}[DRY], you know?), introduce a new type for {19}[technical debt] (aptly named {18}[TDR]),
 have a look at some examples some examples with adapted tooling and talk a bit about the power
 of the idea, that isn't covered by the documents alone.
 
@@ -56,7 +71,7 @@ It never came to my mind, but why should we stop here?
 
 === Technical Debts Records
 
-[Michael Stal][] pretty much got the gist of it and his suggestion is to handle technical debt in
+{12}[Michael Stal] pretty much got the gist of it and his suggestion is to handle technical debt in
 the same lieu as architecture decisions.
 
 - Documented as code
@@ -64,7 +79,7 @@ the same lieu as architecture decisions.
 - With some mandatory fields and an open format as a guide rail.
 
 In comparison with architecture decision records, the format of these new records (especially since
-it is [Markdown][]) looks a bit different, but we are going to cover that later on.
+it is {9}[Markdown]) looks a bit different, but we are going to cover that later on.
 
 NOTE: I included the descriptions of the fields in the actual document, just because I cannot
 explain the fields any better.
@@ -147,7 +162,7 @@ Additional Notes:
 Any other relevant information or considerations related to the debt.
 ----
 
-He also provides [tooling][] along with the definition, which is quite nice for a starter.
+He also provides {20}[tooling] along with the definition, which is quite nice for a starter.
 
 The format is really close to the one of the ADR, so I did the obvious migration and adapted it
 to the format already used there.
@@ -157,19 +172,19 @@ handle TDR yet.
 
 == Record tools
 
-During the course of the last few years I played with the original [adr-tools][] based on the
-work of its inventor [Nat Pryce][] and added some missing features.
-Like the pending [Asciidoc][] support, a simple database layer to speed up some of the generators
+During the course of the last few years I played with the original {1}[adr-tools] based on the
+work of its inventor {13}[Nat Pryce] and added some missing features.
+Like the pending {3}[Asciidoc] support, a simple database layer to speed up some of the generators
 and added simple rss/atom feeds for easier aggregation.
 
 This put me in a perfect position to adapt the tools even further and hack a new format into it
 under a new umbrella.
 
-TIP: I am still playing with the idea to port the shellscripts to [Rust][] - does anyone fancy
+TIP: I am still playing with the idea to port the shellscripts to {16}[Rust] - does anyone fancy
 `record-tools-rs`?
 
 The following examples demonstrates how the record-tools can be used, starting with the basic steps
-up to deploying rendered versions to a [Confluence][] instance, since it always pays off to include
+up to deploying rendered versions to a {5}[Confluence] instance, since it always pays off to include
 non-tech-savvy folks.
 
 The record-tools include two examples, one of each kind to kickstart the decision to actually use
@@ -257,7 +272,7 @@ decision could be gained.
 ----
 $ ../src/record-tdr new -s 2 Usage of zerolog # <.>
 ----
-<.> Both are quite incompatible, but [zerolog][] is always worth mentioning
+<.> Both are quite incompatible, but {22}[zerolog] is always worth mentioning
 
 === Link records
 
@@ -332,7 +347,7 @@ $ ../src/record-tdr generate rss # <.>
 
 ==== Digraph & Plantuml
 
-Both generators create a graph based on [dot][] - the sole difference is the plantuml version just
+Both generators create a graph based on {7}[dot] - the sole difference is the plantuml version just
 neatly wraps the output between `@startdot` and `@enddot`:
 
 [source,shell]
@@ -340,7 +355,7 @@ neatly wraps the output between `@startdot` and `@enddot`:
 $ ../src/record-tdr generate plantuml
 ... # <.>
 ----
-<.> We omit the output here, because it looks way better directly rendered with [Plantuml][] below
+<.> We omit the output here, because it looks way better directly rendered with {14}[Plantuml] below
 
 .Rendered diagram
 ++++
@@ -371,7 +386,7 @@ digraph tdr {
 
 
 Plantuml doesn't use the passed links, but when the graph is directly renderes as a a vector graphic
-([svg][]) it also includes links:
+({17}[svg]) it also includes links:
 
 [source,shell]
 ----
@@ -419,7 +434,7 @@ $ ../src/record-tdr generate index
 ...
 ----
 
-This page can be converted via [Asciidoctor][] and its various backends:
+This page can be converted via {2}[Asciidoctor] and its various backends:
 
 [source,shell]
 ----
@@ -442,7 +457,7 @@ image::index-page.png[]
 .ADR page
 image::adr-page.png[]
 
-Another way of generating the page is via [Maven][], which is quite handy since it is
+Another way of generating the page is via {11}[Maven], which is quite handy since it is
 prerequisite for the next step anyway.
 Fortunately the example contains all required configuration and all that needs to be done is this:
 
@@ -450,7 +465,7 @@ Fortunately the example contains all required configuration and all that needs t
 ----
 $ mvn -P generate-docs exec:exec generate-resources # <.>
 ----
-<.> The [maven exec plugin][] handles the database generation and index page part
+<.> The {10}[maven exec plugin] handles the database generation and index page part
 
 TIP: There is a Makefile included in the example that provides convenience targets for the
 commands like `make generate` and `make publish` which will come in handy for the next step.
@@ -459,7 +474,7 @@ commands like `make generate` and `make publish` which will come in handy for th
 
 And finally we want to publish our documents, to make them easy accessible for everyone.
 There are many different options to pick from, but one of the easiest is to use the
-[Confluence Publisher][] and put our documents to a Confluence instance of our choice.
+{4}[Confluence Publisher] and put our documents to a Confluence instance of our choice.
 
 Spinning up a confluence instance for this example is quite pointless without a license, so if
 you really want to see it in action there is some config required in the `pom.xml` file:
@@ -496,8 +511,8 @@ Aside from the documentation aspect and way to have these documents kind of guid
 document layout, we haven't spoken of the real power of this yet.
 
 Records foster active collaboration and work splendidly with all kind of crowd thinking.
-They offer a space to experiment maybe in the form of [proof-of-concepts][] or simple showcase
-for a particular technologie or to collect further opinions in [Writer's Workshops][].
+They offer a space to experiment maybe in the form of {15}[proof-of-concepts] or simple showcase
+for a particular technologie or to collect further opinions in {21}[Writer's Workshops].
 
 In this way teams are able to contribute to and suggest changes of the overall architecture in the
 case of ADR and point to critical problems within TDR.
