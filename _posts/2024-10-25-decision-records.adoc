@@ -2,8 +2,8 @@
 layout: post
 title: Decision records
 description: This blog post summarizes my experience with architecture decision records (ADR), introduces technical debt records (TDB) and demonstrates how everything can be nicely combined document and culture wise.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-10-25 17:48 +0200
+last_updated: 2024-10-25 17:48 +0200
 author: Christoph Kappel
 tags: adr tdr asciidoc markdown showcase
 categories: documentation myself
