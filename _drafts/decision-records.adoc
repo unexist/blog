@@ -492,26 +492,24 @@ $ CONFLUENCE_USER=USER_NAME CONFLUENCE_TOKEN=USER_TOKEN mvn -P generate-docs-and
 
 == Records and culture
 
-Aside from the documentation aspect and way to have these documents kind of guided to the fixed
-chapter layout, we haven't spoken of the real power of this yet.
+Aside from the documentation aspect and way to have these documents kind of guided to the guided
+document layout, we haven't spoken of the real power of this yet.
 
-Records shouldn't be drafted by single persons and allow people of the teams to contribute to and
-suggest changes of the overall architecture in the case of ADR and point to critical problems
-within TDR.
+Records foster active collaboration and work splendidly with all kind of crowd thinking.
+They offer a space to experiment maybe in the form of [proof-of-concepts] or simple showcase
+for a particular technologie or to collect further opinions in [Writer's Workshops].
 
+In this way teams are able to contribute to and suggest changes of the overall architecture in the
+case of ADR and point to critical problems within TDR.
 This can be a culture change of the involved teams, since it allows a more active participation
-in the process and also provides an opportunity to devise improvements in [PoC] or simple showcases.
-Naturally this is best done in pairs or more, but this depends on the topic and preferences of the
-participants.
-
-And there are many more ways for active collaboration like [Writer's Workshops], which work
-splendidly with this approach.
+in the process and especially if they are involved in the actual (democratic?) decision.
 
 == Conclusion
 
-All examples can be found here:
+We are still experimenting with the actual documents and formats at work, but my personal feeling
+is this really moves us forward and allows the team more autonomy and offers additional ways for
+contribution.
+
+Like always all my examples can be found here:
 
 <https://github.com/unexist/record-tools>
-
-[bibliography]
-== Bibliography
