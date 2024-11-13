@@ -9,12 +9,12 @@ layout: default
             {% capture updatetime %}{{ page.last_updated | date: '%s' }}{% endcapture %}
 
             {% if datetime == updatetime %}
-                <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}">{{ page.author }}</a>
+                <a href="/about.html">{{ page.author }}</a>
                 &middot;
                 <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
                 &middot;
             {% else %}
-                <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}">{{ page.author }}</a>
+                <a href="/about.html">{{ page.author }}</a>
                 &middot;
                 <time class="line-through" datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date_to_long_string }}</time>
                 <time datetime="{{ page.last_updated | date_to_xmlschema }}">{{ page.last_updated | date_to_long_string }}</time>
