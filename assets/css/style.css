@@ -430,7 +430,7 @@ svg.linkedin #path28, svg.linkedin #path30 {
     display: grid;
 }
 
-.post-content p code:not([data-lang]) {
+.post-content code:not([data-lang]) {
     padding: 0.2em 0.4em;
     font-size: 0.9em;
     font-family: monospace;
@@ -438,14 +438,11 @@ svg.linkedin #path28, svg.linkedin #path30 {
     border: var(--border);
     overflow-wrap: break-word;
     font-weight: bold;
-}
-
-.post-content p code.highlighter-rouge {
+    background-color: var(--top-color);
     color: var(--code-color);
 }
 
-.post-content p code {
-    background-color: var(--top-color);
+.post-content p code.highlighter-rouge {
     color: var(--code-color);
 }
 
