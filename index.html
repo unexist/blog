@@ -14,12 +14,12 @@ layout: default
                 {% capture updatetime %}{{ post.last_updated | date: '%s' }}{% endcapture %}
 
                 {% if datetime == updatetime %}
-                    <a href="https://www.linkedin.com/in/{{ site.linkedin_username }}">{{ post.author }}</a>
+                    <a href="about.html">{{ post.author }}</a>
                     &middot;
                     <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_long_string }}</time>
                     &middot;
                 {% else %}
-                    <a href="/about">{{ post.author }}</a>
+                    <a href="/about.html">{{ post.author }}</a>
                     &middot;
                     <time class="line-through" datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date_to_long_string }}</time>
                     <time datetime="{{ post.last_updated | date_to_xmlschema }}">{{ post.last_updated | date_to_long_string }}</time>
