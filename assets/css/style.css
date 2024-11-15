@@ -21,6 +21,7 @@
     --margin: 10px;
     --margin-top: 20px;
     --padding: 10px;
+    --padding-top-bot: 30px;
     --radius: 8px;
     --border: 1px solid var(--top-color);
 
@@ -62,7 +63,7 @@ footer {
     color: var(--font-color2);
     font-size: 70%;
     text-align: center;
-    padding: 30px !important;
+    padding: var(--padding-top-bot) var(--padding) !important;
 }
 
 /* Text */
@@ -258,7 +259,7 @@ span.bold {
 }
 
 #headline {
-    padding: 30px !important;
+    padding: var(--padding-top-bot) var(--padding) !important;
 }
 
 #headline h1 {
