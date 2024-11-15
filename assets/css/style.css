@@ -395,8 +395,8 @@ svg.linkedin #path28, svg.linkedin #path30 {
     text-align:  justify;
 }
 
-.post-content h2 {
-    clear: both;
+.post-content h2, .post-content h3, .post-content h4 {
+    display: flex;
 }
 
 .post-content article {

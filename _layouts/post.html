@@ -28,12 +28,14 @@ layout: default
         </div>
     </div>
 
-    {% if page.toc %}
-    <div id="table-of-contents">
-        <span id="toc-header">In this article</span>
-        {% toc %}
-    </div>
-    {% endif %}
+    <div>
+        {% if page.toc %}
+        <div id="table-of-contents">
+            <span id="toc-header">In this article</span>
+            {% toc %}
+        </div>
+        {% endif %}
 
-    {% include anchor_headings.html html=content anchorBody="&" %}
+        {% include anchor_headings.html html=content anchorBody="&" %}
+    </div>
 </div>
