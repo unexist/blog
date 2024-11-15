@@ -662,6 +662,10 @@ p.tableblock {
         display: none;
     }
 
+    #headline > div {
+        display: inherit !important;
+    }
+
     #split {
         flex-direction: column;
     }
