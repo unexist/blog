@@ -51,6 +51,10 @@ nav {
     align-self: center;
 }
 
+nav .active {
+    color: var(--highlight-color) !important;
+}
+
 nav svg:not(:last-child) {
     margin-right: 5px;
 }
