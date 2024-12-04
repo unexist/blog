@@ -207,13 +207,13 @@ but just to recall the three back to our memory:
 
 [cols="1,5"]
 |===
-| Logging
+h| Logging
 | Historical records of system events and errors
 
-| Tracing
+h| Tracing
 | Visualization of requests flowing through (distributed) systems
 
-| Metrics
+h| Metrics
 | Numerical data like e.g. performance, response time, memory consumption
 |===
 
@@ -351,16 +351,16 @@ Metrics can generally be of following {28}[types]:
 
 [cols="1,5"]
 |===
-| Counter
+h| Counter
 | A simple monotonically increasing counter which can be reset
 
-| Gauge
+h| Gauge
 | A single value that can go arbitrarily up and down
 
-| Histogram
+h| Histogram
 | A time series of counter values and a sum
 
-| Summary
+h| Summary
 | A histogram with a sum and quantile over a sliding window
 |===
 
