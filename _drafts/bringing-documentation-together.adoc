@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Bringing documentation together
-description: TBD
+description: This blog post explains how documentation from Doxygen and AsciiDoc can be brought together with the help of AsciiDoxy.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -17,12 +17,107 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:experimental:
+
+////
+https://www.doxygen.nl
+https://www.doxygen.nl/manual/commands.html#cmdparam
+////
+
+Documentation is and was always my strong point and if I look back upon the year, which is about to
+close, it also has been a huge part inside of this blog and my daily job.
+During the year one critical problem (among how to [line-through]#motivate# create a motivating
+environment to write documentation) remained:
+
+_How can we manage documentation that is scattered among many repositories and documentation
+systems?_
+
+The first problem is easily solved and I also recommended giving [Antora][] a spin for my go-to
+documentation system [AsciiDoc][]
+{{ site.url }}{% post_url 2021-06-24-aggregate-asciidoc-from-multiple-repositories %}[here],
+but what about the latter?
+
+If you look closely, you can probably find *n+1* documentation systems for every language.
+Examples include [Javadoc][] for [Java][], [Rustdoc][] for [Rust][] just to name a few I daily
+use.
+
+Visiting all of them is totally beyond the scope of this post, so this post focuses on a more
+general approach with [Doxygen][], which also better matches my main motivation to align
+documentation for application and embedded software engineering.
+
+== What is Doxygen?
+
+[Doxygen][] was actually the first documentation generator I've ever used and even my oldest
+C project [subtle][] contains configuration for it.
+
+In a nutshell Doxygen collects special [comment blocks][] from the actual source files, takes care
+of all the symbols and provides various output formats like HTML in the next example:
+
+[source,c]
+----
+ /**
+  * @brief Main function <.>
+  *
+  * @details <.>
+  * @startuml
+  * main.c -> lang.c : get_lang()
+  * @enduml
+  *
+  * @param[in]  argc  Number of arguments <.>
+  * @param[in]  argv  Array with passed commandline arguments
+  * @retval  0  Default return value <.>
+  **/
+
+ int main(int argc, char *argv[]) {
+
+    printf("Hello, %s", get_lang("NL"));
+
+    return 0;
+ }
+----
+<.> The first section [brief][] briefly (as the name implies) describes the method or function
+<.> A [details][] block includes more verbose information about the implementation in the source
+file and can even contain [Plantuml][] diagrams
+<.> [Parameters][] should surprise no one besides the direction information `in`, `out` or both
+<.> And lastly [return values][] can also be nicely laid out
+
+NOTE: Normally Doxygen command starts with a btn:[`\`], but I personally prefer the Javadoc btn:[`@`]
+version.
+
+Doxygen can then be run either locally or even better via [container][] to create the first version
+of our output:
+
+[source,shell]
+----
+podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+	-it docker.io/unexist/asciidoxy-builder:0.3 \
+	sh -c "cd /asciidoxy && doxygen"
+Doxygen version used: 1.11.0
+Searching for include files...
+Searching for example files...
+Searching for images...
+Searching for dot files...
+...
+Generate XML output for dir /asciidoxy/src/
+Running plantuml with JAVA...
+Generating PlantUML png Files in html
+type lookup cache used 8/65536 hits=26 misses=8
+symbol lookup cache used 16/65536 hits=50 misses=16
+finished...
+----
+
+Once done the generated html pages look like this (in dark mode):
+
+image::doxygen.png[]
+
+So far, so good, but how does this help us at all?
+
+== How can AsciiDoxy help?
+
+== Example time
 
 == Conclusion
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase->
-
-[bibliography]
-== Bibliography
+<https://github.com/unexist/showcase-asciidoxy>
