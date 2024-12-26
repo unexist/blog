@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 :experimental:
 
 ////
@@ -90,7 +91,7 @@ of our output:
 
 [source,shell]
 ----
-podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && doxygen"
 Doxygen version used: 1.11.0
@@ -119,7 +120,6 @@ move us any closer to an aggregated documentation - *yet*.
 
 Besides the html output from above, Doxygen can also create xml files which include information
 about all the found symbols, their documentation and also their relationship to each other.
-
 Normally this would be quite messy to integrate into Asciidoc, but this is the gap [AsciiDoxy][]
 closes as we are going to see next.
 
@@ -144,7 +144,7 @@ The container from before is equipped with the whole chain, so let us quickly fi
 
 [source,shell]
 ----
-podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && asciidoxy \
     --require asciidoctor-diagram \
@@ -240,7 +240,7 @@ The base call to create the document works in the same manner as before:
 
 [source,shell]
 ----
-podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
     --dns 8.8.8.8 \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && mvn -f pom.xml generate-resources"
@@ -273,7 +273,7 @@ Getting the actual document to Confluence is a nice exercise for my dear readers
 
 [source,shell]
 ----
-CONFLUENCE_URL="unexist.blog" CONFLUENCE_SPACE_KEY="UXT" CONFLUENCE_ANCESTOR_ID="123" \
+$ CONFLUENCE_URL="unexist.blog" CONFLUENCE_SPACE_KEY="UXT" CONFLUENCE_ANCESTOR_ID="123" \
     CONFLUENCE_USER="unexist" CONFLUENCE_TOKEN="secret123" \
     podman run --rm -v $(CURDIR):$(MOUNTPATH) \
         --dns 8.8.8.8 \
