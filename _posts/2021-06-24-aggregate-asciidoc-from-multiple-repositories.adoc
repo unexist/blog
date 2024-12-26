@@ -27,8 +27,8 @@ So back to writing documentation in {1}[AsciiDoc]:
 Sometimes there is a requirement to include docs from multiple sources, but it is kind of difficult
 to aggregate this properly and to combine it to a single document.
 
-: There is surely a way to use something like git modules, but there are also not many faster ways
-to annoy me.
+NOTE: There is surely a way to use something like git modules, but there are also not many faster
+ways to annoy me.
 
 Time to check out {3}[Antora].
 
