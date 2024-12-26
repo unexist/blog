@@ -5,8 +5,8 @@ description: This blog post explains how documentation from Doxygen and AsciiDoc
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
-categories: tech
+tags: asciidoc doxygen asciidoxy showcase
+categories: documentation myself
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -284,6 +284,16 @@ $ CONFLUENCE_URL="unexist.blog" CONFLUENCE_SPACE_KEY="UXT" CONFLUENCE_ANCESTOR_I
 Give it a try, I'll watch.
 
 == Conclusion
+
+Adding Doxygen and AsciiDoxy to the mix allows us to enhance our documentation with rendered meta
+information directly from the code and supplements the existing features of directly including
+code by file or tag.
+Being able to customize the used templates and select per symbol what is included offers great
+flexibility and still keeps the beautiful look of AsciiDoc.
+
+The additional overhead of the toolchain and the intermediate steps to call Doxygen, AsciDoxy and
+AsciiDoc on every change is something to consider, but should be a no-brainer within a proper
+CICD pipeline.
 
 All examples can be found here:
 
