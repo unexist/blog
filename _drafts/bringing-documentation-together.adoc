@@ -22,6 +22,8 @@ endif::[]
 ////
 https://www.doxygen.nl
 https://www.doxygen.nl/manual/commands.html#cmdparam
+https://github.com/tomtom-international/asciidoxy/issues/124
+https://asciidoxy.org/reference/commands.html
 ////
 
 Documentation is and was always my strong point and if I look back upon the year, which is about to
@@ -82,7 +84,7 @@ file and can even contain [Plantuml][] diagrams
 <.> And lastly [return values][] can also be nicely laid out
 
 NOTE: Normally Doxygen command starts with a btn:[`\`], but I personally prefer the Javadoc btn:[`@`]
-version.
+version via `JAVADOC_AUTOBRIEF`.
 
 Doxygen can then be run either locally or even better via [container][] to create the first version
 of our output:
@@ -90,8 +92,8 @@ of our output:
 [source,shell]
 ----
 podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
-	-it docker.io/unexist/asciidoxy-builder:0.3 \
-	sh -c "cd /asciidoxy && doxygen"
+    -it docker.io/unexist/asciidoxy-builder:0.3 \
+    sh -c "cd /asciidoxy && doxygen"
 Doxygen version used: 1.11.0
 Searching for include files...
 Searching for example files...
@@ -108,13 +110,125 @@ finished...
 
 Once done the generated html pages look like this (in dark mode):
 
+.Screenshot of the generated Doxygen docs
 image::doxygen.png[]
 
-So far, so good, but how does this help us at all?
+This works well, but unfortunately creates another documentation artifact somewhere and doesn't
+move us any closer to an aggregated documentation - *yet*.
 
 == How can AsciiDoxy help?
 
-== Example time
+Besides the html output from above, Doxygen can also create xml files which include information
+about all the found symbols, their documentation and also their relationship to each other.
+
+Normally this would be quite messy to integrate into Asciidoc, but this is the gap [AsciiDoxy][]
+closes as we are going to see next.
+
+Originally created by [TomTom][] and hopefully still managed since I've opened a [bug][] on
+[Github][], it parses the xml files and ultimately provides a short list of AsciiDoc macros
+for convenient use inside our documents:
+
+[source, asciidoc]
+----
+${language("cpp")} // <.>
+${insert("main", leveloffset=2)} // <.>
+${insert("main", template="customfunc")} // <.>
+----
+<.> Set the [language][] - the [Mako][] templates vary a bit based on the language
+<.> [Insert][] an actual symbol
+<.> Insert the same symbol again, but use a different [template][] now
+
+NOTE: The initial setup is a bit tricky, especially with the different modules, but refer to the
+showcase and the official manual if you are stuck.
+
+The container from before is equipped with the whole chain, so let us quickly fire it up:
+
+[source,shell]
+----
+podman run --rm -v /Users/ces/Projects/showcase-asciidoxy:/asciidoxy \
+    -it docker.io/unexist/asciidoxy-builder:0.3 \
+    sh -c "cd /asciidoxy && asciidoxy \
+    --require asciidoctor-diagram \
+    --spec-file packages.toml \
+    --base-dir text \
+    --destination-dir src/site/asciidoc \
+    --build-dir build \
+    --template-dir templates \
+    -b adoc \
+    text/index.adoc"
+
+    ___              _ _ ____             0.8.7
+   /   |  __________(_|_) __ \____  _  ____  __
+  / /| | / ___/ ___/ / / / / / __ \| |/_/ / / /
+ / ___ |(__  ) /__/ / / /_/ / /_/ />  </ /_/ /
+/_/  |_/____/\___/_/_/_____/\____/_/|_|\__, /
+                                      /____/
+
+Collecting packages     : 100%|██████████████████████████████████| 1/1 [00:00<00:00, 226.55pkg/s]
+Loading API reference   : 100%|██████████████████████████████████| 1/1 [00:00<00:00, 47.60pkg/s]
+Resolving references    : 100%|██████████████████████████████████| 2/2 [00:00<00:00, 1954.48ref/s]
+Checking references     : 100%|██████████████████████████████████| 1/1 [00:00<00:00, 28149.69ref/s]
+Preparing work directory: 100%|██████████████████████████████████| 2/2 [00:00<00:00, 267.69pkg/s]
+Processing asciidoc     : 100%|██████████████████████████████████| 2/2 [00:00<00:00, 67.52file/s]
+Copying images          : 100%|██████████████████████████████████| 2/2 [00:00<00:00, 6647.07pkg/s]
+----
+
+Once this step is done AsciiDoxy has expanded all the macros and replaced them with the appropriate
+AsciiDoc directives like the following for `${insert("main", leveloffset=2)}`:
+
+[source,asciidoc]
+----
+[#cpp-hello_8c_1a0ddf1224851353fc92bfbff6f499fa97,reftext='main']
+=== main :)
+
+
+[%autofit]
+[source,cpp,subs="-specialchars,macros+"]
+----
+#include &lt;src/hello.c&gt;
+
+int main(int argc,
+         char * argv)
+----
+
+
+main
+
+Main function
+
+[plantuml]
+....
+main.c -> lang.c : get_lang()
+....
+
+[cols='h,5a']
+|===
+| Parameters
+|
+`int argc`::
+Number of arguments
+
+`char * argv`::
+Array with passed commandline arguments
+
+| Returns
+|
+`int`::
+
+
+|===
+----
+
+NOTE: The markup is a bit cryptic, but shouldn't be too hard to understand with a bit of AsciiDoc
+knowledge.
+
+AsciiDoxy can perfectly generate AsciiDoc documents by itself and even supports [multipage][]
+documents, but we require an intermediate step for the next part.
+
+== Bringing everything together
+
+.Screenshot of the generated AsciiDoc docs
+image::asciidoc.png[]
 
 == Conclusion
 
