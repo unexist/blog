@@ -2,8 +2,8 @@
 layout: post
 title: Bringing documentation together
 description: This blog post explains how documentation from Doxygen and AsciiDoc can be brought together with the help of AsciiDoxy.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2024-12-26 18:20 +0100
+last_updated: 2024-12-26 18:20 +0100
 author: Christoph Kappel
 tags: asciidoc doxygen asciidoxy showcase
 categories: documentation myself
