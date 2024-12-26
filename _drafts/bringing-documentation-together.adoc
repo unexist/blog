@@ -2,8 +2,8 @@
 layout: post
 title: Bringing documentation together
 description: This blog post explains how documentation from Doxygen and AsciiDoc can be brought together with the help of AsciiDoxy.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: asciidoc doxygen asciidoxy showcase
 categories: documentation myself
@@ -20,12 +20,33 @@ endif::[]
 :page-liquid:
 :experimental:
 
-////
-https://www.doxygen.nl
-https://www.doxygen.nl/manual/commands.html#cmdparam
-https://github.com/tomtom-international/asciidoxy/issues/124
-https://asciidoxy.org/reference/commands.html
-////
+:1: https://antora.org/
+:2: https://github.com/confluence-publisher/confluence-publisher
+:3: https://asciidoc.org/
+:4: https://asciidoxy.org/
+:5: https://www.doxygen.nl/manual/commands.html#cmdbrief
+:6: https://github.com/tomtom-international/asciidoxy/issues/124
+:7: https://www.doxygen.nl/manual/docblocks.html#specialblock
+:8: https://www.atlassian.com/software/confluence
+:9: https://github.com/unexist/showcase-asciidoxy/blob/master/infrastructure/Containerfile
+:10: https://www.doxygen.nl/manual/commands.html#cmddetails
+:11: https://www.doxygen.nl
+:12: https://github.com/
+:13: https://asciidoxy.org/reference/commands.html
+:14: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
+:15: https://www.java.com/en/
+:16: https://asciidoxy.org/reference/commands.html#_setting_default_programming_language
+:17: https://www.makotemplates.org/
+:18: https://maven.apache.org/
+:19: https://asciidoxy.org/getting-started/multipage.html
+:20: https://www.doxygen.nl/manual/commands.html#cmdparam
+:21: https://github.com/plantuml/plantuml
+:22: https://www.doxygen.nl/manual/commands.html#cmdreturn
+:23: https://doc.rust-lang.org/rustdoc/index.html
+:24: https://www.rust-lang.org/
+:25: https://github.com/unexist/subtle
+:26: https://asciidoxy.org/getting-started/custom-templates.html
+:27: https://www.tomtom.com/
 
 Documentation is and was always my strong point and if I look back upon the year, which is about to
 close, it also has been a huge part inside of this blog and my daily job.
@@ -35,24 +56,24 @@ environment to write documentation) remained:
 _How can we manage documentation that is scattered among many repositories and documentation
 systems?_
 
-The first problem is easily solved and I also recommended giving [Antora][] a spin for my go-to
-documentation system [AsciiDoc][]
+The first problem is easily solved and I also recommended giving {1}[Antora] a spin for my go-to
+documentation system {3}[AsciiDoc]
 {{ site.url }}{% post_url 2021-06-24-aggregate-asciidoc-from-multiple-repositories %}[here],
 but what about the latter?
 
 If you look closely, you can probably find *n+1* documentation systems for every language.
-Examples include [Javadoc][] for [Java][], [Rustdoc][] for [Rust][] just to name a few I daily
+Examples include {14}[Javadoc] for {15}[Java], {23}[Rustdoc] for {24}[Rust] just to name a few I daily
 use.
 Visiting all of them is totally beyond the scope of this post, so this post focuses on a more
-general approach with [Doxygen][], which also better matches my main motivation to align
+general approach with {11}[Doxygen], which also better matches my main motivation to align
 documentation for application and embedded software engineering.
 
 == What is Doxygen?
 
-[Doxygen][] was actually the first documentation generator I've ever used and even my oldest
-C project [subtle][] contains configuration for it.
+{11}[Doxygen] was actually the first documentation generator I've ever used and even my oldest
+C project {25}[subtle] contains configuration for it.
 
-In a nutshell Doxygen collects special [comment blocks][] from the actual source files, takes care
+In a nutshell Doxygen collects special {7}[comment blocks] from the actual source files, takes care
 of all the symbols and provides various output formats like HTML in the next example:
 
 [source,c]
@@ -77,16 +98,16 @@ of all the symbols and provides various output formats like HTML in the next exa
     return 0;
  }
 ----
-<.> The first section [brief][] briefly (as the name implies) describes the method or function
-<.> A [details][] block includes more verbose information about the implementation in the source
-file and can even contain [Plantuml][] diagrams
-<.> [Parameters][] should surprise no one besides the direction information `in`, `out` or both
-<.> And lastly [return values][] can also be nicely laid out
+<.> The first section {5}[brief] briefly (as the name implies) describes the method or function
+<.> A {10}[details] block includes more verbose information about the implementation in the source
+file and can even contain {21}[Plantuml] diagrams
+<.> {20}[Parameters] should surprise no one besides the direction information `in`, `out` or both
+<.> And lastly {22}[return values] can also be nicely laid out
 
 NOTE: Normally Doxygen command starts with a btn:[+\+], but I personally prefer the Javadoc btn:[@]
 version via the config option `JAVADOC_AUTOBRIEF`.
 
-Doxygen can then be run either locally or even better via [container][] to create the first version
+Doxygen can then be run either locally or even better via {9}[container] to create the first version
 of our output:
 
 [source,shell]
@@ -120,11 +141,11 @@ move us any closer to an aggregated documentation - *yet*.
 
 Besides the html output from above, Doxygen can also create xml files which include information
 about all the found symbols, their documentation and also their relationship to each other.
-Normally this would be quite messy to integrate into Asciidoc, but this is the gap [AsciiDoxy][]
+Normally this would be quite messy to integrate into Asciidoc, but this is the gap {4}[AsciiDoxy]
 closes as we are going to see next.
 
-Originally created by [TomTom][] and hopefully still managed since I've opened a [bug][] on
-[Github][], it parses the xml files and ultimately provides a short list of AsciiDoc macros
+Originally created by {27}[TomTom] and hopefully still managed since I've opened a {6}[bug] on
+{12}[Github], it parses the xml files and ultimately provides a short list of AsciiDoc macros
 for convenient use inside our documents:
 
 [source, asciidoc]
@@ -133,9 +154,9 @@ ${language("cpp")} // <.>
 ${insert("main", leveloffset=2)} // <.>
 ${insert("main", template="customfunc")} // <.>
 ----
-<.> Set the [language][] - the [Mako][] templates vary a bit based on the language
-<.> [Insert][] an actual symbol
-<.> Insert the same symbol again, but use a different [template][] now
+<.> Set the {16}[language] - the {17}[Mako] templates vary a bit based on the language
+<.> {13}[Insert] an actual symbol
+<.> Insert the same symbol again, but use a different {26}[template] now
 
 NOTE: The initial setup is a bit tricky, especially with the different modules, but refer to the
 showcase and the official manual if you are stuck.
@@ -221,7 +242,7 @@ Array with passed commandline arguments
 NOTE: The markup is a bit cryptic, but shouldn't be too hard to understand with a bit of AsciiDoc
 knowledge.
 
-AsciiDoxy can perfectly generate AsciiDoc documents by itself and even supports [multipage][]
+AsciiDoxy can perfectly generate AsciiDoc documents by itself and even supports {19}[multipage]
 documents, but we require an intermediate step for the next part.
 
 == Bringing everything together
@@ -229,12 +250,12 @@ documents, but we require an intermediate step for the next part.
 There is more than one way to generate the prepared document to its final form, but as initially
 told the general idea is to bring everything together.
 
-I am not that fond of [Confluence][], but the goal of collecting everything in one place ranks
+I am not that fond of {8}[Confluence], but the goal of collecting everything in one place ranks
 higher than my taste here.
 Since rendering just the document doesn't work here, we are going to rely on the
-[asciidoc-confluence-publisher-maven-plugin][] from before.
+{2}[asciidoc-confluence-publisher-maven-plugin] from before.
 
-This adds some more dependencies and finally explains why the container is based on [Maven][].
+This adds some more dependencies and finally explains why the container is based on {18}[Maven].
 
 The base call to create the document works in the same manner as before:
 
