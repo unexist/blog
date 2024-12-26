@@ -42,7 +42,6 @@ but what about the latter?
 If you look closely, you can probably find *n+1* documentation systems for every language.
 Examples include [Javadoc][] for [Java][], [Rustdoc][] for [Rust][] just to name a few I daily
 use.
-
 Visiting all of them is totally beyond the scope of this post, so this post focuses on a more
 general approach with [Doxygen][], which also better matches my main motivation to align
 documentation for application and embedded software engineering.
@@ -83,8 +82,8 @@ file and can even contain [Plantuml][] diagrams
 <.> [Parameters][] should surprise no one besides the direction information `in`, `out` or both
 <.> And lastly [return values][] can also be nicely laid out
 
-NOTE: Normally Doxygen command starts with a btn:[`\`], but I personally prefer the Javadoc btn:[`@`]
-version via `JAVADOC_AUTOBRIEF`.
+NOTE: Normally Doxygen command starts with a btn:[+\+], but I personally prefer the Javadoc btn:[@]
+version via the config option `JAVADOC_AUTOBRIEF`.
 
 Doxygen can then be run either locally or even better via [container][] to create the first version
 of our output:
@@ -145,7 +144,7 @@ The container from before is equipped with the whole chain, so let us quickly fi
 
 [source,shell]
 ----
-podman run --rm -v /Users/ces/Projects/showcase-asciidoxy:/asciidoxy \
+podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && asciidoxy \
     --require asciidoctor-diagram \
@@ -177,9 +176,9 @@ Once this step is done AsciiDoxy has expanded all the macros and replaced them w
 AsciiDoc directives like the following for `${insert("main", leveloffset=2)}`:
 
 [source,asciidoc]
-----
+-----
 [#cpp-hello_8c_1a0ddf1224851353fc92bfbff6f499fa97,reftext='main']
-=== main :)
+=== main
 
 
 [%autofit]
@@ -217,7 +216,7 @@ Array with passed commandline arguments
 
 
 |===
-----
+-----
 
 NOTE: The markup is a bit cryptic, but shouldn't be too hard to understand with a bit of AsciiDoc
 knowledge.
@@ -227,8 +226,62 @@ documents, but we require an intermediate step for the next part.
 
 == Bringing everything together
 
+There is more than one way to generate the prepared document to its final form, but as initially
+told the general idea is to bring everything together.
+
+I am not that fond of [Confluence][], but the goal of collecting everything in one place ranks
+higher than my taste here.
+Since rendering just the document doesn't work here, we are going to rely on the
+[asciidoc-confluence-publisher-maven-plugin][] from before.
+
+This adds some more dependencies and finally explains why the container is based on [Maven][].
+
+The base call to create the document works in the same manner as before:
+
+[source,shell]
+----
+podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+    --dns 8.8.8.8 \
+    -it docker.io/unexist/asciidoxy-builder:0.3 \
+    sh -c "cd /asciidoxy && mvn -f pom.xml generate-resources"
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------< dev.unexist.showcase:showcase-asciidoxy >---------------
+[INFO] Building showcase-asciidoxy 0.1
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+Downloading from central: https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctor-maven-plugin/2.1.0/asciidoctor-maven-plugin-2.1.0.pom
+...
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO] asciidoctor: WARN: index.adoc: line 60: id assigned to section already in use: cpp-hello_8c_1a0ddf1224851353fc92bfbff6f499fa97
+[INFO] Converted /asciidoxy/src/site/asciidoc/index.adoc
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.596 s
+[INFO] Finished at: 2024-12-26T15:51:23Z
+[INFO] ------------------------------------------------------------------------
+----
+
+And if we have a look at our final result:
+
 .Screenshot of the generated AsciiDoc docs
 image::asciidoc.png[]
+
+Getting the actual document to Confluence is a nice exercise for my dear readers:
+
+[source,shell]
+----
+CONFLUENCE_URL="unexist.blog" CONFLUENCE_SPACE_KEY="UXT" CONFLUENCE_ANCESTOR_ID="123" \
+    CONFLUENCE_USER="unexist" CONFLUENCE_TOKEN="secret123" \
+    podman run --rm -v $(CURDIR):$(MOUNTPATH) \
+        --dns 8.8.8.8 \
+        -it docker.io/unexist/asciidoxy-builder:$(VERSION) \
+        sh -c "cd $(MOUNTPATH) && mvn -f pom.xml -P generate-docs-and-publish generate-resources"
+----
+
+Give it a try, I'll watch.
 
 == Conclusion
 
