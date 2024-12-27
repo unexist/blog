@@ -261,8 +261,7 @@ The base call to create the document works in the same manner as before:
 
 [source,shell]
 ----
-$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
-    --dns 8.8.8.8 \
+$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && mvn -f pom.xml generate-resources"
 [INFO] Scanning for projects...
@@ -294,11 +293,13 @@ Getting the actual document to Confluence is a nice exercise for my dear readers
 
 [source,shell]
 ----
-$ CONFLUENCE_URL="unexist.blog" CONFLUENCE_SPACE_KEY="UXT" CONFLUENCE_ANCESTOR_ID="123" \
-    CONFLUENCE_USER="unexist" CONFLUENCE_TOKEN="secret123" \
-    podman run --rm -v $(CURDIR):$(MOUNTPATH) \
-        --dns 8.8.8.8 \
+$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
         -it docker.io/unexist/asciidoxy-builder:$(VERSION) \
+        -e CONFLUENCE_URL="unexist.blog" \
+        -e CONFLUENCE_SPACE_KEY="UXT" \
+        -e CONFLUENCE_ANCESTOR_ID="123" \
+        -e CONFLUENCE_USER="unexist" \
+        -e CONFLUENCE_TOKEN="secret123" \
         sh -c "cd $(MOUNTPATH) && mvn -f pom.xml -P generate-docs-and-publish generate-resources"
 ----
 
