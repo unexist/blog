@@ -1,0 +1,25 @@
+---
+layout: post
+title: Testing with Rust
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/testing_with_rust
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/testing_with_rust
+endif::[]
+:figure-caption!:
+:table-caption!:
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/heos-dial>
