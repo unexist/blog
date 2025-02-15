@@ -370,7 +370,7 @@ worth the pain?
 
 Using a full-fledged programming language surely doesn't get rid of the complexity of building
 software, but it moves the whole process from a kind of niche-existence to a first-grade citizen
-and let's more persons learn, play and adapt it to their needs.
+and lets more persons learn, play and adapt it to their needs.
 
 This directly distributes the arcane knowledge in the team and maybe reduces the bottlenecks
 when builds suddenly break.
