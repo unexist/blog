@@ -2,8 +2,8 @@
 layout: post
 title: Gitlab with Podman
 description: This blog post is a spin-off of the original post about the programmable CICD system Dagger and explains how to set up Gitlab with Podman.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2025-02-15 19:07 +0100
+last_updated: 2025-02-15 19:07 +0100
 author: Christoph Kappel
 tags: gitlab podman dagger showcase
 categories: cicd
