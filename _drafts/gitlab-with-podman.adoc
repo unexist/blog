@@ -22,6 +22,7 @@ endif::[]
 https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
 https://gist.github.com/Mearman/318b96efb31ed33d9c2efa959784d6d8
 https://en.wikipedia.org/wiki/Convention_over_configuration
+https://registry.gitlab.com/qontainers/pipglr:
 ////
 
 == Gitlab with Podman
@@ -37,10 +38,10 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 {{ site.url }}{% post_url 2024-05-15-building-with-dagger %}[Building with Dagger].
 
-=== Setting everything up
+=== Preparations
 
-The first step is to start Gitlab itself and this requires a SSL cert and just to make this
-a lot more interesting we rely on a self-signed one:
+The first step in order to start Gitlab is to provide an SSL cert, but to make this a lot more
+interesting we rely on a self-signed one:
 
 [source,shell]
 ----
@@ -54,11 +55,9 @@ $ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
 
 Next up is the actual config of Gitlab.
 
-==== Starting Gitlab
-
 There is aplenty that can actually be configured beforehand, especially in
 [memory constrained environments][] it is beneficial to disable services like [Prometheus][], but
-this we have trust in [convention over configuration][] and just include only the bare minimum to
+here we trust in [convention over configuration][] and just include only the bare minimum to
 run Gitlab:
 
 [source,ruby]
@@ -91,23 +90,25 @@ e91d11fdeb168c5713c9f48a50ab736db59d88ae7e39b807371923dcf4f26199
 
 TIP: This can be done with the make target `pd-pod-create`.
 
-Once everything is in place we can fire up Gitlab:
+==== Starting Gitlab
+
+Once everything is in place we can fire up Gitlab.
 
 [source,shell]
 ----
 $ podman run -dit --name gitlab --pod=gitlab \
     --memory=4096m --cpus=4 \
-    -v ./gitlab.crt:/etc/gitlab/ssl/gitlab.crt \ # <1>
+    -v ./gitlab.crt:/etc/gitlab/ssl/gitlab.crt \ # <.>
     -v ./gitlab.key:/etc/gitlab/ssl/gitlab.key \
-    -v ./gitlab.rb:/etc/gitlab/gitlab.rb \ # <2>
+    -v ./gitlab.rb:/etc/gitlab/gitlab.rb \ # <.>
     -v ./gitlab-data:/var/opt/gitlab \
-    -e GITLAB_ROOT_PASSWORD=YourPassword \ #<3>
+    -e GITLAB_ROOT_PASSWORD=YourPassword \ #<.>
     docker.io/gitlab/gitlab-ce:latest
 17349b87f81aa9eb7230f414923cf491c84a36a87d61057f8dc2f8f82c7ea60a
 ----
-<1> We pass our new certs via volume mounts to Gitlab
-<2> Our previously modified minimal config
-<3> Let us be creative
+<.> We pass our new certs via volume mounts to Gitlab
+<.> Our previously modified minimal config
+<.> Let's be creative
 
 TIP: This can also be done with the make target `pd-gitlab`.
 
@@ -117,51 +118,102 @@ Once the container is running Gitlab can be reached at following address:
 .Screenshot of the login screen of Gitlab
 image::gitlab_login.png[]
 
-Greta success, but unfortunately Gitlab alone is only half of the deal.
+Great success, but unfortunately Gitlab alone is only half the deal.
 
 ==== Adding a runner
 
-Following commands are required to start the required containers:
+Setting up a runner which is able to spawn new containers inside Podman is a bit tricky and
+requires to build a specially configured container first.
 
-==== Summing up
+Lucky for us other [people struggled][] also with this kind of problem and did the heavy lifting
+for us:
 
-Once everything is ready `podman ps` should show following:
+[source,shell]
+----
+$ podman build -t $(RUNNER_IMAGE_NAME) -f runner/Containerfile \ # <.>
+    --build-arg=GITLAB_URL=$(GITLAB_URL) \ # <.>
+    --build-arg=REGISTRY_URL=$(REGISTRY_URL) \
+    --build-arg=PODNAME=$(PODNAME)
+----
+<.> This relies on the [pipglr][] project
+<.> This is an excerpt from the provided Makefile, so please consider the env variables properly set
+
+TIP: This can also be done with the make target `pd-runner-podman-build`.
+
+
+=== Registration of the runner
+
+The current registration process requires us to register a new runner inside Gitlab first and
+this can be done via menu:Admin[CICD > Runners > New instance runner] at:
+<https://localhost:10443/admin/runners>
+
+Once submitted the redirection is going to fail, since our host machine doesn't know the hostname
+`gitlab`:
+
+.Screenshot of the wrong address
+image::gitlab_register_localhost.png[]
+
+This can be bypassed by just replacing `gitlab` with `localhost` or with a quick edit of the
+hosts file:
+
+[source,shell]
+----
+$ grep 127 /etc/hosts
+127.0.0.1     localhost
+127.0.0.1     meanas
+127.0.0.1     gitlab
+----
+
+Registration of the actual runner is a more involved, but remember the stuff other people do for us?
+pipglr, like a good guy, comes prepared and brings some [container labels][] to execute the actual
+commands.
+I took the liberty to throw everything into a Makefile target, and we just call it directly this
+time:
+
+[source,shell]
+----
+$ TOKEN=glrt-t1_QnEnk-yx3sdgVT-DYt7i make pd-runner-podman
+# This requires Podman >=4.1 <.>
+#podman secret exists REGISTRATION_TOKEN && podman secret rm REGISTRATION_TOKEN || true
+#podman secret exists config.toml && podman secret rm config.toml || true
+Error: no secret with name or id "REGISTRATION_TOKEN": no such secret
+Error: no secret with name or id "config.toml": no such secret
+1a02dae2a667dbddbdc8bd7b0
+Runtime platform                                    arch=amd64 os=linux pid=1 revision=690ce25c version=17.8.3
+Running in system-mode.
+
+Created missing unique system ID                    system_id=s_d3cc561989f6
+Verifying runner... is valid                        runner=t1_QnEnk-
+Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+
+Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
+# Fix SSL config to contact Gitlab registry
+db86c90b8d202682014668223
+pipglr-storage
+pipglr-cache
+8230fd623fc59d7621600304efcf1a11b5c9bf7cec5a8de5237b6d0143edb809 # <.>
+----
+<.> I really need to update this, meanwhile even my [Debian][] machine uses a decent version of Podman
+<.> Yay!
+
+The output looks promising, so let us verify our containers via Podman:
 
 [source,shell]
 ----
 $ podman ps -a --format 'table {{.ID}} {{.Image}} {{.Status}} {{.Names}}'
-CONTAINER ID  IMAGE                                  STATUS                       NAMES
-09ef2665fb09  localhost/podman-pause:4.3.1-0         Up 2 hours ago               991e7a69b59e-infra
-ccae50ee7749  docker.io/gitlab/gitlab-runner:latest  Up 2 hours ago               runner
-e88fcb56c786  docker.io/gitlab/gitlab-ce:latest      Up 17 minutes ago (healthy)  gitlab
+CONTAINER ID  IMAGE                                    STATUS                   NAMES
+bfac4e6acb26  localhost/podman-pause:5.3.2-1737979078  Up 42 minutes            e91d11fdeb16-infra
+cc6599fdf8db  docker.io/gitlab/gitlab-ce:latest        Up 42 minutes (healthy)  gitlab
+8230fd623fc5  localhost/custom-pip-runner:latest       Up About a minute        pipglr
 ----
 
+And also a quick glance at the runners list of Gitlab:
 
-=== Register the runner
+.Screenshot of our newly created runner
+image::gitlab_runner.png[]
 
-Due to the new registration process of Gitlab v16.x tokens are obsolete and the registration must be
-done inside Gitlab via `New instance runner` at:
-<https://localhost:10443/admin/runners>
 
-[source,shell]
-----
-$ gitlab-runner register  --url https://gitlab:443  --token glrt-6kixPTKGk5XLf-QLbdUF
-Runtime platform                                    arch=amd64 os=linux pid=97 revision=81ab07f6 version=16.10.0
-Running in system-mode.
 
-Enter the GitLab instance URL (for example, https://gitlab.com/):
-[https://gitlab:443]:
-Verifying runner... is valid                        runner=6kixPTKGk
-Enter a name for the runner. This is stored only in the local config.toml file:
-[showcase]:
-Enter an executor: custom, docker+machine, docker-autoscaler, virtualbox, docker, docker-windows, kubernetes, instance, shell, ssh, parallels:
-docker
-Enter the default Docker image (for example, ruby:2.7):
-quay.io/podman/stable
-Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
-
-Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
-----
 
 == Conclusion
 
