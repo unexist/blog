@@ -2,8 +2,8 @@
 layout: post
 title: Gitlab with Podman
 description: This blog post is a spin-off of the original post about the programmable CICD system Dagger and explains how to set up Gitlab with Podman.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: gitlab podman dagger showcase
 categories: cicd
@@ -20,17 +20,24 @@ endif::[]
 :page-liquid:
 :experimental:
 
-////
-https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
-https://gist.github.com/Mearman/318b96efb31ed33d9c2efa959784d6d8
-https://en.wikipedia.org/wiki/Convention_over_configuration
-https://registry.gitlab.com/qontainers/pipglr:
-////
+:1: https://docs.docker.com/engine/manage-resources/labels/
+:2: https://en.wikipedia.org/wiki/Convention_over_configuration
+:3: https://dagger.io/
+:4: https://www.debian.org/
+:5: https://about.gitlab.com/
+:6: https://kubernetes.io/
+:7: https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
+:8: https://opensource.com/article/23/3/podman-gitlab-runners
+:9: https://registry.gitlab.com/qontainers/pipglr
+:10: https://podman.io/
+:11: https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods
+:12: https://prometheus.io/
+:13: https://docs.gitlab.com/ee/user/packages/container_registry/
 
 == Gitlab with Podman
 
-The ultimate goal for my previous post about [Dagger][] was to demonstrate the combination of it
-with [Gitlab][] and [Podman][], but unfortunately I ran into so many different problems I made the
+The ultimate goal for my previous post about {3}[Dagger] was to demonstrate the combination of it
+with {5}[Gitlab] and {10}[Podman], but unfortunately I ran into so many different problems I made the
 decision to break it apart.
 
 This is second part of a small series and explains how to set up Gitlab with Podman-in-Podman
@@ -58,8 +65,8 @@ $ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
 Next up is the actual config of Gitlab.
 
 There is aplenty that can actually be configured beforehand, especially in
-[memory constrained environments][] it is beneficial to disable services like [Prometheus][], but
-here we trust in [convention over configuration][] and just include only the bare minimum to
+{7}[memory constrained environments] it is beneficial to disable services like {12}[Prometheus], but
+here we trust in {2}[convention over configuration] and just include only the bare minimum to
 run Gitlab:
 
 [source,ruby]
@@ -78,7 +85,7 @@ nginx['listen_port'] = 10443 # <3>
 <2> My initial idea was to use the registry as a cache, but more to that later
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
-Like [Kubernetes][], Podman allows to group or rather encapsulate containers in [pods][] and also to
+Like {6}[Kubernetes], Podman allows to group or rather encapsulate containers in {11}[pods] and also to
 convert them afterward, so let us quickly create one:
 
 [source,shell]
@@ -127,7 +134,7 @@ Great success, but unfortunately Gitlab alone is only half the deal.
 Setting up a runner which is able to spawn new containers inside Podman is a bit tricky and
 requires to build a specially configured container first.
 
-Luckily for us other [people struggled][] with the same idea and did the heavy lifting
+Luckily for us other {8}[people struggled] with the same idea and did the heavy lifting
 for us:
 
 [source,shell]
@@ -137,7 +144,7 @@ $ podman build -t $(RUNNER_IMAGE_NAME) -f runner/Containerfile \ # <.>
     --build-arg=REGISTRY_URL=$(REGISTRY_URL) \
     --build-arg=PODNAME=$(PODNAME)
 ----
-<.> This relies on the [pipglr][] project
+<.> This relies on the {9}[pipglr] project
 <.> This is an excerpt from the provided Makefile, so please consider the env variables properly set
 
 TIP: This can also be done with the make target `pd-runner-podman-build`.
@@ -166,7 +173,7 @@ $ grep 127 /etc/hosts
 ----
 
 Registration of the actual runner is bit a more involved, but remember the other people?
-pipglr, the actual hero our story, comes prepared and brings some [container labels][] to execute
+pipglr, the actual hero our story, comes prepared and brings some {1}[container labels] to execute
 the registration commands.
 
 I took the liberty to throw everything into a Makefile target, and we just call it directly this
@@ -195,7 +202,7 @@ pipglr-storage
 pipglr-cache
 8230fd623fc59d7621600304efcf1a11b5c9bf7cec5a8de5237b6d0143edb809 # <.>
 ----
-<.> I really need to update this, meanwhile even my [Debian][] machine uses a decent version of Podman
+<.> I really need to update this, meanwhile even my {4}[Debian] machine uses a decent version of Podman
 <.> Yay!
 
 The output looks promising, so let us verify our containers via Podman:
@@ -265,7 +272,7 @@ RUN apk add podman podman-docker curl fuse-overlayfs \
 
 With so many containers (1x gitlab + 1x runner + 1x builder) the limit of a free tier can be
 quicky reached, and it is strongly advised to add some kind of caching layer.
-Gitlab comes with its own [registry][] and can be used to cache all artifacts locally.
+Gitlab comes with its own {13}[registry] and can be used to cache all artifacts locally.
 
 We already did the required configuration in our minimal config, so we just have to push the
 containers and configure the registry.
