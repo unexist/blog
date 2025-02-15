@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Gitlab with Podman
-description: TBD
+description: This blog post is a spin-off of the original post about the programmable CICD system Dagger and explains how to set up Gitlab with Podman.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -21,19 +21,21 @@ endif::[]
 ////
 https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
 https://gist.github.com/Mearman/318b96efb31ed33d9c2efa959784d6d8
+https://en.wikipedia.org/wiki/Convention_over_configuration
 ////
 
 == Gitlab with Podman
 
-My ultimate goal for my previous post was to demonstrate the combination of [Gitlab][], [Podman][]
-and [Dagger][], but unfortunately I ran into so many different problems I made the decision to
-break it apart.
+My ultimate goal for my previous post about [Dagger][] was to demonstrate the combination with
+of it with [Gitlab][] and [Podman][], but unfortunately I ran into so many different problems I
+made the decision to break it apart.
 
-This is second part of the small series and explains how to set up Gitlab with Podman-in-Podman
-and various pitfalls on the way.
+This is second part of a small series and explains how to set up Gitlab with Podman-in-Podman
+and various pitfalls along the way.
 
 NOTE: If you are looking for the first part just follow this link over here:
-<https://unexist.blog/cicd/2024/05/05/building-with-dagger.html>
+
+{{ site.url }}{% post_url 2024-05-15-building-with-dagger %}[Building with Dagger].
 
 === Setting everything up
 
@@ -44,18 +46,19 @@ a lot more interesting we create a self-signed one:
 ----
 $ openssl req -newkey rsa:4096 -x509 -sha512 -days 365 -nodes \
     -out gitlab.crt -keyout gitlab.key \
-    -addext "subjectAltName=DNS:gitlab" \ # <1>
-    -subj "/C=DE/ST=DE/L=DE/O=unexist.dev/OU=showcase/CN=gitlab" # <2>
+    -addext "subjectAltName=DNS:gitlab" \ # <.>
+    -subj "/C=DE/ST=DE/L=DE/O=unexist.dev/OU=showcase/CN=gitlab" # <.>
 ----
-<1> This line is essential, otherwise Gitlab won't accept this cert
-<2> We are going to use *gitlab* for the hostname, so make sure to add it to your hosts file
+<.> This line is essential, otherwise Gitlab won't accept this cert
+<.> We are going to use *gitlab* for the hostname, so make sure to add it to your hosts file
+
+Next up is the actual config of Gitlab.
 
 ==== Starting Gitlab
 
-Next up is the actual config of Gitlab.
-There is plenty of stuff that can actually be configured, especially in
-[constrained environments][] it is beneficial to disable services like [Prometheus][], but this
-excerpt includes only the bare minimum to run Gitlab.
+There is aplenty that can actually be configured, especially in [memory constrained environments][]
+it is beneficial to disable services like [Prometheus][], but this we have trust in [convention over
+configuration][] and just include only the bare minimum to run Gitlab:
 
 [source,ruby]
 ----
@@ -74,8 +77,9 @@ nginx['listen_port'] = 10443 # <3>
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
 Almost there.
-Like [Kubernetes][] Podman allows to group or rather encapsulate container
-in [pods][] and also to convert them afterwards, so let us quickly create one:
+
+Like [Kubernetes][] Podman allows to group or rather encapsulate container in [pods][] and also to
+convert them afterward, so let us quickly create one:
 
 [source,shell]
 ----
@@ -97,7 +101,7 @@ $ podman run -dit --name gitlab --pod=gitlab \
     -v ./gitlab.key:/etc/gitlab/ssl/gitlab.key \
     -v ./gitlab.rb:/etc/gitlab/gitlab.rb \ # <2>
     -v ./gitlab-data:/var/opt/gitlab \
-    -e GITLAB_ROOT_EMAIL=admin@local -e GITLAB_ROOT_PASSWORD=YourPassword \ #<3>
+    -e GITLAB_ROOT_PASSWORD=YourPassword \ #<3>
     docker.io/gitlab/gitlab-ce:latest
 17349b87f81aa9eb7230f414923cf491c84a36a87d61057f8dc2f8f82c7ea60a
 ----
@@ -106,6 +110,9 @@ $ podman run -dit --name gitlab --pod=gitlab \
 <3> Let us be creative
 
 TIP: This can also be done with the make target `pd-gitlab`.
+
+Once the container is running Gitlab can be reached at following address:
+<https://localhost:10443>
 
 ==== Starting a runner
 
@@ -124,13 +131,11 @@ ccae50ee7749  docker.io/gitlab/gitlab-runner:latest  Up 2 hours ago             
 e88fcb56c786  docker.io/gitlab/gitlab-ce:latest      Up 17 minutes ago (healthy)  gitlab
 ----
 
-The webinterface can be reached at following address:
-<https://localhost:10443>
 
 === Register the runner
 
 Due to the new registration process of Gitlab v16.x tokens are obsolete and the registration must be
-started inside Gitlab via `New instance runner` at:
+done inside Gitlab via `New instance runner` at:
 <https://localhost:10443/admin/runners>
 
 [source,shell]
