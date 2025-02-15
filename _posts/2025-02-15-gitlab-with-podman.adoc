@@ -45,7 +45,7 @@ and various pitfalls along the way.
 
 NOTE: If you are looking for the first part just follow this link over here:
 
-{{ site.url }}{% post_url 2024-05-15-building-with-dagger %}[Building with Dagger].
+{{ site.url }}{% post_url 2024-05-05-building-with-dagger %}[Building with Dagger].
 
 === Preparations
 
@@ -99,7 +99,7 @@ e91d11fdeb168c5713c9f48a50ab736db59d88ae7e39b807371923dcf4f26199
 
 TIP: This can be done with the make target `pd-pod-create`.
 
-==== Starting Gitlab
+=== Starting Gitlab
 
 Once everything is in place we can fire up Gitlab:
 
@@ -129,7 +129,7 @@ image::gitlab_login.png[]
 
 Great success, but unfortunately Gitlab alone is only half the deal.
 
-==== Adding a runner
+=== Adding a runner
 
 Setting up a runner which is able to spawn new containers inside Podman is a bit tricky and
 requires to build a specially configured container first.
@@ -209,7 +209,9 @@ The output looks promising, so let us verify our containers via Podman:
 
 [source,shell]
 ----
+{% raw %}
 $ podman ps -a --format 'table {{.ID}} {{.Image}} {{.Status}} {{.Names}}'
+{% endraw %}
 CONTAINER ID  IMAGE                                    STATUS                   NAMES
 bfac4e6acb26  localhost/podman-pause:5.3.2-1737979078  Up 42 minutes            e91d11fdeb16-infra
 cc6599fdf8db  docker.io/gitlab/gitlab-ce:latest        Up 42 minutes (healthy)  gitlab
@@ -280,7 +282,7 @@ containers and configure the registry.
 [source,shell]
 ----
 $ podman login -u root -p $(GITLAB_PASS) --tls-verify=false https://$(REGISTRY_URL) # <.>
-$ podman push --tls-verify=false \¬
+$ podman push --tls-verify=false \
     $(BUILDER_IMAGE_NAME):latest $(REGISTRY_URL)/root/showcase-dagger-golang/$(BUILDER_IMAGE_NAME):latest
 ----
 <.> Perfectly set-up environment for sure!
