@@ -5,7 +5,7 @@ description: This blog post is a spin-off of the original post about the program
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: gitlab podman showcase
+tags: gitlab podman dagger showcase
 categories: cicd
 toc: true
 ---
@@ -78,7 +78,7 @@ nginx['listen_port'] = 10443 # <3>
 <2> My initial idea was to use the registry as a cache, but more to that later
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
-Like [Kubernetes][] Podman allows to group or rather encapsulate container in [pods][] and also to
+Like [Kubernetes][], Podman allows to group or rather encapsulate containers in [pods][] and also to
 convert them afterward, so let us quickly create one:
 
 [source,shell]
@@ -94,7 +94,7 @@ TIP: This can be done with the make target `pd-pod-create`.
 
 ==== Starting Gitlab
 
-Once everything is in place we can fire up Gitlab.
+Once everything is in place we can fire up Gitlab:
 
 [source,shell]
 ----
@@ -127,7 +127,7 @@ Great success, but unfortunately Gitlab alone is only half the deal.
 Setting up a runner which is able to spawn new containers inside Podman is a bit tricky and
 requires to build a specially configured container first.
 
-Lucky for us other [people struggled][] also with this kind of problem and did the heavy lifting
+Luckily for us other [people struggled][] with the same idea and did the heavy lifting
 for us:
 
 [source,shell]
@@ -141,7 +141,6 @@ $ podman build -t $(RUNNER_IMAGE_NAME) -f runner/Containerfile \ # <.>
 <.> This is an excerpt from the provided Makefile, so please consider the env variables properly set
 
 TIP: This can also be done with the make target `pd-runner-podman-build`.
-
 
 === Registration of the runner
 
@@ -166,9 +165,10 @@ $ grep 127 /etc/hosts
 127.0.0.1     gitlab
 ----
 
-Registration of the actual runner is a more involved, but remember the stuff other people do for us?
-pipglr, like a good guy, comes prepared and brings some [container labels][] to execute the actual
-commands.
+Registration of the actual runner is bit a more involved, but remember the other people?
+pipglr, the actual hero our story, comes prepared and brings some [container labels][] to execute
+the registration commands.
+
 I took the liberty to throw everything into a Makefile target, and we just call it directly this
 time:
 
@@ -215,13 +215,15 @@ And there it is, our new runner in the list of Gitlab:
 image::gitlab_runner.png[]
 
 From here everything should be pretty much self-explanatory and there are loads of good articles
-how to actually use Gitlab itself.
+how to actually use Gitlab itself like:
 
-=== Bonus: Running this with Dagger
+- <https://docs.gitlab.com/ee/tutorials/>
+- <https://docs.gitlab.com/ee/ci/quick_start/>
 
-If you really want to follow the original idea and actually use Dagger, another step of preparation
-is required.
-Dagger uses another container inside the runner, which stacks pretty up nicely:
+=== Bonus: Running with Dagger
+
+Following the original idea of using Dagger, just another step of preparation is required.
+Dagger uses another container inside the runner and adds a bit more compexity to the mix:
 
 .Stacked containers
 ++++
@@ -244,12 +246,11 @@ stack "Gitlab Runner" {
 {% endplantuml %}
 ++++
 
-"Container in container in container.." requires a specially grafted one with support for
-[overlayfs via fuse][] and doesn't work with the default container from the Dagger project:
+The containers are nicely stacked, but this requires a specially grafted one for Dagger in order
+for it to access files:
 
-[source,shell]
+[source,dockerfile]
 ----
-$ cat builder/Containerfile
 FROM docker.io/golang:alpine
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
@@ -262,15 +263,41 @@ RUN apk add podman podman-docker curl fuse-overlayfs \
 
 === Bonus: Caching via registry
 
+With so many containers (1x gitlab + 1x runner + 1x builder) the limit of a free tier can be
+quicky reached, and it is strongly advised to add some kind of caching layer.
+Gitlab comes with its own [registry][] and can be used to cache all artifacts locally.
 
+We already did the required configuration in our minimal config, so we just have to push the
+containers and configure the registry.
 
+[source,shell]
+----
+$ podman login -u root -p $(GITLAB_PASS) --tls-verify=false https://$(REGISTRY_URL) # <.>
+$ podman push --tls-verify=false \¬
+    $(BUILDER_IMAGE_NAME):latest $(REGISTRY_URL)/root/showcase-dagger-golang/$(BUILDER_IMAGE_NAME):latest
+----
+<.> Perfectly set-up environment for sure!
+
+TIP: And finally this can be done with the make target `pd-gitlab-prepare-cache`.
 
 == Conclusion
 
-Gitlab is the defacto default for many development teams, but lacks easy support for other
-container management tools like Podman.
-The examples inside of this post demonstrate how Podman can be used an
+Gitlab is by itself a complex system and adding Podman and Dagger to the mix doesn't make it
+easer at all, but probably increases the complexy tenfold.
 
-All examples can be found here:
+*So what do we actually get?*
+
+During my experiments with the trio I quickly ran into many problems and some of them were really
+challenging.
+Although I tried to address some of them in this blog post, to make it fellow readers easier to
+gets started, the whole thing is still complicated.
+
+My original goal was to benefit from the facts to have pipeline knowledge everywhere, since the
+same pipelines are run locally and in the actual CICD and to be freed from the sales stuff
+of Docker, but if I consider the cost of this small advantage...
+
+Ultimately I made the decision to postpone every move in this direction for now.
+
+All examples can be found next to the examples from the first post:
 
 <https://github.com/unexist/showcase-dagger-golang>
