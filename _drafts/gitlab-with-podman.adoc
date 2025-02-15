@@ -26,9 +26,9 @@ https://en.wikipedia.org/wiki/Convention_over_configuration
 
 == Gitlab with Podman
 
-My ultimate goal for my previous post about [Dagger][] was to demonstrate the combination with
-of it with [Gitlab][] and [Podman][], but unfortunately I ran into so many different problems I
-made the decision to break it apart.
+The ultimate goal for my previous post about [Dagger][] was to demonstrate the combination of it
+with [Gitlab][] and [Podman][], but unfortunately I ran into so many different problems I made the
+decision to break it apart.
 
 This is second part of a small series and explains how to set up Gitlab with Podman-in-Podman
 and various pitfalls along the way.
@@ -39,8 +39,8 @@ NOTE: If you are looking for the first part just follow this link over here:
 
 === Setting everything up
 
-The first step is to start Gitlab itself and this requires a SSL cert - so just to make this
-a lot more interesting we create a self-signed one:
+The first step is to start Gitlab itself and this requires a SSL cert and just to make this
+a lot more interesting we rely on a self-signed one:
 
 [source,shell]
 ----
@@ -56,9 +56,10 @@ Next up is the actual config of Gitlab.
 
 ==== Starting Gitlab
 
-There is aplenty that can actually be configured, especially in [memory constrained environments][]
-it is beneficial to disable services like [Prometheus][], but this we have trust in [convention over
-configuration][] and just include only the bare minimum to run Gitlab:
+There is aplenty that can actually be configured beforehand, especially in
+[memory constrained environments][] it is beneficial to disable services like [Prometheus][], but
+this we have trust in [convention over configuration][] and just include only the bare minimum to
+run Gitlab:
 
 [source,ruby]
 ----
@@ -76,22 +77,21 @@ nginx['listen_port'] = 10443 # <3>
 <2> My initial idea was to use the registry as a cache, but more to that later
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
-Almost there.
-
 Like [Kubernetes][] Podman allows to group or rather encapsulate container in [pods][] and also to
 convert them afterward, so let us quickly create one:
 
 [source,shell]
 ----
-$ podman pod create -n gitlab --network bridge \
-    -p 10022:22 -p 10080:80 -p 10443:10443 \
-    -p 4567:4567
-991e7a69b59e76e051d87ef756169c9ed53e4b4090650a0e41cd09cf6ffd7eb9
+$ podman pod create -n showcase --network bridge  \
+        -p 10022:22 `# Gitlab ssh` \
+        -p 10443:10443 `# Gitlab web` \
+        -p 4567:4567 `# Gitlab registry`
+e91d11fdeb168c5713c9f48a50ab736db59d88ae7e39b807371923dcf4f26199
 ----
 
 TIP: This can be done with the make target `pd-pod-create`.
 
-And with everything in place we can fire up Gitlab:
+Once everything is in place we can fire up Gitlab:
 
 [source,shell]
 ----
@@ -114,7 +114,12 @@ TIP: This can also be done with the make target `pd-gitlab`.
 Once the container is running Gitlab can be reached at following address:
 <https://localhost:10443>
 
-==== Starting a runner
+.Screenshot of the login screen of Gitlab
+image::gitlab_login.png[]
+
+Greta success, but unfortunately Gitlab alone is only half of the deal.
+
+==== Adding a runner
 
 Following commands are required to start the required containers:
 
