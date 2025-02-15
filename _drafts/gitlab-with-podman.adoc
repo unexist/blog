@@ -17,6 +17,8 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
+:experimental:
 
 ////
 https://docs.gitlab.com/omnibus/settings/memory_constrained_envs.html
@@ -72,7 +74,7 @@ nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.crt"
 nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.key"
 nginx['listen_port'] = 10443 # <3>
 ----
-<1> Setting the ports here cases problems elsewhere, so better also set the ports in <2> and <3>
+<1> Setting the ports here causes problems elsewhere, so better also set the ports in <2> and <3>
 <2> My initial idea was to use the registry as a cache, but more to that later
 <3> Nginx usually picks the port from _external_url_, which is not what we want to do
 
@@ -207,15 +209,67 @@ cc6599fdf8db  docker.io/gitlab/gitlab-ce:latest        Up 42 minutes (healthy)  
 8230fd623fc5  localhost/custom-pip-runner:latest       Up About a minute        pipglr
 ----
 
-And also a quick glance at the runners list of Gitlab:
+And there it is, our new runner in the list of Gitlab:
 
 .Screenshot of our newly created runner
 image::gitlab_runner.png[]
+
+From here everything should be pretty much self-explanatory and there are loads of good articles
+how to actually use Gitlab itself.
+
+=== Bonus: Running this with Dagger
+
+If you really want to follow the original idea and actually use Dagger, another step of preparation
+is required.
+Dagger uses another container inside the runner, which stacks pretty up nicely:
+
+.Stacked containers
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startuml
+stack "Gitlab Runner" {
+    stack "Dagger" {
+        stack "Builder" {
+            file "Software"
+        }
+    }
+}
+@enduml
+{% endplantuml %}
+++++
+
+"Container in container in container.." requires a specially grafted one with support for
+[overlayfs via fuse][] and doesn't work with the default container from the Dagger project:
+
+[source,shell]
+----
+$ cat builder/Containerfile
+FROM docker.io/golang:alpine
+
+MAINTAINER Christoph Kappel <christoph@unexist.dev>
+
+RUN apk add podman podman-docker curl fuse-overlayfs \
+    && sed -i 's/#mount_program/mount_program/' /etc/containers/storage.conf \ #<.>
+    && curl -sL --retry 3 https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
+----
+<.> This took me quite a while to figure out
+
+=== Bonus: Caching via registry
 
 
 
 
 == Conclusion
+
+Gitlab is the defacto default for many development teams, but lacks easy support for other
+container management tools like Podman.
+The examples inside of this post demonstrate how Podman can be used an
 
 All examples can be found here:
 
