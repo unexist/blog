@@ -384,7 +384,6 @@ digraph tdr {
 {% endplantuml %}
 ++++
 
-
 Plantuml doesn't use the passed links, but when the graph is directly renderes as a a vector graphic
 ({17}[svg]) it also includes links:
 
