@@ -41,8 +41,9 @@ I am getting more and more obsessed with centralized documentation and this isn'
 writing documentation (which I unfortunately really do), but more due sheer lack of it in my day
 job and all the related issues we are currently facing.
 
-Pushing ideas like the one from my previous post +
+Pushing ideas like the one from my previous post
 {{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together]
+{{ site.url }}{% post_url 2024-05-05-building-with-dagger %}[Building with Dagger].
 certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
 
 So this post is going to demonstrate how {12}[OpenAPI] (or formerly {15}[Swagger]) can be converted
