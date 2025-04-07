@@ -39,7 +39,8 @@ plugins:
 asciidoctor_attributes: &asciidoctor_attributes
   icons: font
   source-highlighter: rouge
-  plantumldir: /home/unexist/blog/assets/plantuml
+  plantumldir: /Users/ces/Projects/blog/assets/plantuml
+  #plantumldir: /home/unexist/blog/assets/plantuml
   #plantumldir: /home/unexist/projects/blog/assets/plantuml
 
 asciidoctor:

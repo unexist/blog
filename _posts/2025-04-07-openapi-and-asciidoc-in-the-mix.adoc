@@ -2,8 +2,8 @@
 layout: post
 title: OpenAPI and AsciiDoc in the Mix
 description: This blog post rounds up on converting OpenAPI specs to AsciiDoc and how this can be brought into the mix of centralized documentation.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2025-04-07 18:31 +0200
+last_updated: 2025-04-07 18:31 +0200
 author: Christoph Kappel
 tags: asciidoc openapi asciidoxy kotlin showcase
 categories: documentation myself
