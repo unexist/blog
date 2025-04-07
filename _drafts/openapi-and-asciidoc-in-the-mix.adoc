@@ -90,12 +90,12 @@ image::asciidoc.png[]
 
 == Customizing the document
 
-One of the strong point of AsciiDoc is surely the extensibility and this also true for the
+One of the strong points of AsciiDoc is surely its extensibility and this also true for the
 generator pipeline we are using now.
 
 Per default, the generator offers a lot of different entrypoints to provide custom content for
-inclusion in the final document, without doing fancy hacks like e.g. a include of the generated
-document in your own.
+inclusion in the final document, without doing fancy hacks like e.g. an include of the generated
+document in your own one.
 
 If you have a closer look at the actual generated document you can see lots of commented out
 includes like:
@@ -142,11 +142,12 @@ And hopefully, a run of the above rewards with an output like this:
 
 image::introduction.png[]
 
-There are many more templates that can be filled,
+There are many more templates that can be filled and I would gladly supply a list, but at the time
+of writing I just can offer to grep the document on your own:
 
 [source,shell]
 ----
-$ \grep -m 5 "// markup not found" asciidoc/src/site/asciidoc/index.adoc
+$ \grep -m 5 "// markup not found" src/site/asciidoc/index.adoc
 // markup not found, no include::{specDir}todo/POST/spec.adoc[opts=optional]
 // markup not found, no include::{snippetDir}todo/POST/http-request.adoc[opts=optional] # <.>
 // markup not found, no include::{snippetDir}todo/POST/http-response.adoc[opts=optional]
@@ -155,9 +156,34 @@ $ \grep -m 5 "// markup not found" asciidoc/src/site/asciidoc/index.adoc
 ----
 <.> Looks like we can also supply snippets to the example sections - neat!
 
+[WARNING]
+====
+During my tests I stumbled upon a weird behavior, whereas there are different checks per index
+and generation phase, which have different requirements to the actual path.
+
+This made it necessary for me to fix this with a symlink in my builds:
+
+[source,shell]
+----
+$ podman run --rm -v .:/openapi -it docker.io/unexist/openapi-builder:0.3 \
+  sh -c "cd /openapi \
+    && ln -s asciidoc/src/site/asciidoc/spec spec \ # <.>
+    && openapi-generator-cli generate -g asciidoc \
+        --skip-validate-spec \
+        --input-spec=asciidoc/src/site/asciidoc/spec/openapi.json \
+        --output=asciidoc/src/site/asciidoc \
+        --additional-properties=specDir=spec/,useIntroduction=true' \
+    && unlink spec" # <.>
+----
+<.> Nasty I know, but maybe I got a response to this when you actually read this post:
+<https://github.com/OpenAPITools/openapi-generator/issues/20996>
+<.> Just tidy up afterwards or rather skip altogether in a container
+====
+
 == Publish the document
 
-Getting the actual document to Confluence is a nice exercise for my dear readers:
+I think this is the third time I tease how everything can be pushed to [Confluence][], but since
+I don't run any personal instance just feel teased again:
 
 [source,shell]
 ----
@@ -169,8 +195,6 @@ $ mvn -f pom.xml \
     -DCONFLUENCE_TOKEN="secret123" \
     -P generate-docs-and-publish generate-resources
 ----
-
-Give it a try, I'll watch.
 
 == Conclusion
 
