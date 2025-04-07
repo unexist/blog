@@ -23,6 +23,7 @@ https://github.com/SMILEY4/ktor-openapi-tools
 https://github.com/Redocly/redoc
 https://swagger.io/tools/swagger-ui/
 https://github.com/joensson/swagger2asciidoc
+https://openapi-generator.tech/
 ////
 
 I am getting more and more obsessed with centralized documentation and this isn't because I enjoy
