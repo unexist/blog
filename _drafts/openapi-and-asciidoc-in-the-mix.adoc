@@ -120,10 +120,10 @@ $ cat asciidoc/src/site/asciidoc/spec/intro.adoc
 This page is updated automatically, please do *not* edit manually.
 ----
 
-:fn-templates: footnote:templates[This might be misleading due to the integration of [Mustache][], but what are they actually called?]
 
 After that we have to tell the generator to actually include our document.
-When started, it is looking for these `templates`.{fn-templates}
+When started, it is looking for these
+`templates`.{fn-templates}.footnote:[This might be misleading due to the integration of [Mustache][], but what are they actually called?]
 inside the `specDir`, something we haven't set before, but we are quite able to do.
 
 This only requires a minor change of our previous commandline:
@@ -199,7 +199,20 @@ $ mvn -f pom.xml \
 == Conclusion
 
 What have we done here?
-Strictly speaking this doesn't bring much advantages, especially when the tooling for OpenAPI
+Strictly speaking this doesn't bring many advantages, especially when the tooling for OpenAPI
+looks so polished like this:
+
+<https://unexist.blog/redoc>
+
+The ultimate goal of this is to create a central place where these specifications can be stored,
+without too many hurdles for non-dev stakeholders.
+Developers do well, when told the specs can be generated via
+[Makefile][].footnote:[Or even better via [Taskfile][]], but what about other roles like e.g.
+testers?
+
+Back then we rolled a special infrastructure container, which basically included SwaggerUI along
+with the current versions of our specs, but infrastructure *is* additional work that has to be
+done *and* everything that leads to it must be maintained.
 
 All examples can be found here:
 
