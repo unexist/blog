@@ -43,8 +43,7 @@ decision to break it apart.
 This is second part of a small series and explains how to set up Gitlab with Podman-in-Podman
 and various pitfalls along the way.
 
-NOTE: If you are looking for the first part just follow this link over here:
-
+NOTE: If you are looking for the first part just follow this link over here: +
 {{ site.url }}{% post_url 2024-05-05-building-with-dagger %}[Building with Dagger].
 
 === Preparations

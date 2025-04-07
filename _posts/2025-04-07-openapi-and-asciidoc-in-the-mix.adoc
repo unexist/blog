@@ -41,7 +41,7 @@ I am getting more and more obsessed with centralized documentation and this isn'
 writing documentation (which I unfortunately really do), but more due sheer lack of it in my day
 job and all the related issues we are currently facing.
 
-Pushing ideas like the one from my previous post
+Pushing ideas like the one from my previous post +
 {{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together]
 certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
 
