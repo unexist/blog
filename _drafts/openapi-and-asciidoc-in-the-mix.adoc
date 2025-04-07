@@ -198,6 +198,9 @@ $ mvn -f pom.xml \
 
 == Conclusion
 
+What have we done here?
+Strictly speaking this doesn't bring much advantages, especially when the tooling for OpenAPI
+
 All examples can be found here:
 
 <https://github.com/unexist/showcase-openapi-asciidoc>
