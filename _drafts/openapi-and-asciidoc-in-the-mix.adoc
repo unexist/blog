@@ -88,12 +88,12 @@ When everything works well a resulting document like this can be viewed:
 
 image::asciidoc.png[]
 
-== Enriching the document
+== Customizing the document
 
 One of the strong point of AsciiDoc is surely the extensibility and this also true for the
 generator pipeline we are using now.
 
-Per default, the generator offers a lot of different entrypoints to provide custom documents for
+Per default, the generator offers a lot of different entrypoints to provide custom content for
 inclusion in the final document, without doing fancy hacks like e.g. a include of the generated
 document in your own.
 
@@ -110,11 +110,8 @@ Simple todo service
 // markup not found, no include::{specDir}intro.adoc[opts=optional]
 ----
 
-These entrypoints (what are they actually called?) we have to provide a source or rather `spec`
-directory and he generator picks up the appropriate files for inclusion.
-
-For example, if we want to provide some helpful introductional words, we can easily create this
-file and pass the required information to the generator:
+An introduction sounds like a good idea, so we could use the space there to inform our readers
+about the automatic updates of the document:
 
 [source,shell]
 ----
@@ -123,7 +120,13 @@ $ cat asciidoc/src/site/asciidoc/spec/intro.adoc
 This page is updated automatically, please do *not* edit manually.
 ----
 
-This requires some small change of our previous commandline:
+:fn-templates: footnote:templates[This might be misleading due to the integration of [Mustache][], but what are they actually called?]
+
+After that we have to tell the generator to actually include our document.
+When started, it is looking for these `templates`.{fn-templates}
+inside the `specDir`, something we haven't set before, but we are quite able to do.
+
+This only requires a minor change of our previous commandline:
 
 [source,shell]
 ----
@@ -135,9 +138,39 @@ $ openapi-generator-cli generate -g asciidoc \
 ----
 <.> [Additional properties][] can be used to pass down configuration directly to the AsciiDoc renderer
 
+And hopefully, a run of the above rewards with an output like this:
+
 image::introduction.png[]
 
-There are many more
+There are many more templates that can be filled,
+
+[source,shell]
+----
+$ \grep -m 5 "// markup not found" asciidoc/src/site/asciidoc/index.adoc
+// markup not found, no include::{specDir}todo/POST/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}todo/POST/http-request.adoc[opts=optional] # <.>
+// markup not found, no include::{snippetDir}todo/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{specDir}todo/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}todo/\{id\}/DELETE/spec.adoc[opts=optional]
+----
+<.> Looks like we can also supply snippets to the example sections - neat!
+
+== Publish the document
+
+Getting the actual document to Confluence is a nice exercise for my dear readers:
+
+[source,shell]
+----
+$ mvn -f pom.xml \
+    -DCONFLUENCE_URL="unexist.blog" \
+    -DCONFLUENCE_SPACE_KEY="UXT" \
+    -DCONFLUENCE_ANCESTOR_ID="123" \
+    -DCONFLUENCE_USER="unexist" \
+    -DCONFLUENCE_TOKEN="secret123" \
+    -P generate-docs-and-publish generate-resources
+----
+
+Give it a try, I'll watch.
 
 == Conclusion
 
