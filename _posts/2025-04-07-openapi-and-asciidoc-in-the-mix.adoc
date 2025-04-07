@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 :1: https://openapi-generator.tech/docs/usage/#generate
 :2: https://asciidoc.org/
@@ -42,11 +43,7 @@ writing documentation (which I unfortunately really do), but more due sheer lack
 job and all the related issues we are currently facing.
 
 Pushing ideas like the one from my previous post
-
-{{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together]
-
-{{ site.url }}{% post_url 2024-05-05-building-with-dagger %}[Building with Dagger]
-
+({{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
 certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
 
 So this post is going to demonstrate how {12}[OpenAPI] (or formerly {15}[Swagger]) can be converted
