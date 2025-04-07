@@ -1,7 +1,7 @@
 ---
 layout: post
 title: OpenAPI and AsciiDoc in the Mix
-description: This blog post explains how documentation from Doxygen and AsciiDoc can be brought together with the help of AsciiDoxy.
+description: This blog post rounds up on converting OpenAPI specs to AsciiDoc and how this can be brought into the mix of centralized documentation.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -24,6 +24,9 @@ https://github.com/Redocly/redoc
 https://swagger.io/tools/swagger-ui/
 https://github.com/joensson/swagger2asciidoc
 https://openapi-generator.tech/
+https://hub.docker.com/r/openapitools/openapi-generator-cli
+https://openapi-generator.tech/docs/generators/asciidoc
+https://github.com/unexist/showcase-openapi-asciidoc/blob/master/infrastructure/Containerfile
 ////
 
 I am getting more and more obsessed with centralized documentation and this isn't because I enjoy
@@ -54,15 +57,87 @@ TIP: Still not sold? <https://swagger.io/blog/api-strategy/benefits-of-openapi-a
 
 == Converting to AsciiDoc
 
-Again, there are dozens of options to select from and some of them stopped working sanely years
-ago.
-Since I rely on the [confluence publisher plugin][] my initial pick was another
-[Maven][]-integration - [swagger2asciidoc][].
-Unfortunately the project is unmaintained for quite some time and relies on obscure and ancient
-packages and are kind of educative what happens on outdated package mirrors.
+Again, there are dozens of options to select from..
+Since I rely on the [confluence publisher plugin][] my initial pick was something with
+[Maven][]-integration as well, but unfortunately [swagger2asciidoc][] has been unmaintained for
+quite some time.
+I actually tried to use it, but this was more like an educative endeavor for learning what happens
+to neglected packages.
 
-The next best option and probably should be the first address anyway are the generators of the
-OpenAPI project.
+The next best option and probably should have been my first pick anyway is OpenAPI with its
+exhaustive list of generators.
+They offer a plethora of different ways to convert specs and thankfully
+[AsciiDoc is among them][].
+
+If we omit all nitty-gritty details it boils down to this call:
+
+[source,shell]
+----
+$ openapi-generator-cli generate -g asciidoc \
+    --skip-validate-spec \ # <.>
+    --input-spec=src/site/asciidoc/spec/openapi.json \
+    --output=src/site/asciidoc # <.>
+----
+<.> Let us ignore version handling and maturity of my own spec for now
+<.> This is my preferred structure for Maven-based documentations
+
+TIP: This can also be run from a container, see either [openapi-generator-cli][] or have a look
+at my [containerfile][] for even more dependencies.
+
+When everything works well a resulting document like this can be viewed:
+
+image::asciidoc.png[]
+
+== Enriching the document
+
+One of the strong point of AsciiDoc is surely the extensibility and this also true for the
+generator pipeline we are using now.
+
+Per default, the generator offers a lot of different entrypoints to provide custom documents for
+inclusion in the final document, without doing fancy hacks like e.g. a include of the generated
+document in your own.
+
+If you have a closer look at the actual generated document you can see lots of commented out
+includes like:
+
+[source,adoc]
+----
+[abstract]
+.Abstract
+Simple todo service
+
+
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
+----
+
+These entrypoints (what are they actually called?) we have to provide a source or rather `spec`
+directory and he generator picks up the appropriate files for inclusion.
+
+For example, if we want to provide some helpful introductional words, we can easily create this
+file and pass the required information to the generator:
+
+[source,shell]
+----
+$ cat asciidoc/src/site/asciidoc/spec/intro.adoc
+[CAUTION]
+This page is updated automatically, please do *not* edit manually.
+----
+
+This requires some small change of our previous commandline:
+
+[source,shell]
+----
+$ openapi-generator-cli generate -g asciidoc \
+    --skip-validate-spec \ # <.>
+    --input-spec=src/site/asciidoc/spec/openapi.json \
+    --output=src/site/asciidoc \
+    --additional-properties=specDir=spec/,useIntroduction=true # <.>
+----
+<.> [Additional properties][] can be used to pass down configuration directly to the AsciiDoc renderer
+
+image::introduction.png[]
+
+There are many more
 
 == Conclusion
 
