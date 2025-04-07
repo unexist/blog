@@ -22,29 +22,46 @@ endif::[]
 https://github.com/SMILEY4/ktor-openapi-tools
 https://github.com/Redocly/redoc
 https://swagger.io/tools/swagger-ui/
+https://github.com/joensson/swagger2asciidoc
 ////
 
-I am getting more and more obsessed with central documentation and this isn't because I enjoy
+I am getting more and more obsessed with centralized documentation and this isn't because I enjoy
 writing documentation (which I unfortunately really do), but more due sheer lack of it in my day
 job and all the related issues we are currently facing.
 
 Pushing ideas like the one from my previous post
 ({{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
-certainly help to make writing docs easier, but are still some loose ends to follow - like API.
+certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
 
 So this post is going to demonstrate how [OpenAPI][] (or formerly [Swagger][]) can be converted
 into shiny [AsciiDoc][] and be brought into the mix.
 
-## Why OpenAPI?
+== Why OpenAPI?
 
-[OpenAPI][] (or formerly [Swagger][]) is easily the best way to document any REST API and from
-a developer's perspective there are many
+There are many ways to document API (mind you any documentation is better than none!), but keeping
+established standards like [OpenAPI][] and [AsyncAPI][] (which isn't to far off) really help to
+keep the cognitive churn low while trying to understand what a document is trying to convey.
 
-From a developer's perspective [OpenAPI][] is the easily best way to document any REST API:
+And from a developer's perspective there are many low-hanging fruits:
 
-- There are lots of generators available like [ktor-openapi-tools][] used in the example
-- Code-first or API-first are both pickable
+- Code-first or API-first - you decide
+- Many generators in both directions available - like [ktor-openapi-tools][] used in the example
 - Tools like [Swagger UI][] and [Redoc][]
+- Comes pre-assembled with a testing tool
+
+TIP: Still not sold? <https://swagger.io/blog/api-strategy/benefits-of-openapi-api-development/>
+
+== Converting to AsciiDoc
+
+Again, there are dozens of options to select from and some of them stopped working sanely years
+ago.
+Since I rely on the [confluence publisher plugin][] my initial pick was another
+[Maven][]-integration - [swagger2asciidoc][].
+Unfortunately the project is unmaintained for quite some time and relies on obscure and ancient
+packages and are kind of educative what happens on outdated package mirrors.
+
+The next best option and probably should be the first address anyway are the generators of the
+OpenAPI project.
 
 == Conclusion
 
