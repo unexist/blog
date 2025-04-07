@@ -2,8 +2,8 @@
 layout: post
 title: OpenAPI and AsciiDoc in the Mix
 description: This blog post rounds up on converting OpenAPI specs to AsciiDoc and how this can be brought into the mix of centralized documentation.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: asciidoc openapi asciidoxy kotlin showcase
 categories: documentation myself
@@ -18,16 +18,24 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 
-////
-https://github.com/SMILEY4/ktor-openapi-tools
-https://github.com/Redocly/redoc
-https://swagger.io/tools/swagger-ui/
-https://github.com/joensson/swagger2asciidoc
-https://openapi-generator.tech/
-https://hub.docker.com/r/openapitools/openapi-generator-cli
-https://openapi-generator.tech/docs/generators/asciidoc
-https://github.com/unexist/showcase-openapi-asciidoc/blob/master/infrastructure/Containerfile
-////
+:1: https://openapi-generator.tech/docs/usage/#generate
+:2: https://asciidoc.org/
+:3: https://openapi-generator.tech/docs/generators/asciidoc
+:4: https://www.asyncapi.com/en
+:5: https://www.atlassian.com/software/confluence
+:6: https://github.com/confluence-publisher/confluence-publisher
+:7: https://github.com/unexist/showcase-openapi-asciidoc/blob/master/infrastructure/Containerfile
+:8: https://github.com/SMILEY4/ktor-openapi-tools
+:9: https://www.gnu.org/software/make/manual/make.html
+:10: https://maven.apache.org/
+:11: https://mustache.github.io/
+:12: https://swagger.io/specification/
+:13: https://hub.docker.com/r/openapitools/openapi-generator-cli
+:14: https://github.com/Redocly/redoc
+:15: https://swagger.io/
+:16: https://github.com/joensson/swagger2asciidoc
+:17: https://swagger.io/tools/swagger-ui/
+:18: https://taskfile.dev/
 
 I am getting more and more obsessed with centralized documentation and this isn't because I enjoy
 writing documentation (which I unfortunately really do), but more due sheer lack of it in my day
@@ -37,20 +45,20 @@ Pushing ideas like the one from my previous post
 ({{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
 certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
 
-So this post is going to demonstrate how [OpenAPI][] (or formerly [Swagger][]) can be converted
-into shiny [AsciiDoc][] and be brought into the mix.
+So this post is going to demonstrate how {12}[OpenAPI] (or formerly {15}[Swagger]) can be converted
+into shiny {2}[AsciiDoc] and be brought into the mix.
 
 == Why OpenAPI?
 
 There are many ways to document API (mind you any documentation is better than none!), but keeping
-established standards like [OpenAPI][] and [AsyncAPI][] (which isn't to far off) really help to
+established standards like {12}[OpenAPI] and {4}[AsyncAPI] (which isn't to far off) really help to
 keep the cognitive churn low while trying to understand what a document is trying to convey.
 
 And from a developer's perspective there are many low-hanging fruits:
 
 - Code-first or API-first - you decide
-- Many generators in both directions available - like [ktor-openapi-tools][] used in the example
-- Tools like [Swagger UI][] and [Redoc][]
+- Many generators in both directions available - like {8}[ktor-openapi-tools] used in the example
+- Tools like {17}[Swagger UI] and {14}[Redoc]
 - Comes pre-assembled with a testing tool
 
 TIP: Still not sold? <https://swagger.io/blog/api-strategy/benefits-of-openapi-api-development/>
@@ -58,8 +66,8 @@ TIP: Still not sold? <https://swagger.io/blog/api-strategy/benefits-of-openapi-a
 == Converting to AsciiDoc
 
 Again, there are dozens of options to select from..
-Since I rely on the [confluence publisher plugin][] my initial pick was something with
-[Maven][]-integration as well, but unfortunately [swagger2asciidoc][] has been unmaintained for
+Since I rely on the {6}[confluence publisher plugin] my initial pick was something with
+{10}[Maven]-integration as well, but unfortunately {16}[swagger2asciidoc] has been unmaintained for
 quite some time.
 I actually tried to use it, but this was more like an educative endeavor for learning what happens
 to neglected packages.
@@ -67,7 +75,7 @@ to neglected packages.
 The next best option and probably should have been my first pick anyway is OpenAPI with its
 exhaustive list of generators.
 They offer a plethora of different ways to convert specs and thankfully
-[AsciiDoc is among them][].
+{3}[AsciiDoc is among them].
 
 If we omit all nitty-gritty details it boils down to this call:
 
@@ -81,8 +89,8 @@ $ openapi-generator-cli generate -g asciidoc \
 <.> Let us ignore version handling and maturity of my own spec for now
 <.> This is my preferred structure for Maven-based documentations
 
-TIP: This can also be run from a container, see either [openapi-generator-cli][] or have a look
-at my [containerfile][] for even more dependencies.
+TIP: This can also be run from a container, see either {13}[openapi-generator-cli] or have a look
+at my {7}[containerfile] for even more dependencies.
 
 When everything works well a resulting document like this can be viewed:
 
@@ -123,7 +131,7 @@ This page is updated automatically, please do *not* edit manually.
 
 After that we have to tell the generator to actually include our document.
 When started, it is looking for these
-`templates`.{fn-templates}.footnote:[This might be misleading due to the integration of [Mustache][], but what are they actually called?]
+`templates`.{fn-templates}.footnote:[This might be misleading due to the integration of {11}[Mustache], but what are they actually called?]
 inside the `specDir`, something we haven't set before, but we are quite able to do.
 
 This only requires a minor change of our previous commandline:
@@ -136,7 +144,7 @@ $ openapi-generator-cli generate -g asciidoc \
     --output=src/site/asciidoc \
     --additional-properties=specDir=spec/,useIntroduction=true # <.>
 ----
-<.> [Additional properties][] can be used to pass down configuration directly to the AsciiDoc renderer
+<.> {1}[Additional properties] can be used to pass down configuration directly to the AsciiDoc renderer
 
 And hopefully, a run of the above rewards with an output like this:
 
@@ -182,7 +190,7 @@ $ podman run --rm -v .:/openapi -it docker.io/unexist/openapi-builder:0.3 \
 
 == Publish the document
 
-I think this is the third time I tease how everything can be pushed to [Confluence][], but since
+I think this is the third time I tease how everything can be pushed to {5}[Confluence], but since
 I don't run any personal instance just feel teased again:
 
 [source,shell]
@@ -207,12 +215,15 @@ looks so polished like this:
 The ultimate goal of this is to create a central place where these specifications can be stored,
 without too many hurdles for non-dev stakeholders.
 Developers do well, when told the specs can be generated via
-[Makefile][].footnote:[Or even better via [Taskfile][]], but what about other roles like e.g.
+{9}[Makefile].footnote:[Or even better via {18}[Taskfile]!], but what about other roles like e.g.
 testers?
 
 Back then we rolled a special infrastructure container, which basically included SwaggerUI along
 with the current versions of our specs, but infrastructure *is* additional work that has to be
 done *and* everything that leads to it must be maintained.
+
+Whatever you do, proving easy access to documentation really helps to reach a common understanding
+and also might help to keep it up-to-date.
 
 All examples can be found here:
 
