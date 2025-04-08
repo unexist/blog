@@ -44,7 +44,8 @@ job and all the related issues we are currently facing.
 
 Pushing ideas like the one from my previous post
 ({{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
-certainly helps to make writing docs easier, but are still some loose ends to follow - like API.
+certainly helps to make writing docs easier, but there are still some loose ends to follow -
+like API.
 
 So this post is going to demonstrate how {12}[OpenAPI] (or formerly {15}[Swagger]) can be converted
 into shiny {2}[AsciiDoc] and be brought into the mix.
