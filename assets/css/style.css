@@ -39,15 +39,20 @@
 }
 
 @font-face {
-    font-family: Nebula;
-    src:url("../webfonts/NebulaSans-Light.ttf") format("truetype");
+    font-family: Nebula-Book;
+    src:url("../webfonts/NebulaSans-Book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: Nebula-Medium;
+    src:url("../webfonts/NebulaSans-Medium.ttf") format("truetype");
 }
 
 /* Layout */
 body {
     background-color: var(--bottom-color);
     color: var(--font-color);
-    font-family: Nebula, Inter, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: Nebula-Book, Inter, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     font-size: 18px;
     line-height: 1.3;
 }
