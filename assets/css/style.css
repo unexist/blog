@@ -52,7 +52,7 @@
 body {
     background-color: var(--bottom-color);
     color: var(--font-color);
-    font-family: Nebula-Book, Inter, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    font-family: Inter, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
     font-size: 18px;
     line-height: 1.3;
 }
