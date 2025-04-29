@@ -239,6 +239,9 @@ Using diagrams for communication isn't something new, still I rarely see develop
 I sometimes think this might be a problem of tooling, but with the rise of
 {4}[documentation-as-code] this shouldn't be an excuse anymore.
 
+Domain storytelling is a different approach to the whole idea and even if you don't follow this
+approach by detail, your projects can still benefit from the way Egon tells your stories.
+
 If you interested in this topic and want to read more about it I highly suggest to have a look at
 these two books:
 
