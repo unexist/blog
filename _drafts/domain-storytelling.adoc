@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Domain storytelling
-description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with a strong ties to domain-driven design.
+description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with strong ties to domain-driven design.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -20,7 +20,7 @@ endif::[]
 :page-liquid:
 
 ```
-https://domainstorytelling.org/book
+https://domainstorytelling.org
 https://egon.io/
 https://en.wikipedia.org/wiki/Curse_of_knowledge
 ```
@@ -30,16 +30,22 @@ The great enemy of communication is the illusion of it.
 
 I think we can all agree on communication is hard and especially when you want to convey something
 that is perfectly clear to you.
-One simple explanation can be the [curse of knowledge][], but this doesn't help me on my next
-struggle to find the right words.
+One simple explanation can be the [curse of knowledge][], but this doesn't help me (at least) on my
+next struggle to find the right words without getting frustrated first.
 
-This kind of struggle can be interesting in most cases during personal communication, but what
-happens during anything related to business, like requirement phases of the next big product?
+This kind of struggle can be mildly said interesting in most cases during personal communication,
+but what happens during anything related to business, like complex requirement of your next big
+product?
 
-During the course of the post I want to put emphasis on visual communication, which can help to
-support any narrativ which can help to understand what something is supposed to mean.
+During the course of this post I want to put emphasis on visual communication, which can help to
+support any narrativ and ultimately provide additional help in getting understood.
 
-== Simple use-case
+TIP: Like many posts in this blog before, we again use my sample todo application - if you still
+haven't seen it yet you can find an [OpenAPI][] specification here:
+<https://blog.unexist.dev/redoc/#tag/Todo>¬
+
+== Simple use-cases
+
 
 ****
 A user wants to create a new todo entry.
@@ -83,6 +89,8 @@ json Todo {
 ----
 //{% endplantuml %}
 //++++
+
+== Domain-stories
 
 == Conclusion
 
