@@ -1,0 +1,32 @@
+version: '3'
+env:
+  JEKYLL_ENV: '{{.JEKYLL_ENV | default "production" }}'
+
+tasks:
+  build:
+    cmds:
+      - bundle exec jekyll build
+
+  collect:
+    cmds:
+      - zsh bin/collect.sh
+
+  convert:
+    cmds:
+      - zsh bin/convert.sh
+
+  create:
+    cmds:
+      - zsh bin/create.sh
+
+  drafts:
+    cmds:
+      - "bundle exec jekyll serve --port 10000 --drafts {{.CLI_ARGS}}"
+
+  publish:
+    cmds:
+      - zsh bin/publish.sh
+
+  start:
+    cmds:
+      - "bundle exec jekyll serve --port 9000 {{.CLI_ARGS}}"
