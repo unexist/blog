@@ -198,10 +198,19 @@ well and also the story that can be told now.
 
 == Domain-stories
 
+
+image::todo.egn.svg[Generated with Egon]
+
 == Conclusion
 
-All examples can be found here:
+Writing and evaluating requirements can be a progressive approach as we have seen with the
+evolution from a single no-brainer requirement to a more complex one.
 
+If you interested in this topic and want to read more about it I highly suggest to have a look at
+these two books:
+
+- <<viscom>>
+- <<domstory>>
 
 [bibliography]
 == Bibliography
