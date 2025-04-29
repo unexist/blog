@@ -2,8 +2,8 @@
 layout: post
 title: Domain storytelling
 description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with strong ties to domain-driven design.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2025-04-29 16:33 +0200
+last_updated: 2025-04-29 16:33 +0200
 author: Christoph Kappel
 tags: ddd diagrams use-case storytelling uml
 categories: communication
