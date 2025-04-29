@@ -5,7 +5,7 @@ description: This blog post introduces domain storytelling as an easy and intera
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: ddd diagrams storytelling uml
+tags: ddd diagrams use-case storytelling uml
 categories: communication
 toc: true
 ---
@@ -19,21 +19,24 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-```
-https://domainstorytelling.org
-https://egon.io/
-https://en.wikipedia.org/wiki/Curse_of_knowledge
-https://ifvp.org/content/why-our-brain-loves-pictures
-https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=visual+perception&btnG=&oq=visual+perc
-https://github.com/unexist/showcase-logging-tracing-quarkus
-```
+:1: https://martinfowler.com/bliki/BoundedContext.html
+:2: https://communicationpatternsbook.com/
+:3: https://en.wikipedia.org/wiki/Curse_of_knowledge
+:4: https://docsascode.org/
+:5: https://domainstorytelling.org
+:6: https://egon.io/
+:7: https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=visual+perception&btnG=&oq=visual+perc
+:8: https://www.openapis.org/
+:9: https://ifvp.org/content/why-our-brain-loves-pictures
+:10: https://martinfowler.com/bliki/UbiquitousLanguage.html
+:11: https://en.wikipedia.org/wiki/Unified_Modeling_Language
 
 [quote,William H. Whyte]
 The great enemy of communication is the illusion of it.
 
 I think we can all agree on communication is hard and especially when you want to convey something
 that is perfectly clear to you.
-One simple explanation can be the [curse of knowledge][], but this doesn't help me (at least) on my
+One simple explanation can be the {3}[curse of knowledge], but this doesn't help me (at least) on my
 next struggle to find the right words without getting frustrated first.
 
 This kind of struggle can be mildly said interesting in most cases during personal communication,
@@ -44,7 +47,7 @@ During the course of this post I want to put emphasis on visual communication, w
 support any narrativ and ultimately provide additional help in getting understood.
 
 TIP: Like many posts in this blog before, we again use my sample todo application - if you still
-haven't seen it yet you can find an [OpenAPI][] specification here: +
+haven't seen it yet you can find an {8}[OpenAPI] specification here: +
 <https://blog.unexist.dev/redoc/#tag/Todo>
 
 == Simple use-cases
@@ -83,21 +86,21 @@ So still why do I insist this adds benefits?
 
 === Excursion: Visual perception
 
-We humans are [really good in visual perception][] and a lot of information is gathered that way in
+We humans are {9}[really good in visual perception] and a lot of information is gathered that way in
 literally a glimpse.
 
 You can easily verify it on your own:
 How long does it take to read the single requirement vs how long do you have to look at the picture?
 
 NOTE: There are so many sources to cite from, if you are curious about this whole topic please
-give [Google Scholar][] a spin, but going further probably leads away from the point I want to make.
+give {7}[Google Scholar] a spin, but going further probably leads away from the point I want to make.
 
 === Technical use-cases
 
 Targeting the right audience is also key here, but still adding too much technical jargon and
 information to a use-case kind of beats the benefit of getting everything in a quick glance.
 
-[UML][] might offer many niceties, but please ask yourself does the extension of the previous
+{11}[UML] might offer many niceties, but please ask yourself does the extension of the previous
 use-case add anything of value?
 
 .Technical use-case
@@ -201,7 +204,7 @@ idea and actually tell them.
 
 == Domain-stories
 
-At its heart [Domain Storytelling][] is a workshop format, usually held by a domain expert and a
+At its heart {5}[Domain Storytelling] is a workshop format, usually held by a domain expert and a
 supporting moderator, who share examples how they actually work inside the domain.
 
 While the expert explains the domain, the moderator tries to record the story with a simple
@@ -209,13 +212,13 @@ pictographic language.
 Each domain story covers one concrete example and can be directly used to verify if the story has
 been understood correctly or otherwise adjusted.
 
-This approach allows all participants to learn the domain language (see [ubiquitous language][]),
+This approach allows all participants to learn the domain language (see {10}[ubiquitous language]),
 get an understanding of the activities of the domain and also discover boundaries between
-the different parts (see [bounded contexts][]).
+the different parts (see {1}[bounded contexts]).
 
 === Show and tell
 
-The authors of the book [Domain Storytelling][] <<domstory>> also provided [Egon][], a lightweight
+The authors of the book {5}[Domain Storytelling] <<domstory>> also provided {6}[Egon], a lightweight
 editor to support the workshop format.
 
 One of my personal favorite features among others it the replay button to actually blend in the
@@ -234,16 +237,17 @@ directly improve the understanding of all participants.
 
 Using diagrams for communication isn't something new, still I rarely see developers using them.
 I sometimes think this might be a problem of tooling, but with the rise of
-[documentation-as-code][] this shouldn't be an excuse anymore.
+{4}[documentation-as-code] this shouldn't be an excuse anymore.
 
 If you interested in this topic and want to read more about it I highly suggest to have a look at
 these two books:
 
 - Domain Storytelling <<domstory>>
-- [Communication Patterns][] <<viscom>>
+- {2}[Communication Patterns] <<viscom>>
 
 [bibliography]
 == Bibliography
 
 * [[[domstory]]] Stefan Hofer, Henning Schwentner, Domain Storytelling: A Collaborative, Visual and Agile Way to Build Domain-Driven Software, Addison-Wesley 2021
 * [[[viscom]]] Jacqui Read, Communication Patterns: A Guide for Developers and Architects, O'Reilly 2023
+
