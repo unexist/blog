@@ -5,7 +5,7 @@ description: This blog post introduces domain storytelling as an easy and intera
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: ddd diagrams uml
+tags: ddd diagrams storytelling uml
 categories: communication
 toc: true
 ---
@@ -193,11 +193,35 @@ skinparam ranksep 20
 //{% endplantuml %}
 //++++
 
-This is just a really tiny example, but I hope it still demonstrates the power of visual use-cases
-well and also the story that can be told now.
+There are many more ways to improve these use-cases and I don't lack funny ideas, but the main goal
+here was to demonstrate the power of visual use-cases and the story that can unfold.
+
+Instead of creating all of these use-cases in isolation, we can also carry on with the story
+idea and actually tell them.
 
 == Domain-stories
 
+At its heart [Domain Storytelling][] is a workshop format, usually held by a domain expert and a
+supporting moderator, who share examples how they actually work inside the domain.
+
+While the expert explains the domain, the moderator tries to record the story with a simple
+pictographic language.
+Each domain story covers one concrete example and can be directly used to verify if the story has
+been understood correctly or otherwise adjusted.
+
+This approach allows all participants to learn the domain language (see [ubiquitous language][]),
+get an understanding of the activities of the domain and also discover boundaries between
+the different parts (see [bounded contexts][]).
+
+=== Show and tell
+
+The authors of the book [Domain Storytelling][] <<domstory>> also provided [Egon][], a lightweight
+editor to support the workshop format.
+
+One of my personal favorite features among others it the replay button to actually blend in the
+different steps like in a good slidedeck.
+
+If we translate our last use-case to a simple domain story, one version could be like this:
 
 image::todo.egn.svg[Generated with Egon]
 
@@ -205,12 +229,18 @@ image::todo.egn.svg[Generated with Egon]
 
 Writing and evaluating requirements can be a progressive approach as we have seen with the
 evolution from a single no-brainer requirement to a more complex one.
+Going even further, the whole process can be done in a conversational and story-telling way and
+directly improve the understanding of all participants.
+
+Using diagrams for communication isn't something new, still I rarely see developers using them.
+I sometimes think this might be a problem of tooling, but with the rise of
+[documentation-as-code][] this shouldn't be an excuse anymore.
 
 If you interested in this topic and want to read more about it I highly suggest to have a look at
 these two books:
 
-- <<viscom>>
-- <<domstory>>
+- Domain Storytelling <<domstory>>
+- [Communication Patterns][] <<viscom>>
 
 [bibliography]
 == Bibliography
