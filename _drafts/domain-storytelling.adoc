@@ -2,8 +2,8 @@
 layout: post
 title: Domain storytelling
 description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with strong ties to domain-driven design.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: ddd diagrams use-case storytelling uml
 categories: communication
@@ -63,11 +63,10 @@ Simple enough and perfectly straight forward, but the same can be expressed (and
 replaced mind you) with a simple use-case diagram:
 
 .Simple use-case
-//++++
-//{% plantuml %}
-//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-[plantuml]
-----
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
@@ -75,9 +74,8 @@ skinparam ranksep 20
 @startuml
 :User: --> (Create todo)/
 @enduml
-----
-//{% endplantuml %}
-//++++
+{% endplantuml %}
+++++
 
 I suppose if I'd ask you for your first thoughts on this example now I'd probably get something in
 the  range of this just adds clutter and is completely overkill for this really simple matter.
@@ -104,11 +102,10 @@ information to a use-case kind of beats the benefit of getting everything in a q
 use-case add anything of value?
 
 .Technical use-case
-//++++
-//{% plantuml %}
-//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-[plantuml]
-----
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
@@ -133,8 +130,8 @@ json Todo {
 }
 @enduml
 ----
-//{% endplantuml %}
-//++++
+{% endplantuml %}
+++++
 
 Let's move on to a more complex use-case.
 
@@ -152,11 +149,10 @@ This just adds a bit more complexity, but with focus on the business side the up
 can look like this:
 
 .Advanced use-case
-//++++
-//{% plantuml %}
-//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-[plantuml]
-----
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
@@ -167,19 +163,17 @@ skinparam ranksep 20
 (Create todo)/ --> (Swearword check)/ : <<uses>>
 (Swearword check) ..> :User: : Todo denied
 @enduml
-----
-//{% endplantuml %}
-//++++
+{% endplantuml %}
+++++
 
 So far this probably doesn't bring any real benefit business-wise, so let us quickly add a way to
 actual see the created todo entries and awestruck our competitors:
 
 .Updated advanced use-case
-//++++
-//{% plantuml %}
-//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
-[plantuml]
-----
+++++
+{% plantuml %}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
@@ -192,9 +186,8 @@ skinparam ranksep 20
 
 :User: ---> (List todo entries)/
 @enduml
-----
-//{% endplantuml %}
-//++++
+{% endplantuml %}
+++++
 
 There are many more ways to improve these use-cases and I don't lack funny ideas, but the main goal
 here was to demonstrate the power of visual use-cases and the story that can unfold.
