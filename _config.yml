@@ -39,8 +39,8 @@ plugins:
 asciidoctor_attributes: &asciidoctor_attributes
   icons: font
   source-highlighter: rouge
-  plantumldir: /home/unexist/projects/blog/assets/plantuml
-  #plantumldir: /home/unexist/blog/assets/plantuml
+  #plantumldir: /home/unexist/projects/blog/assets/plantuml
+  plantumldir: /home/unexist/hg/repos/blog/assets/plantuml¬
 
 asciidoctor:
   attributes: *asciidoctor_attributes
