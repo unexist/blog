@@ -136,6 +136,31 @@ Let's move on to a more complex use-case.
 
 == Advanced use-cases
 
+****
+An admin want to define a list of swear words. +
+A user wants to create a new todo entry free of swearwords.
+****
+
+.Advanced use-case
+//++++
+//{% plantuml %}
+//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+[plantuml]
+----
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startuml
+:Admin: --> (Limit Swearwords)/
+:User: --> (Create todo)/
+(Create todo)/ --> (Swearword check)/ : <<uses>>
+(Swearword check) ..> :User: : Todo denied
+@enduml
+----
+//{% endplantuml %}
+//++++
+
 == Domain-stories
 
 == Conclusion
