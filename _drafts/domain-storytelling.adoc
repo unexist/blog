@@ -25,6 +25,7 @@ https://egon.io/
 https://en.wikipedia.org/wiki/Curse_of_knowledge
 https://ifvp.org/content/why-our-brain-loves-pictures
 https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=visual+perception&btnG=&oq=visual+perc
+https://github.com/unexist/showcase-logging-tracing-quarkus
 ```
 
 [quote,William H. Whyte]
@@ -82,7 +83,7 @@ So still why do I insist this adds benefits?
 
 === Excursion: Visual perception
 
-We humans are [really good in visual perception] and a lot of information is gathered that way in
+We humans are [really good in visual perception][] and a lot of information is gathered that way in
 literally a glimpse.
 
 You can easily verify it on your own:
@@ -136,10 +137,16 @@ Let's move on to a more complex use-case.
 
 == Advanced use-cases
 
+No creative hat on today, so I am just going to re-use an idea from my previous [logging/tracing
+showcase][]:
+
 ****
-An admin want to define a list of swear words. +
+An admin wants to define a list of swear words. +
 A user wants to create a new todo entry free of swearwords.
 ****
+
+This just adds a bit more complexity, but with focus on the business side the updated use-case
+can look like this:
 
 .Advanced use-case
 //++++
@@ -152,7 +159,7 @@ skinparam nodesep 20
 skinparam ranksep 20
 
 @startuml
-:Admin: --> (Limit Swearwords)/
+:Admin: --> (Limit swearwords)/
 :User: --> (Create todo)/
 (Create todo)/ --> (Swearword check)/ : <<uses>>
 (Swearword check) ..> :User: : Todo denied
@@ -161,13 +168,40 @@ skinparam ranksep 20
 //{% endplantuml %}
 //++++
 
+So far this probably doesn't bring any real benefit business-wise, so let us quickly add a way to
+actual see the created todo entries and awestruck our competitors:
+
+.Updated advanced use-case
+//++++
+//{% plantuml %}
+//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+[plantuml]
+----
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startuml
+:Admin: --> (Limit swearwords)/
+:User: --> (Create todo)/
+(Create todo)/ --> (Swearword check)/ : <<uses>>
+(Swearword check) ..> :User: : Todo denied
+
+:User: ---> (List todo entries)/
+@enduml
+----
+//{% endplantuml %}
+//++++
+
+This is just a really tiny example, but I hope it still demonstrates the power of visual use-cases
+well and also the story that can be told now.
+
 == Domain-stories
 
 == Conclusion
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase->
 
 [bibliography]
 == Bibliography
