@@ -1,0 +1,97 @@
+---
+layout: post
+title: Domain storytelling
+description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with a strong ties to domain-driven design.
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: ddd diagrams uml
+categories: communication
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/domain_storytelling
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/domain_storytelling
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
+```
+https://domainstorytelling.org/book
+https://egon.io/
+https://en.wikipedia.org/wiki/Curse_of_knowledge
+```
+
+[quote,William H. Whyte]
+The great enemy of communication is the illusion of it.
+
+I think we can all agree on communication is hard and especially when you want to convey something
+that is perfectly clear to you.
+One simple explanation can be the [curse of knowledge][], but this doesn't help me on my next
+struggle to find the right words.
+
+This kind of struggle can be interesting in most cases during personal communication, but what
+happens during anything related to business, like requirement phases of the next big product?
+
+During the course of the post I want to put emphasis on visual communication, which can help to
+support any narrativ which can help to understand what something is supposed to mean.
+
+== Simple use-case
+
+****
+A user wants to create a new todo entry.
+****
+
+.Simple use-case
+//++++
+//{% plantuml %}
+//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+[plantuml]
+----
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startuml
+:User: --> (Create todo)/
+@enduml
+----
+//{% endplantuml %}
+//++++
+
+.Technical use-case
+//++++
+//{% plantuml %}
+//!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+[plantuml]
+----
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+@startuml
+:User: --> (Create todo)/
+
+json Todo {
+    "title": "New todo",
+    "description": "Write a blog post"
+}
+@enduml
+----
+//{% endplantuml %}
+//++++
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
+
+* [[[domstory]]] Stefan Hofer, Henning Schwentner, Domain Storytelling: A Collaborative, Visual and Agile Way to Build Domain-Driven Software, Addison-Wesley 2021
+* [[[viscom]]] Jacqui Read, Communication Patterns: A Guide for Developers and Architects, O'Reilly 2023
