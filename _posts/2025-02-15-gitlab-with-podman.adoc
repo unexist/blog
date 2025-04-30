@@ -242,7 +242,6 @@ skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-@startuml
 stack "Gitlab Runner" {
     stack "Dagger" {
         stack "Builder" {
@@ -250,7 +249,6 @@ stack "Gitlab Runner" {
         }
     }
 }
-@enduml
 {% endplantuml %}
 ++++
 

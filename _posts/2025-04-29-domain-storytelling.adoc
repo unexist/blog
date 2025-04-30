@@ -67,13 +67,7 @@ replaced mind you) with a simple use-case diagram:
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-skinparam linetype ortho
-skinparam nodesep 20
-skinparam ranksep 20
-
-@startuml
 :User: --> (Create todo)/
-@enduml
 {% endplantuml %}
 ++++
 
@@ -106,11 +100,6 @@ use-case add anything of value?
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-skinparam linetype ortho
-skinparam nodesep 20
-skinparam ranksep 20
-
-@startuml
 actor User << User >> as u1
 
 rectangle "Create todo" {
@@ -128,8 +117,6 @@ json Todo {
     "title": "New todo",
     "description": "Write a blog post"
 }
-@enduml
-----
 {% endplantuml %}
 ++++
 
@@ -153,16 +140,10 @@ can look like this:
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-skinparam linetype ortho
-skinparam nodesep 20
-skinparam ranksep 20
-
-@startuml
 :Admin: --> (Limit swearwords)/
 :User: --> (Create todo)/
 (Create todo)/ --> (Swearword check)/ : <<uses>>
 (Swearword check) ..> :User: : Todo denied
-@enduml
 {% endplantuml %}
 ++++
 
@@ -174,18 +155,12 @@ actual see the created todo entries and awestruck our competitors:
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-skinparam linetype ortho
-skinparam nodesep 20
-skinparam ranksep 20
-
-@startuml
 :Admin: --> (Limit swearwords)/
 :User: --> (Create todo)/
 (Create todo)/ --> (Swearword check)/ : <<uses>>
 (Swearword check) ..> :User: : Todo denied
 
 :User: ---> (List todo entries)/
-@enduml
 {% endplantuml %}
 ++++
 

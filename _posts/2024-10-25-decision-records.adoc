@@ -365,6 +365,7 @@ $ ../src/record-tdr generate plantuml
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
+
 @startdot
 digraph tdr {
     node [shape=plaintext];

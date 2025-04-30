@@ -253,6 +253,7 @@ we can see following output:
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 set separator none
 title Todo Software System - System Context
 
@@ -375,6 +376,7 @@ the {18}[Grahpviz] gods your mileage may vary:
 ++++
 {% plantuml %}
 !theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 title Service components
 
 skinparam {
