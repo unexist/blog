@@ -190,7 +190,7 @@ And easily the messiest part to throw everything into a {25}[pom.xml]:
 </build>
 ----
 <1> Everything has to be bottled up into a {17}[jar] - a complete example can be found here:
-<https://github.com/unexist/showcase-asciidoc-extensions/blob/master/asciidoctor-helper-macros/pom.xml>
+<https://github.com/unexist/showcase-documentation-asciidoc-extensions/blob/master/asciidoctor-helper-macros/pom.xml>
 
 Why, but why is all of this necessary?
 We are getting closer!
@@ -421,4 +421,4 @@ to ease up writing and/or structuring.
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-asciidoc-extensions>
+<https://github.com/unexist/showcase-documentation-asciidoc-extensions>

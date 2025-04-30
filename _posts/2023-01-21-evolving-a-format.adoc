@@ -660,7 +660,7 @@ place, without disrupting other (older) services.
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-kafka-quarkus>
+<https://github.com/unexist/showcase-eventing-kafka>
 
 [bibliography]
 == Bibliography

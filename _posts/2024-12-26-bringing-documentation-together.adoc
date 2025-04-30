@@ -28,7 +28,7 @@ endif::[]
 :6: https://github.com/tomtom-international/asciidoxy/issues/124
 :7: https://www.doxygen.nl/manual/docblocks.html#specialblock
 :8: https://www.atlassian.com/software/confluence
-:9: https://github.com/unexist/showcase-asciidoxy/blob/master/infrastructure/Containerfile
+:9: https://github.com/unexist/showcase-documentation-asciidoxy/blob/master/infrastructure/Containerfile
 :10: https://www.doxygen.nl/manual/commands.html#cmddetails
 :11: https://www.doxygen.nl
 :12: https://github.com/
@@ -112,7 +112,7 @@ of our output:
 
 [source,shell]
 ----
-$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && doxygen"
 Doxygen version used: 1.11.0
@@ -165,7 +165,7 @@ The container from before is equipped with the whole chain, so let us quickly fi
 
 [source,shell]
 ----
-$ podman run --rm -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && asciidoxy \
     --require asciidoctor-diagram \
@@ -261,13 +261,13 @@ The base call to create the document works in the same manner as before:
 
 [source,shell]
 ----
-$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
     -it docker.io/unexist/asciidoxy-builder:0.3 \
     sh -c "cd /asciidoxy && mvn -f pom.xml generate-resources"
 [INFO] Scanning for projects...
 [INFO]
-[INFO] --------------< dev.unexist.showcase:showcase-asciidoxy >---------------
-[INFO] Building showcase-asciidoxy 0.1
+[INFO] --------------< dev.unexist.showcase:showcase-documentation-asciidoxy >---------------
+[INFO] Building showcase-documentation-asciidoxy 0.1
 [INFO]   from pom.xml
 [INFO] --------------------------------[ jar ]---------------------------------
 Downloading from central: https://repo.maven.apache.org/maven2/org/asciidoctor/asciidoctor-maven-plugin/2.1.0/asciidoctor-maven-plugin-2.1.0.pom
@@ -293,7 +293,7 @@ Getting the actual document to Confluence is a nice exercise for my dear readers
 
 [source,shell]
 ----
-$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-asciidoxy:/asciidoxy \
+$ podman run --rm --dns 8.8.8.8 -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
         -it docker.io/unexist/asciidoxy-builder:$(VERSION) \
         -e CONFLUENCE_URL="unexist.blog" \
         -e CONFLUENCE_SPACE_KEY="UXT" \
@@ -319,4 +319,4 @@ CICD pipeline.
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-asciidoxy>
+<https://github.com/unexist/showcase-documentation-asciidoxy>

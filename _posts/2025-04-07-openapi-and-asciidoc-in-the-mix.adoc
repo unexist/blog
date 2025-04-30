@@ -25,7 +25,7 @@ endif::[]
 :4: https://www.asyncapi.com/en
 :5: https://www.atlassian.com/software/confluence
 :6: https://github.com/confluence-publisher/confluence-publisher
-:7: https://github.com/unexist/showcase-openapi-asciidoc/blob/master/infrastructure/Containerfile
+:7: https://github.com/unexist/showcase-documentation-openapi-asciidoc/blob/master/infrastructure/Containerfile
 :8: https://github.com/SMILEY4/ktor-openapi-tools
 :9: https://www.gnu.org/software/make/manual/make.html
 :10: https://maven.apache.org/
@@ -229,4 +229,4 @@ and also might help to keep it up-to-date.
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase-openapi-asciidoc>
+<https://github.com/unexist/showcase-documentation-openapi-asciidoc>
