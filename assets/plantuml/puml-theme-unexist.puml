@@ -99,7 +99,7 @@ skinparam ArrowColor         $DARK
 skinparam stereotype {
     CBackgroundColor $BGCOLOR
     CBorderColor     $SECONDARY_LIGHT
-    ABackgroundColor $SUCCESS_LIGHT
+    ABackgroundColor $BGCOLOR
     ABorderColor     $SUCCESS_DARK
     IBackgroundColor $DANGER_LIGHT
     IBorderColor     $DANGER_DARK
@@ -429,24 +429,37 @@ skinparam stack {
         Padding         6
         Shadowing       0.0
     }
+
+    document {
+        BackgroundColor $BGCOLOR
+        header {
+            LineThickness 0
+        }
+        title {
+            FontSize          20
+            BorderRoundCorner 8
+            BorderThickness   $BORDER_THICKNESS
+            BackgroundColor   $BGCOLOR
+            FontColor         $PRIMARY
+            BorderColor       $SECONDARY
+        }
+        caption {
+            LineThickness 0
+        }
+        footer {
+            LineThickness 0
+        }
+    }
+
     node {
         Padding         $PADDING
         RoundCorner     $ROUNDED_CORNER
         BackgroundColor $PRIMARY
     }
-    caption {
-        LineThickness 0
-    }
-    footer {
-        LineThickness 0
-    }
     groupHeader {
         BackgroundColor $SECONDARY
         FontColor       $INFO
         FontStyle       bold
-    }
-    header {
-        LineThickness 0
     }
     referenceHeader {
         BackgroundColor $BGCOLOR
@@ -458,17 +471,10 @@ skinparam stack {
         FontColor       $BGCOLOR
         FontStyle       bold
     }
-    title {
-        FontSize          20
-        BorderRoundCorner 8
-        BorderThickness   $BORDER_THICKNESS
-        BackgroundColor   $BGCOLOR
-        FontColor         $PRIMARY
-        BorderColor       $SECONDARY
-    }
+
     wbsDiagram, mindmapDiagram {
         root {
-            BackgroundColor $PUML_BGCOLOR
+            BackgroundColor $BGCOLOR
             FontColor       $PRIMARY_TEXT
             HyperLinkColor  $INFO_BG
             LineColor       $PRIMARY_DARK
@@ -497,13 +503,13 @@ skinparam stack {
             LineThickness 0
         }
         referenceHeader {
-            BackgroundColor $PUML_BGCOLOR
+            BackgroundColor $BGCOLOR
             FontColor       $DARK_BG
             FontStyle       bold
         }
         separator {
             BackgroundColor $FGCOLOR
-            FontColor       $PUML_BGCOLOR
+            FontColor       $BGCOLOR
             FontStyle       bold
         }
         title {
@@ -551,7 +557,7 @@ skinparam stack {
         }
         separator {
             LineColor       $SECONDARY
-            BackGroundColor $SECONDARY-$SECONDARY_DARK
+            BackGroundColor $BGCOLOR
             FontColor       $SECONDARY_TEXT
         }
         milestone {
@@ -569,5 +575,11 @@ skinparam stack {
             BackgroundColor $WARNING_DARK
             FontColor       $WARNING_TEXT
         }
+    }
+    usecaseDiagram, descriptionDiagram {
+        BackGroundColor $BGCOLOR
+    }
+    yamlDiagram, jsonDiagram {
+        BackGroundColor $BGCOLOR
     }
 </style>
