@@ -38,16 +38,6 @@
     padding: 0px;
 }
 
-@font-face {
-    font-family: Nebula-Book;
-    src:url("../webfonts/NebulaSans-Book.ttf") format("truetype");
-}
-
-@font-face {
-    font-family: Nebula-Medium;
-    src:url("../webfonts/NebulaSans-Medium.ttf") format("truetype");
-}
-
 /* Layout */
 body {
     background-color: var(--bottom-color);
@@ -273,7 +263,7 @@ span.bold {
 }
 
 #headline {
-    padding: var(--padding-top-bot) var(--padding) !important;
+    padding: var(--padding-top-bot) var(--padding) 0px var(--padding) !important;
 }
 
 #headline h1 {
@@ -386,6 +376,10 @@ svg.linkedin #path14 {
 
 svg.linkedin #path28, svg.linkedin #path30 {
     fill: var(--bottom-color)
+}
+
+svg.waves {
+    vertical-align: bottom;
 }
 
 /* Jekyll */
