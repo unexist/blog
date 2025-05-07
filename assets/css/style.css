@@ -31,6 +31,13 @@
     --admon-tip: var(--h4-color);
     --admon-caution: var(--highlight-color);
     --admon-warning: var(--highlight-color);
+
+    /* Waves */
+    --scrollbar-size: 20px;
+    --mask: radial-gradient(26.83px at 50% 36.00px, #000 99%, #0000 101%) calc(50% - 24px) 0 / 48px 51% repeat-x,
+        radial-gradient(26.83px at 50% -24px, #0000 99%, #000 101%) 50% 12px / 48px calc(51% - 12px) repeat-x,
+        radial-gradient(26.83px at 50% calc(100% - 36.00px), #000 99%, #0000 101%) 50% calc(100% + var(--scrollbar-size)) / 48px 51% repeat-x,
+        radial-gradient(26.83px at 50% calc(100% + 24.00px), #0000 99%, #000 101%) calc(50% - 24px) calc(100% - 12px - var(--scrollbar-size)) / 48px calc(51% - 12px) repeat-x;
 }
 
 * {
@@ -471,10 +478,12 @@ svg.waves {
 .post-content pre {
     display: grid;
     text-align: left;
-    padding: var(--padding);
+    padding: var(--padding-top-bot) var(--padding);
     border: var(--border);
     background-color: #000;
     overflow-x: auto;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
 }
 
 .post-content pre.highlight code {
