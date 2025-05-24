@@ -35,55 +35,72 @@ rectangle "Index" as index {
 }
 
 rectangle "Blobs" as blobs {
-    file "Manifest amd64/linux" as manifest_amd
-    file "Config amd64/linux" as config
-    file "Layer 1" as l1
-    file "Layer 2" as l2
-    file "Layer n" as ln
+    file "Manifest amd64/linux" as blobs_manifest_amd64
+    file "Config amd64/linux" as blobs_config_amd64
+    file "Layer 1" as blobs_l1
+    file "Layer 2" as blobs_l2
+    file "Layer n" as blobs_ln
 
-    file "Manifest arm64/linux" as manifest_arm
+    file "Manifest arm64/linux" as blobs_manifest_arm64
 
     rectangle "sha256" as sha
 }
 
+rectangle "Manifest" as manifests {
+    file "amd64/linux config" as manifests_config
+
+    rectangle "Layers" as manifests_layers {
+        file "Layer 1" as manifests_l1 #palegreen;line.dashed
+        file "Layer 2" as manifests_l2 #palegreen;line.dashed
+        file "Layer n" as manifests_ln #palegreen;line.dashed
+    }
+}
+
+rectangle "Config" as configs {
+    rectangle "<U+0000>" as configs_attrs {
+        file "arch: amd64"
+        file "os: linux"
+    }
+
+    rectangle "rootfs" as configs_rootfs {
+        file "Layer 1" as configs_l1 #lightpink;line.dashed
+        file "Layer 2" as configs_l2 #lightpink;line.dashed
+        file "Layer n" as configs_ln #lightpink;line.dashed
+    }
+}
+
 ' Arrows
-index_amd .r.> manifest_amd
-index_arm .d.> manifest_arm
+index_amd .r.> blobs_manifest_amd64
+index_arm .d.> blobs_manifest_arm64
+manifests -l-> blobs_manifest_amd64
+configs -l-> blobs_config_amd64
+configs_ln -l-> blobs_ln
 
-' Placement
+' Global placement
 index -[hidden]r-> blobs
+blobs -[hidden]r-> manifests
+manifests -[hidden]d-> configs
 
+' Index
 index_amd -[hidden]d-> index_arm
 
-manifest_amd -[hidden]d-> config
-config -[hidden]d-> l1
-l1 -[hidden]d-> l2
-l2 -[hidden]d-> ln
+' Blobs
+blobs_manifest_amd64 -[hidden]d-> blobs_config_amd64
+blobs_config_amd64 -[hidden]d-> blobs_l1
+blobs_l1 -[hidden]d-> blobs_l2
+blobs_l2 -[hidden]d-> blobs_ln
+blobs_ln -[hidden]d-> blobs_manifest_arm64
+blobs_manifest_arm64 -[hidden]d-> sha
 
-ln -[hidden]d-> manifest_arm
+' Manifests
+manifests_config -[hidden]d-> manifests_layers
+manifests_l1 -[hidden]d-> manifests_l2
+manifests_l2 -[hidden]d-> manifests_ln
 
-manifest_arm -[hidden]d-> sha
-
-' Notes
-note right of config
-    JSON
-end note
-
-note right of manifest_amd
-    JSON
-end note
-
-note right of l1
-    TAR GZ
-end note
-
-note right of l2
-    TAR GZ
-end note
-
-note right of manifest_arm
-    JSON
-end note
+' Configs
+configs_attrs -[hidden]d-> configs_rootfs
+configs_l1 -[hidden]d-> configs_l2
+configs_l2 -[hidden]d-> configs_ln
 ----
 
 == Use-Cases
@@ -92,7 +109,7 @@ end note
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase->
+<https://github.com/unexist/showcase-oci-registries>
 
 [bibliography]
 == Bibliography
