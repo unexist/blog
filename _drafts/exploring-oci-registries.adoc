@@ -1,0 +1,98 @@
+---
+layout: post
+title: Exploring OCI registries
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/exploring_oci_registries
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/exploring_oci_registries
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
+== What is OCI?
+
+[plantuml]
+----
+'"!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+'skinparam linetype ortho
+skinparam nodesep 10
+skinparam ranksep 10
+
+rectangle "Index" as index {
+    file "amd64/linux" as index_amd
+    file "arm64/linux" as index_arm
+}
+
+rectangle "Blobs" as blobs {
+    file "Manifest amd64/linux" as manifest_amd
+    file "Config amd64/linux" as config
+    file "Layer 1" as l1
+    file "Layer 2" as l2
+    file "Layer n" as ln
+
+    file "Manifest arm64/linux" as manifest_arm
+
+    rectangle "sha256" as sha
+}
+
+' Arrows
+index_amd .r.> manifest_amd
+index_arm .d.> manifest_arm
+
+' Placement
+index -[hidden]r-> blobs
+
+index_amd -[hidden]d-> index_arm
+
+manifest_amd -[hidden]d-> config
+config -[hidden]d-> l1
+l1 -[hidden]d-> l2
+l2 -[hidden]d-> ln
+
+ln -[hidden]d-> manifest_arm
+
+manifest_arm -[hidden]d-> sha
+
+' Notes
+note right of config
+    JSON
+end note
+
+note right of manifest_amd
+    JSON
+end note
+
+note right of l1
+    TAR GZ
+end note
+
+note right of l2
+    TAR GZ
+end note
+
+note right of manifest_arm
+    JSON
+end note
+----
+
+== Use-Cases
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
