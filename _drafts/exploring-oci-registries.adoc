@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Exploring OCI registries
-description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with strong ties to domain-driven design.
+description: This blog post demonstrates how ORAS can be used to leverage OCI-compliant registries to handle all kind of artifacts.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
+tags: container oci oras cosign cyclodedx sbom showcase
 categories: tech
 toc: true
 ---
@@ -19,6 +19,16 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+:oci: https://opencontainers.org/
+:oras: https://oras.land/
+:sbom: https://about.gitlab.com/blog/2022/10/25/the-ultimate-guide-to-sboms/
+:harbor: https://goharbor.io/
+:runtimespec: https://github.com/opencontainers/runtime-spec
+:imagespec: https://github.com/opencontainers/image-spec
+:distspec: https://github.com/opencontainers/distribution-spec
+:github: https://github.com
+:cyclondedx: https://cyclonedx.org/
+
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
 They provide flexibility, allow easy packaging and also sandboxing of stuff you might not want
@@ -31,19 +41,29 @@ This changed, when I started looking for an artifact store for our firmware bina
 I quickly discovered there are many container registries available, but just a few stores for
 _ordinary_ artifacts without spending large parts of our engineering budget on enterprise
 license fees.
-Asking my bubble, a good friend suggested to have a look at [Oras][], which leverages
-[OCI][]-compliant registries for exactly what I wanted to archive.
+Asking my bubble, a good friend suggested to have a look at {oras}[ORAS], which leverages
+{oci}[OCI]-compliant registries for exactly what I wanted to archive.
 We are already using Harbor][], so moving other artifacts there as well directly aroused my
 interest.
 
 So over the course of this article we are going to dive into the container world with a short
-primer of the duality of OCI, talk about basic usage and a few advanced points like [SBOM][]
+primer of the duality of OCI, talk about basic usage and a few advanced points like {sbom}[SBOM]
 and signing and conclude with my impression on the technology.
 
 NOTE: Feel free to skip the next section, if you are well versed in it, but also feel strongly invited
 to correct me if I have gotten something wrong.
 
 == What is OCI?
+
+Turns out the {oci}[Open Container Initiative (OCI)] isn't a single spec by itself, but rather
+a governance body around several container formats and runtimes - namely:
+
+- Runtime Specification ({runtimespec}[runtime-spec])
+- Image Specification ({imagespec}[image-spec])
+- Distribution Specification ({distspec}[distribution-spec])
+
+I've added links to the related {github}[GitHub] in case you want to build your own container
+engine, but let us have a focussed look on the image-spec.
 
 [plantuml]
 ----
@@ -53,13 +73,13 @@ to correct me if I have gotten something wrong.
 skinparam nodesep 20
 skinparam ranksep 20
 
-package "Index" as index {
+package "Index (2)" as index {
     rectangle "Manifests" {
         file "amd64/linux" as index_amd
     }
 }
 
-package "Blobs" as blobs {
+package "Blobs (1)" as blobs {
     file "Manifest amd64/linux" as blobs_manifest_amd64 #goldenrod
     file "Config amd64/linux" as blobs_config_amd64 #mediumpurple
     file "Layer 1" as blobs_l1
@@ -69,7 +89,7 @@ package "Blobs" as blobs {
     rectangle "sha256" as sha
 }
 
-package "Manifest" as manifests {
+package "Manifest (4)" as manifests {
     file "amd64/linux config" as manifests_config
 
     rectangle "Layers" as manifests_layers {
@@ -79,7 +99,7 @@ package "Manifest" as manifests {
     }
 }
 
-package "Config" as configs {
+package "Config (3)" as configs {
     rectangle "<U+0000>" as configs_attrs {
         file "arch: amd64"
         file "os: linux"
@@ -122,6 +142,10 @@ configs_attrs -[hidden]d-> configs_rootfs
 configs_l1 -[hidden]d-> configs_l2
 configs_l2 -[hidden]d-> configs_ln
 ----
+<1> Test
+<2> Foobar
+<3> Foo
+<4> Bla
 
 == Use-Cases
 
