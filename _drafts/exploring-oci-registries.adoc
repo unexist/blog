@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Exploring OCI registries
-description: TBD
+description: This blog post introduces domain storytelling as an easy and interactive way of conveying use-cases with strong ties to domain-driven design.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -19,6 +19,30 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+Handling containers is probably something a modern developer can't and probably *should* not live
+without anymore.
+They provide flexibility, allow easy packaging and also sandboxing of stuff you might not want
+to have installed on your machine.
+
+Like so often in tech, using something successfully doesn't imply real understanding how it
+works under the hood, but I lived quite happily with this black box and all greasy details
+shrouded in mysteries.
+This changed, when I started looking for an artifact store for our firmware binary artifacts.
+I quickly discovered there are many container registries available, but just a few stores for
+_ordinary_ artifacts without spending large parts of our engineering budget on enterprise
+license fees.
+Asking my bubble, a good friend suggested to have a look at [Oras][], which leverages
+[OCI][]-compliant registries for exactly what I wanted to archive.
+We are already using Harbor][], so moving other artifacts there as well directly aroused my
+interest.
+
+So over the course of this article we are going to dive into the container world with a short
+primer of the duality of OCI, talk about basic usage and a few advanced points like [SBOM][]
+and signing and conclude with my impression on the technology.
+
+NOTE: Feel free to skip the next section, if you are well versed in it, but also feel strongly invited
+to correct me if I have gotten something wrong.
+
 == What is OCI?
 
 [plantuml]
@@ -26,27 +50,26 @@ endif::[]
 '"!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 'skinparam linetype ortho
-skinparam nodesep 10
-skinparam ranksep 10
+skinparam nodesep 20
+skinparam ranksep 20
 
-rectangle "Index" as index {
-    file "amd64/linux" as index_amd
-    file "arm64/linux" as index_arm
+package "Index" as index {
+    rectangle "Manifests" {
+        file "amd64/linux" as index_amd
+    }
 }
 
-rectangle "Blobs" as blobs {
-    file "Manifest amd64/linux" as blobs_manifest_amd64
-    file "Config amd64/linux" as blobs_config_amd64
+package "Blobs" as blobs {
+    file "Manifest amd64/linux" as blobs_manifest_amd64 #goldenrod
+    file "Config amd64/linux" as blobs_config_amd64 #mediumpurple
     file "Layer 1" as blobs_l1
     file "Layer 2" as blobs_l2
     file "Layer n" as blobs_ln
 
-    file "Manifest arm64/linux" as blobs_manifest_arm64
-
     rectangle "sha256" as sha
 }
 
-rectangle "Manifest" as manifests {
+package "Manifest" as manifests {
     file "amd64/linux config" as manifests_config
 
     rectangle "Layers" as manifests_layers {
@@ -56,7 +79,7 @@ rectangle "Manifest" as manifests {
     }
 }
 
-rectangle "Config" as configs {
+package "Config" as configs {
     rectangle "<U+0000>" as configs_attrs {
         file "arch: amd64"
         file "os: linux"
@@ -71,26 +94,23 @@ rectangle "Config" as configs {
 
 ' Arrows
 index_amd .r.> blobs_manifest_amd64
-index_arm .d.> blobs_manifest_arm64
-manifests -l-> blobs_manifest_amd64
-configs -l-> blobs_config_amd64
-configs_ln -l-> blobs_ln
+manifests o-l-o blobs_manifest_amd64 #goldenrod
+configs o-r-o blobs_config_amd64 #mediumpurple
+configs_l1 -r-> blobs_l1
+configs_l2 -r-> blobs_l2
 
 ' Global placement
 index -[hidden]r-> blobs
+index -[hidden]l-> configs
 blobs -[hidden]r-> manifests
-manifests -[hidden]d-> configs
-
-' Index
-index_amd -[hidden]d-> index_arm
+configs -[hidden]r-> blobs
 
 ' Blobs
 blobs_manifest_amd64 -[hidden]d-> blobs_config_amd64
 blobs_config_amd64 -[hidden]d-> blobs_l1
 blobs_l1 -[hidden]d-> blobs_l2
 blobs_l2 -[hidden]d-> blobs_ln
-blobs_ln -[hidden]d-> blobs_manifest_arm64
-blobs_manifest_arm64 -[hidden]d-> sha
+blobs_ln -[hidden]d-> sha
 
 ' Manifests
 manifests_config -[hidden]d-> manifests_layers
