@@ -19,14 +19,16 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+:podman: https://podman.io/
 :oci: https://opencontainers.org/
 :oras: https://oras.land/
 :sbom: https://about.gitlab.com/blog/2022/10/25/the-ultimate-guide-to-sboms/
 :harbor: https://goharbor.io/
-:runtimespec: https://github.com/opencontainers/runtime-spec
-:imagespec: https://github.com/opencontainers/image-spec
-:distspec: https://github.com/opencontainers/distribution-spec
+:runtimespec: https://github.com/opencontainers/runtime-spec/blob/main/spec.md
+:imagespec: https://github.com/opencontainers/image-spec/blob/main/spec.md
+:distspec: https://github.com/opencontainers/distribution-spec/blob/main/spec.md
 :github: https://github.com
+:json: https://www.json.org/
 :cyclondedx: https://cyclonedx.org/
 
 Handling containers is probably something a modern developer can't and probably *should* not live
@@ -36,7 +38,7 @@ to have installed on your machine.
 
 Like so often in tech, using something successfully doesn't imply real understanding how it
 works under the hood, but I lived quite happily with this black box and all greasy details
-shrouded in mysteries.
+shrouded in mysteries hidden behind tooling like {podman}[Podman].
 This changed, when I started looking for an artifact store for our firmware binary artifacts.
 I quickly discovered there are many container registries available, but just a few stores for
 _ordinary_ artifacts without spending large parts of our engineering budget on enterprise
@@ -50,8 +52,8 @@ So over the course of this article we are going to dive into the container world
 primer of the duality of OCI, talk about basic usage and a few advanced points like {sbom}[SBOM]
 and signing and conclude with my impression on the technology.
 
-NOTE: Feel free to skip the next section, if you are well versed in it, but also feel strongly invited
-to correct me if I have gotten something wrong.
+NOTE: Feel free to skip the next section, if you are well versed in it, but also feel strongly
+invited to correct me if I have gotten something wrong.
 
 == What is OCI?
 
@@ -62,8 +64,11 @@ a governance body around several container formats and runtimes - namely:
 - Image Specification ({imagespec}[image-spec])
 - Distribution Specification ({distspec}[distribution-spec])
 
-I've added links to the related {github}[GitHub] in case you want to build your own container
-engine, but let us have a focussed look on the image-spec.
+I've added links to the related {github}[GitHub] projects in case you want to build your own
+container engine, but the essential one here is the *image-spec*, which lays out the structure in
+all gory details.
+
+This might be quite a bit to digest, so please allow me to point you to my fancy diagram below:
 
 [plantuml]
 ----
@@ -73,79 +78,112 @@ engine, but let us have a focussed look on the image-spec.
 skinparam nodesep 20
 skinparam ranksep 20
 
-package "Index (2)" as index {
-    rectangle "Manifests" {
-        file "amd64/linux" as index_amd
+package "Index (5)" as index {
+    json "Manifests" as index_manifests {
+        [
+            {
+                "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                "size": "<i>$(du --bytes manifest.json)",
+                "digest": "sha256:<back:goldenrod><i>$(sha256 manifest.json)",
+                "platform": {
+                    "architecture": "amd64",
+                    "os": "linux"
+                }
+            }
+        ]
+    }
+
+    json "Annotations" as index_annotations {
+        "blog.unexist.author": "unexist",
+        "blog.unexist.title": "Exploring OCI registries"
     }
 }
 
 package "Blobs (1)" as blobs {
     file "Manifest amd64/linux" as blobs_manifest_amd64 #goldenrod
     file "Config amd64/linux" as blobs_config_amd64 #mediumpurple
-    file "Layer 1" as blobs_l1
-    file "Layer 2" as blobs_l2
+    file "Layer 1" as blobs_l1 #palegreen
+    file "Layer 2" as blobs_l2 #palegreen
     file "Layer n" as blobs_ln
-
-    rectangle "sha256" as sha
 }
 
-package "Manifest (4)" as manifests {
-    file "amd64/linux config" as manifests_config
+package "Manifest (4)" as manifest {
+    json "Config" as manifest_config {
+        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "size": "<i>$(du --bytes config.json)",
+        "digest": "sha256:<back:mediumpurple><i>$(sha256 config.json)"
+    }
 
-    rectangle "Layers" as manifests_layers {
-        file "Layer 1" as manifests_l1 #palegreen;line.dashed
-        file "Layer 2" as manifests_l2 #palegreen;line.dashed
-        file "Layer n" as manifests_ln #palegreen;line.dashed
+    json "Layers" as manifest_layers {
+        [
+            {
+                "mediaType": "application/vnd.oci.image.layer.v1.tar",
+                "size": "<i>$(du --bytes layer1.tar)",
+                "digest": "sha256:<i><back:palegreen>$(sha256 layer1.tar)"
+            },
+            {
+                "mediaType": "application/vnd.oci.image.layer.v1.tar",
+                "size": "<i>$(du --bytes layer2.tar)",
+                "digest": "sha256:<i><back:palegreen>$(sha256 layer2.tar)"
+            }
+        ]
     }
 }
 
-package "Config (3)" as configs {
-    rectangle "<U+0000>" as configs_attrs {
-        file "arch: amd64"
-        file "os: linux"
+package "Config (2)" as configs {
+    json "Config" as config_attrs {
+        "created": "<i>$(date --iso-8601=ns)",
+        "author": "unexist",
+        "architecture": "amd64",
+        "os": "linux"
     }
 
-    rectangle "rootfs" as configs_rootfs {
-        file "Layer 1" as configs_l1 #lightpink;line.dashed
-        file "Layer 2" as configs_l2 #lightpink;line.dashed
-        file "Layer n" as configs_ln #lightpink;line.dashed
+    json "rootfs (3)" as config_rootfs {
+       "diff_ids": [
+            "sha256:<i><back:palegreen>$(sha256 layer1.tar)",
+            "sha256:<i><back:palegreen>$(sha256 layer2.tar)"
+        ]
     }
 }
 
 ' Arrows
-index_amd .r.> blobs_manifest_amd64
-manifests o-l-o blobs_manifest_amd64 #goldenrod
+manifest o-l-o blobs_manifest_amd64 #goldenrod
 configs o-r-o blobs_config_amd64 #mediumpurple
-configs_l1 -r-> blobs_l1
-configs_l2 -r-> blobs_l2
+
+config_rootfs -> blobs_l1
+config_rootfs -> blobs_l2
+
+manifest_layers -> blobs_l1
+manifest_layers -> blobs_l2
 
 ' Global placement
 index -[hidden]r-> blobs
-index -[hidden]l-> configs
-blobs -[hidden]r-> manifests
-configs -[hidden]r-> blobs
+index -[hidden]d-> manifest
+manifest -[hidden]l-> blobs
+blobs -[hidden]r-> configs
+
+' Index
+index_manifests -[hidden]d-> index_annotations
 
 ' Blobs
 blobs_manifest_amd64 -[hidden]d-> blobs_config_amd64
 blobs_config_amd64 -[hidden]d-> blobs_l1
 blobs_l1 -[hidden]d-> blobs_l2
 blobs_l2 -[hidden]d-> blobs_ln
-blobs_ln -[hidden]d-> sha
 
 ' Manifests
-manifests_config -[hidden]d-> manifests_layers
-manifests_l1 -[hidden]d-> manifests_l2
-manifests_l2 -[hidden]d-> manifests_ln
+manifest_config -[hidden]d-> manifest_layers
 
 ' Configs
-configs_attrs -[hidden]d-> configs_rootfs
-configs_l1 -[hidden]d-> configs_l2
-configs_l2 -[hidden]d-> configs_ln
+config_attrs -[hidden]d-> config_rootfs
 ----
-<1> Test
-<2> Foobar
-<3> Foo
-<4> Bla
+<1> *Blobs* is a directory with all adressable filesystem layers and their related metadata
+defined in the appropriate {json}[JSON] files _config_ and _manifest_.
+<2> *Config* contains entries like meta information about author as well as other runtime
+information like environment variables, entrypoints, volume mounts etc.
+<3> *rootfs* contains an ordered list of the digests that compose the actual image.
+<4> *Manifest*
+<5> *Index*
 
 == Use-Cases
 
