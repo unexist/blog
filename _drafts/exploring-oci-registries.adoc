@@ -114,7 +114,7 @@ package "Manifest (4)" as manifest {
         "digest": "sha256:<back:mediumpurple><i>$(sha256 config.json)"
     }
 
-    json "Layers" as manifest_layers {
+    json "Layers (5)" as manifest_layers {
         [
             {
                 "mediaType": "application/vnd.oci.image.layer.v1.tar",
@@ -131,7 +131,7 @@ package "Manifest (4)" as manifest {
 }
 
 package "Config (2)" as configs {
-    json "Config" as config_attrs {
+    json "Meta" as config_attrs {
         "created": "<i>$(date --iso-8601=ns)",
         "author": "unexist",
         "architecture": "amd64",
