@@ -52,8 +52,8 @@ So over the course of this article we are going to dive into the container world
 primer of the duality of OCI, talk about basic usage and a few advanced points like {sbom}[SBOM]
 and signing and conclude with my impression on the technology.
 
-NOTE: Feel free to skip the next section, if you are well versed in it, but also feel strongly
-invited to correct me if I have gotten something wrong.
+NOTE: The next section gives some brief details about what OCI is and what is inside of a container,
+so if you are just here for examples of how to use ORAS please jump ahead and wait for us.
 
 == What is OCI?
 
@@ -64,11 +64,44 @@ a governance body around several container formats and runtimes - namely:
 - Image Specification ({imagespec}[image-spec])
 - Distribution Specification ({distspec}[distribution-spec])
 
-I've added links to the related {github}[GitHub] projects in case you want to build your own
-container engine, but the essential one here is the *image-spec*, which lays out the structure in
-all gory details.
+The links lead to the related {github}[GitHub] projects in case you want to build your own
+container engine, but I suggest we focus on *image-spec*, which lays out the structure in all gory
+details.
 
-This might be quite a bit to digest, so please allow me to point you to my fancy diagram below:
+=== Containers inside out
+
+If you've dutifully studied the spec the overall structure of an actual container will probably
+not surprise you.
+They can be fetched with the help of tools like Podman and easily be dissect on the shell:
+
+[source,shell]
+----
+$ podman save ghcr.io/oras-project/oras:main -o oras.tar
+Copying blob 08000c18d16d done   |
+...
+Writing manifest to image destination
+$ tar xvf oras.tar --one-top-level
+08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350.tar
+...
+manifest.json
+repositories
+$ tree oras
+oras
+├── 08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350.tar
+...
+├── 29ec8736648c6f233d234d989b3daed3178a3ec488db0a41085d192d63321c72
+    ├── json
+    ├── layer.tar -> ../08000c18d16dadf9553d747a58cf44023423a9ab010aab96cf263d2216b8b350.tar
+    └── VERSION
+...
+├── manifest.json
+└── repositories
+
+6 directories, 23 files
+----
+
+Too fast?
+Please have a look at the next diagram:
 
 [plantuml]
 ----
@@ -177,13 +210,16 @@ manifest_config -[hidden]d-> manifest_layers
 ' Configs
 config_attrs -[hidden]d-> config_rootfs
 ----
-<1> *Blobs* is a directory with all adressable filesystem layers and their related metadata
+<1> *Blobs* is the main directory with all adressable filesystem layers and their related metadata
 defined in the appropriate {json}[JSON] files _config_ and _manifest_.
+_The name of the layers are actually digests as well, but to make it easier to follow let us keep the
+fancy numbers._
 <2> *Config* contains entries like meta information about author as well as other runtime
-information like environment variables, entrypoints, volume mounts etc.
+information like environment variables, entrypoints, volume mounts etc. as well as infos about
+specific hardware architecture and OS.
 <3> *rootfs* contains an ordered list of the digests that compose the actual image.
-<4> *Manifest*
-<5> *Index*
+<4> The *manifest* just links to the actual configugration by digest and to the layers.
+<5> And finally the *index* includes all available manifests and also image annotations.
 
 == Use-Cases
 
