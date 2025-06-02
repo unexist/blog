@@ -224,10 +224,17 @@ specific hardware architecture and OS.
 <4> The *manifest* just links to the actual configugration by digest and to the layers.
 <5> And finally the *index* includes all available manifests and also image annotations.
 
+The remaining piece of the puzzle are the media types, so keep up please.
+
 == What are mediatypes?
 
+Among the long list of specs there is one we haven't covered so far and probably should - so please
+welcome our last (promised) spec for today - the one about {mediaspec}[media types].
 
-
+This is what allows us to be compatible to existing runtimes and also to swap out layers as long as
+we are upright and set the appropriate media type.
+There are several interesting ones which also ensure a certain behavior, but the specs are quite
+generous and allow mostly arbitrary values, which are ignored when unsupported.
 
 == Use-Cases
 
