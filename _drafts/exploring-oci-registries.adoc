@@ -30,6 +30,7 @@ endif::[]
 :github: https://github.com
 :json: https://www.json.org/
 :mediaspec: https://specs.opencontainers.org/image-spec/media-types/
+:zotreg: https://zotregistry.dev/
 :cyclondedx: https://cyclonedx.org/
 
 Handling containers is probably something a modern developer can't and probably *should* not live
@@ -224,7 +225,7 @@ specific hardware architecture and OS.
 <4> The *manifest* just links to the actual configugration by digest and to the layers.
 <5> And finally the *index* includes all available manifests and also image annotations.
 
-The remaining piece of the puzzle are the media types, so keep up please.
+The remaining piece of the puzzle are the media types.
 
 == What are mediatypes?
 
@@ -237,6 +238,97 @@ There are several interesting ones which also ensure a certain behavior, but the
 generous and allow mostly arbitrary values, which are ignored when unsupported.
 
 == Use-Cases
+
+The next examples require a OCI-compatible registry and also accessible *oras* and *cosign*
+binaries.
+Installation can sometimes be a hassle, so we keep on relying on podman and the pretty well
+supported {zotreg}[Zot Registry]:
+
+=== Setting up Zot
+
+The next command probably requires no further explanations besides what is inside of the
+provided config without any hardening for actual logins.
+Apart from setting pretty much defaults we also want to enable the web ui and the cve scanner - you
+can find it here:
+
+<https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
+
+[source,shell]
+----
+$ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
+  -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \
+  ghcr.io/project-zot/zot-linux-amd64:v2.1.2
+----
+
+=== Pushing a generic artifact
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \ <.>
+    ghcr.io/oras-project/oras:main \
+    push localhost:5000/todo-service:latest \
+        --artifact-type showcase/todo \ <.>
+        todo-service/todo-service.bin:application/octet-stream \
+        --plain-http
+✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                                                                                                                        26.1/26.1 MB 100.00%   34ms
+  └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
+✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                                                                                                                          2/2  B 100.00%    4ms
+  └─ sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                                                                                                             578/578  B 100.00%    7ms
+  └─ sha256:bf34418c95a3f5d3c55eb2652daaa87fcf547d997e035401f1437aebe04d613a
+Pushed [registry] localhost:5000/todo-service:latest
+ArtifactType: showcase/todo
+Digest: sha256:bf34418c95a3f5d3c55eb2652daaa87fcf547d997e035401f1437aebe04d613a
+----
+<.> The ORAS container allows us to call it this way and directly pass our arguments.
+<.> Here we set our custom artifact type, to be able to distinguish it.
+
+=== Pulling it back
+
+Unfortunately and actually without surprise, Podman doesn't know our custom artifact-type and
+hence refuses to do our bidding:
+
+[source,shell]
+----
+$ podman pull localhost:5000/todo-service:latest
+Trying to pull localhost:5000/todo-service:latest...
+Error: parsing image configuration: unsupported image-specific operation on artifact with type "showcase/todo"
+----
+
+[NOTE]
+====
+If Podman cannot connect to your local registry and bails out with
+`http: server gave HTTP response to HTTPS client` please make sure to add your insecure registry
+to your _/etc/containers/registries.conf_ file.
+[source,shell]
+----
+$ tail -n2 /etc/containers/registries.conf
+[registries.insecure]
+registries = ['localhost:5000']
+----
+====
+
+=== Pull with ORAS
+
+Let us try again - this time with ORAS.
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    pull localhost:5000/todo-service:latest --plain-http
+✓ Pulled      todo-service/todo-service.bin                                                                                                                                                                                                                                                                                                      26.1/26.1 MB 100.00%   32ms
+  └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
+✓ Pulled      application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                                                                                                           578/578  B 100.00%   98µs
+  └─ sha256:bf34418c95a3f5d3c55eb2652daaa87fcf547d997e035401f1437aebe04d613a
+Pulled [registry] localhost:5000/todo-service:latest
+Digest: sha256:bf34418c95a3f5d3c55eb2652daaa87fcf547d997e035401f1437aebe04d613a
+$ tree todo-service
+todo-service
+└── todo-service.bin
+
+1 directory, 1 file
+----
 
 == Conclusion
 
