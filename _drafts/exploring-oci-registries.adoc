@@ -57,7 +57,7 @@ and signing and conclude with my impression on the technology.
 NOTE: The next section gives some brief details about what OCI is and what is inside of a container,
 so if you are just here for examples of how to use ORAS please jump ahead and wait for us.
 
-== What is OCI?
+== Excursion: What is OCI?
 
 Turns out the {oci}[Open Container Initiative (OCI)] isn't a single spec by itself, but rather
 a governance body around several container formats and runtimes - namely:
@@ -237,6 +237,8 @@ we are upright and set the appropriate media type.
 There are several interesting ones which also ensure a certain behavior, but the specs are quite
 generous and allow mostly arbitrary values, which are ignored when unsupported.
 
+== Excursion: Using SBOM
+
 == Use-Cases
 
 The next examples require a OCI-compatible registry and also accessible *oras* and *cosign*
@@ -247,7 +249,9 @@ supported {zotreg}[Zot Registry]:
 === Setting up Zot
 
 The next command probably requires no further explanations besides what is inside of the
-provided config without any hardening for actual logins.
+provided config.
+Here we pretty much set just the essentials and also *deliberate* without any hardening for actual
+logins.
 Apart from setting pretty much defaults we also want to enable the web ui and the cve scanner - you
 can find it here:
 
@@ -260,7 +264,7 @@ $ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
   ghcr.io/project-zot/zot-linux-amd64:v2.1.2
 ----
 
-=== Pushing a generic artifact
+=== Pushing a binary artifact
 
 [source,shell]
 ----
@@ -298,8 +302,9 @@ Error: parsing image configuration: unsupported image-specific operation on arti
 [NOTE]
 ====
 If Podman cannot connect to your local registry and bails out with
-`http: server gave HTTP response to HTTPS client` please make sure to add your insecure registry
-to your _/etc/containers/registries.conf_ file.
+`http: server gave HTTP response to HTTPS client` please make sure to add your *insecure* registry
+to your _/etc/containers/registries.conf_ file:
+
 [source,shell]
 ----
 $ tail -n2 /etc/containers/registries.conf
@@ -308,7 +313,7 @@ registries = ['localhost:5000']
 ----
 ====
 
-=== Pull with ORAS
+=== Pull harder
 
 Let us try again - this time with ORAS.
 
@@ -329,6 +334,8 @@ todo-service
 
 1 directory, 1 file
 ----
+
+===
 
 == Conclusion
 
