@@ -29,6 +29,7 @@ endif::[]
 :distspec: https://github.com/opencontainers/distribution-spec/blob/main/spec.md
 :github: https://github.com
 :json: https://www.json.org/
+:mediaspec: https://specs.opencontainers.org/image-spec/media-types/
 :cyclondedx: https://cyclonedx.org/
 
 Handling containers is probably something a modern developer can't and probably *should* not live
@@ -100,8 +101,10 @@ oras
 6 directories, 23 files
 ----
 
-Too fast?
-Please have a look at the next diagram:
+Following links in {json}[JSON]-files and digests is a bit cumbersome at least to me, so let us try arrows
+instead.
+
+== Containers mapped out
 
 [plantuml]
 ----
@@ -115,7 +118,7 @@ package "Index (5)" as index {
     json "Manifests" as index_manifests {
         [
             {
-                "mediaType": "application/vnd.oci.image.manifest.v1+json",
+                "mediaType": "<back:wheat>application/vnd.oci.image.manifest.v1+json",
                 "size": "<i>$(du --bytes manifest.json)",
                 "digest": "sha256:<back:goldenrod><i>$(sha256 manifest.json)",
                 "platform": {
@@ -134,7 +137,7 @@ package "Index (5)" as index {
 
 package "Blobs (1)" as blobs {
     file "Manifest amd64/linux" as blobs_manifest_amd64 #goldenrod
-    file "Config amd64/linux" as blobs_config_amd64 #mediumpurple
+    file "Config amd64/linux" as blobs_config_amd64 #deepskyblue
     file "Layer 1" as blobs_l1 #palegreen
     file "Layer 2" as blobs_l2 #palegreen
     file "Layer n" as blobs_ln
@@ -142,15 +145,15 @@ package "Blobs (1)" as blobs {
 
 package "Manifest (4)" as manifest {
     json "Config" as manifest_config {
-        "mediaType": "application/vnd.oci.image.config.v1+json",
+        "mediaType": "<back:wheat>application/vnd.oci.image.config.v1+json",
         "size": "<i>$(du --bytes config.json)",
-        "digest": "sha256:<back:mediumpurple><i>$(sha256 config.json)"
+        "digest": "sha256:<back:deepskyblue><i>$(sha256 config.json)"
     }
 
     json "Layers (5)" as manifest_layers {
         [
             {
-                "mediaType": "application/vnd.oci.image.layer.v1.tar",
+                "mediaType": "<back:wheat>application/vnd.oci.image.layer.v1.tar",
                 "size": "<i>$(du --bytes layer1.tar)",
                 "digest": "sha256:<i><back:palegreen>$(sha256 layer1.tar)"
             },
@@ -211,7 +214,7 @@ manifest_config -[hidden]d-> manifest_layers
 config_attrs -[hidden]d-> config_rootfs
 ----
 <1> *Blobs* is the main directory with all adressable filesystem layers and their related metadata
-defined in the appropriate {json}[JSON] files _config_ and _manifest_.
+defined in the appropriate JSON files _config_ and _manifest_.
 _The name of the layers are actually digests as well, but to make it easier to follow let us keep the
 fancy numbers._
 <2> *Config* contains entries like meta information about author as well as other runtime
@@ -220,6 +223,11 @@ specific hardware architecture and OS.
 <3> *rootfs* contains an ordered list of the digests that compose the actual image.
 <4> The *manifest* just links to the actual configugration by digest and to the layers.
 <5> And finally the *index* includes all available manifests and also image annotations.
+
+== What are mediatypes?
+
+
+
 
 == Use-Cases
 
