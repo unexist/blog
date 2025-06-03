@@ -237,8 +237,6 @@ we are upright and set the appropriate media type.
 There are several interesting ones which also ensure a certain behavior, but the specs are quite
 generous and allow mostly arbitrary values, which are ignored when unsupported.
 
-== Excursion: Using SBOM
-
 == Use-Cases
 
 The next examples require a OCI-compatible registry and also accessible *oras* and *cosign*
@@ -335,7 +333,44 @@ todo-service
 1 directory, 1 file
 ----
 
-===
+=== Print the image manifest
+
+There are several commands available to gather information about images on the registry:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    manifest fetch --pretty \
+    localhost:5000/todo-service:latest --plain-http
+{
+  "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
+  "artifactType": "showcase/todo",
+  "config": {
+    "mediaType": "application/vnd.oci.empty.v1+json",
+    "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+    "size": 2,
+    "data": "e30="
+  },
+  "layers": [
+    {
+      "mediaType": "application/octet-stream",
+      "digest": "sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc",
+      "size": 27352532,
+      "annotations": {
+        "org.opencontainers.image.title": "todo-service/todo-service.bin"
+      }
+    }
+  ],
+  "annotations": {
+    "org.opencontainers.image.created": "2025-06-02T13:05:34Z"
+  }
+}
+----
+
+
+=== Excursion: Using SBOM
 
 == Conclusion
 
