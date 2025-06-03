@@ -333,7 +333,7 @@ todo-service
 1 directory, 1 file
 ----
 
-=== Print the image manifest
+=== Print information about the image
 
 There are several commands available to gather information about images on the registry:
 
@@ -369,6 +369,14 @@ $ podman run --rm -v .:/workspace -it --network=host \
 }
 ----
 
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    discover --format tree \
+    localhost:5000/todo-service:latest --plain-http
+localhost:5000/todo-service@sha256:bf34418c95a3f5d3c55eb2652daaa87fcf547d997e035401f1437aebe04d613a
+----
 
 === Excursion: Using SBOM
 
