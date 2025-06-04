@@ -501,9 +501,13 @@ Digest: sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
 ----
 <.> This gave me a bit of a headache, because Zot supports SBOM scanning and also propagates the results
 on the web ui.
-Unfortunately just for known media types and I wondered if I got the media type wrong: +
-<https://github.com/project-zot/zot/issues/2415>
-[source,golang]
+
+.SBOM handling in Zot
+****
+Unfortunately Zot or rather its internal handling of Trivy just allows scans for known media types
+and doesn't rely on any specific media type:
+
+[source,golang,highlight=5]
 ----
 // https://github.com/project-zot/zot/blob/main/pkg/extensions/search/cve/trivy/scanner.go#L278
 func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
@@ -517,6 +521,31 @@ func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
 }
 ----
 
+I thought I might just got it wrong, since many pages I've read were a bit vague if it is
+`example/sbom` or `sbom/example`.
+After several hours I found a pending issue which is kind of related to my problem, but I might
+have to provide a patch to bring this forward:
+
+<https://github.com/project-zot/zot/issues/2415>
+****
+
+=== Discover the changes
+
+And if we run discover again we can see there is a new layer:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    discover --format tree --plain-http \
+    localhost:5000/todo-service:latest
+localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
+└── showcase/sbom
+    └── sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
+        └── [annotations]
+            └── org.opencontainers.image.created: "2025-06-04T12:40:38Z"
+----
+
 === Signing images
 
 == Conclusion
@@ -524,6 +553,3 @@ func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
 All examples can be found here:
 
 <https://github.com/unexist/showcase-oci-registries>
-
-[bibliography]
-== Bibliography
