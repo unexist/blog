@@ -5,7 +5,7 @@ description: This blog post demonstrates how ORAS can be used to leverage OCI-co
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: container oci oras cosign cyclodedx sbom showcase
+tags: container oci sbom oras cosign trivy grype syft cyclodedx showcase
 categories: tech
 toc: true
 ---
@@ -32,6 +32,8 @@ endif::[]
 :mediaspec: https://specs.opencontainers.org/image-spec/media-types/
 :zotreg: https://zotregistry.dev/
 :zotregweb: https://zotregistry.dev/v2.1.0/user-guides/user-guide-gui/
+:trivy: https://trivy.dev/latest/
+:heosdial: https://github.com/unexist/heos-dial
 :cve: https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures
 :cyclondedx: https://cyclonedx.org/
 
@@ -47,19 +49,19 @@ This changed, when I started looking for an artifact store for our firmware bina
 I quickly discovered there are many container registries available, but just a few stores for
 _ordinary_ artifacts without spending large parts of our engineering budget on enterprise
 license fees.
-Asking my bubble, a good friend suggested to have a look at {oras}[ORAS], which leverages
-{oci}[OCI]-compliant registries for exactly what I wanted to archive.
-We are already using Harbor][], so moving other artifacts there as well directly aroused my
-interest.
+Passing this question to my bubble lead to a suggestion of a good friend  to have a look at
+{oras}[ORAS], which leverages {oci}[OCI]-compliant registries for exactly what I wanted to
+literally archive.
+We are already using Harbor][], so moving other artifacts there as well aroused my interest.
 
 So over the course of this article we are going to dive into the container world with a short
 primer of the duality of OCI, talk about basic usage and a few advanced points like {sbom}[SBOM]
 and signing and conclude with my impression on the technology.
 
-NOTE: The next section gives some brief details about what OCI is and what is inside of a container,
-so if you are just here for examples of how to use ORAS please jump ahead and wait for us.
+NOTE: This post includes several introductional chapters as a deep dive into a specific topic.
+If you are just here for the examples and how to use the tooling quickly jump ahead and wait for us.
 
-== Excursion: What is OCI?
+== What is OCI?
 
 Turns out the {oci}[Open Container Initiative (OCI)] isn't a single spec by itself, but rather
 a governance body around several container formats and runtimes - namely:
@@ -76,7 +78,8 @@ details.
 
 If you've dutifully studied the spec the overall structure of an actual container will probably
 not surprise you.
-They can be fetched with the help of tools like Podman and easily be dissect on the shell:
+If not believe me, they are less magically than thought, can be fetched with the help of Podman
+and easily be dissected on the shell:
 
 [source,shell]
 ----
@@ -104,10 +107,10 @@ oras
 6 directories, 23 files
 ----
 
-Following links in {json}[JSON]-files and digests is a bit cumbersome at least to me, so let us try arrows
-instead.
+Following links in {json}[JSON]-files and memorizing digests is a bit
+cumbersomefootnote:[At least to me], so let us try arrows instead.
 
-== Containers mapped out
+=== Containers mapped out
 
 [plantuml]
 ----
@@ -229,50 +232,56 @@ specific hardware architecture and OS.
 
 Mysteries solved, but there is still one essential piece missing - namely media types.
 
-== What are media types?
+=== What are media types?
 
-Among the long list of specs there is one we haven't covered so far and probably should - so please
-welcome our last (promised) spec for today - the one about {mediaspec}[media types].
+This surprises probably no one, but media types are also covered by a spec
+footnote:[Really the last one for the course of this post..] - the {mediaspec}[media-spec]
 
-This is what allows us to be compatible to existing runtimes and also to swap out layers as long as
-we are upright and set the appropriate media type.
-There are several interesting ones which also ensure a certain behavior, but the specs are quite
-generous and allow mostly arbitrary values, which are ignored when unsupported.
+There you can see the exhaustive list of the known types and an implementor's todo list in order to
+be compliant.
+Conversely, this means as long as we pick something different we are free to swap out or fill
+layers with anything to our liking without triggering a certain behaviour accidentally.
 
 == Use-Cases
 
 The next few examples require an OCI-compatible registry and also accessible *oras* and *cosign*
 binaries.
 Since installation is usually a hassle, all examples rely on Podman and the well-supported
-{zotreg}[Zot Registry]:
+{zotreg}[Zot Registry].
 
-=== Setting up Zot
+== Firing up Zot
 
 Firing up our registry is just a piece of cake and shouldn't raise any eyebrows yet.
 We pretty much set just the bare essentials - *deliberately* without any hardening for actual
 logins.
-Apart from defaults we also want to enable the fancy {zotregweb}[web ui] and the {cve}[CVE]
-scanner - have a glimpse how this can be done on GitHub:
-
-<https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
 
 [source,shell]
 ----
 $ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
-  -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \
+  -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \ <.>
   ghcr.io/project-zot/zot-linux-amd64:v2.1.2
 ----
+<1> Apart from defaults we also want to enable the fancy {zotregweb}[web ui] and the {cve}[CVE]
+scanner - have a glimpse how this can be done on GitHub: +
+<https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
 
-Once the registry fetched the CVE database and is up running we are greeted with
+Once started and after the initial download of the vulnerabilities database of {trivy}[Trivy] we
+are dutifully greeted with an empty list:
+
+image::zot-empty.png[]
+
+Time to push our first artifact!
 
 === Pushing a binary artifact
+
+My original idea is
 
 [source,shell]
 ----
 $ podman run --rm -v .:/workspace -it --network=host \ <.>
     ghcr.io/oras-project/oras:main \
     push localhost:5000/todo-service:latest \
-        --artifact-type showcase/todo \ <.>
+        --artifact-type showcase/todo-service \ <.>
         todo-service/todo-service.bin:application/octet-stream \
         --plain-http
 ✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   33ms
@@ -290,15 +299,19 @@ Digest: sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
 
 === Pulling it back
 
+
+
+==== Pull with Podman
+
 Pulling images from container registries is best done with Podman directly:
 
 [source,shell]
 ----
 $ podman pull localhost:5000/todo-service:latest
 Trying to pull localhost:5000/todo-service:latest...
-Error: parsing image configuration: unsupported image-specific operation on artifact with type "showcase/todo" # <.>
+Error: parsing image configuration: unsupported image-specific operation on artifact with type "showcase/todo-service" # <.>
 ----
-<.> Unsurprisingly Podman doesn't understand our custom artifact-type and hence refuses to do our
+<.> Unsurprisingly Podman doesn't understand our custom artifact type and hence refuses to do our
 bidding.
 
 [NOTE]
@@ -315,7 +328,7 @@ registries = ['localhost:5000']
 ----
 ====
 
-=== Can ORAS pull the image?
+==== Can ORAS pull the image?
 
 Let us try again - this time with ORAS.
 
@@ -352,7 +365,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
 {
   "schemaVersion": 2,
   "mediaType": "application/vnd.oci.image.manifest.v1+json",
-  "artifactType": "showcase/todo",
+  "artifactType": "showcase/todo-service",
   "config": {
     "mediaType": "application/vnd.oci.empty.v1+json",
     "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
