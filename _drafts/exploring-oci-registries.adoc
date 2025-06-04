@@ -32,9 +32,15 @@ endif::[]
 :mediaspec: https://specs.opencontainers.org/image-spec/media-types/
 :zotreg: https://zotregistry.dev/
 :zotregweb: https://zotregistry.dev/v2.1.0/user-guides/user-guide-gui/
+:cve: https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures
 :trivy: https://trivy.dev/latest/
 :heosdial: https://github.com/unexist/heos-dial
-:cve: https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures
+:golang: https://go.dev/
+:redoc: https://unexist.blog/redoc
+:orascmds: https://oras.land/docs/category/oras-commands
+:blobs: https://de.wikipedia.org/wiki/Binary_Large_Object
+:helm: https://helm.sh/
+:spdx: https://en.wikipedia.org/wiki/Software_Package_Data_Exchange
 :cyclondedx: https://cyclonedx.org/
 
 Handling containers is probably something a modern developer can't and probably *should* not live
@@ -108,7 +114,7 @@ oras
 ----
 
 Following links in {json}[JSON]-files and memorizing digests is a bit
-cumbersomefootnote:[At least to me], so let us try arrows instead.
+cumbersomefootnote:[At least to me], so let us try arrows in a diagram instead.
 
 === Containers mapped out
 
@@ -237,31 +243,31 @@ Mysteries solved, but there is still one essential piece missing - namely media 
 This surprises probably no one, but media types are also covered by a spec
 footnote:[Really the last one for the course of this post..] - the {mediaspec}[media-spec]
 
-There you can see the exhaustive list of the known types and an implementor's todo list in order to
-be compliant.
-Conversely, this means as long as we pick something different we are free to swap out or fill
-layers with anything to our liking without triggering a certain behaviour accidentally.
+There you can see the exhaustive list of the known types and an implementor's todo list for
+compliance to the specs.
+Conversely, this also means as long as we pick something different we are free to fill layers with
+anything to our liking without triggering a certain behaviour accidentally.
 
 == Use-Cases
 
-The next few examples require an OCI-compatible registry and also accessible *oras* and *cosign*
-binaries.
+The next few examples require an OCI-compatible registry and also access to the binaries of
+*oras* and *cosign* and some more.
 Since installation is usually a hassle, all examples rely on Podman and the well-supported
 {zotreg}[Zot Registry].
 
 == Firing up Zot
 
-Firing up our registry is just a piece of cake and shouldn't raise any eyebrows yet.
+Setting up our registry is just a piece of cake and shouldn't raise any eyebrows yet.
 We pretty much set just the bare essentials - *deliberately* without any hardening for actual
 logins.
 
 [source,shell]
 ----
 $ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
-  -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \ <.>
+  -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \ # <.>
   ghcr.io/project-zot/zot-linux-amd64:v2.1.2
 ----
-<1> Apart from defaults we also want to enable the fancy {zotregweb}[web ui] and the {cve}[CVE]
+<1> Apart from host stuff we also want to enable the fancy {zotregweb}[web ui] and the {cve}[CVE]
 scanner - have a glimpse how this can be done on GitHub: +
 <https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
 
@@ -274,7 +280,9 @@ Time to push our first artifact!
 
 === Pushing a binary artifact
 
-My original idea is
+Ultimately I want to push embedded software artifacts to the registry, but since this is public
+and my own project {heosdial}[heos-dial] isn't ready yet we are pushing a binary of the
+{golang}[Golang] version of my faithful {redoc}[todo service]:
 
 [source,shell]
 ----
@@ -284,26 +292,26 @@ $ podman run --rm -v .:/workspace -it --network=host \ <.>
         --artifact-type showcase/todo-service \ <.>
         todo-service/todo-service.bin:application/octet-stream \
         --plain-http
-✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   33ms
+✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   36ms
   └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
-✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%    4ms
+✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%    6ms
   └─ sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
-✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 578/578  B 100.00%    7ms
-  └─ sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
+✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 586/586  B 100.00%   19ms
+  └─ sha256:3609ba6ae3df00715af288216d96b61f1131474823e18233ba4cd7df1b0553fc
 Pushed [registry] localhost:5000/todo-service:latest
-ArtifactType: showcase/todo
-Digest: sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
+ArtifactType: showcase/todo-service
+Digest: sha256:3609ba6ae3df00715af288216d96b61f1131474823e18233ba4cd7df1b0553fc
 ----
 <.> The ORAS container allows us to call it this way and directly pass our arguments.
 <.> Here we set our custom artifact type, to be able to distinguish it.
 
 === Pulling it back
 
-
+One-way-success, time to get it back:
 
 ==== Pull with Podman
 
-Pulling images from container registries is best done with Podman directly:
+Pulling images from container registries is one of the core tasks of Podman:
 
 [source,shell]
 ----
@@ -388,7 +396,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
 }
 ----
 
-====
+==== Discover the tree
 
 [source,shell]
 ----
@@ -399,7 +407,22 @@ $ podman run --rm -v .:/workspace -it --network=host \
 localhost:5000/todo-service@sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
 ----
 
-=== Excursion: Using SBOM
+There are many more helpful {orascmds}[commands] that can be used to interact with stored images,
+other types of {blobs}[blobs] and also with supporting files.
+Typically among these supporting are {helm}[Helm]-charts without museum and also {sbom}[SBOM].
+
+=== Providing an SBOM
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    -v ./todo-service:/in \
+    docker.io/anchore/syft:latest scan dir:/in -o cyclonedx-json=/workspace/sbom.json # <.>
+----
+<.> There are different formats for SBOM files like {spdx}[SPDX] or {cyclondedx}[CycloneDX] and
+most tools support one or more - my pick is entirely based on the cool name though.
+
+=== Signing images
 
 == Conclusion
 
