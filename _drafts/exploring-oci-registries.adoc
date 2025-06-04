@@ -40,8 +40,11 @@ endif::[]
 :orascmds: https://oras.land/docs/category/oras-commands
 :blobs: https://de.wikipedia.org/wiki/Binary_Large_Object
 :helm: https://helm.sh/
+:log4j: https://en.wikipedia.org/wiki/Log4Shell
 :spdx: https://en.wikipedia.org/wiki/Software_Package_Data_Exchange
 :cyclondedx: https://cyclonedx.org/
+:syft: https://github.com/anchore/syft
+:grype: https://github.com/anchore/grype
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -286,24 +289,25 @@ and my own project {heosdial}[heos-dial] isn't ready yet we are pushing a binary
 
 [source,shell]
 ----
-$ podman run --rm -v .:/workspace -it --network=host \ <.>
+$ podman run --rm -v .:/workspace -it --network=host \ # <.>
     ghcr.io/oras-project/oras:main \
     push localhost:5000/todo-service:latest \
-        --artifact-type showcase/todo-service \ <.>
-        todo-service/todo-service.bin:application/octet-stream \
-        --plain-http
-✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   36ms
+        --artifact-type showcase/todo-service \ # <.>
+        --plain-http \ # <.>
+        todo-service/todo-service.bin:application/octet-stream
+✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   32ms
   └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
-✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%    6ms
+✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%    7ms
   └─ sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
-✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 586/586  B 100.00%   19ms
-  └─ sha256:3609ba6ae3df00715af288216d96b61f1131474823e18233ba4cd7df1b0553fc
+✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 586/586  B 100.00%    7ms
+  └─ sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 Pushed [registry] localhost:5000/todo-service:latest
 ArtifactType: showcase/todo-service
-Digest: sha256:3609ba6ae3df00715af288216d96b61f1131474823e18233ba4cd7df1b0553fc
+Digest: sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 ----
 <.> The ORAS container allows us to call it this way and directly pass our arguments.
 <.> Here we set our custom artifact type, to be able to distinguish it.
+<.> No need to make our live miserable with SSL/TLS!
 
 === Pulling it back
 
@@ -345,12 +349,12 @@ Let us try again - this time with ORAS.
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
     pull localhost:5000/todo-service:latest --plain-http
-✓ Pulled      todo-service/todo-service.bin                                                                                                                                                                                                          26.1/26.1 MB 100.00%   35ms
+✓ Pulled      todo-service/todo-service.bin                                                                                                                                                                                                          26.1/26.1 MB 100.00%   38ms
   └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
-✓ Pulled      application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                               578/578  B 100.00%   50µs
-  └─ sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
+✓ Pulled      application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                               586/586  B 100.00%   66µs
+  └─ sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 Pulled [registry] localhost:5000/todo-service:latest
-Digest: sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
+Digest: sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 $ tree todo-service
 todo-service
 └── todo-service.bin
@@ -368,8 +372,8 @@ There are several commands available to gather information about images on the r
 ----
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
-    manifest fetch --pretty \
-    localhost:5000/todo-service:latest --plain-http
+    manifest fetch --pretty --plain-http \
+    localhost:5000/todo-service:latest
 {
   "schemaVersion": 2,
   "mediaType": "application/vnd.oci.image.manifest.v1+json",
@@ -391,7 +395,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
     }
   ],
   "annotations": {
-    "org.opencontainers.image.created": "2025-06-04T06:52:13Z"
+    "org.opencontainers.image.created": "2025-06-04T11:57:57Z"
   }
 }
 ----
@@ -402,25 +406,116 @@ $ podman run --rm -v .:/workspace -it --network=host \
 ----
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
-    discover --format tree \
-    localhost:5000/todo-service:latest --plain-http
-localhost:5000/todo-service@sha256:845c637a8ce8e1b3badf7e727682f7cbbfccaedeaebeb8936ba23324f7d530d0
+    discover --format tree --plain-http \
+    localhost:5000/todo-service:latest
+localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 ----
 
 There are many more helpful {orascmds}[commands] that can be used to interact with stored images,
 other types of {blobs}[blobs] and also with supporting files.
-Typically among these supporting are {helm}[Helm]-charts without museum and also {sbom}[SBOM].
+Typically among these supporting are museum-less {helm}[Helm]-charts and also {sbom}[SBOM].
 
-=== Providing an SBOM
+== What is an SBOM?
+
+A *software bill of materials* or SBOM is a kind of inventory list of an artifact, which details
+included software components and assists in securing the software supply chain.
+This gets more and more attention as it should especially since the
+{log4j}[log4j vulnerability] back then in 2020 and 2021.
+
+There are different formats for SBOM files like {spdx}[SPDX] or {cyclondedx}[CycloneDX] and also
+a broad range of tools that support one or more of them as input and output is available.
+
+I am kind of fondfootnote:[Maybe I just like their mascots?] of Anchore with their tools
+{syft}[syft] and {grype}[grype] and therefore the next examples are going to make use of both of
+them.
+
+=== Syfting through
+
+Since my todo service is based on Golang syft can easily scan the source code and assemble our
+SBOM
 
 [source,shell]
 ----
 $ podman run --rm -v .:/workspace -it --network=host \
     -v ./todo-service:/in \
     docker.io/anchore/syft:latest scan dir:/in -o cyclonedx-json=/workspace/sbom.json # <.>
+ ✔ Indexed file system                                                                                                                                                                                                                                                    /in
+ ✔ Cataloged contents                                                                                                                                                                                        86121fea66864109267c361a1fec880ab49dc5f619205b1f364ecb7ba31eb066
+   ├── ✔ Packages                        [70 packages]
+   ├── ✔ Executables                     [1 executables]
+   ├── ✔ File digests                    [1 files]
+   └── ✔ File metadata                   [1 locations]
+[0000]  WARN no explicit name and version provided for directory source, deriving artifact ID from the given path (which is not ideal)
+A newer version of syft is available for download: 1.26.1 (installed version is 1.26.0) # <.>
+$ cat sbom.json | jq '.components | length' # <.>
+71
 ----
-<.> There are different formats for SBOM files like {spdx}[SPDX] or {cyclondedx}[CycloneDX] and
-most tools support one or more - my pick is entirely based on the cool name though.
+<.> My pick is entirely based on the cool name though.
+<.> Interesting since I am using the `latest` tag.
+<.> Quite a lot of components..
+
+=== Scanning the SBOM
+
+Like Trivy, grype can easily be run from inside a container and start scanning:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --name grype --network=host \
+    docker.io/anchore/grype:latest sbom:/workspace/sbom.json
+ ✔ Vulnerability DB                [updated]
+ ✔ Scanned for vulnerabilities     [9 vulnerability matches]
+   ├── by severity: 1 critical, 2 high, 6 medium, 0 low, 0 negligible
+   └── by status:   9 fixed, 0 not-fixed, 0 ignored
+NAME                        INSTALLED  FIXED-IN  TYPE       VULNERABILITY        SEVERITY  EPSS%  RISK
+golang.org/x/crypto         v0.15.0    0.17.0    go-module  GHSA-45x7-px36-x8w8  Medium    98.45   36.5
+golang.org/x/net            v0.18.0    0.23.0    go-module  GHSA-4v7x-pqxf-cx7m  Medium    98.35   33.4
+golang.org/x/crypto         v0.15.0    0.31.0    go-module  GHSA-v778-237x-gjrc  Critical  96.91   32.6
+google.golang.org/protobuf  v1.31.0    1.33.0    go-module  GHSA-8r3f-844c-mc37  Medium    46.14    0.1
+github.com/jackc/pgx/v5     v5.4.3     5.5.4     go-module  GHSA-mrww-27vc-gghv  High      38.06    0.1
+golang.org/x/crypto         v0.15.0    0.35.0    go-module  GHSA-hcg3-q754-cr77  High      15.90  < 0.1
+golang.org/x/net            v0.18.0    0.38.0    go-module  GHSA-vvgc-356p-c3xw  Medium     5.05  < 0.1
+golang.org/x/net            v0.18.0    0.36.0    go-module  GHSA-qxp5-gwg8-xv66  Medium     1.24  < 0.1
+github.com/jackc/pgx/v5     v5.4.3     5.5.2     go-module  GHSA-fqpg-rq76-99pq  Medium      N/A    N/A
+----
+
+=== Uploading our SBOM
+
+If we are content with the scanning result and I bet we arefootnote:[Not!] let us quickly add this
+to our image:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    attach localhost:5000/todo-service:latest --plain-http \
+    --artifact-type showcase/sbom \ # <.>
+    sbom.json:application/vnd.cyclonedx+json
+✓ Uploaded  sbom.json                                                                                                                                                                                                                                50.1/50.1 KB 100.00%    2ms
+  └─ sha256:0690e255a326ee93c96bf1471586bb3bc720a1f660eb1c2ac64bbf95a1bd9693
+✓ Exists    application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%     0s
+  └─ sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
+✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 724/724  B 100.00%    3ms
+  └─ sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
+Attached to [registry] localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
+Digest: sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
+----
+<.> This gave me a bit of a headache, because Zot supports SBOM scanning and also propagates the results
+on the web ui.
+Unfortunately just for known media types and I wondered if I got the media type wrong: +
+<https://github.com/project-zot/zot/issues/2415>
+[source,golang]
+----
+// https://github.com/project-zot/zot/blob/main/pkg/extensions/search/cve/trivy/scanner.go#L278
+func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
+...
+    switch imageLayer.MediaType {
+    case ispec.MediaTypeImageLayerGzip, ispec.MediaTypeImageLayer, string(regTypes.DockerLayer):
+        continue
+    default:
+    return false, zerr.ErrScanNotSupported
+...
+}
+----
 
 === Signing images
 
