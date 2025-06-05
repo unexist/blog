@@ -170,8 +170,8 @@ span.bold {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    border: var(--border);
 }
-
 
 #content img.portrait {
     max-height: 300px;
@@ -183,6 +183,25 @@ span.bold {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+}
+
+#content .sidebarblock {
+    background-color: var(--top-color);
+    padding: var(--padding);
+}
+
+#content .sidebarblock .title:before {
+    content: "##";
+    padding-right: 0.2em;
+}
+
+#content .sidebarblock .title {
+    text-align: right;
+    text-decoration: none;
+    color: var(--h2-color);
+    border-bottom: 1px solid var(--h2-color);
+    margin-bottom: 10px;
+    font-size: 1.5em;
 }
 
 #content table {
