@@ -45,6 +45,7 @@ endif::[]
 :cyclondedx: https://cyclonedx.org/
 :syft: https://github.com/anchore/syft
 :grype: https://github.com/anchore/grype
+:idp: https://en.wikipedia.org/wiki/Identity_provider
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -547,7 +548,46 @@ localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e7
             └── org.opencontainers.image.created: "2025-06-04T12:40:38Z"
 ----
 
+Speaking about security:
+Just adding images without means of verification if this is the real deal apart from the checksum
+doesn't make too much sense too me.
+
+So let us talk about image singing.
+
 == Image signing
+
+Due to the nature of OCI containers there are two things we can do:
+
+- Sign the complete image
+- Attest the specific layer in-toto
+
+So why not both to get some practice?
+
+=== Signing the image
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    sign --yes localhost:5000/todo-service:latest
+Generating ephemeral keys...
+Retrieving signed certificate...
+Non-interactive mode detected, using device flow.
+Enter the verification code xxxx in your browser at: https://oauth2.sigstore.dev/auth/device?user_code=xxxx # <.>
+Code will be valid for 300 seconds
+Token received!
+Successfully verified SCT...
+...
+By typing 'y', you attest that (1) you are not submitting the personal data of any other person; and (2) you understand and agree to the statement and the Agreement terms at the URLs listed above. # <.>
+tlog entry created with index: 230160511
+Pushing signature to: localhost:5000/todo-service
+----
+<.> Here we are asked to follow the given link and select an {idp}[IDP] of our choice like
+GitHub to provide identification details
+<.> Glad we added `--yes`.
+
+
+
 
 == Conclusion
 
