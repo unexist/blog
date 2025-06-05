@@ -586,8 +586,10 @@ Pushing signature to: localhost:5000/todo-service
 GitHub to provide identification details
 <.> Glad we added `--yes`.
 
+And when we check the web ui we can see there is a bit of progress:
 
-
+.Zot Registry on <http://localhost:5000>
+image::zot-signed.png[]
 
 == Conclusion
 
