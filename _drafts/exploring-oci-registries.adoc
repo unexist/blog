@@ -591,6 +591,26 @@ And when we check the web ui we can see there is a bit of progress:
 .Zot Registry on <http://localhost:5000>
 image::zot-signed.png[]
 
+=== Verify signature
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    verify  \
+    --certificate-oidc-issuer=https://github.com/login/oauth \
+    --certificate-identity=christoph@unexist.dev \
+    localhost:5000/todo-service:latest
+Verification for localhost:5000/todo-service:latest --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+...
+----
+
+=== Attest in-toto
+
 == Conclusion
 
 All examples can be found here:
