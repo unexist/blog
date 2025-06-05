@@ -5,7 +5,7 @@ description: This blog post demonstrates how ORAS can be used to leverage OCI-co
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: container oci sbom oras cosign trivy grype syft cyclodedx showcase
+tags: container oci sbom oras cosign trivy grype syft cyclonedx showcase
 categories: tech
 toc: true
 ---
@@ -258,7 +258,7 @@ The next few examples require an OCI-compatible registry and also access to the 
 Since installation is usually a hassle, all examples rely on Podman and the well-supported
 {zotreg}[Zot Registry].
 
-== Firing up Zot
+=== Firing up Zot
 
 Setting up our registry is just a piece of cake and shouldn't raise any eyebrows yet.
 We pretty much set just the bare essentials - *deliberately* without any hardening for actual
@@ -274,9 +274,10 @@ $ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
 scanner - have a glimpse how this can be done on GitHub: +
 <https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
 
-Once started and after the initial download of the vulnerabilities database of {trivy}[Trivy] we
-are dutifully greeted with an empty list:
+Once started and after {trivy}[Trivy]'s update of the vulnerabilities is done we are dutifully
+greeted with an empty list:
 
+.Zot Registry on <http://localhost:5000>
 image::zot-empty.png[]
 
 Time to push our first artifact!
@@ -309,11 +310,11 @@ Digest: sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 <.> Here we set our custom artifact type, to be able to distinguish it.
 <.> No need to make our live miserable with SSL/TLS!
 
-=== Pulling it back
+=== Pull it back
 
 One-way-success, time to get it back:
 
-==== Pull with Podman
+==== Naively with Podman
 
 Pulling images from container registries is one of the core tasks of Podman:
 
@@ -340,7 +341,7 @@ registries = ['localhost:5000']
 ----
 ====
 
-==== Can ORAS pull the image?
+==== Confidently with ORAS
 
 Let us try again - this time with ORAS.
 
@@ -366,7 +367,7 @@ todo-service
 
 There are several commands available to gather information about images on the registry.
 
-==== Fetching the manifest
+==== Fetch the manifest
 
 [source,shell]
 ----
@@ -454,9 +455,9 @@ $ cat sbom.json | jq '.components | length' # <.>
 <.> Interesting since I am using the `latest` tag.
 <.> Quite a lot of components..
 
-=== Scanning the SBOM
+=== Scanning for vulnerabilities
 
-Like Trivy, grype can easily be run from inside a container and start scanning:
+Like Trivy, grype can easily scan from inside a container:
 
 [source,shell]
 ----
@@ -478,10 +479,10 @@ golang.org/x/net            v0.18.0    0.36.0    go-module  GHSA-qxp5-gwg8-xv66 
 github.com/jackc/pgx/v5     v5.4.3     5.5.2     go-module  GHSA-fqpg-rq76-99pq  Medium      N/A    N/A
 ----
 
-=== Uploading our SBOM
+=== Attaching our SBOM
 
-If we are content with the scanning result and I bet we arefootnote:[Not!] let us quickly add this
-to our image:
+If we are content with the scanning resultfootnote:[I hope we are not - anyway!] let us quickly add
+this to our image:
 
 [source,shell]
 ----
@@ -529,7 +530,7 @@ have to provide a patch to bring this forward:
 <https://github.com/project-zot/zot/issues/2415>
 ****
 
-=== Discover the changes
+=== Discover changes
 
 And if we run discover again we can see there is a new layer:
 
@@ -546,7 +547,7 @@ localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e7
             └── org.opencontainers.image.created: "2025-06-04T12:40:38Z"
 ----
 
-=== Signing images
+== Image signing
 
 == Conclusion
 
