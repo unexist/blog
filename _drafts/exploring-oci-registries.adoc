@@ -556,9 +556,13 @@ Speaking about security:
 Just adding images without means of verification if this is the real deal apart from the checksum
 doesn't make too much sense too me.
 
-So let us talk about image singing.
+I think the why should be clear, let us talk about how.
 
 == Image signing
+
+Again we are free to pick from multiple options,
+
+I think we got the why pretty much nailed down, so
 
 Due to the nature of OCI containers there are two things we can do:
 
