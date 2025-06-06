@@ -46,6 +46,8 @@ endif::[]
 :syft: https://github.com/anchore/syft
 :grype: https://github.com/anchore/grype
 :idp: https://en.wikipedia.org/wiki/Identity_provider
+:cosign: https://github.com/sigstore/cosign
+:redhatsigning: https://www.redhat.com/en/blog/container-image-signing
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -381,7 +383,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
   "mediaType": "application/vnd.oci.image.manifest.v1+json",
   "artifactType": "showcase/todo-service",
   "config": {
-    "mediaType": "application/vnd.oci.empty.v1+json",
+    "mediaType": "application/vnd.oci.empty.v1+json", #<.>
     "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
     "size": 2,
     "data": "e30="
@@ -401,6 +403,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
   }
 }
 ----
+<.> Another media type - this time to indicate there is no config available.
 
 ==== Discover the tree
 
@@ -458,7 +461,8 @@ $ cat sbom.json | jq '.components | length' # <.>
 
 === Scanning for vulnerabilities
 
-Like Trivy, grype can easily scan from inside a container:
+Like Trivy, grype can easily scan from inside a container and provide machine-readable statistics
+by default:
 
 [source,shell]
 ----
@@ -502,7 +506,7 @@ Attached to [registry] localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d
 Digest: sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
 ----
 <.> This gave me a bit of a headache, because Zot supports SBOM scanning and also propagates the results
-on the web ui.
+on the web ui - see the sidepanel for more information.
 
 .SBOM handling in Zot
 ****
@@ -523,7 +527,7 @@ func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
 }
 ----
 
-I thought I might just got it wrong, since many pages I've read were a bit vague if it is
+I thought I just got the type wrong, since many pages I've read were a bit vague if it is
 `example/sbom` or `sbom/example`.
 After several hours I found a pending issue which is kind of related to my problem, but I might
 have to provide a patch to bring this forward:
@@ -593,20 +597,53 @@ image::zot-signed.png[]
 
 === Verify signature
 
+
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    verify  \
+    --certificate-oidc-issuer=https://github.com/login/oauth \ # <.>
+    --certificate-identity=christoph@unexist.dev \
+    localhost:5000/todo-service:latest | jq .
+Verification for localhost:5000/todo-service:latest --
+The following checks were performed on each of these signatures: # <.>
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+[
+  {
+    "critical": { # <.>
+      "identity": {
+        "docker-reference": "localhost:5000/todo-service"
+      },
+      "image": {
+        "docker-manifest-digest": "sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6"
+      },
+      "type": "cosign container image signature"
+    },
+    "optional": {
+      "1.3.6.1.4.1.57264.1.1": "https://github.com/login/oauth",
+      "Bundle": {
+...
+----
+<.> There are several options for verification available - we just rely on issuer and email.
+<.> This states which checks were performed during the verification.
+<.> Apparently this _critical_ is nothing of concern and a {redhatsigning}[default from RedHat].
+
+Just as a negative check this is how it looks like when the verification actually fails:
+
 [source,shell]
 ----
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
     verify  \
     --certificate-oidc-issuer=https://github.com/login/oauth \
-    --certificate-identity=christoph@unexist.dev \
+    --certificate-identity=anon@anon.rs \
     localhost:5000/todo-service:latest
-Verification for localhost:5000/todo-service:latest --
-The following checks were performed on each of these signatures:
-  - The cosign claims were validated
-  - Existence of the claims in the transparency log was verified offline
-  - The code-signing certificate was verified using trusted certificate authority certificates
-...
+Error: no matching signatures: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
+main.go:69: error during command execution: no matching signatures: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
 ----
 
 === Attest in-toto
