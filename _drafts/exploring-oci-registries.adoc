@@ -56,6 +56,7 @@ endif::[]
 :skopeo: https://github.com/containers/skopeo
 :intoto: https://in-toto.io/
 :intotospec: https://github.com/in-toto/attestation/blob/main/spec/README.md#in-toto-attestation-framework-spec
+:cosignattachsbom: https://github.com/sigstore/cosign/blob/main/doc/cosign_attach_sbom.md
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -453,7 +454,8 @@ SBOM
 ----
 $ podman run --rm -v .:/workspace -it --network=host \
     -v ./todo-service:/in \
-    docker.io/anchore/syft:latest scan dir:/in -o cyclonedx-json=/workspace/sbom.json # <.>
+    docker.io/anchore/syft:latest \
+        scan dir:/in -o cyclonedx-json=/workspace/sbom.json # <.>
  ✔ Indexed file system                                                                                                                                                                                                                                                    /in
  ✔ Cataloged contents                                                                                                                                                                                        86121fea66864109267c361a1fec880ab49dc5f619205b1f364ecb7ba31eb066
    ├── ✔ Packages                        [70 packages]
@@ -477,7 +479,8 @@ by default:
 [source,shell]
 ----
 $ podman run --rm -v .:/workspace -it --network=host \
-    docker.io/anchore/grype:latest sbom:/workspace/sbom.json
+    docker.io/anchore/grype:latest \
+        sbom:/workspace/sbom.json
  ✔ Vulnerability DB                [updated]
  ✔ Scanned for vulnerabilities     [9 vulnerability matches]
    ├── by severity: 1 critical, 2 high, 6 medium, 0 low, 0 negligible
@@ -594,7 +597,8 @@ but in the most convenient way it just allows us to select from a list of suppor
 ----
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
-    sign --yes localhost:5000/todo-service:latest
+    sign --yes \
+        localhost:5000/todo-service:latest
 Generating ephemeral keys...
 Retrieving signed certificate...
 Non-interactive mode detected, using device flow.
@@ -665,7 +669,7 @@ main.go:69: error during command execution: no matching signatures: none of the 
 
 First step done - step two is to sign our SBOM as well.
 
-=== In-toto attestation
+=== Create an in-toto attestation
 
 If you have made it this far in this post I probably shouldn't bore you with another
 {intotospec}[spec] about in-toto or the framework around it and just provide the
@@ -673,19 +677,123 @@ examples:
 
 [source,shell]
 ----
+$ DIGEST=`podman run --rm -v .:/workspace -it --network=host \
+    ghcr.io/oras-project/oras:main \
+    discover --format json --plain-http \
+        localhost:5000/todo-service:latest | jq -r ".referrers[].reference"` # <.>
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
-    attest \
-        --type cyclonedx-json \
-        --predicate
-        localhost:5000/todo-service:latest
+    attest --yes \ # <.>
+        --type cyclonedx \ # <.>
+        --predicate /workspace/sbom.json \
+        $DIGEST
+Generating ephemeral keys...
+Retrieving signed certificate...
+Non-interactive mode detected, using device flow.
+Enter the verification code xxxx in your browser at: https://oauth2.sigstore.dev/auth/device?user_code=xxxx
+Code will be valid for 300 seconds
+Token received!
+Successfully verified SCT...
+Using payload from: /workspace/sbom.json
+...
+By typing 'y', you attest that (1) you are not submitting the personal data of any other person; and (2) you understand and agree to the statement and the Agreement terms at the URLs listed above.
+using ephemeral certificate:
+-----BEGIN CERTIFICATE-----
+LOREMIPSUMDOLORSITAMETCONSECTETURADIPISCINGELIT
+MORBIIDSODALESESTVIVAMUSVOLUTPATSODALESTINCIDUNT
+...
+-----END CERTIFICATE-----
+
+tlog entry created with index: 232176597
+----
+<.> We need the digest to identify our artifact for the next steps - so please keep it at hand.
+<.> Don't forget to deal with the interactive prompt here.
+<.> Some information about type and name of what cosign is supposed to attest.
+
+NOTE: cosign still supports the older command {cosignattachsbom}[attach sbom] to attach artifacts,
+but the it is deprecated and it is generally advised to use proper attestations.
+There is a heaty debate about its status and maturity though.
+
+=== Download attestation
+
+As mentiond before this is complex, so let us have a closer look at what we can actually get back.
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    download attestation \
+        $DIGEST | jq "del(.payload)" # <.>
+{
+  "payloadType": "application/vnd.in-toto+json", # <.>
+  "signatures": [
+    {
+      "keyid": "",
+      "sig": "MEYCIQDE4/CeQstLjHLE+ZQ+BCH+aaw2wSWSr9i26d7iuazXrwIhAPtly5XBD6C14s/78vTjuHdLOjj2a9TeSgs0yD6YRrZd"
+    }
+  ]
+}
+----
+<.> We omit the payload data here - feel free to dump your own base64 blob
+<.> This is the actual type of the payload that has been transmitted.
+
+If you want to see the actual content of the payload here is a small exercise for you:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    download attestation \
+        $DIGEST | jq -r .payload | base64 -d | jq .predicate
 ----
 
-$ cosign sign --key cosign.key
-gcr.io/$(gcloud config get-value project)/alpine:sha256-e1c082e3d3c45cccac829840a25941e679c25d438cc8412c2fa221cf1a824e6a.sbom
+=== Verification of the attestation
 
-$ cosign attest -predicate myattestations -key cosign.key gcr.io/$(gcloud config get-value project)/alpine:latest
+And lastly in the same manner as before the attestation can also be verified by the means of
+cosign:
 
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    verify-attestation  \
+        --type cyclonedx \
+        --certificate-oidc-issuer=https://github.com/login/oauth \
+        --certificate-identity=christoph@unexist.dev \
+        $DIGEST | jq ".[] | .critical"
+podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    verify-attestation  \
+        --type cyclonedx \ # <.>
+        --certificate-oidc-issuer=https://github.com/login/oauth \
+        --certificate-identity=christoph@unexist.dev \
+        $DIGEST > /dev/null # <.>
+
+Verification for localhost:5000/todo-service@sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9 --
+The following checks were performed on each of these signatures:
+  - The cosign claims were validated
+  - Existence of the claims in the transparency log was verified offline
+  - The code-signing certificate was verified using trusted certificate authority certificates
+Certificate subject: christoph@unexist.dev
+Certificate issuer URL: https://github.com/login/oauth
+----
+<.> Here we pass some expectations to the checks.
+<.> We don't want to see the exact same content from the previous step again.
+
+Passing bogus information or trying to verify the wrong digest leads to an error:
+
+[source,shell]
+----
+podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    verify-attestation  \
+        --type cyclonedx \
+        --certificate-oidc-issuer=https://github.com/login/oauth \
+        --certificate-identity=anon@anon.rs \
+        $DIGEST > /dev/null
+Error: no matching attestations: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
+main.go:74: error during command execution: no matching attestations: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
+----
 
 == Conclusion
 
