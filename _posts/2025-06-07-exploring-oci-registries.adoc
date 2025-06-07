@@ -75,7 +75,7 @@ license fees.
 Passing this question to my bubble lead to a suggestion of a good friend  to have a look at
 {oras}[ORAS], which leverages {oci}[OCI]-compliant registries for exactly what I wanted to
 literally archive.
-We are already using Harbor][], so moving other artifacts there as well aroused my interest.
+We are already using {harbor}[Harbor], so moving other artifacts there as well aroused my interest.
 
 So over the course of this article we are going to dive into the container world with a short
 primer of the duality of OCI, talk about basic usage and a few advanced points like {sbom}[SBOM]
