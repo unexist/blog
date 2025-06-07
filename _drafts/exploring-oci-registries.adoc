@@ -45,9 +45,12 @@ endif::[]
 :cyclondedx: https://cyclonedx.org/
 :syft: https://github.com/anchore/syft
 :grype: https://github.com/anchore/grype
+:imagespectypes: https://github.com/opencontainers/image-spec/blob/main/specs-go/v1/mediatype.go#L43
+:gocontainerregtypes: https://github.com/google/go-containerregistry/blob/main/pkg/v1/types/types.go#L37
 :idp: https://en.wikipedia.org/wiki/Identity_provider
-:cosign: https://github.com/sigstore/cosign
 :redhatsigning: https://www.redhat.com/en/blog/container-image-signing
+:cosign: https://github.com/sigstore/cosign
+:notary: https://github.com/notaryproject/notary
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -466,7 +469,7 @@ by default:
 
 [source,shell]
 ----
-$ podman run --rm -v .:/workspace -it --name grype --network=host \
+$ podman run --rm -v .:/workspace -it --network=host \
     docker.io/anchore/grype:latest sbom:/workspace/sbom.json
  ✔ Vulnerability DB                [updated]
  ✔ Scanned for vulnerabilities     [9 vulnerability matches]
@@ -510,8 +513,8 @@ on the web ui - see the sidepanel for more information.
 
 .SBOM handling in Zot
 ****
-Unfortunately Zot or rather its internal handling of Trivy just allows scans for known media types
-and doesn't rely on any specific media type:
+Unfortunately Zot or rather its internal handling of Trivy just allows scans of known media types
+and doesn't rely on any specific media type to identify passed SBOM files:
 
 [source,golang,highlight=5]
 ----
@@ -519,23 +522,27 @@ and doesn't rely on any specific media type:
 func (scanner Scanner) isManifestScanable(digestStr string) (bool, error) {
 ...
     switch imageLayer.MediaType {
-    case ispec.MediaTypeImageLayerGzip, ispec.MediaTypeImageLayer, string(regTypes.DockerLayer):
+    case ispec.MediaTypeImageLayerGzip, ispec.MediaTypeImageLayer, string(regTypes.DockerLayer): # <.>
         continue
     default:
     return false, zerr.ErrScanNotSupported
 ...
 }
 ----
+<.> This relies on borrowed definitions from our known {imagespectypes}[image-spec] as well as
+{gocontainerregtypes}[go-containerregistry].
 
 I thought I just got the type wrong, since many pages I've read were a bit vague if it is
 `example/sbom` or `sbom/example`.
-After several hours I found a pending issue which is kind of related to my problem, but I might
-have to provide a patch to bring this forward:
+After several hours I found a pending issue which is kind of related to my problem, but the
+timestamp of the issue doesn't look promising though.
+I'll put patch-work on my todo listfootnote:[I've got plenty of apps for that] so I might bring
+this forward.
 
 <https://github.com/project-zot/zot/issues/2415>
 ****
 
-=== Discover changes
+=== Discover our changes
 
 And if we run discover again we can see there is a new layer:
 
@@ -559,6 +566,7 @@ doesn't make too much sense too me.
 I think the why should be clear, let us talk about how.
 
 == Image signing
+
 
 Again we are free to pick from multiple options,
 
