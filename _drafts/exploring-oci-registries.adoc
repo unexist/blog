@@ -57,6 +57,8 @@ endif::[]
 :intoto: https://in-toto.io/
 :intotospec: https://github.com/in-toto/attestation/blob/main/spec/README.md#in-toto-attestation-framework-spec
 :cosignattachsbom: https://github.com/sigstore/cosign/blob/main/doc/cosign_attach_sbom.md
+:silverbullet: https://en.wikipedia.org/wiki/No_Silver_Bullet
+:taskfile: https://taskfile.dev/
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -795,8 +797,26 @@ Error: no matching attestations: none of the expected identities matched what wa
 main.go:74: error during command execution: no matching attestations: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
 ----
 
+Phew that was quite lengthy to reach this point, time for a small recap.
+
 == Conclusion
 
-All examples can be found here:
+During the course of this post we have seen how OCI-registries can be leveraged to store almost
+any kind of artifact.
+The layered structure and format allows to add additional metadata and ancillary artifacts like
+Helm-charts can be put there to rest as well.
+
+Bill of materials allow quick scan of layers for known vulnerabilities and combined with proper
+signing can the security of the supply chain be further strengthened.
+Alas this is also no {silverbullet}[silver bullet] and takes lots of work to get it right in
+automatic workflows.
+
+I personally think this is a great addition, solves my initial hunt for artifact storage and also
+eases the handling of all the dependencies of different kind of artifacts in a more secure way.
+Next stop for me is to compile all this into a shiny new
+{{ site.url }}{% post_url 2024-10-25-decision-records %}[Architecture Decision Record].
+and discuss is with my team.
+
+All examples can be found here hidden in the {taskfile}[taskfiles]:
 
 <https://github.com/unexist/showcase-oci-registries>
