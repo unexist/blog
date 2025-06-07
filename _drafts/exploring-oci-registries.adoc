@@ -386,7 +386,7 @@ There are several commands available to gather information about images on the r
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
     manifest fetch --pretty --plain-http \
-    localhost:5000/todo-service:latest
+        localhost:5000/todo-service:latest
 {
   "schemaVersion": 2,
   "mediaType": "application/vnd.oci.image.manifest.v1+json",
@@ -422,7 +422,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
     discover --format tree --plain-http \
-    localhost:5000/todo-service:latest
+        localhost:5000/todo-service:latest
 localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 ----
 
@@ -504,8 +504,8 @@ this to our image:
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
     attach localhost:5000/todo-service:latest --plain-http \
-    --artifact-type showcase/sbom \ # <.>
-    sbom.json:application/vnd.cyclonedx+json
+        --artifact-type showcase/sbom \ # <.>
+        sbom.json:application/vnd.cyclonedx+json
 ✓ Uploaded  sbom.json                                                                                                                                                                                                                                50.1/50.1 KB 100.00%    2ms
   └─ sha256:0690e255a326ee93c96bf1471586bb3bc720a1f660eb1c2ac64bbf95a1bd9693
 ✓ Exists    application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%     0s
@@ -558,7 +558,7 @@ And if we run discover again we can see there is a new layer:
 $ podman run --rm -v .:/workspace -it --network=host \
     ghcr.io/oras-project/oras:main \
     discover --format tree --plain-http \
-    localhost:5000/todo-service:latest
+        localhost:5000/todo-service:latest
 localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 └── showcase/sbom
     └── sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
@@ -626,9 +626,9 @@ It all boils down to another simple call of cosign:
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
     verify  \
-    --certificate-oidc-issuer=https://github.com/login/oauth \ # <.>
-    --certificate-identity=christoph@unexist.dev \
-    localhost:5000/todo-service:latest | jq ".[] | .critical" # <.>
+        --certificate-oidc-issuer=https://github.com/login/oauth \ # <.>
+        --certificate-identity=christoph@unexist.dev \
+        localhost:5000/todo-service:latest | jq ".[] | .critical" # <.>
 Verification for localhost:5000/todo-service:latest --
 The following checks were performed on each of these signatures: # <.>
   - The cosign claims were validated
@@ -656,9 +656,9 @@ Just as a negative test this is how it looks like when the verification actually
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
     verify  \
-    --certificate-oidc-issuer=https://github.com/login/oauth \
-    --certificate-identity=anon@anon.rs \
-    localhost:5000/todo-service:latest
+        --certificate-oidc-issuer=https://github.com/login/oauth \
+        --certificate-identity=anon@anon.rs \
+        localhost:5000/todo-service:latest
 Error: no matching signatures: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
 main.go:69: error during command execution: no matching signatures: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
 ----
@@ -676,9 +676,9 @@ examples:
 $ podman run --rm -v .:/workspace --network=host \
     ghcr.io/sigstore/cosign/cosign:v2.4.1 \
     attest \
-    --type cyclonedx-json \
-    --predicate
-    localhost:5000/todo-service:latest
+        --type cyclonedx-json \
+        --predicate
+        localhost:5000/todo-service:latest
 ----
 
 $ cosign sign --key cosign.key
