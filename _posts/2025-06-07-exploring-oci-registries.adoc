@@ -2,8 +2,8 @@
 layout: post
 title: Exploring OCI registries
 description: This blog post demonstrates how ORAS and cosign can be used to leverage OCI-compliant registries to handle all kind of artifacts in a more secure way.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2025-06-07 15:16 +0200
+last_updated: 2025-06-07 15:16 +0200
 author: Christoph Kappel
 tags: container oci sbom oras cosign trivy grype syft cyclonedx showcase
 categories: tech
