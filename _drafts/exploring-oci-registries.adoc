@@ -37,6 +37,8 @@ endif::[]
 :heosdial: https://github.com/unexist/heos-dial
 :golang: https://go.dev/
 :redoc: https://unexist.blog/redoc
+:dummyconfig: https://oras.land/docs/how_to_guides/manifest_config/
+:orasannotate: https://oras.land/docs/how_to_guides/manifest_annotations
 :orascmds: https://oras.land/docs/category/oras-commands
 :blobs: https://de.wikipedia.org/wiki/Binary_Large_Object
 :helm: https://helm.sh/
@@ -51,6 +53,9 @@ endif::[]
 :redhatsigning: https://www.redhat.com/en/blog/container-image-signing
 :cosign: https://github.com/sigstore/cosign
 :notary: https://github.com/notaryproject/notary
+:skopeo: https://github.com/containers/skopeo
+:intoto: https://in-toto.io/
+:intotospec: https://github.com/in-toto/attestation/blob/main/spec/README.md#in-toto-attestation-framework-spec
 
 Handling containers is probably something a modern developer can't and probably *should* not live
 without anymore.
@@ -276,7 +281,7 @@ $ podman run --rm -it --name zot-registry -p 5000:5000 --network=host \
   -v ./infrastructure/zot-registry/config.json:/etc/zot/config.json \ # <.>
   ghcr.io/project-zot/zot-linux-amd64:v2.1.2
 ----
-<1> Apart from host stuff we also want to enable the fancy {zotregweb}[web ui] and the {cve}[CVE]
+<1> Apart from host stuff we also want to enable the fancy {zotregweb}[web UI] and the {cve}[CVE]
 scanner - have a glimpse how this can be done on GitHub: +
 <https://github.com/unexist/showcase-oci-registries/blob/master/infrastructure/zot-registry/config.json>
 
@@ -304,9 +309,9 @@ $ podman run --rm -v .:/workspace -it --network=host \ # <.>
         todo-service/todo-service.bin:application/octet-stream
 ✓ Uploaded  todo-service/todo-service.bin                                                                                                                                                                                                            26.1/26.1 MB 100.00%   32ms
   └─ sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc
-✓ Uploaded  application/vnd.oci.empty.v1+json                                                                                                                                                                                                              2/2  B 100.00%    7ms
+✓ Uploaded  application/vnd.oci.empty.v1+json # <.>
   └─ sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a
-✓ Uploaded  application/vnd.oci.image.manifest.v1+json                                                                                                                                                                                                 586/586  B 100.00%    7ms
+✓ Uploaded  application/vnd.oci.image.manifest.v1+json
   └─ sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 Pushed [registry] localhost:5000/todo-service:latest
 ArtifactType: showcase/todo-service
@@ -315,6 +320,7 @@ Digest: sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6
 <.> The ORAS container allows us to call it this way and directly pass our arguments.
 <.> Here we set our custom artifact type, to be able to distinguish it.
 <.> No need to make our live miserable with SSL/TLS!
+<.> This isn't a _real_ container, so we must provide a {dummyconfig}[dummy config}.
 
 === Pull it back
 
@@ -396,7 +402,7 @@ $ podman run --rm -v .:/workspace -it --network=host \
       "mediaType": "application/octet-stream",
       "digest": "sha256:cc8ab19ee7e1f1f7d43b023317c560943dd2c15448ae77a83641e272bc7a5dbc",
       "size": 27352532,
-      "annotations": {
+      "annotations": { # <.>
         "org.opencontainers.image.title": "todo-service/todo-service.bin"
       }
     }
@@ -406,7 +412,8 @@ $ podman run --rm -v .:/workspace -it --network=host \
   }
 }
 ----
-<.> Another media type - this time to indicate there is no config available.
+<.> This is our empty dummy config - check the `size` and `data` fields.
+<.> Annotations are supported as well and can be added with {orasannotate}[oras push --annotation].
 
 ==== Discover the tree
 
@@ -509,7 +516,7 @@ Attached to [registry] localhost:5000/todo-service@sha256:fb1f02fff7f1406ae3aa2d
 Digest: sha256:5c6bb144aaed7d3e4eb58ac6bcdbf2a68d0409d5328f81c9d413e9301e2517a9
 ----
 <.> This gave me a bit of a headache, because Zot supports SBOM scanning and also propagates the results
-on the web ui - see the sidepanel for more information.
+on the web UI - see the sidepanel for more information.
 
 .SBOM handling in Zot
 ****
@@ -536,7 +543,7 @@ I thought I just got the type wrong, since many pages I've read were a bit vague
 `example/sbom` or `sbom/example`.
 After several hours I found a pending issue which is kind of related to my problem, but the
 timestamp of the issue doesn't look promising though.
-I'll put patch-work on my todo listfootnote:[I've got plenty of apps for that] so I might bring
+I'll put patch-work on my todo listfootnote:[I've got plenty of apps for that..] so I might bring
 this forward.
 
 <https://github.com/project-zot/zot/issues/2415>
@@ -567,19 +574,21 @@ I think the why should be clear, let us talk about how.
 
 == Image signing
 
+Needless to say topics like encryption, signatures etc. are usually pretty complicated, so I
+can gladly there exists lots of tooling to ease this for us dramatically.
+I did the homework for us  in preparation for this post and checked our options.
+While doing that I found lots of references to {notary}[notary] and {skopeo[skopeo], but the full
+package and overall documentation of {cosign}[cosign] just convinced me and it can basically sign
+anything in a registry.
 
-Again we are free to pick from multiple options,
-
-I think we got the why pretty much nailed down, so
-
-Due to the nature of OCI containers there are two things we can do:
-
-- Sign the complete image
-- Attest the specific layer in-toto
-
-So why not both to get some practice?
+In this last chapter we are going to sign our image and specific layers via
+{intoto}[in-toto attestations] with the help of cosign.
 
 === Signing the image
+
+Cosign comes with lots of useful commands to create and manage identities, signatures and whatnot,
+but in the most convenient way it just allows us to select from a list of supported
+{idp}[identity provider] in our browser per runtime:
 
 [source,shell]
 ----
@@ -598,18 +607,19 @@ By typing 'y', you attest that (1) you are not submitting the personal data of a
 tlog entry created with index: 230160511
 Pushing signature to: localhost:5000/todo-service
 ----
-<.> Here we are asked to follow the given link and select an {idp}[IDP] of our choice like
-GitHub to provide identification details
-<.> Glad we added `--yes`.
+<.> Quickly follow the link and pick one of your liking - we continue with Github here.
+<.> Glad we added `--yes` - interactivity in container is usually a pain.
 
-And when we check the web ui we can see there is a bit of progress:
+And when we check the web UI we can see there is a bit of progress:
 
 .Zot Registry on <http://localhost:5000>
 image::zot-signed.png[]
 
-=== Verify signature
+Relying on Zot is nice and good, but there are other ways to do that.
 
+=== Verification of the image
 
+It all boils down to another simple call of cosign:
 
 [source,shell]
 ----
@@ -618,33 +628,28 @@ $ podman run --rm -v .:/workspace --network=host \
     verify  \
     --certificate-oidc-issuer=https://github.com/login/oauth \ # <.>
     --certificate-identity=christoph@unexist.dev \
-    localhost:5000/todo-service:latest | jq .
+    localhost:5000/todo-service:latest | jq ".[] | .critical" # <.>
 Verification for localhost:5000/todo-service:latest --
 The following checks were performed on each of these signatures: # <.>
   - The cosign claims were validated
   - Existence of the claims in the transparency log was verified offline
   - The code-signing certificate was verified using trusted certificate authority certificates
-[
-  {
-    "critical": { # <.>
-      "identity": {
-        "docker-reference": "localhost:5000/todo-service"
-      },
-      "image": {
-        "docker-manifest-digest": "sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6"
-      },
-      "type": "cosign container image signature"
-    },
-    "optional": {
-      "1.3.6.1.4.1.57264.1.1": "https://github.com/login/oauth",
-      "Bundle": {
-...
+{
+  "identity": {
+    "docker-reference": "localhost:5000/todo-service"
+  },
+  "image": {
+    "docker-manifest-digest": "sha256:fb1f02fff7f1406ae3aa2d9ebf3f931910b69e99c95e78e211037f11ec8f1eb6"
+  },
+  "type": "cosign container image signature"
+}
 ----
-<.> There are several options for verification available - we just rely on issuer and email.
-<.> This states which checks were performed during the verification.
-<.> Apparently this _critical_ is nothing of concern and a {redhatsigning}[default from RedHat].
+<.> There are several options for verification available - we just rely on issuer and mail.
+<.> Apparently this _critical_ is nothing of concern and a
+{redhatsigning}[format specificed by RedHat].
+<.> This is a short summary of the checks that have been performed during the verification.
 
-Just as a negative check this is how it looks like when the verification actually fails:
+Just as a negative test this is how it looks like when the verification actually fails:
 
 [source,shell]
 ----
@@ -658,7 +663,29 @@ Error: no matching signatures: none of the expected identities matched what was 
 main.go:69: error during command execution: no matching signatures: none of the expected identities matched what was in the certificate, got subjects [christoph@unexist.dev] with issuer https://github.com/login/oauth
 ----
 
-=== Attest in-toto
+First step done - step two is to sign our SBOM as well.
+
+=== In-toto attestation
+
+If you have made it this far in this post I probably shouldn't bore you with another
+{intotospec}[spec] about in-toto or the framework around it and just provide the
+examples:
+
+[source,shell]
+----
+$ podman run --rm -v .:/workspace --network=host \
+    ghcr.io/sigstore/cosign/cosign:v2.4.1 \
+    attest \
+    --type cyclonedx-json \
+    --predicate
+    localhost:5000/todo-service:latest
+----
+
+$ cosign sign --key cosign.key
+gcr.io/$(gcloud config get-value project)/alpine:sha256-e1c082e3d3c45cccac829840a25941e679c25d438cc8412c2fa221cf1a824e6a.sbom
+
+$ cosign attest -predicate myattestations -key cosign.key gcr.io/$(gcloud config get-value project)/alpine:latest
+
 
 == Conclusion
 
