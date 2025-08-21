@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Tired of AI
-description: TBD
+description: This blog post is my personal stance on AI and my tiredness of the hype of a tech that leads me to nowhere.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -19,10 +19,47 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
-({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI])
+:mcp: https://modelcontextprotocol.io/docs/getting-started/intro
+:mcprcp: https://julsimon.medium.com/why-mcps-disregard-for-40-years-of-rpc-best-practices-will-burn-enterprises-8ef85ce5bc9b
+
+It has been roughly two years since my last post regarding my experience with the state of AI
+({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
+time to talk about this again.
+
+But in contrast to the previous post, this time I don't want to dwell on specific products and
+tools, but to explain why I think we should pay close attention to the development and why this
+topic is generally such a mixed bag to me.
+
+Enough chit-chat, let us begin.
+
+== Omnipresence in media
+
+When I look back at the last two years I can safely say the whole think got even more traction, as
+we left the early adopting phase.
+AI has entered the mainstream and almost everything gets
+AI support and if it isn't feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
+
+Strictly speaking everything went according to plan:
+
+.Gartner <https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence>
+image::hype-cycle-for-artificial-intelligence-2023.png[]
+
+== Asking the right questions
+
+== Impact on society
 
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
+
+
+
+So what happened during these two years?
+There has been lots of iterations on language models, loads of new tools
+
+Even more than two years ago AI is omnipresent in almost every type of media I consume
+
+The whole AI topic is a kind of mixed bag to me
+
 
 == Conclusion
 
