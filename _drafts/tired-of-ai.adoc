@@ -1,0 +1,37 @@
+---
+layout: post
+title: Tired of AI
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: ai
+categories: myself
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/tired_of_ai
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/tired_of_ai
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
+({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI])
+
+.Sam Altman on https://x.com/sama/status/195208457436603235[X]
+image::sam-altman.png[]
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
+
+* [[[tamingsilicon]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
+* [[[aicon]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
