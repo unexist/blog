@@ -24,6 +24,10 @@ endif::[]
 :popup: https://en.wikipedia.org/wiki/Pop-up_retail
 :nurseai: https://pmc.ncbi.nlm.nih.gov/articles/PMC11850350/
 :laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
+:tamingsiliconvalley: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
+:stupidityparadox: https://www.goodreads.com/book/show/30209127-the-stupidity-paradox
+:theaicon: https://www.goodreads.com/book/show/217432753-the-ai-con
+:chatgpt: https://chatgpt.com/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -38,15 +42,15 @@ Enough chit-chat, let us begin.
 == Omnipresence in media
 
 When I look back at the last two years I can safely say the whole thing got even more traction, as
-we left the early adopting phase.
+we've left the early adopting phase.
 
 - AI has entered the mainstream and almost everything gets AI support and if it isn't directly
 feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
-- There is an abundance of new tools as it should be for new technology and new companies appear like
-{popup}[pop-up stores] with huge amounts of venture capital and tax money to burn.
+- There is an abundance of new tools, as it should be for new technology, and new companies sprout
+like {popup}[pop-up stores] with huge amounts of venture capital and tax money to burn.
 - The expectations are at an all-time high and the media overflows with new innovative ideas and
 applications of AI-technology like replacing {nurseai}[nurses with AI in healthcare] or how
-companies generally replace {laborai}[human labor].
+companies generally try to replace {laborai}[human labor].
 
 Strictly speaking everything went according to plan from 2023:
 
@@ -55,6 +59,20 @@ image::hype-cycle-for-artificial-intelligence-2023.png[]
 
 == Asking the right questions
 
+I've read many articles about AI and related stuff including the books
+{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalley>> and the entertaining one
+{theaicon}[The AI Con] <<theaicon>> and wonder what kind of problems does AI really try to address
+and solve?
+
+If you look at the business side I'd say the overall theme is to increase productivityfootnote:[read:
+getting faster] and to reduce manual and tiresome labor and on the personal side mostly
+quality-of-life improvements with the likes of
+{chatgpt}[ChatGPT]footnote:[or just "Chatty" I learned recently] and the stuff I'd loosely
+collect under the umbrella of movie and image generation.
+
+These aren't the only tasks that , but the few named examples generally
+match the category "gettings things done" without a benefit of a learning how the desired result
+can be archived without them.
 
 
 == Impact on society
@@ -70,3 +88,4 @@ image::sam-altman.png[]
 
 * [[[tamingsilicon]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
 * [[[theaicon]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
+* [[[stupidityparadox]]] Mats Alvesson, André Spicer, The Stupidity Paradox: The Power and Pitfalls of Function Stupidity at Work, Profile Books 2016
