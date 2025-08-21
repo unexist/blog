@@ -21,7 +21,9 @@ endif::[]
 
 :mcp: https://modelcontextprotocol.io/docs/getting-started/intro
 :mcprcp: https://julsimon.medium.com/why-mcps-disregard-for-40-years-of-rpc-best-practices-will-burn-enterprises-8ef85ce5bc9b
+:popup: https://en.wikipedia.org/wiki/Pop-up_retail
 :nurseai: https://pmc.ncbi.nlm.nih.gov/articles/PMC11850350/
+:laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -37,47 +39,34 @@ Enough chit-chat, let us begin.
 
 When I look back at the last two years I can safely say the whole thing got even more traction, as
 we left the early adopting phase.
-AI has entered the mainstream and almost everything gets
-AI support and if it isn't directly feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws]
-into the fold.
 
-There is an abundance of new tools as it should be for new technology and new companies appear like
-popup stores with huge amounts of venture capital and tax money to burn.
+- AI has entered the mainstream and almost everything gets AI support and if it isn't directly
+feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
+- There is an abundance of new tools as it should be for new technology and new companies appear like
+{popup}[pop-up stores] with huge amounts of venture capital and tax money to burn.
+- The expectations are at an all-time high and the media overflows with new innovative ideas and
+applications of AI-technology like replacing {nurseai}[nurses with AI in healthcare] or how
+companies generally replace {laborai}[human labor].
 
-Strictly speaking everything went according to plan:
+Strictly speaking everything went according to plan from 2023:
 
 .Gartner <https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence>
 image::hype-cycle-for-artificial-intelligence-2023.png[]
 
-Still with all the new innovations and the over-presence of AI related news to explore fields
-like replacing {nurseai}[nurses with AI in healthcare] I start to feel tired.
-
-
 == Asking the right questions
+
+
 
 == Impact on society
 
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
 
-
-
-So what happened during these two years?
-There has been lots of iterations on language models, loads of new tools
-
-Even more than two years ago AI is omnipresent in almost every type of media I consume
-
-The whole AI topic is a kind of mixed bag to me
-
-
 == Conclusion
 
-All examples can be found here:
-
-<https://github.com/unexist/showcase->
 
 [bibliography]
 == Bibliography
 
 * [[[tamingsilicon]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
-* [[[aicon]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
+* [[[theaicon]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
