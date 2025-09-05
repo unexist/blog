@@ -23,6 +23,7 @@ endif::[]
 :mcprcp: https://julsimon.medium.com/why-mcps-disregard-for-40-years-of-rpc-best-practices-will-burn-enterprises-8ef85ce5bc9b
 :popup: https://en.wikipedia.org/wiki/Pop-up_retail
 :nurseai: https://pmc.ncbi.nlm.nih.gov/articles/PMC11850350/
+:billgates: https://fortune.com/2025/03/27/billionaire-bill-gates-two-day-workweek-ai-replacing-humans/
 :laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
 :tamingsiliconvalley: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
 :stupidityparadox: https://www.goodreads.com/book/show/30209127-the-stupidity-paradox
@@ -49,15 +50,14 @@ we've left the early adopting phase.
 
 - AI has entered the mainstream and almost everything gets AI support and if it isn't directly
 feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
-- There is an abundance of new tools, as it should be for new technology, and new companies sprout
-like {popup}[pop-up stores] with huge amounts of venture capital and tax money to burn.
-- The expectations are at an all-time high and the media overflows with new innovative ideas and
-applications of AI-technology like replacing {nurseai}[nurses with AI in healthcare] or how
-companies generally try to replace {laborai}[human labor].
-- We are back to the promise from the industrial age: Once AI is everywhere we have more free time
-and can spend it on life and art.
+- There is an abundance of new tools and new companies sprout like {popup}[pop-up stores] with huge
+amounts of venture capital and tax money to burn.
+- The expectations are at an all-time high and my media bubbles spill over with new innovative ideas
+and applications of AI-technology like trying to replace general {laborai}[human labor] and even
+highly specific ones like {nurseai}[nurses in healthcare].
+- {billgates}[AI promises to reduce our daily working time].
 
-Strictly speaking everything went according to plan from 2023:
+So in hindsight everything went according to plan from 2023:
 
 .Gartner <https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence>
 image::hype-cycle-for-artificial-intelligence-2023.png[]
@@ -67,25 +67,31 @@ image::hype-cycle-for-artificial-intelligence-2023.png[]
 During the two years I've read quite a few articles about AI and related stuff including the books
 {tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalley>> and the entertaining
 {theaicon}[The AI Con] <<theaicon>> and begin to wonder what kind of problems does AI really try to
-address and solve?
+address?
 
-If I look at the business side I'd say the overall theme is to *increase productivityfootnote:[read:
-getting faster]* and to reduce tiresome  and/or manual labor.
-And on the personal side I mostly see quality-of-life improvements like easier *access to information*
-with the help of the natural interface of {chatgpt}[ChatGPT]footnote:[or just "Chatty" I learned recently]
-and the generational parts to create memes and reels more easily.
+If I look at the business side I'd say the overall themes are to *increase productivityfootnote:[Read:
+getting faster]* like reducing tiresome and/or manual labor and probably fear of missing a
+competitive advantage.
+And on the personal side I mostly see quality-of-life improvements like easy *access to information*
+with the help of the natural interfaces like {chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
+and generational parts to create memes and reels more easily.
 
-These aren't the only applications out there mind you, but they are sufficient for two points I'd
-like to make next.
+These aren't the only applications mind you, but they are sufficient for
+twofootnote:[One short from looking like an AI-written text — https://www.youtube.com/watch?v=9Ch4a6ffPZY!]
+points I'd like to make next.
 
 === Increase productivity
 
-Increasing productivity with technology is no new idea, [line-through]#blue collar# industrial
-workers faced this already some during the mid-19th century during the
-{industrialage}[industrial age], but interestingly this time [line-through]#white collar# knowledge
-workers are impacted, and they aren't backed by any {labourmovement}[labour union to fight back].
+Increasing productivity and reducing work time with technology isn't strictly speaking a new idea,
+[line-through]#blue collar# industrial workers faced this already during the mid-19th century
+during the {industrialage}[industrial age], but for the first time [line-through]#white collar#
+knowledge workers are impacted, and they aren't backed by any
+{labourmovement}[labour union to fight back].
 
-During that time a strange phenomenon occurred:
+Back then there were lots of riots and protests, so the workforce probably wasn't all happy with
+the outcome, but we aren't there *yet*, so let us focus on the promise of our improved
+work-life-balance.
+Interestingly during that time a strange phenomenon could be observed:
 
 [quote,David Graeber,https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant]
 But rather than allowing a massive reduction of working hours to free the world’s population to
@@ -97,15 +103,28 @@ relations. And these numbers do not even reflect on all those people whose job i
 administrative, technical, or security support for these industries, or for that matter the whole
 host of ancillary industries (dog-washers, all-night pizza delivery) that only exist because
 everyone else is spending so much of their time working in all the other ones.
-These are what I propose to call ‘*bullshit jobs:footnote:[Emphasis is mine]*’.
+These are what I propose to call ‘*bullshit jobsfootnote:[Emphasis is mine]*’.
 
-If we just ignore the administrative aspects (which are moderns problems in its own) I daresay some
-of the mentioned jobs are caused due to the general increase and distribution of wealth, but is
-still probably related.
+I really enjoy the term *bullshit jobs* here, but in my opinion especially all these ancillary
+industries can also be explained by increase of wealthfootnote:[Read: Capitalism?] and not just by
+lack of time of the populace.
+
+The more concerning part to me is what can we do with our skilled workforce, that still has the
+need to earn money for a living, but their field of work has been replaced with automatons?
+
+[quote,David Graeber,https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant]
+Hell is a collection of individuals who are spending the bulk of their time working on a task they
+don't like and are not especially good at. Say they were hired because they were excellent
+cabinet-makers, and then discover they are expected to spend a great deal of their time frying fish.
+
+Another issue I see with increasing productivity is the orientation towards through- or rather
+output in information related topics.
+Viewed from the business side increasing quantity makes total sense to me, this is what the business
+has been created for in the first place.
 
 
 
-
+=== Access to information
 
 [quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
 After all, who are you writing for? Do you care if anybody reads it and how they respond to it?
@@ -113,12 +132,7 @@ How can you expect anybody to relate to a piece of writing if it was generated b
 If you can’t be bothered to write the entire article, you can’t really expect anybody else to be
 bothered to read it.
 
-
-=== Access to information
-
-
 == Impact on society
-
 
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
