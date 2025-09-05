@@ -28,6 +28,9 @@ endif::[]
 :stupidityparadox: https://www.goodreads.com/book/show/30209127-the-stupidity-paradox
 :theaicon: https://www.goodreads.com/book/show/217432753-the-ai-con
 :chatgpt: https://chatgpt.com/
+:industrialage: https://en.wikipedia.org/wiki/Industrial_Age
+:labourmovement: https://en.wikipedia.org/wiki/Labour_movement
+:bullshitjobs: https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -51,6 +54,8 @@ like {popup}[pop-up stores] with huge amounts of venture capital and tax money t
 - The expectations are at an all-time high and the media overflows with new innovative ideas and
 applications of AI-technology like replacing {nurseai}[nurses with AI in healthcare] or how
 companies generally try to replace {laborai}[human labor].
+- We are back to the promise from the industrial age: Once AI is everywhere we have more free time
+and can spend it on life and art.
 
 Strictly speaking everything went according to plan from 2023:
 
@@ -59,28 +64,71 @@ image::hype-cycle-for-artificial-intelligence-2023.png[]
 
 == Asking the right questions
 
-I've read many articles about AI and related stuff including the books
-{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalley>> and the entertaining one
-{theaicon}[The AI Con] <<theaicon>> and wonder what kind of problems does AI really try to address
-and solve?
+During the two years I've read quite a few articles about AI and related stuff including the books
+{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalley>> and the entertaining
+{theaicon}[The AI Con] <<theaicon>> and begin to wonder what kind of problems does AI really try to
+address and solve?
 
-If you look at the business side I'd say the overall theme is to increase productivityfootnote:[read:
-getting faster] and to reduce manual and tiresome labor and on the personal side mostly
-quality-of-life improvements with the likes of
-{chatgpt}[ChatGPT]footnote:[or just "Chatty" I learned recently] and the stuff I'd loosely
-collect under the umbrella of movie and image generation.
+If I look at the business side I'd say the overall theme is to *increase productivityfootnote:[read:
+getting faster]* and to reduce tiresome  and/or manual labor.
+And on the personal side I mostly see quality-of-life improvements like easier *access to information*
+with the help of the natural interface of {chatgpt}[ChatGPT]footnote:[or just "Chatty" I learned recently]
+and the generational parts to create memes and reels more easily.
 
-These aren't the only tasks that , but the few named examples generally
-match the category "gettings things done" without a benefit of a learning how the desired result
-can be archived without them.
+These aren't the only applications out there mind you, but they are sufficient for two points I'd
+like to make next.
+
+=== Increase productivity
+
+Increasing productivity with technology is no new idea, [line-through]#blue collar# industrial
+workers faced this already some during the mid-19th century during the
+{industrialage}[industrial age], but interestingly this time [line-through]#white collar# knowledge
+workers are impacted, and they aren't backed by any {labourmovement}[labour union to fight back].
+
+During that time a strange phenomenon occurred:
+
+[quote,David Graeber,https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant]
+But rather than allowing a massive reduction of working hours to free the world’s population to
+pursue their own projects, pleasures, visions, and ideas, we have seen the ballooning of not even
+so much of the ‘service’ sector as of the administrative sector, up to and including the creation
+of whole new industries like financial services or telemarketing, or the unprecedented expansion of
+sectors like corporate law, academic and health administration, human resources, and public
+relations. And these numbers do not even reflect on all those people whose job is to provide
+administrative, technical, or security support for these industries, or for that matter the whole
+host of ancillary industries (dog-washers, all-night pizza delivery) that only exist because
+everyone else is spending so much of their time working in all the other ones.
+These are what I propose to call ‘*bullshit jobs:footnote:[Emphasis is mine]*’.
+
+If we just ignore the administrative aspects (which are moderns problems in its own) I daresay some
+of the mentioned jobs are caused due to the general increase and distribution of wealth, but is
+still probably related.
+
+
+
+
+
+[quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
+After all, who are you writing for? Do you care if anybody reads it and how they respond to it?
+How can you expect anybody to relate to a piece of writing if it was generated by an AI model?
+If you can’t be bothered to write the entire article, you can’t really expect anybody else to be
+bothered to read it.
+
+
+=== Access to information
 
 
 == Impact on society
+
 
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
 
 == Conclusion
+
+I am just tired of AI - it is just everywhere and I don't see any real benefit for me.
+
+.Joanna Macijewska Altman on https://x.com/AuthorJMac/status/1773679197631701238[X]
+image::joanna-macijewska.png[]
 
 
 [bibliography]
