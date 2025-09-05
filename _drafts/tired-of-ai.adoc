@@ -32,6 +32,7 @@ endif::[]
 :industrialage: https://en.wikipedia.org/wiki/Industrial_Age
 :labourmovement: https://en.wikipedia.org/wiki/Labour_movement
 :bullshitjobs: https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant/
+:hallucinations: https://pubmed.ncbi.nlm.nih.gov/40038472/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -52,7 +53,7 @@ we've left the early adopting phase.
 feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
 - There is an abundance of new tools and new companies sprout like {popup}[pop-up stores] with huge
 amounts of venture capital and tax money to burn.
-- The expectations are at an all-time high and my media bubbles spill over with new innovative ideas
+- The expectations are at an all-time high and my media bubble spills over with new innovative ideas
 and applications of AI-technology like trying to replace general {laborai}[human labor] and even
 highly specific ones like {nurseai}[nurses in healthcare].
 - {billgates}[AI promises to reduce our daily working time].
@@ -69,9 +70,9 @@ During the two years I've read quite a few articles about AI and related stuff i
 {theaicon}[The AI Con] <<theaicon>> and begin to wonder what kind of problems does AI really try to
 address?
 
-If I look at the business side I'd say the overall themes are to *increase productivityfootnote:[Read:
-getting faster]* like reducing tiresome and/or manual labor and probably fear of missing a
-competitive advantage.
+If I look at the business side I'd say the overall themes are *increase of
+productivityfootnote:[Read: getting faster]* like reducing tiresome and/or manual labor and
+probably fear of missing a competitive advantage.
 And on the personal side I mostly see quality-of-life improvements like easy *access to information*
 with the help of the natural interfaces like {chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
 and generational parts to create memes and reels more easily.
@@ -80,7 +81,7 @@ These aren't the only applications mind you, but they are sufficient for
 twofootnote:[One short from looking like an AI-written text — https://www.youtube.com/watch?v=9Ch4a6ffPZY!]
 points I'd like to make next.
 
-=== Increase productivity
+=== Increase of productivity
 
 Increasing productivity and reducing work time with technology isn't strictly speaking a new idea,
 [line-through]#blue collar# industrial workers faced this already during the mid-19th century
@@ -120,11 +121,22 @@ cabinet-makers, and then discover they are expected to spend a great deal of the
 Another issue I see with increasing productivity is the orientation towards through- or rather
 output in information related topics.
 Viewed from the business side increasing quantity makes total sense to me, this is what the business
-has been created for in the first place.
-
-
+has been created for in the first place, but is output the only and ulterior goal and the learning
+how to reach and achieve something can be totally neglected and automated?
 
 === Access to information
+
+Lowering the bar to access information more readily for all people is a great goal and I think
+ChatGPT and consorts do a decent job in that regard.
+Hallucinations are still an sometimes entertaining problem and some people are bold enough to say
+they are an original {hallucinations}[feature of LLM design], but media consumption should always
+happen with a bit of skepticism.
+
+
+
+Analogous to my previous point about learning, producing information is also not a mere act of output
+and it should be highly skeptical to gear it towards this goal.
+
 
 [quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
 After all, who are you writing for? Do you care if anybody reads it and how they respond to it?
@@ -134,8 +146,12 @@ bothered to read it.
 
 == Impact on society
 
+I've seen so many questionable posts from Sam Altman, but this one makes perfect sense to me:
+
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
+
+
 
 == Conclusion
 
