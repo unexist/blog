@@ -17,7 +17,6 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
-:page-liquid:
 
 :mcp: https://modelcontextprotocol.io/docs/getting-started/intro
 :mcprcp: https://julsimon.medium.com/why-mcps-disregard-for-40-years-of-rpc-best-practices-will-burn-enterprises-8ef85ce5bc9b
@@ -32,6 +31,7 @@ endif::[]
 :industrialage: https://en.wikipedia.org/wiki/Industrial_Age
 :labourmovement: https://en.wikipedia.org/wiki/Labour_movement
 :bullshitjobs: https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant/
+:bullshitjobsbook: https://www.goodreads.com/book/show/34466958-bullshit-jobs
 :hallucinations: https://pubmed.ncbi.nlm.nih.gov/40038472/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
@@ -66,9 +66,9 @@ image::hype-cycle-for-artificial-intelligence-2023.png[]
 == Asking the right questions
 
 During the two years I've read quite a few articles about AI and related stuff including the books
-{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalley>> and the entertaining
-{theaicon}[The AI Con] <<theaicon>> and begin to wonder what kind of problems does AI really try to
-address?
+{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalleybook>> and the entertaining
+{theaicon}[The AI Con] <<theaiconbook>> and begin to wonder what kind of problems does AI really
+try to address?
 
 If I look at the business side I'd say the overall themes are *increase of
 productivityfootnote:[Read: getting faster]* like reducing tiresome and/or manual labor and
@@ -85,12 +85,14 @@ points I'd like to make next.
 
 Increasing productivity and reducing work time with technology isn't strictly speaking a new idea,
 [line-through]#blue collar# industrial workers faced this already during the mid-19th century
-during the {industrialage}[industrial age], but for the first time [line-through]#white collar#
-knowledge workers are impacted, and they aren't backed by any
-{labourmovement}[labour union to fight back].
+during the {industrialage}[industrial age], but for the first time
+[line-through]#white collar# knowledge workers are impacted, and they aren't backed by any
+{labourmovement}[labour union].
 
-Back then there were lots of riots and protests, so the workforce probably wasn't all happy with
-the outcome, but we aren't there *yet*, so let us focus on the promise of improved work-life-balance.
+Back then there were lots of riots and protests according to Wikipedia, so the workforce probably
+wasn't all happy with the outcome, but we aren't there *yet*, so let us focus on the promise of
+improved work-life-balance.
+
 Interestingly during that time a strange phenomenon could be observed:
 
 [quote,David Graeber,https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant]
@@ -105,6 +107,7 @@ host of ancillary industries (dog-washers, all-night pizza delivery) that only e
 everyone else is spending so much of their time working in all the other ones.
 These are what I propose to call ‘*bullshit jobsfootnote:[Emphasis is mine]*’.
 
+There is more explanation of this in his book {bullshitjobsbook}[Bullshit Jobs] <<bullshitjobsbook>>
 I really enjoy the term *bullshit jobs* here, but in my opinion especially all these ancillary
 industries can also be explained by increase and general distribution of
 wealthfootnote:[Read: Capitalism?] and not just by lack of time of the populace.
@@ -131,8 +134,12 @@ Hallucinations are still an sometimes entertaining problem and some people are b
 they are an original {hallucinations}[feature of LLM design], but media
 consumption should IMHO always happen with a bit of skepticism.
 
+
 LLM cannot only help finding information and they can also bne used to summarize information into
 digestible chunks.
+
+.https://marketoonist.com/wp-content/uploads/2023/03/230327.n.aiwritten.jpg
+image::ai-first.png[]
 
 
 [quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
@@ -161,6 +168,7 @@ image::joanna-macijewska.png[]
 [bibliography]
 == Bibliography
 
-* [[[tamingsilicon]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
-* [[[theaicon]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
-* [[[stupidityparadox]]] Mats Alvesson, André Spicer, The Stupidity Paradox: The Power and Pitfalls of Function Stupidity at Work, Profile Books 2016
+* [[[tamingsiliconvalleybook]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
+* [[[theaiconbook]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
+* [[[stupidityparadoxbook]]] Mats Alvesson, André Spicer, The Stupidity Paradox: The Power and Pitfalls of Function Stupidity at Work, Profile Books 2016
+* [[[bullshitjobsbook]]] David Graeber, Bullshit Jobs: A Theory, Simon & Schuster 2019
