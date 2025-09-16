@@ -131,7 +131,6 @@ Hallucinations are still an sometimes entertaining problem and some people are b
 they are an original {hallucinations}[feature of LLM design], but media
 consumption should IMHO always happen with a bit of skepticism.
 
-
 LLM cannot only help finding information and they can also bne used to summarize information into
 digestible chunks.
 
