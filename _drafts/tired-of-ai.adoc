@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Tired of AI
+title: Fear of missing out on AI
 description: This blog post is my personal stance on AI and my tiredness of the hype of a tech, that leads me to nowhere.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
@@ -10,10 +10,10 @@ categories: myself
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/tired_of_ai
+:imagesdir: {asciidoctorconfigdir}/../assets/images/fear_of_missing_out_on_ai
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/tired_of_ai
+:imagesdir: /assets/images/fear_of_missing_out_on_ai
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -47,16 +47,14 @@ Enough chit-chat, let us begin.
 == Omnipresence in media
 
 When I look back at the last two years I can safely say the whole thing got even more traction, as
-we've left the early adopting phase.
+we've left the early adopting phase and there are daily new innovative ideas in media.
 
-- AI has entered the mainstream and almost everything gets AI support and if it isn't directly
-feasible we throw {mcp}[MCP] with all it's {mcprcp}[flaws] into the fold.
-- There is an abundance of new tools and new companies sprout like {popup}[pop-up stores] with huge
-amounts of venture capital and tax money to burn.
-- The expectations are at an all-time high and my media bubble spills over with new innovative ideas
-and applications of AI-technology like trying to replace general {laborai}[human labor] and even
-highly specific ones like {nurseai}[nurses in healthcare].
-- {billgates}[AI promises to reduce our daily working time].
+- AI has entered the mainstream and almost everything gets AI support.
+- Content is specially {MCP}[prepared for AI systems] without following {mcprcp}[best practices].
+- There is an abundance of new tools and new companies sprout like {popup}[pop-up stores].
+- There are trials to replace {laborai}[general human labor] and even highly specific ones like
+{nurseai}[nurses in healthcare].
+- There are promises {billgates}[AI reduces our daily working time].
 
 So in hindsight everything went according to plan from 2023:
 
@@ -72,7 +70,7 @@ try to address?
 
 If I look at the business side I'd say the overall themes are *increase of
 productivityfootnote:[Read: getting faster]* like reducing tiresome and/or manual labor and
-probably fear of missing out a competitive advantage.
+probably fear of missing out competitive advantage.
 And on the personal side I mostly see quality-of-life improvements like easy *access to information*
 with the help of the natural interfaces like {chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
 and generational parts to create memes and reels more easily.
