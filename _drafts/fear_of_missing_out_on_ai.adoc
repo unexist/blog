@@ -25,7 +25,6 @@ endif::[]
 :billgates: https://fortune.com/2025/03/27/billionaire-bill-gates-two-day-workweek-ai-replacing-humans/
 :laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
 :tamingsiliconvalley: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
-:stupidityparadox: https://www.goodreads.com/book/show/30209127-the-stupidity-paradox
 :theaicon: https://www.goodreads.com/book/show/217432753-the-ai-con
 :chatgpt: https://chatgpt.com/
 :industrialage: https://en.wikipedia.org/wiki/Industrial_Age
