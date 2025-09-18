@@ -33,6 +33,8 @@ endif::[]
 :bullshitjobsbook: https://www.goodreads.com/book/show/34466958-bullshit-jobs
 :hallucinations: https://pubmed.ncbi.nlm.nih.gov/40038472/
 :linkedin: https://linkedin.com/
+:dogfood: https://en.wikipedia.org/wiki/Eating_your_own_dog_food
+:spotai: https://www.youtube.com/watch?v=9Ch4a6ffPZY
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -125,19 +127,23 @@ how to reach and achieve something can be totally neglected?
 === Fear of missing out
 
 If your media feeds are like mine, there is probably something about AI every two or three posts
-and depending on the kind of media like e.g. {linkedin][LinkedIn], the posts are full of promised
-land and articles how the full potential of AI can be utilized.
+and depending on the kind of media like e.g. {linkedin}[LinkedIn], the posts are full of promised
+land and how the full potential of AI can be utilized for your business.
 
-Something I usually miss in these posts is some kind of prove or some other kind of empirical
-evidence.
+Oftentimes they appear to be written with the help of AI and can therefore easily be
+{spotai}[spotted], but I gladly count this as as {dogfood}[eating your own dog food] and is
+actually fine.
+What I can rarely find is some kind of empirical evince or any other proof for these theses, so
+my subconsciousness registers this as a red flag.
 
 === Access to information
 
 Lowering the bar to access information is a great goal by itself and I think ChatGPT and consorts
 do a great job in that regard.
-Hallucinations are still an sometimes entertaining problem and some people are bold enough to say
-they are an original {hallucinations}[feature of LLM design], but media
-consumption should IMHO always happen with a bit of skepticism.
+Hallucinations are still an sometimes dangerous and sometimes entertaining problem and some people
+are bold enough to say they are an original
+{hallucinations}[feature of LLM design], but media consumption should IMHO always happen with a
+bit of skepticism.
 
 
 LLM cannot only help finding information and they can also bne used to summarize information into
