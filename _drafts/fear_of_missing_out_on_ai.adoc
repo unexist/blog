@@ -32,6 +32,7 @@ endif::[]
 :bullshitjobs: https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant/
 :bullshitjobsbook: https://www.goodreads.com/book/show/34466958-bullshit-jobs
 :hallucinations: https://pubmed.ncbi.nlm.nih.gov/40038472/
+:linkedin: https://linkedin.com/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -123,6 +124,13 @@ how to reach and achieve something can be totally neglected?
 
 === Fear of missing out
 
+If your media feeds are like mine, there is probably something about AI every two or three posts
+and depending on the kind of media like e.g. {linkedin][LinkedIn], the posts are full of promised
+land and articles how the full potential of AI can be utilized.
+
+Something I usually miss in these posts is some kind of prove or some other kind of empirical
+evidence.
+
 === Access to information
 
 Lowering the bar to access information is a great goal by itself and I think ChatGPT and consorts
@@ -130,6 +138,7 @@ do a great job in that regard.
 Hallucinations are still an sometimes entertaining problem and some people are bold enough to say
 they are an original {hallucinations}[feature of LLM design], but media
 consumption should IMHO always happen with a bit of skepticism.
+
 
 LLM cannot only help finding information and they can also bne used to summarize information into
 digestible chunks.
