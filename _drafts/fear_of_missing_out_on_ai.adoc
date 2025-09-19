@@ -35,6 +35,7 @@ endif::[]
 :linkedin: https://linkedin.com/
 :dogfood: https://en.wikipedia.org/wiki/Eating_your_own_dog_food
 :spotai: https://www.youtube.com/watch?v=9Ch4a6ffPZY
+:aifomo: https://www.sciencedirect.com/science/article/abs/pii/S0736585325000450
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -133,8 +134,11 @@ land and how the full potential of AI can be utilized for your business.
 Oftentimes they appear to be written with the help of AI and can therefore easily be
 {spotai}[spotted], but I count this as as
 {dogfood}[eating your own dog food], which is actually fine.
-What I can rarely find is some kind of empirical evince or any other proof for these theses, so
-my subconsciousness registers this as a red flag.
+What I can rarely find is some kind of empirical evince or any other proof for these and I consider
+this usually as a red flag - skepticism can help here.
+
+The current hype is so huge, academia also started to looking into the phenomenon of
+{aifomo}[AI FOMO].
 
 === Access to information
 
