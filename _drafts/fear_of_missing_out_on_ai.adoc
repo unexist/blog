@@ -148,10 +148,6 @@ Hallucinations vary between dangerous and hilarious and some people are bold eno
 is an original {hallucinations}[feature of LLM design], but I think we
 have already established media consumption *should* IMHO always happen with a bit of skepticism.
 
-
-LLM cannot only help finding information and they can also bne used to summarize information into
-digestible chunks.
-
 .https://marketoonist.com/wp-content/uploads/2023/03/230327.n.aiwritten.jpg
 image::ai-first.png[]
 
