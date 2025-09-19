@@ -127,12 +127,12 @@ how to reach and achieve something can be totally neglected?
 === Fear of missing out
 
 If your media feeds are like mine, there is probably something about AI every two or three posts
-and depending on the kind of media like e.g. {linkedin}[LinkedIn], the posts are full of promised
+and depending on the kind of media, like e.g. {linkedin}[LinkedIn], the posts are full of promised
 land and how the full potential of AI can be utilized for your business.
 
 Oftentimes they appear to be written with the help of AI and can therefore easily be
-{spotai}[spotted], but I gladly count this as as {dogfood}[eating your own dog food] and is
-actually fine.
+{spotai}[spotted], but I count this as as
+{dogfood}[eating your own dog food], which is actually fine.
 What I can rarely find is some kind of empirical evince or any other proof for these theses, so
 my subconsciousness registers this as a red flag.
 
@@ -151,7 +151,6 @@ digestible chunks.
 
 .https://marketoonist.com/wp-content/uploads/2023/03/230327.n.aiwritten.jpg
 image::ai-first.png[]
-
 
 [quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
 After all, who are you writing for? Do you care if anybody reads it and how they respond to it?
