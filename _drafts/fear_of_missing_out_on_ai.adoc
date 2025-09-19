@@ -137,17 +137,16 @@ Oftentimes they appear to be written with the help of AI and can therefore easil
 What I can rarely find is some kind of empirical evince or any other proof for these and I consider
 this usually as a red flag - skepticism can help here.
 
-The current hype is so huge, academia also started to looking into the phenomenon of
-{aifomo}[AI FOMO].
+The current hype is so huge, academia also started looking into the phenomenon of
+{aifomo}[development of fear of missing out on AI].
 
 === Access to information
 
-Lowering the bar to access information is a great goal by itself and I think ChatGPT and consorts
-do a great job in that regard.
-Hallucinations are still an sometimes dangerous and sometimes entertaining problem and some people
-are bold enough to say they are an original
-{hallucinations}[feature of LLM design], but media consumption should IMHO always happen with a
-bit of skepticism.
+Speaking of something really positive:
+AI does a splendid job of lowering the bare to access information!
+Hallucinations vary between dangerous and hilarious and some people are bold enough to state this
+is an original {hallucinations}[feature of LLM design], but I think we
+have already established media consumption *should* IMHO always happen with a bit of skepticism.
 
 
 LLM cannot only help finding information and they can also bne used to summarize information into
