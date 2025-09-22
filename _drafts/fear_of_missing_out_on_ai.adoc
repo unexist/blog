@@ -41,13 +41,13 @@ It has been roughly two years since my last post regarding my experience with th
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
 time to talk about this again.
 
-But in contrast to the previous post, this time I don't want to dwell on specific products and
-tools, but to explain why I think we should pay close attention to the development and why this
-topic is generally such a mixed bag to me.
+In contract to my previous post, I don't want to dwell on specific products and tools, but
+talk about some points about that I think we should pay close attention to and why this topic
+is a generally such a mixed bag to me.
 
 Enough chit-chat, let us begin.
 
-== Omnipresence in media
+== The journey so far
 
 When I look back at the last two years I can safely say the whole thing got even more traction, as
 we've left the early adopting phase and there are daily new innovative ideas in media.
