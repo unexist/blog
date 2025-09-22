@@ -2,8 +2,8 @@
 layout: post
 title: Fear of missing out on AI
 description: This blog post is my personal stance on AI and a glimpse into related questions I rarely see discussed in media.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2025-09-22 15:48 +0200
+last_updated: 2025-09-22 15:48 +0200
 author: Christoph Kappel
 tags: ai
 categories: myself
