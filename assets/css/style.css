@@ -267,6 +267,13 @@ span.bold {
     padding-right: 0.2em;
 }
 
+/* Footnotes */
+#footnotes hr {
+    border-bottom: 0px;
+    border-top: 1px solid var(--link-color);
+    margin-bottom: var(--margin);
+}
+
 /* Sidebar */
 #sidebar {
     flex-grow: 0;
