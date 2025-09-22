@@ -45,9 +45,11 @@ endif::[]
 :fastfashion: https://en.wikipedia.org/wiki/Fast_fashion
 :fastfashionenvironment: https://earth.org/fast-fashions-detrimental-effect-on-the-environment/
 :aienvironment: https://en.wikipedia.org/wiki/Environmental_impact_of_artificial_intelligence
+:aiworker: https://ssir.org/articles/entry/ai-workers-mechanical-turk
+:fastfashionworker: https://www.earthday.org/beneath-the-seams-the-human-toll-of-fast-fashion/
 :mechturk: https://en.wikipedia.org/wiki/Mechanical_Turk
+:imagenet: https://en.wikipedia.org/wiki/ImageNet
 :saas: https://en.wikipedia.org/wiki/Software_as_a_service
-:coredomain: https://ddd-practitioners.com/home/glossary/domain/core-domain/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -207,22 +209,30 @@ The implied comparison of mass-produced {fastfashion}[fast fashion] with the ove
 of {saas}[Software-as-a-Service] is interesting by itself, although I think it is not a good one
 to promote your AI services.
 For me two of the pain points of fast fashion are the {fastfashionenvironment}[environmental footprint]
-and the exploitation of people in fabric factories and according to media the same is true for
-the AI industry.
+and the {fastfashionworker}[exploitation of people] in fabric factories and according
+to media the same is true for {aiworker}[the AI industry].
 There are many reports of the {aienvironment}[energy requirements of AI] and the references
-to the {mechturk}[Mechanical Turk] are also increasing.
+to the {mechturk}[Mechanical Turk] are also increasing:
 
+[quote,https://restofworld.org/2025/the-ai-con-book-invisible-labor/]
+Amazon using this name [Amazon Mechanical Turk] or their product is surprisingly on the nose:
+their system also plays the function of hiding the massive amount of labor needed to make any
+modern AI infrastructure work.
+{imagenet}[ImageNet], during its development in the late 2000s, was the largest
+single project hosted on the MTurk platform, according to Li.
+It took two and a half years and nearly 50,000 workers across 167 countries to create the dataset.
+In the end, the data contained over 14 million images, labeled across 22,000 categories.
 
-I am working in the software industry and I always had an ambivalent opinion towards
-{saas}[Software-as-a-Service], but I am also a strong proponent of staying at your
-{coredomain}[core domain] and hand-off supporting ones, so I am a bit at a tie.
-
+I think the real point he wanted to make is with the help of AI can cheap software be mass-produced
+instead of paying monthly fees to service providers or individual solutions to problems.
+And this works actually well with software, since there is a negligible impact on the environment in
+contrast to physical products.
 
 == Conclusion
 
 I am just tired of AI - it is just everywhere and I don't see any real benefit for me.
 
-.Joanna Macijewska Altman on https://x.com/AuthorJMac/status/1773679197631701238[X]
+.Joanna Macijewska on https://x.com/AuthorJMac/status/1773679197631701238[X]
 image::joanna-macijewska.png[]
 
 
