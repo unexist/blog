@@ -40,7 +40,7 @@ endif::[]
 :spotai: https://www.youtube.com/watch?v=9Ch4a6ffPZY
 :aifomo: https://www.sciencedirect.com/science/article/abs/pii/S0736585325000450
 :aibro: https://www.urbandictionary.com/define.php?term=AI+Bro
-:useaiorlose: https://kagi.com/search?q=use+ai+or+lose+our+edge
+:useaiorlose: https://kagi.com/search?q=use+ai+or+lose
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -154,19 +154,31 @@ The current hype and pressure increases and academia has also started looking in
 And there is an increasingly number of posts and voices besides the ones from common
 {aibro][AI Bros] who foretell if you don't start to use AI today you are going to lose your edge.
 
-
 NOTE: I won't cite any of these posts, but if you are curious here is a starter: <{useaiorlose}>
 
 === Access to information
 
-Here we can start with something positive:
-AI does a splendid job of lowering the bare to access information!
+Let us start with something positive:
+AI does a splendid job of lowering the bar to access information!
 Hallucinations vary between dangerous and hilarious and some people are bold enough to state this
-is an original {hallucinationasfeat}[feature of LLM design], but I think we
-have already established media consumption *should* IMHO always happen with a bit of skepticism.
+is an original {hallucinationasfeat}[feature of LLM design], but with our previous established
+skepticism regarding media consumption this *should* be fine.
+
+Delivering probability-based answers to question is only part of the deal, another great application
+of these models if for content generation and both goes perfectly hand in hand:
 
 .https://marketoonist.com/wp-content/uploads/2023/03/230327.n.aiwritten.jpg
 image::ai-first.png[]
+
+I personally think we should just stick to the bullet point list instead of applying a
+"prosa-2-text" conversion twice, but still I wonder what happens to the quality of the information
+underneath.
+Writing this blog post or generally writing is a really time consuming task.
+Drafting a new post and trying to fill the intended outline with content is a tasks which helps me
+personally to pinpoint what I really want to sayfootnote:[or rather I am hoping] and I wouldn't
+want to miss this journey.
+
+I am a bit afraid the following is more than true:
 
 [quote,Ben Morris,https://www.ben-morris.com/ai-and-the-creeping-enshittification-of-work]
 After all, who are you writing for? Do you care if anybody reads it and how they respond to it?
