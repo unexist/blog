@@ -33,7 +33,8 @@ endif::[]
 :labourmovement: https://en.wikipedia.org/wiki/Labour_movement
 :bullshitjobs: https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant/
 :bullshitjobsbook: https://www.goodreads.com/book/show/34466958-bullshit-jobs
-:hallucinations: https://pubmed.ncbi.nlm.nih.gov/40038472/
+:trektonomic: https://en.wikipedia.org/wiki/Trekonomics
+:hallucinationasfeat: https://pubmed.ncbi.nlm.nih.gov/40038472/
 :linkedin: https://linkedin.com/
 :dogfood: https://en.wikipedia.org/wiki/Eating_your_own_dog_food
 :spotai: https://www.youtube.com/watch?v=9Ch4a6ffPZY
@@ -93,10 +94,10 @@ This short list is non-exhaustive mind you, but is sufficient for the points I'd
 Increasing productivity and reducing work time with technology isn't strictly speaking a new idea,
 [line-through]#blue collar# industrial workers faced this already during the mid-19th century
 during the {industrialage}[industrial age], but for the first time
-[line-through]#white collar# knowledge workers are impacted, and they aren't backed by any
-{labourmovement}[labour union].
+[line-through]#white collar# knowledge workers are impacted, and they are probably not backed by
+any {labourmovement}[labour union].
 
-Back then there were lots of riots and protests according to Wikipedia, so the workforce probably
+There have been lots of riots and protests according to Wikipedia, so apparently the workforce
 wasn't all happy with the outcome, but we aren't there *yet*, so let us focus on the promise of
 improved work-life-balance.
 
@@ -115,11 +116,13 @@ everyone else is spending so much of their time working in all the other ones.
 These are what I propose to call ‘*bullshit jobsfootnote:[Emphasis is mine]*’.
 
 This is just an excerpt of an article written for a magazine under the umbrella of things nobody
-would print, as the author points out in {bullshitjobsbook}[Bullshit Jobs] <<bullshitjobsbook>>,
-but still the term sounds right to me and also hits a mark.
-There are a lot more examples and explanations in the book, but the really concerning part to me is
-the implied question what can our highly skilled workforce do for a living, when their field of
-expertise has been replaced with automatons?
+would print, as the author points out in his book
+{bullshitjobsbook}[Bullshit Jobs] <<bullshitjobsbook>>,
+but still the term hits a mark.
+There are a lot more examples and explanations in the book or supposedly bullshit jobs and also
+jobs that just feel like one, but my key takeaway is the implied question what can our highly
+skilled workforce do for a living, when their field of expertise has been replaced with automatons
+and we haven't reached a {trektonomic}[moneyless utopia] yet?
 
 [quote,David Graeber,https://davidgraeber.org/articles/on-the-phenomenon-of-bullshit-jobs-a-work-rant]
 Hell is a collection of individuals who are spending the bulk of their time working on a task they
@@ -128,9 +131,9 @@ cabinet-makers, and then discover they are expected to spend a great deal of the
 
 Another issue I see with increasing productivity is the orientation towards through- or rather
 output in information related topics.
-Viewed from the business side increasing quantity makes total sense to me, this is what the business
-has been created for in the first place, but is output the only and ulterior goal and the learning
-how to reach and achieve something can be totally neglected?
+Viewed from the business side increasing quantity makes total sense to me, this is what the
+business has been created for in the first place, but is output the only and ulterior goal and the
+learning how to reach and achieve something can be totally neglected?
 
 === Fear of missing out
 
@@ -152,7 +155,7 @@ The current hype is so huge, academia also started looking into the phenomenon o
 Speaking of something really positive:
 AI does a splendid job of lowering the bare to access information!
 Hallucinations vary between dangerous and hilarious and some people are bold enough to state this
-is an original {hallucinations}[feature of LLM design], but I think we
+is an original {hallucinationasfeat}[feature of LLM design], but I think we
 have already established media consumption *should* IMHO always happen with a bit of skepticism.
 
 .https://marketoonist.com/wp-content/uploads/2023/03/230327.n.aiwritten.jpg
