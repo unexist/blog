@@ -57,7 +57,7 @@ It has been roughly two years since my last post regarding my experience with th
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
 time to talk about this again.
 
-In contract to my previous post, I don't want to dwell on specific products and tools, but
+In contrast to my previous post, I don't want to dwell on specific products and tools, but
 talk about some points about that I think we should pay close attention to and why this topic
 is a generally such a mixed bag to me.
 
