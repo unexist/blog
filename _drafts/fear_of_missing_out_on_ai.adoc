@@ -20,9 +20,10 @@ endif::[]
 
 :mcp: https://modelcontextprotocol.io/docs/getting-started/intro
 :mcprcp: https://julsimon.medium.com/why-mcps-disregard-for-40-years-of-rpc-best-practices-will-burn-enterprises-8ef85ce5bc9b
+:dailyai: https://opentools.ai/tools-today
 :popup: https://en.wikipedia.org/wiki/Pop-up_retail
 :nurseai: https://pmc.ncbi.nlm.nih.gov/articles/PMC11850350/
-:billgates: https://fortune.com/2025/03/27/billionaire-bill-gates-two-day-workweek-ai-replacing-humans/
+:billgatespromised: https://fortune.com/2025/03/27/billionaire-bill-gates-two-day-workweek-ai-replacing-humans/
 :laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
 :tamingsiliconvalley: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
 :theaicon: https://www.goodreads.com/book/show/217432753-the-ai-con
@@ -49,15 +50,15 @@ Enough chit-chat, let us begin.
 
 == The journey so far
 
-When I look back at the last two years I can safely say the whole thing got even more traction, as
-we've left the early adopting phase and there are daily new innovative ideas in media.
+When I look back at the last two years I can probably safely say the whole thing got even more
+traction, as we've left the early adopting phase and AI got a lot of traction.
 
 - AI has entered the mainstream and almost everything gets AI support.
-- Content is specially {MCP}[prepared for AI systems] without following {mcprcp}[best practices].
-- There is an abundance of new tools and new companies sprout like {popup}[pop-up stores].
-- There are trials to replace {laborai}[general human labor] and even highly specific ones like
+- Content is specially {MCP}[prepared for AI systems] apparently without following {mcprcp}[best practices].
+- There is an {dailyai}[abundance of new tools] and new companies sprout like {popup}[pop-up stores].
+- There are experiments to replace {laborai}[general human labor] and also specific ones like
 {nurseai}[nurses in healthcare].
-- There are promises {billgates}[AI reduces our daily working time].
+- There are promises {billgatespromised}[AI reduces our daily working time].
 
 So in hindsight everything went according to plan from 2023:
 
