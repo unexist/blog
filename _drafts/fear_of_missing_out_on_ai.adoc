@@ -39,6 +39,8 @@ endif::[]
 :dogfood: https://en.wikipedia.org/wiki/Eating_your_own_dog_food
 :spotai: https://www.youtube.com/watch?v=9Ch4a6ffPZY
 :aifomo: https://www.sciencedirect.com/science/article/abs/pii/S0736585325000450
+:aibro: https://www.urbandictionary.com/define.php?term=AI+Bro
+:useaiorlose: https://kagi.com/search?q=use+ai+or+lose+our+edge
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -129,30 +131,35 @@ Hell is a collection of individuals who are spending the bulk of their time work
 don't like and are not especially good at. Say they were hired because they were excellent
 cabinet-makers, and then discover they are expected to spend a great deal of their time frying fish.
 
-Another issue I see with increasing productivity is the orientation towards through- or rather
-output in information related topics.
-Viewed from the business side increasing quantity makes total sense to me, this is what the
-business has been created for in the first place, but is output the only and ulterior goal and the
-learning how to reach and achieve something can be totally neglected?
+Another issue I see with increasing productivity is the orientation towards throughpput or rather
+output in general in information related topics.
+Viewed from the business side increasing quantity makes sense to me, this is what the business has
+been created for in the first place, but is output the only and ulterior goal and the learning how
+to reach and achieve something can be totally neglected?
 
 === Fear of missing out
 
 If your media feeds are like mine, there is probably something about AI every two or three posts
-and depending on the kind of media, like e.g. {linkedin}[LinkedIn], the posts are full of promised
-land and how the full potential of AI can be utilized for your business.
+and depending on the type of media, like e.g. {linkedin}[LinkedIn], the posts are full
+of promises and how the full potential of AI can be unlocked to utilize it for your business.
 
-Oftentimes they appear to be written with the help of AI and can therefore easily be
-{spotai}[spotted], but I count this as as
-{dogfood}[eating your own dog food], which is actually fine.
-What I can rarely find is some kind of empirical evince or any other proof for these and I consider
-this usually as a red flag - skepticism can help here.
+Oftentimes these posts appear to be written with the help of AI and especially {spotai}}[em-dashes enjoy
+increasing popularity].
+I think {dogfood}[eating your own dog food] is always advisable, so I see no fault there.
+On the other hand, I can rarely find some kind of empirical evidence or any other kind of proof
+for these theses and here I consider this usually as a red flag - skepticism can help.
 
-The current hype is so huge, academia also started looking into the phenomenon of
+The current hype and pressure increases and academia has also started looking into the phenomenon of
 {aifomo}[development of fear of missing out on AI].
+And there is an increasingly number of posts and voices besides the ones from common
+{aibro][AI Bros] who foretell if you don't start to use AI today you are going to lose your edge.
+
+
+NOTE: I won't cite any of these posts, but if you are curious here is a starter: <{useaiorlose}>
 
 === Access to information
 
-Speaking of something really positive:
+Here we can start with something positive:
 AI does a splendid job of lowering the bare to access information!
 Hallucinations vary between dangerous and hilarious and some people are bold enough to state this
 is an original {hallucinationasfeat}[feature of LLM design], but I think we
