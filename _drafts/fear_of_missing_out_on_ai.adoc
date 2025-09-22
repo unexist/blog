@@ -25,8 +25,9 @@ endif::[]
 :nurseai: https://pmc.ncbi.nlm.nih.gov/articles/PMC11850350/
 :billgatespromised: https://fortune.com/2025/03/27/billionaire-bill-gates-two-day-workweek-ai-replacing-humans/
 :laborai: https://www.forbes.com/sites/rachelwells/2025/03/10/11-jobs-ai-could-replace-in-2025-and-15-jobs-that-are-safe/
-:tamingsiliconvalley: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
-:theaicon: https://www.goodreads.com/book/show/217432753-the-ai-con
+:tamingsiliconvalleybook: https://www.goodreads.com/book/show/204294839-taming-silicon-valley
+:theaiconbook: https://www.goodreads.com/book/show/217432753-the-ai-con
+:searchesbook: https://www.goodreads.com/book/show/216247514-searches
 :chatgpt: https://chatgpt.com/
 :industrialage: https://en.wikipedia.org/wiki/Industrial_Age
 :labourmovement: https://en.wikipedia.org/wiki/Labour_movement
@@ -67,20 +68,25 @@ image::hype-cycle-for-artificial-intelligence-2023.png[]
 
 == Asking the right questions
 
-During the two years I've read quite a few articles about AI and related stuff including the books
-{tamingsiliconvalley}[Taming Silicon Valley] <<tamingsiliconvalleybook>> and the entertaining
-{theaicon}[The AI Con] <<theaiconbook>> and begin to wonder what kind of problems are we trying
-to address really with AI?
+I've spent a lot of time reading about the general progression of AI and besides dozen of blog posts
+and other articles for and against AI, also some books to get a broader perspective.
 
-If I look at the business side I'd say the overall themes are *increase of
+Among these books are following:
+
+- {tamingsiliconvalleybook}[Taming Silicon Valley: How We Can Ensure That AI Works for Us] <<tamingsiliconvalleybook>>
+- {theaiconbook}[The AI Con: How to Fight Big Tech's Hype and Create the Future We Want] <<theaiconbook>>
+- {searchesbook}[Searches: Selfood in the Digital Age] <<searchesbook>>
+
+I somehow begin to wonder what kind of problems are we trying to address really with AI?
+
+When I I look at the business side I'd say the overall themes are *increase of
 productivityfootnote:[Read: getting faster]* like reducing tiresome and/or manual labor and
 probably *fear of missing out* competitive advantage.
 And on the personal side I mostly see quality-of-life improvements like easy *access to information*
 with the help of the natural interfaces like {chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
 and generational parts to create memes and reels more easily.
 
-These aren't the only applications mind you, but they are sufficient for the points I'd like to
-make next.
+This short list is non-exhaustive mind you, but is sufficient for the points I'd like to make next.
 
 === Increase of productivity
 
@@ -180,5 +186,6 @@ image::joanna-macijewska.png[]
 
 * [[[tamingsiliconvalleybook]]] Gary F. Marcus, Taming Silicon Valley: How We Can Ensure That AI Works for Us, The MIT Press 2024
 * [[[theaiconbook]]] Emily M. Bender, Alex Hanna, The AI Con: How to Fight Big Tech's Hype and Create the Future We Want, Harper 2025
+* [[[searchesbook]]] Vauhini Vara, Searches: Selfhood in the Digital Age, Random House 2025
 * [[[stupidityparadoxbook]]] Mats Alvesson, André Spicer, The Stupidity Paradox: The Power and Pitfalls of Function Stupidity at Work, Profile Books 2016
 * [[[bullshitjobsbook]]] David Graeber, Bullshit Jobs: A Theory, Simon & Schuster 2019
