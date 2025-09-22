@@ -41,6 +41,13 @@ endif::[]
 :aifomo: https://www.sciencedirect.com/science/article/abs/pii/S0736585325000450
 :aibro: https://www.urbandictionary.com/define.php?term=AI+Bro
 :useaiorlose: https://kagi.com/search?q=use+ai+or+lose
+:samaltman: https://en.wikipedia.org/wiki/Sam_Altman
+:fastfashion: https://en.wikipedia.org/wiki/Fast_fashion
+:fastfashionenvironment: https://earth.org/fast-fashions-detrimental-effect-on-the-environment/
+:aienvironment: https://en.wikipedia.org/wiki/Environmental_impact_of_artificial_intelligence
+:mechturk: https://en.wikipedia.org/wiki/Mechanical_Turk
+:saas: https://en.wikipedia.org/wiki/Software_as_a_service
+:coredomain: https://ddd-practitioners.com/home/glossary/domain/core-domain/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -143,8 +150,8 @@ If your media feeds are like mine, there is probably something about AI every tw
 and depending on the type of media, like e.g. {linkedin}[LinkedIn], the posts are full
 of promises and how the full potential of AI can be unlocked to utilize it for your business.
 
-Oftentimes these posts appear to be written with the help of AI and especially {spotai}}[em-dashes enjoy
-increasing popularity].
+Oftentimes these posts appear to be written with the help of AI and especially
+{spotai}}[em-dashes] enjoy increasing popularity.
 I think {dogfood}[eating your own dog food] is always advisable, so I see no fault there.
 On the other hand, I can rarely find some kind of empirical evidence or any other kind of proof
 for these theses and here I consider this usually as a red flag - skepticism can help.
@@ -173,7 +180,7 @@ image::ai-first.png[]
 I personally think we should just stick to the bullet point list instead of applying a
 "prosa-2-text" conversion twice, but still I wonder what happens to the quality of the information
 underneath.
-Writing this blog post or generally writing is a really time consuming task.
+Writing this blog post or generally writing is a really time-consuming task.
 Drafting a new post and trying to fill the intended outline with content is a tasks which helps me
 personally to pinpoint what I really want to sayfootnote:[or rather I am hoping] and I wouldn't
 want to miss this journey.
@@ -188,11 +195,27 @@ bothered to read it.
 
 == Impact on society
 
-I've seen so many questionable posts from Sam Altman, but this one makes perfect sense to me:
+This is probably the most interesting point and I think it is really difficult to imagine the
+world to come and visionaries like {samaltman}[Sam Altman] play a big role in it.
+Still, when money gets involved things are sometimes getting sour and I think one of more recent
+posts from Altman really condenses the problem down well:
 
 .Sam Altman on https://x.com/sama/status/195208457436603235[X]
 image::sam-altman.png[]
 
+The implied comparison of mass-produced {fastfashion}[fast fashion] with the overgeneralized idea
+of {saas}[Software-as-a-Service] is interesting by itself, although I think it is not a good one
+to promote your AI services.
+For me two of the pain points of fast fashion are the {fastfashionenvironment}[environmental footprint]
+and the exploitation of people in fabric factories and according to media the same is true for
+the AI industry.
+There are many reports of the {aienvironment}[energy requirements of AI] and the references
+to the {mechturk}[Mechanical Turk] are also increasing.
+
+
+I am working in the software industry and I always had an ambivalent opinion towards
+{saas}[Software-as-a-Service], but I am also a strong proponent of staying at your
+{coredomain}[core domain] and hand-off supporting ones, so I am a bit at a tie.
 
 
 == Conclusion
