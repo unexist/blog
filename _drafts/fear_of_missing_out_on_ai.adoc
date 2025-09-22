@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Fear of missing out on AI
-description: This blog post is my personal stance on AI and my tiredness of the hype of a tech, that leads me to nowhere.
+description: This blog post is my personal stance on AI and a glimpse into related questions I rarely see discussed in media.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -50,6 +50,7 @@ endif::[]
 :mechturk: https://en.wikipedia.org/wiki/Mechanical_Turk
 :imagenet: https://en.wikipedia.org/wiki/ImageNet
 :saas: https://en.wikipedia.org/wiki/Software_as_a_service
+:idiocracy: https://www.imdb.com/title/tt0387808/
 
 It has been roughly two years since my last post regarding my experience with the state of AI
 ({{ site.url }}{% post_url 2023-04-28-coding-with-ai %}[Coding with AI]) and I think it is about
@@ -95,7 +96,8 @@ When I I look at the business side I'd say the overall themes are *increase of
 productivityfootnote:[Read: getting faster]* like reducing tiresome and/or manual labor and
 probably *fear of missing out* competitive advantage.
 And on the personal side I mostly see quality-of-life improvements like easy *access to information*
-with the help of the natural interfaces like {chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
+with the help of the natural interfaces like
+{chatgpt}[ChatGPT]footnote:[Or just "Chatty" as I've learned recently]
 and generational parts to create memes and reels more easily.
 
 This short list is non-exhaustive mind you, but is sufficient for the points I'd like to make next.
@@ -140,7 +142,7 @@ Hell is a collection of individuals who are spending the bulk of their time work
 don't like and are not especially good at. Say they were hired because they were excellent
 cabinet-makers, and then discover they are expected to spend a great deal of their time frying fish.
 
-Another issue I see with increasing productivity is the orientation towards throughpput or rather
+Another issue I see with increasing productivity is the orientation towards throughput or rather
 output in general in information related topics.
 Viewed from the business side increasing quantity makes sense to me, this is what the business has
 been created for in the first place, but is output the only and ulterior goal and the learning how
@@ -184,7 +186,7 @@ I personally think we should just stick to the bullet point list instead of appl
 underneath.
 Writing this blog post or generally writing is a really time-consuming task.
 Drafting a new post and trying to fill the intended outline with content is a tasks which helps me
-personally to pinpoint what I really want to sayfootnote:[or rather I am hoping] and I wouldn't
+personally to pinpoint what I really want to sayfootnote:[Or rather I am hoping] and I wouldn't
 want to miss this journey.
 
 I am a bit afraid the following is more than true:
@@ -225,16 +227,25 @@ In the end, the data contained over 14 million images, labeled across 22,000 cat
 
 I think the real point he wanted to make is with the help of AI can cheap software be mass-produced
 instead of paying monthly fees to service providers or individual solutions to problems.
-And this works actually well with software, since there is a negligible impact on the environment in
-contrast to physical products.
+And this works actually well with software, since there is a negligible impact on the environment
+in contrast to physical products.
 
 == Conclusion
 
-I am just tired of AI - it is just everywhere and I don't see any real benefit for me.
+Currently I am not exactly sure where we are on the hype cycle from the beginning of this post and I
+hope the next few months and years will surely show a direction there.
+We are going to see if history repeats itself in the protests of workers and if the dystopian
+outlooks of the movie {idiocracy}[Idiocracy] stay a work of fiction.
+
+I think my personal usage of AI won't sky rocket any time soon, since I am most of the time
+interested in discovering how and why something can be done and rarely just in a fast solution.
+Given the situation that I am interested in exactly that and I don't plan on using it beyond this
+narrow scope I [line-through]#might ask AI# would still write it myself.
+
+For any other stuff that can readily be automated I totally agree to this:
 
 .Joanna Macijewska on https://x.com/AuthorJMac/status/1773679197631701238[X]
 image::joanna-macijewska.png[]
-
 
 [bibliography]
 == Bibliography
