@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rewriting with Rust
+title: Rewriting in Rust
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
@@ -17,6 +17,52 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+
+:rust: https://rust-lang.org/
+:windowmanager: https://en.wikipedia.org/wiki/Window_manager
+:subtle: https://subtle.de/
+:20years: https://hg.unexist.dev/subtle/rev/40917ee3b688
+:subtle-rs: https://subtle.rs/
+:ai: https://en.wikipedia.org/wiki/Artificial_intelligence
+:c2rust: https://github.com/immunant/c2rust
+:legacycheck: https://understandlegacycode.com/blog/what-is-legacy-code-is-it-code-without-tests/
+
+During my career facing legacy code has always been an annoying task and it took me quite some
+years to understand, that oftentimes today's code is tomorrow's legacy.
+Still, legacy code can be a great opportunity to learn something new and especially when you are
+the original author of the piece.
+
+This post jumps on the bandwagon of rewriting everything in {rust}[Rust] and elaborates a bit on my
+personal motivation and learnings of rewriting my pet {windowmanager}[window manager] project
+{subtle}[subtle], which I started {20years}[~20 years]footnote:[The first commit is actually a bit
+older, but apparently moving from CVS > SVN > HG isn't frictionless] ago and still use it on a
+daily basis.
+
+== Why?
+
+Among the many things {ai}[AI] can _do for us_, migrating code from one language into another is
+usually a strong selling point and even without AI there are excellent tools on its own, like
+{c2rust}[C2Rust], to get the job done with just a flick of a finger.
+
+So why is an excellent question.
+
+One of my main motivators isn't just to get the job done like I lamented on a bit in my
+{{ site.url }}{% post_url 2025-09-22-fear_of_missing_out_on_ai %}[previous blog post], but to have
+a learning experience and take something from it besides another code base, which easily ticks
+every point of the {legacycheck}[legacy code checklist].
+
+
+
+
+== Learnings so far
+
+=== God objects
+
+=== Borrow checker
+
+=== Interior mutability
+
+=== Explicit copies
 
 == Conclusion
 
