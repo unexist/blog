@@ -1,19 +1,19 @@
 ---
 layout: post
-title: Testing with Rust
+title: Rewriting with Rust
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
+tags: rust subtle clean-code showcase
 categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/testing_with_rust
+:imagesdir: {asciidoctorconfigdir}/../assets/images/rewriting_in_rust
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/testing_with_rust
+:imagesdir: /assets/images/rewriting_in_rust
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -22,4 +22,4 @@ endif::[]
 
 All examples can be found here:
 
-<https://github.com/unexist/heos-dial>
+<https://github.com/unexist/subtle-rs>
