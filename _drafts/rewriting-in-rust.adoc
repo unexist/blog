@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: rust subtle clean-code showcase
+tags: rust subtle subtle-rs x11 clean-code showcase
 categories: tech
 toc: true
 ---
@@ -29,6 +29,12 @@ endif::[]
 :x11: https://en.wikipedia.org/wiki/X_Window_System
 :wayland: https://en.wikipedia.org/wiki/Wayland_(protocol)
 :gnomex11: https://blogs.gnome.org/alatiera/2025/06/23/x11-session-removal-faq/
+:loc: https://en.wikipedia.org/wiki/Source_lines_of_code
+:sloccount: https://dwheeler.com/sloccount/
+:godobject: https://en.wikipedia.org/wiki/God_object
+:anti-pattern: https://en.wikipedia.org/wiki/Anti-pattern
+:sep-of-concerns: https://en.wikipedia.org/wiki/Separation_of_concerns
+:trade-off: https://en.wikipedia.org/wiki/Trade-off
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -59,22 +65,82 @@ application in the [line-through]#day# [line-through]#year# epoch of {wayland}[W
 like a waste of time.
 
 Alas, the reasoning here is basically the same.
-I've spend many years with X11 and learning its core concepts and still like the system and
+Plus I've spent many years with X11 learning its core concepts and *still* like the system and
 capabilities.
-Additionally I am not entirely certain there is a giant switch to get rid of it, despite how
+
+On a side note - I am not entirely certain there is a giant switch to get rid of it, despite how
 decisions of e.g. the {gnomex11}[GNOME project]footnote:[GNOME and I had some intermezzos back
 then, but that is more than a decade ago] might appear.
 
-Convincing so far?
-If not let me know, if not please also feel free.
-
 == Learnings so far
+
+Porting a codebase, like the one of subtle with 14728 {loc}[LoC] (according to
+{sloccount}[sloccount]), brought loads of challenges with it.
+Some of them were the usual ones like "where to start" and how can this be done in language X, but
+let us concentrate here a handful of interesting points.
 
 === God objects
 
-=== Borrow checker
+When I started subtle back then, I didn't even know that this pattern is called
+{godobject}[God Object] or that it is considered to be prime example of an
+{anti-pattern}[anti-pattern].
+To me it was something that I've learned by reading other people's code and looked like a good
+solution for a problem, which is still relevant today.
+
+==== Problem
+
+The main problem is kind of easy to explain and mainly related to software design:
+Your program needs to keep track of data like state or socket descriptors and many related functions
+have to access and sometimes mutate them.
+
+There are several ways to tackle it, like moving everything related together, but this can also
+mean there is basically just one big file and C isn't the strongest language to enforce a proper
+structure and coherence.
+It was way easier to have a global object which included every bit and was available throughout
+the program.
+
+This might obviously lead to interesting side-effects in multi-threaded applications, but
+fortunately the design goal of subtle has always been to be single-threaded and no other means of
+locking were required.
+
+What I did not understand back then and which is more of concern here, is the implicit coupling of
+everything to this god object.
+This means changing the god object may require changes of other parts of the program and also may
+unknowingly break other parts of the application.
+
+==== Solution
+
+subtle-rs (as its predecessor) is event-driven and many parts revolve around a single connection to
+the X11 server.
+This connection must be available to most parts and moving everything into the holding object made
+proper {sep-of-concerns}}[separation of concerns] more difficult.
+
+Like every worth-while decision this is a classical {trade-off}[trade-off] and the original design
+was kept with the addition to carry the dependency *explicitly* through the codebase.
+
+.subtle/client.c \(C):
+[source,c]
+----
+void subClientSetSizeHints(SubClient *c, int *flags) {
+...
+}
+----
+
+.subtle-rs/client.rs (Rust):
+[source,rust]
+----
+pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> {
+...
+}
+----
+
+
 
 === Interior mutability
+
+
+
+=== Borrow checker
 
 === Explicit copies
 
