@@ -29,12 +29,17 @@ endif::[]
 :x11: https://en.wikipedia.org/wiki/X_Window_System
 :wayland: https://en.wikipedia.org/wiki/Wayland_(protocol)
 :gnomex11: https://blogs.gnome.org/alatiera/2025/06/23/x11-session-removal-faq/
+:chickenegg: https://en.wikipedia.org/wiki/Chicken_or_the_egg
 :loc: https://en.wikipedia.org/wiki/Source_lines_of_code
 :sloccount: https://dwheeler.com/sloccount/
 :godobject: https://en.wikipedia.org/wiki/God_object
 :anti-pattern: https://en.wikipedia.org/wiki/Anti-pattern
 :sep-of-concerns: https://en.wikipedia.org/wiki/Separation_of_concerns
 :trade-off: https://en.wikipedia.org/wiki/Trade-off
+:cell: https://doc.rust-lang.org/std/cell/
+:atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
+:arc: https://doc.rust-lang.org/std/sync/struct.Arc.html
+:let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -70,14 +75,18 @@ capabilities.
 
 On a side note - I am not entirely certain there is a giant switch to get rid of it, despite how
 decisions of e.g. the {gnomex11}[GNOME project]footnote:[GNOME and I had some intermezzos back
-then, but that is more than a decade ago] might appear.
+then, but that is more than a decade ago.] might appear.
 
 == Learnings so far
 
 Porting a codebase, like the one of subtle with 14728 {loc}[LoC] (according to
-{sloccount}[sloccount]), brought loads of challenges with it.
+{sloccount}[sloccount]footnote:[The underlying model is good way to annoy every developer, but the
+tool is still nice to count lines.]), brought loads of challenges with it.
 Some of them were the usual ones like "where to start" and how can this be done in language X, but
 let us concentrate here a handful of interesting points.
+
+NOTE: The problems are inter-related, and it is sometimes a {chickenegg}[chicken or the egg]-type
+of problem which to address first, so please be prepared to jump a bit around if necessary.
 
 === God objects
 
@@ -129,15 +138,80 @@ void subClientSetSizeHints(SubClient *c, int *flags) {
 .subtle-rs/client.rs (Rust):
 [source,rust]
 ----
-pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> {
+pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> { // <.>
 ...
 }
 ----
-
-
+<.> Another benefit of Clean Code
 
 === Interior mutability
 
+Since the last problem was that easy to solve, let us face a new problem, that mainly has been
+introduced due to our easy approach before.
+I've never seen this problem in other languages before, nonetheless I still think this is relevant
+to other languages.
+
+==== Problem
+
+We are happily carrying our reference to our let us say demi-god object around, everything can
+access and read the data and some use-cases work splendidly.
+Now what happens when something wants to actually mutate (write) the data?
+
+The compiler (or rather the borrow checker) happily reminds us, that there can only be one mutable
+reference at the same time and the aliasing rules are violated:
+
+[source,shell]
+----
+error[E0499]: cannot borrow `subtle` as mutable more than once at a time
+----
+
+NOTE: Strictly speaking in a linear and single-threaded application this problem shouldn't occur,
+but the borrow checker cannot know that at compile-time.
+
+==== Solution
+
+The next problem explains why we cannot just use mutable references everywhere, but there are
+other ways to tell the compiler we are aware and extra careful - namely interior mutability.
+
+In a nutshell this means we are wrapping the data inside an extra container, pass the container
+around and move its data in and out according to our use-case.
+
+This is a pretty common problem and Rust provides many different options like
+{cell}[Cell and RefCell], {atomic}[Atomic] and some more advanced options like the smart pointer
+{arc}[Arc] for more shenanigans.footnote:[Interior mutabilty is sometimes also called escape hatch..]
+
+.subtle/screen.c \(C):
+[source,c]
+----
+void subScreenConfigure(void) {
+...
+    /* Reset visible tags, views and available clients */
+    subtle->visible_tags = 0; // <.>
+...
+    /* Set visible tags and views to ease lookups */
+    subtle->visible_tags |= v->tags;
+...
+}
+----
+<.> No one can stop us from just accessing our god object directly.
+
+.subtle-rs/screen.rs (Rust):
+[source,rust]
+----
+pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
+...
+    // Reset visible tags, views and available clients
+    let mut visible_tags = Tagging::empty(); // <.>
+...
+    // Set visible tags and views to ease lookups
+    visible_tags.insert(view.tags);
+...
+    subtle.visible_tags.replace(visible_tags); // <.>
+...
+}
+----
+<.> This is a pretty easy case: First we introduce a local variable via {let-binding}[let binding].
+<.> And then once we are happy with the result we ask the container to swap the content entirely.
 
 
 === Borrow checker
