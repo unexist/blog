@@ -26,6 +26,9 @@ endif::[]
 :ai: https://en.wikipedia.org/wiki/Artificial_intelligence
 :c2rust: https://github.com/immunant/c2rust
 :legacycheck: https://understandlegacycode.com/blog/what-is-legacy-code-is-it-code-without-tests/
+:x11: https://en.wikipedia.org/wiki/X_Window_System
+:wayland: https://en.wikipedia.org/wiki/Wayland_(protocol)
+:gnomex11: https://blogs.gnome.org/alatiera/2025/06/23/x11-session-removal-faq/
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -46,13 +49,24 @@ usually a strong selling point and even without AI there are excellent tools on 
 
 So why is an excellent question.
 
-One of my main motivators isn't just to get the job done like I lamented on a bit in my
+One of my main motivators isn't just to get the job done, like I lamented on a bit in my
 {{ site.url }}{% post_url 2025-09-22-fear_of_missing_out_on_ai %}[previous blog post], but to have
 a learning experience and take something from it besides another code base, which easily ticks
 every point of the {legacycheck}[legacy code checklist].
 
+Manual labor isn't probably the most controversial aspect of it, but porting an {x11}[X11]
+application in the [line-through]#day# [line-through]#year# epoch of {wayland}[Wayland] might look
+like a waste of time.
 
+Alas, the reasoning here is basically the same.
+I've spend many years with X11 and learning its core concepts and still like the system and
+capabilities.
+Additionally I am not entirely certain there is a giant switch to get rid of it, despite how
+decisions of e.g. the {gnomex11}[GNOME project]footnote:[GNOME and I had some intermezzos back
+then, but that is more than a decade ago] might appear.
 
+Convincing so far?
+If not let me know, if not please also feel free.
 
 == Learnings so far
 
