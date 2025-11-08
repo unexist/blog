@@ -36,10 +36,12 @@ endif::[]
 :anti-pattern: https://en.wikipedia.org/wiki/Anti-pattern
 :sep-of-concerns: https://en.wikipedia.org/wiki/Separation_of_concerns
 :trade-off: https://en.wikipedia.org/wiki/Trade-off
+:aliasing: https://www.slingacademy.com/article/understanding-borrowing-rules-aliasing-vs-mutability/
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
 :arc: https://doc.rust-lang.org/std/sync/struct.Arc.html
 :let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
+:rustacean: https://rust-for-rustaceans.com/
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -138,11 +140,10 @@ void subClientSetSizeHints(SubClient *c, int *flags) {
 .subtle-rs/client.rs (Rust):
 [source,rust]
 ----
-pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> { // <.>
+pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> {
 ...
 }
 ----
-<.> Another benefit of Clean Code
 
 === Interior mutability
 
@@ -157,8 +158,15 @@ We are happily carrying our reference to our let us say demi-god object around, 
 access and read the data and some use-cases work splendidly.
 Now what happens when something wants to actually mutate (write) the data?
 
+
+.Problematic code
+[source,rust]
+----
+pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
+----
+
 The compiler (or rather the borrow checker) happily reminds us, that there can only be one mutable
-reference at the same time and the aliasing rules are violated:
+reference at the same time and the {aliasing}[aliasing rules] are violated:
 
 [source,shell]
 ----
@@ -210,11 +218,70 @@ pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
 ...
 }
 ----
-<.> This is a pretty easy case: First we introduce a local variable via {let-binding}[let binding].
-<.> And then once we are happy with the result we ask the container to swap the content entirely.
-
+<.> This is a pretty easy case: We introduce a local variable via {let-binding}[let binding] first.
+<.> And then once we are happy with the result we ask the container to swap-out the content entirely.
 
 === Borrow checker
+
+The next related problem is the (in)famous borrow checker and probably one of the main antagonists
+of any {rustacean}[Rustacean] - new and old.
+
+If we continue with our initial problem with a god object - why can't we just keep a mutable
+reference of it all the time?
+
+==== Problem
+
+.Compiler error
+[source,shell]
+----
+error[E0499]: cannot borrow `subtle` as mutable more than once at a time # <.>
+----
+<.> <https://doc.rust-lang.org/error_codes/E0499.html>
+
+==== Solution
+
+.subtle/client.c \(C):
+[source,c]
+----
+static void ClientBounds(SubClient *c, XRectangle *bounds, XRectangle *geom, int adjustx, int adjusty) {
+... // <.>
+}
+
+void subClientResize(SubClient *c, XRectangle *bounds, int size_hints) {
+...
+    /* Honor size hints */
+    if (size_hints)
+        ClientBounds(c, bounds, &c->geom, False, False); // <.>
+...
+}
+----
+<.> Nothing to see here besides some boring bound checking - next!
+<.> Here we pass on a pointer to a variable to another function - totally fine in C-land.
+
+.subtle-rs/client.rs (Rust):
+[source,rust]
+----
+fn apply_size_hints(&self, subtle: &Subtle, bounds: &Rectangle,
+                        adjust_x: bool, adjust_y: bool, geom: &mut Rectangle)
+... // <.>
+}
+
+pub(crate) fn resize(&mut self, subtle: &Subtle, bounds: &Rectangle, use_size_hints: bool) -> Result<()> {
+    let mut geom = self.geom; // <.>
+
+    // Honor size hints
+    if use_size_hints {
+        self.apply_size_hints(subtle, bounds, false, false, &mut geom); // <.>
+    }
+...
+    // Finally update geom
+    self.geom = geom;
+}
+----
+<.> Bound checking is done here directly.
+<.> The pattern is quite similar to the one before..
+<.> ...with the addition the compiler wouldn't allow passing on a mutable reference to `self.geom`
+
 
 === Explicit copies
 
