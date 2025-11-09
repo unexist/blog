@@ -50,8 +50,8 @@ endif::[]
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
 :arc: https://doc.rust-lang.org/std/sync/struct.Arc.html
+:copy-trait: https://doc.rust-lang.org/std/marker/trait.Copy.html
 :let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
-:rustacean: https://rust-for-rustaceans.com/
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -405,55 +405,84 @@ fn main() {
 
 === Interior mutability
 
-Now its getting interesting and we have to face the consequences of our naive approach from the
-previous problem.
+Now its getting interesting, and we have to talk about given promises of immutability and one more
+time about ergonomics of our general design.
 
-NOTE: I've never seen this problem in other languages before, nonetheless I still think this should
-be relevant even for other languages.
+With the last problem we established the underlying promise of functions, that don't require a
+mutable reference, will *never* change the object itself and only changes made to a mutable
+reference are of any consequence to you.
 
 ==== Problem
 
-We are happily carrying our reference of our let us say demi-god object around, everything can
-access and read the data and many use-cases work splendidly as long this is read-only.
+What happens, when you need to change some internal state, which is just required for internal
+bookkeeping and doesn't change anything at all for the caller?
 
-Now what happens, when something wants to actually wants to mutate (write) the data?
+Have a look at following contrivedfootnote:[It is really difficult to find an easy example here..]
+example:
 
-.Problematic code
+.Problematic Rust code
 [source,rust]
 ----
-fn func_b(suntle: &mut Subtle) {
-    subtle.visible_tags = Tagging::empty();
+use std::time::{SystemTime, UNIX_EPOCH};
+
+#[derive(Default)]
+struct Counter {
+    number: u32,
+    last_printed: u32,
 }
 
-fn func_a(subtle: &mut Subtle) {
-    func_b(subtle)?;
+impl Counter {
+    fn increment(&mut self) {
+        self.number += 1;
+    }
+
+    fn print(&mut self) { // <.>
+        self.last_printed = SystemTime::now()
+            .duration_since(UNIX_EPOCh).unwrap().as_secs() as u32; // <.>
+
+        println!("number={}", self.number);
+    }
+}
+
+fn main() {
+    let mut counter = Counter::default();
+
+    counter.increment();
+    counter.print();
 }
 ----
+<.> To allow our internal bookkeeping the signature must include `mut` now.
+<.> Error checking skipped for brevity - unwrap all the things!
 
-The compiler (or rather the borrow checker) happily reminds us, that there can only be one mutable
-reference at the same time and the {aliasing}[aliasing rules] are violated:
+Here we had to change the methods signature just to allow the pointless action of storing the
+last printing time, maybe for big data applications, who knows.
 
-[source,shell]
-----
-error[E0499]: cannot borrow `subtle` as mutable more than once at a time
-----
-
-NOTE: Strictly speaking in a linear and single-threaded application this problem shouldn't occur,
-but the borrow checker cannot know that at compile-time.
+From the caller's perspective it doesn't make any sense to pass a mutable reference into the
+`print` function and from the counter's perspectivefootnote:[Yes, I know..] there wasn't any
+actual  change of the number.
 
 ==== Solution
 
-The next problem explains why we cannot just use mutable references everywhere, but there are
-other ways to tell the compiler we are aware and extra careful - namely interior mutability.
-
-In a nutshell this means we are wrapping the data inside an extra container, pass the container
-around and move its data in and out according to our use-case.
-
 This is a pretty common problem and Rust provides many different options like
 {cell}[Cell and RefCell], {atomic}[Atomic] and some more advanced options like the smart pointer
-{arc}[Arc] for more shenanigans.footnote:[Interior mutabilty is sometimes also called escape hatch..]
+{arc}[Arc] for more shenanigans.footnote:[Interior mutability is sometimes also called escape
+hatch..]
 
-.subtle/screen.c \(C):
+In our case Cell works splendidly here for our {copy-trait}[copy-able] type:
+
+===== C version
+
+.subtle/subtle.h:
+[source,c]
+----
+typedef struct subsubtle_t { /* {{{ */
+...
+    int visible_tags; ///< Subtle visible tags
+...
+} SubSubtle;
+----
+
+.subtle/screen.c:
 [source,c]
 ----
 void subScreenConfigure(void) {
@@ -468,7 +497,29 @@ void subScreenConfigure(void) {
 ----
 <.> No one can stop us from just accessing our god object directly.
 
-.subtle-rs/screen.rs (Rust):
+===== Rust version
+
+.subtle-rs/subtle.rs:
+[source,rust]
+----
+pub(crate) struct Subtle {
+...
+    pub(crate) visible_tags: Cell<Tagging>,
+...
+}
+
+impl Default for Subtle {
+    fn default() -> Self {
+        Subtle {
+...
+            visible_tags: Cell::new(Tagging::empty()),
+...
+        }
+    }
+}
+----
+
+.subtle-rs/screen.rs:
 [source,rust]
 ----
 pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
@@ -484,10 +535,7 @@ pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
 }
 ----
 <.> This is a pretty easy case: We introduce a local variable via {let-binding}[let binding] first.
-<.> And then once we are happy with the result we ask the container to swap-out the content entirely.
-
-
-
+<.> And then once we are happy with the result we tell the cell to swap-out the content entirely.
 
 === Explicit copies
 
