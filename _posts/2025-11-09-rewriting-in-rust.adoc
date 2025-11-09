@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rewriting in Rust
-description: TBD
+description: This blog post describes my experience and learnings during the port of my pet window manager project subtle from C to Rust.
 date: 2025-11-09 17:32 +0100
 last_updated: 2025-11-09 17:32 +0100
 author: Christoph Kappel
