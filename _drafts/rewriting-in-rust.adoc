@@ -54,6 +54,11 @@ endif::[]
 :clone-trait: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
 :let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
 :affine-types: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
+:extism: https://extism.org/
+:idiomaticrust: https://www.goodreads.com/book/show/218011528-idiomatic-rust
+:coderustpro: https://www.goodreads.com/book/show/60509158-code-like-a-pro-in-rust
+:asyncrust: https://www.goodreads.com/book/show/221468589-async-rust
+:effectiverust: https://www.goodreads.com/book/show/211161112-effective-rust
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -639,6 +644,35 @@ error.
 
 == Conclusion
 
-All examples can be found here:
+Writing this blog post was an interesting experience and helped me to sharpen my own understanding
+how Rust internally works and what I actually learned about it over the course of this project.
 
+Porting such a large codebase from my past into a modern language and also re-visiting many of the
+taken design choices have been a great experience so far.
+And in regard to the legacy code aspect I mentioned initially - there are tests but still even I
+don't understand some of the odd namings for variables and steps in algorithm anymore.
+
+I currently do not dare to use subtle-rs as my daily window manager yet, mainly because some
+required features are still missing and especially something is missing to bring e.g. a clock into
+the panel, but I am eagerly looking at {extism}[Extism] for this matter.
+
+Naturally I've read some books about Rust if you are looking for inspiration:
+
+- {idiomaticrust}[Idiomatic Rust: Code like a Rustacean] <<idiomaticrust>>
+- {coderustpro}[Code Like a Pro in Rust] <<coderustpro>>
+- {asyncrust}[Async Rust: Unleashing the Power of Fearless Concurrency] <<asyncrust>>
+- {effectiverust}[https://www.goodreads.com/book/show/211161112-effective-rust] <<effectiverust>>
+
+
+Most of the examples were taken from following repositories:
+
+<https://github.com/unexist/subtle> +
 <https://github.com/unexist/subtle-rs>
+
+[bibliography]
+== Bibliography
+
+* [[[idiomaticrust]]] Brenden Matthwes, Idiomatic Rust: Code like a Rustacean, Manning 2024
+* [[[coderustpro]]] Brenden Matthwes, Code Like a Pro in Rust, Manning 2024
+* [[[asyncrust]]] Maxwell Flitton, Caroline Morton, Async Rust: Unleashing the Power of Fearless Concurrency, O'Reilly 2024
+* [[[effectiverust]]] David Drysdale, Effective Rust: 35 Specific Ways to Improve Your Rust Code, O'Reilly 2024
