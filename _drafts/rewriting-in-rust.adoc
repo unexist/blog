@@ -302,9 +302,9 @@ all the time and pass it around?*
 
 ==== Problem
 
-Interestingly this is again more about software design, cognitive load, coupling and also
-about Rust's pragmatic way of handling mutability in contrast to other (functional) languages like
-{haskell}[Haskell] as can be seen in the next code block:
+Interestingly this is again more about software design and Rust's pragmatic way of handling
+mutability in contrast to other (functional) languages like {haskell}[Haskell].
+Please have a look at the next code block:
 
 .Problematic Rust code
 [source,rust]
@@ -318,36 +318,50 @@ impl Holder {
     fn func_a(&mut self) { // <.>
         self.counter += 1;
     }
+
+    fn func_b(&mut self) { // <.>
+        println!("counter={}", self.counter);
+    }
 }
 
-fn func_b(holder: &mut Holder) { // <.>
+fn func_c(holder: &mut Holder) { // <.>
     holder.counter += 1;
+}
+
+fn func_d(holder: &mut Holder) { // <.>
+    println!("counter={}", holder.counter);
 }
 
 fn main() {
     let mut holder = Holder::default();
 
     holder.func_a(); // <.>
+    holder.func_b(); // <.>
 
-    func_b(&mut holder); // <.>
+    func_c(&mut holder); // <.>
+    func_d(&mut holder); // <.>
 }
 ----
 <.> Derive is one of Rust's real work horses.
-<.> Mut required here..
-<.> See &#10103;!
-<.> Implied mut here.
-<.> See &#10103;!
+<.> `Mut` required due to write to binding.
+<.> Is `mut` required here?
+<.> `Mut`!
+<.> `Mut`?
+<.> Implied `mut`!
+<.> Implied `mut`?
+<.> `Mut`!
+<.> Why `mut`?
 
-If you don't mind trailing all those explicit `mut` statements the above code runs fine and if you
-don't try to re-borrow anything the {aliasing}[aliasing rules] work in your favor.
+If you don't mind trailing all those terribly explicit `mut` keywords the above code runs fine and
+if you don't try to re-borrow anything the {aliasing}[aliasing rules] work in your favor.
 
-A different story is the cognitive load and the coupling:
+A different story is the coupling and the cognitive load:
 When everything gets a mutable reference, everything is coupled together and you can never be sure
 about the side-effects of calling a certain function.
 
 ==== Solution
 
-The easiest and most naive solution to this kind of problem is just omit `mut` wherever possible
+The easiest and most naive solution to this kind of problem is just omit `mut` wherever possible.
 
 .Adapted Rust code
 [source,rust]
@@ -382,16 +396,17 @@ fn main() {
     holder.func_b();
 
     func_c(&mut holder);
-    func_d(&holder);
+    func_d(&holder); // <.>
 }
 ----
-<.> This access is just read-only, so no need for `mut` and also a promises to be side-effect free.
-<.> See &#10103;!
+<.> This access is just read-only, so no need for `mut` and also a promises of being side-effect free.
+<.> See &#10102;!
+<.> See &#10102;!
 
 === Interior mutability
 
-Since the last problems were that easy to solve, let us face some of the consequences of our
-previous approaches.
+Now its getting interesting and we have to face the consequences of our naive approach from the
+previous problem.
 
 NOTE: I've never seen this problem in other languages before, nonetheless I still think this should
 be relevant even for other languages.
