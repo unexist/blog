@@ -2,8 +2,8 @@
 layout: post
 title: Rewriting in Rust
 description: TBD
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: rust subtle subtle-rs x11 clean-code showcase
 categories: tech
