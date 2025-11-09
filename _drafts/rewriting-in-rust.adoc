@@ -36,6 +36,7 @@ endif::[]
 :anti-pattern: https://en.wikipedia.org/wiki/Anti-pattern
 :sep-of-concerns: https://en.wikipedia.org/wiki/Separation_of_concerns
 :trade-off: https://en.wikipedia.org/wiki/Trade-off
+:zero-cost: https://github.com/brianwow/zero-cost-abstraction
 :raii: https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization
 :option: https://doc.rust-lang.org/std/option/
 :oncecell: https://doc.rust-lang.org/std/cell/struct.OnceCell.html
@@ -43,6 +44,8 @@ endif::[]
 :from-trait: https://docs.rs/clap/latest/clap/index.html
 :default-trait: https://doc.rust-lang.org/std/default/trait.Default.html
 :error-499: https://doc.rust-lang.org/error_codes/E0499.html
+:error-502: https://doc.rust-lang.org/error_codes/E0502.html
+:haskell: https://www.haskell.org/
 :aliasing: https://www.slingacademy.com/article/understanding-borrowing-rules-aliasing-vs-mutability/
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
@@ -162,14 +165,15 @@ pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut Client
 {raii}[Resource acquisition is initialization] (RAII) is another programming idiom, which is less
 of a concern in C-based languages, but can turn into a problem in strict languages like Rust.
 Simply put this just means whenever we initialize something like a holding structure, we also have
-to initialize all of its members.
+to initialize all of its members due to the general idea of predictable runtime behavior and
+{zero-cost}[zero-cost abstraction].
 
 ==== Problem
 
 This easily turns into a problem, whenever the holding structure contains something, that requires
 some preparation before it can be initialized - like a socket connection:
 
-.Problematic code
+.Problematic C code
 [source,C]
 ----
 struct Holder {
@@ -187,15 +191,14 @@ holder.conn = MagicallyOpenConnection(); // <.>
 
 Since this a more general problem in Rust, there exists a bunch of options with different
 ergonomics.
-One of the easies ways is to wrap the connection in {option][Option], which can be initialized
+One of the easiest ways is to wrap the connection in {option][Option], which can be initialized
 with its default value and set later, but as I've said the ergonomics of mutatingfootnote:[I'll use
 _mutate_ instead of _write_ onwards, because I think it better transports the intent.] something
 on the inside are bothersome.
 
-A better [line-through]#option# alternative is let one of the many
-cellsfootnote:[More on this later.] handle this job.
-{oncecell}[OnceCell], as the name implies, offers an easy way to basically initialize our socket
-_once_ we are ready with the preparation.
+A better [line-through]#option# alternative is let one of the many cellsfootnote:[More on this
+later.] handle this job. {oncecell}[OnceCell], as the name implies, offers an easy way to
+initialize our socket *once* we are prepped.
 
 ===== C version
 
@@ -235,7 +238,6 @@ int main(int argc, char *argv[]) {
 }
 ----
 <.> This is just `calloc` with some error handling.
-
 
 ===== Rust version
 
@@ -291,63 +293,100 @@ the help of our {from-trait}[From] trait implementation.
 === Borrow checker
 
 Did you wonder why the (in)famous borrow checker isn't number one on our list of problems?
-Well, simply because you can come pretty far without triggering beloved errors like
-{error-499}[E0499] and grouping problems to keep a common thread is quite difficult.
+Well, simply because you can come pretty far without running into beloved errors like
+{error-499}[E0499] or {error-502}[E0502] and grouping problems to keep a common thread is quite
+difficult.
 
-Anyway, back to the topic at hand: Why can't we just keep a mutable reference of our god object
-it all the time and pass it around?
+Anyway, back to the topic at hand: *Why can't we just keep a mutable reference of our god object
+all the time and pass it around?*
 
 ==== Problem
 
-.Compiler error
-[source,shell]
+Interestingly this is again more about software design, cognitive load, coupling and also
+about Rust's pragmatic way of handling mutability in contrast to other (functional) languages like
+{haskell}[Haskell] as can be seen in the next code block:
+
+.Problematic Rust code
+[source,rust]
 ----
-error[E0499]: cannot borrow `subtle` as mutable more than once at a time
+#[derive(Default)] // <.>
+struct Holder {
+    counter: u32,
+}
+
+impl Holder {
+    fn func_a(&mut self) { // <.>
+        self.counter += 1;
+    }
+}
+
+fn func_b(holder: &mut Holder) { // <.>
+    holder.counter += 1;
+}
+
+fn main() {
+    let mut holder = Holder::default();
+
+    holder.func_a(); // <.>
+
+    func_b(&mut holder); // <.>
+}
 ----
+<.> Derive is one of Rust's real work horses.
+<.> Mut required here..
+<.> See &#10103;!
+<.> Implied mut here.
+<.> See &#10103;!
+
+If you don't mind trailing all those explicit `mut` statements the above code runs fine and if you
+don't try to re-borrow anything the {aliasing}[aliasing rules] work in your favor.
+
+A different story is the cognitive load and the coupling:
+When everything gets a mutable reference, everything is coupled together and you can never be sure
+about the side-effects of calling a certain function.
 
 ==== Solution
 
-.subtle/client.c \(C):
-[source,c]
-----
-static void ClientBounds(SubClient *c, XRectangle *bounds, XRectangle *geom, int adjustx, int adjusty) {
-... // <.>
-}
+The easiest and most naive solution to this kind of problem is just omit `mut` wherever possible
 
-void subClientResize(SubClient *c, XRectangle *bounds, int size_hints) {
-...
-    /* Honor size hints */
-    if (size_hints)
-        ClientBounds(c, bounds, &c->geom, False, False); // <.>
-...
-}
-----
-<.> Nothing to see here besides some boring bound checking - next!
-<.> Here we pass on a pointer to a variable to another function - totally fine in C-land.
-
-.subtle-rs/client.rs (Rust):
+.Adapted Rust code
 [source,rust]
 ----
-fn apply_size_hints(&self, subtle: &Subtle, bounds: &Rectangle,
-                        adjust_x: bool, adjust_y: bool, geom: &mut Rectangle)
-... // <.>
+#[derive(Default)]
+struct Holder {
+    counter: u32,
 }
 
-pub(crate) fn resize(&mut self, subtle: &Subtle, bounds: &Rectangle, use_size_hints: bool) -> Result<()> {
-    let mut geom = self.geom; // <.>
-
-    // Honor size hints
-    if use_size_hints {
-        self.apply_size_hints(subtle, bounds, false, false, &mut geom); // <.>
+impl Holder {
+    fn func_a(&mut self) {
+        self.counter += 1;
     }
-...
-    // Finally update geom
-    self.geom = geom;
+
+    fn func_b(&self) { // <.>
+        println!("counter={}", self.counter);
+    }
+}
+
+fn func_c(holder: &mut Holder) {
+    holder.counter += 1;
+}
+
+fn func_d(holder: &Holder) { // <.>
+    println!("counter={}", holder.counter);
+}
+
+fn main() {
+    let mut holder = Holder::default();
+
+    holder.func_a();
+    holder.func_b();
+
+    func_c(&mut holder);
+    func_d(&holder);
 }
 ----
-<.> Bound checking is done here directly.
-<.> The pattern is quite similar to the one before..
-<.> ...with the addition the compiler wouldn't allow passing on a mutable reference to `self.geom`
+<.> This access is just read-only, so no need for `mut` and also a promises to be side-effect free.
+<.> See &#10103;!
 
 === Interior mutability
 
