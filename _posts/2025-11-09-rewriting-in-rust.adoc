@@ -2,8 +2,8 @@
 layout: post
 title: Rewriting in Rust
 description: TBD
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2025-11-09 17:32 +0100
+last_updated: 2025-11-09 17:32 +0100
 author: Christoph Kappel
 tags: rust subtle subtle-rs x11 clean-code showcase
 categories: tech
@@ -54,6 +54,7 @@ endif::[]
 :clone-trait: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
 :let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
 :affine-types: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
+:cleancode: https://www.goodreads.com/book/show/3735293-clean-code
 :extism: https://extism.org/
 :idiomaticrust: https://www.goodreads.com/book/show/218011528-idiomatic-rust
 :coderustpro: https://www.goodreads.com/book/show/60509158-code-like-a-pro-in-rust
@@ -652,6 +653,7 @@ Porting such a large codebase from my past into a modern language and also re-vi
 taken design choices have been a great experience so far.
 And in regard to the legacy code aspect I mentioned initially - there are tests but still even I
 don't understand some of the odd namings for variables and steps in algorithm anymore.
+Maybe I should have read {cleancode}[Clean Code] some years earlier <<cleancode>>..
 
 I currently do not dare to use subtle-rs as my daily window manager yet, mainly because some
 required features are still missing like something simple to bring e.g. a clock into the panel, but
@@ -663,7 +665,6 @@ Naturally I've read some books about Rust if you are looking for inspiration:
 - {coderustpro}[Code Like a Pro in Rust] <<coderustpro>>
 - {asyncrust}[Async Rust: Unleashing the Power of Fearless Concurrency] <<asyncrust>>
 - {effectiverust}[https://www.goodreads.com/book/show/211161112-effective-rust] <<effectiverust>>
-
 
 Most of the examples were taken from following repositories:
 
@@ -677,3 +678,5 @@ Most of the examples were taken from following repositories:
 * [[[coderustpro]]] Brenden Matthwes, Code Like a Pro in Rust, Manning 2024
 * [[[asyncrust]]] Maxwell Flitton, Caroline Morton, Async Rust: Unleashing the Power of Fearless Concurrency, O'Reilly 2024
 * [[[effectiverust]]] David Drysdale, Effective Rust: 35 Specific Ways to Improve Your Rust Code, O'Reilly 2024
+* [[[cleancode]]] Robert C. Martin, Clean Code: A Handbook of Agile Software Craftsmanship, O'Reilly 2007
+
