@@ -51,7 +51,9 @@ endif::[]
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
 :arc: https://doc.rust-lang.org/std/sync/struct.Arc.html
 :copy-trait: https://doc.rust-lang.org/std/marker/trait.Copy.html
+:clone-trait: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
 :let-binding: https://doc.rust-lang.org/rust-by-example/variable_bindings.html
+:affine-types: https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems
 
 During my career facing legacy code has always been an annoying task and it took me quite some
 years to understand, that oftentimes today's code is tomorrow's legacy.
@@ -85,8 +87,8 @@ Alas, the reasoning here is basically the same.
 Plus I've spent many years with X11 learning its core concepts and *still* like the system and
 capabilities.
 
-On a side note - I am not entirely certain there is a giant switch to get rid of it, despite how
-decisions of e.g. the {gnomex11}[GNOME project]footnote:[GNOME and I had some intermezzos back
+On a side note - I am not entirely certain there is a giant switch to get rid of X11 yet, despite
+how decisions of e.g. the {gnomex11}[GNOME project]footnote:[GNOME and I had some intermezzos back
 then, but that is more than a decade ago.] might appear.
 
 == Learnings so far
@@ -260,7 +262,7 @@ impl Default for Subtle { // <.>
     }
 }
 ----
-<.> Unfortunately deriving the {default-trait}[Default] trait doesn't work for all members of `Subtle`.
+<.> Unfortunately deriving the {default-trait}[Default trait] doesn't work for all members of `Subtle`.
 <.> This initializes our `OnceCell` with its default value.
 
 .subtle-rs/display.rs:
@@ -288,7 +290,7 @@ fn main() -> Result<()> {
 }
 ----
 <.> `Config` holds the configured values - a courtesy of {clap}[clap] - and we convert it with
-the help of our {from-trait}[From] trait implementation.
+the help of our {from-trait}[From trait] implementation.
 
 === Borrow checker
 
@@ -468,7 +470,8 @@ This is a pretty common problem and Rust provides many different options like
 {arc}[Arc] for more shenanigans.footnote:[Interior mutability is sometimes also called escape
 hatch..]
 
-In our case Cell works splendidly here for our {copy-trait}[copy-able] type:
+In our case Cell works splendidly here for our type comes prepared with the
+{copy-trait}[copy trait]:
 
 ===== C version
 
@@ -538,6 +541,101 @@ pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
 <.> And then once we are happy with the result we tell the cell to swap-out the content entirely.
 
 === Explicit copies
+
+Likewise with mutability, Rust in a similar way annoyingly verbose and explicit with how it handles
+data and copies of it.
+Seems like keeping all the guarantees and promises there has to be done some work upfront from
+every side.
+
+==== Problem
+
+In the next example we just continue with the counter from before, but the repetition of the struct
+definition and implementation itself have been removed, since they just divert from the actual
+problem:
+
+.Problematic Rust code
+[source,rust,highlight=10]
+----
+...
+fn print_counter(counter: &Counter) {
+    counter.print();
+}
+
+fn main() {
+    let mut counter1 = Counter::default();
+
+    counter1.increment();
+
+    let counter2 = counter1; // <.>
+
+    print_counter(&counter1);
+    print_counter(&counter2);
+}
+----
+<.> D'oh!
+
+The above snippet fails to compile for apparent reasons, still the error message of the compiler
+is kind of a surprise in its detail and content:
+
+[source,log]
+----
+error[E0382]: borrow of moved value: `counter1`
+  --> src/main.rs:27:19
+   |
+21 |     let mut counter1 = Counter::default();
+   |         ------------ move occurs because `counter1` has type `Counter`, which does not implement the `Copy` trait
+...
+25 |     let counter2 = counter1;
+   |                    -------- value moved here
+26 |
+27 |     print_counter(&counter1);
+   |                   ^^^^^^^^^ value borrowed here after move
+   |
+note: if `Counter` implemented `Clone`, you could clone the value
+  --> src/main.rs:2:1
+   |
+ 2 | struct Counter {
+   | ^^^^^^^^^^^^^^ consider implementing `Clone` for this type
+...
+25 |     let counter2 = counter1;
+   |                    -------- you could clone this value
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `example` (bin "example") due to 1 previous error
+----
+
+==== Solution
+
+This is just an example of a really overwhelming and also quite helpful error message from our
+partner in crimes - the Rust compiler.
+What it points out here is that we can just add the {copy-trait}[copy trait marker] and also
+implement the {clone-trait}[clone trait] to satisfy this move.
+
+And like our friendly compiler told us, when we just do as suggested the code runs perfectly fine:
+
+.Fixed Rust code
+[source,rust,highlight=1]
+----
+#[derive(Default, Clone, Copy)]
+struct Counter {
+    number: u32,
+}
+----
+
+This innocent assignment over there just introduced the concept of move semantics, that Rust uses
+internally in its {affine-types}[affine type system]:
+
+[quote,'<https://en.wikipedia.org/wiki/Substructural_type_system#Affine_type_systems>']
+An affine resource can be used at most once, while a linear one must be used exactly once.
+
+The definition is quite heavy and somehow unwieldy, but what it basically says, is every type that
+doesn't come along with a `Copy` marker trait is moved and the ownership transferred to the
+recipient.
+All other types are just copied along the way.
+
+Accessing the object afterward is a violation of the ownershipfootnote:[No post about Rust can be
+complete without talking about ownership - glad we managed that!] model and hence causes such an
+error.
 
 == Conclusion
 
