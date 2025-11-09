@@ -42,6 +42,7 @@ endif::[]
 :clap: https://docs.rs/clap/latest/clap/index.html
 :from-trait: https://docs.rs/clap/latest/clap/index.html
 :default-trait: https://doc.rust-lang.org/std/default/trait.Default.html
+:error-499: https://doc.rust-lang.org/error_codes/E0499.html
 :aliasing: https://www.slingacademy.com/article/understanding-borrowing-rules-aliasing-vs-mutability/
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
@@ -87,11 +88,11 @@ then, but that is more than a decade ago.] might appear.
 
 == Learnings so far
 
-Porting a codebase, like the one of subtle with 14728 {loc}[LoC] (according to
+Porting a codebase, like the one of subtle with _14728_ {loc}[LoC] (according to
 {sloccount}[sloccount]footnote:[The underlying model is good way to annoy every developer, but the
 tool is still nice to count lines.]), brought loads of challenges with it.
 Some of them were the usual ones like "where to start" and how can this be done in language X, but
-let us concentrate here a handful of interesting points.
+let us concentrate here on a handful of interesting points.
 
 NOTE: The problems are inter-related, and it is sometimes a {chickenegg}[chicken or the egg]-type
 of problem which to address first, so please be prepared to jump a bit around if necessary.
@@ -135,7 +136,9 @@ proper {sep-of-concerns}}[separation of concerns] more difficult.
 Like every worth-while decision this is a classical {trade-off}[trade-off] and the original design
 was kept with the addition to carry the dependency *explicitly* through the codebase.
 
-.subtle/client.c \(C):
+===== C version
+
+.subtle/client.c:
 [source,c]
 ----
 void subClientSetSizeHints(SubClient *c, int *flags) {
@@ -143,7 +146,9 @@ void subClientSetSizeHints(SubClient *c, int *flags) {
 }
 ----
 
-.subtle-rs/client.rs (Rust):
+===== Rust version
+
+.subtle-rs/client.rs:
 [source,rust]
 ----
 pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> { // <.>
@@ -154,15 +159,15 @@ pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut Client
 
 === RAII
 
-{raii}[Resource acquisition is initialization] (RAII) is another programming idiom, which isn't of
-any concern in C-based languages, but can turn into a problem in strict languages like Rust.
-In layman's terns this just means whenever we initialize our holder, we also have to initialize
-all of its members.
+{raii}[Resource acquisition is initialization] (RAII) is another programming idiom, which is less
+of a concern in C-based languages, but can turn into a problem in strict languages like Rust.
+Simply put this just means whenever we initialize something like a holding structure, we also have
+to initialize all of its members.
 
 ==== Problem
 
-This easily turns into a problem, whenever the holding structure contains something, that must be
-initialized later - like a socket connection:
+This easily turns into a problem, whenever the holding structure contains something, that requires
+some preparation before it can be initialized - like a socket connection:
 
 .Problematic code
 [source,C]
@@ -184,8 +189,8 @@ Since this a more general problem in Rust, there exists a bunch of options with 
 ergonomics.
 One of the easies ways is to wrap the connection in {option][Option], which can be initialized
 with its default value and set later, but as I've said the ergonomics of mutatingfootnote:[I'll use
-mutate instead of write onwards, because I think it better transports the intent.] something on the
-inside is bothersome.
+_mutate_ instead of _write_ onwards, because I think it better transports the intent.] something
+on the inside are bothersome.
 
 A better [line-through]#option# alternative is let one of the many
 cellsfootnote:[More on this later.] handle this job.
@@ -281,12 +286,73 @@ fn main() -> Result<()> {
 }
 ----
 <.> `Config` holds the configured values - a courtesy of {clap}[clap] - and we convert it with
-the help of our {from-trait}[From] trait.
+the help of our {from-trait}[From] trait implementation.
+
+=== Borrow checker
+
+Did you wonder why the (in)famous borrow checker isn't number one on our list of problems?
+Well, simply because you can come pretty far without triggering beloved errors like
+{error-499}[E0499] and grouping problems to keep a common thread is quite difficult.
+
+Anyway, back to the topic at hand: Why can't we just keep a mutable reference of our god object
+it all the time and pass it around?
+
+==== Problem
+
+.Compiler error
+[source,shell]
+----
+error[E0499]: cannot borrow `subtle` as mutable more than once at a time
+----
+
+==== Solution
+
+.subtle/client.c \(C):
+[source,c]
+----
+static void ClientBounds(SubClient *c, XRectangle *bounds, XRectangle *geom, int adjustx, int adjusty) {
+... // <.>
+}
+
+void subClientResize(SubClient *c, XRectangle *bounds, int size_hints) {
+...
+    /* Honor size hints */
+    if (size_hints)
+        ClientBounds(c, bounds, &c->geom, False, False); // <.>
+...
+}
+----
+<.> Nothing to see here besides some boring bound checking - next!
+<.> Here we pass on a pointer to a variable to another function - totally fine in C-land.
+
+.subtle-rs/client.rs (Rust):
+[source,rust]
+----
+fn apply_size_hints(&self, subtle: &Subtle, bounds: &Rectangle,
+                        adjust_x: bool, adjust_y: bool, geom: &mut Rectangle)
+... // <.>
+}
+
+pub(crate) fn resize(&mut self, subtle: &Subtle, bounds: &Rectangle, use_size_hints: bool) -> Result<()> {
+    let mut geom = self.geom; // <.>
+
+    // Honor size hints
+    if use_size_hints {
+        self.apply_size_hints(subtle, bounds, false, false, &mut geom); // <.>
+    }
+...
+    // Finally update geom
+    self.geom = geom;
+}
+----
+<.> Bound checking is done here directly.
+<.> The pattern is quite similar to the one before..
+<.> ...with the addition the compiler wouldn't allow passing on a mutable reference to `self.geom`
 
 === Interior mutability
 
-Since the last problem was that easy to solve, let us face a new problem, which mainly is a
-consequence of our easy approach before.
+Since the last problems were that easy to solve, let us face some of the consequences of our
+previous approaches.
 
 NOTE: I've never seen this problem in other languages before, nonetheless I still think this should
 be relevant even for other languages.
@@ -366,66 +432,7 @@ pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
 <.> This is a pretty easy case: We introduce a local variable via {let-binding}[let binding] first.
 <.> And then once we are happy with the result we ask the container to swap-out the content entirely.
 
-=== Borrow checker
 
-The next related problem is the (in)famous borrow checker and probably one of the main antagonists
-of any {rustacean}[Rustacean] - new and old.
-
-If we continue with our initial problem with a god object - why can't we just keep a mutable
-reference of it all the time?
-
-==== Problem
-
-.Compiler error
-[source,shell]
-----
-error[E0499]: cannot borrow `subtle` as mutable more than once at a time # <.>
-----
-<.> <https://doc.rust-lang.org/error_codes/E0499.html>
-
-==== Solution
-
-.subtle/client.c \(C):
-[source,c]
-----
-static void ClientBounds(SubClient *c, XRectangle *bounds, XRectangle *geom, int adjustx, int adjusty) {
-... // <.>
-}
-
-void subClientResize(SubClient *c, XRectangle *bounds, int size_hints) {
-...
-    /* Honor size hints */
-    if (size_hints)
-        ClientBounds(c, bounds, &c->geom, False, False); // <.>
-...
-}
-----
-<.> Nothing to see here besides some boring bound checking - next!
-<.> Here we pass on a pointer to a variable to another function - totally fine in C-land.
-
-.subtle-rs/client.rs (Rust):
-[source,rust]
-----
-fn apply_size_hints(&self, subtle: &Subtle, bounds: &Rectangle,
-                        adjust_x: bool, adjust_y: bool, geom: &mut Rectangle)
-... // <.>
-}
-
-pub(crate) fn resize(&mut self, subtle: &Subtle, bounds: &Rectangle, use_size_hints: bool) -> Result<()> {
-    let mut geom = self.geom; // <.>
-
-    // Honor size hints
-    if use_size_hints {
-        self.apply_size_hints(subtle, bounds, false, false, &mut geom); // <.>
-    }
-...
-    // Finally update geom
-    self.geom = geom;
-}
-----
-<.> Bound checking is done here directly.
-<.> The pattern is quite similar to the one before..
-<.> ...with the addition the compiler wouldn't allow passing on a mutable reference to `self.geom`
 
 
 === Explicit copies
