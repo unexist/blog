@@ -644,8 +644,9 @@ error.
 
 == Conclusion
 
-Writing this blog post was an interesting experience and helped me to sharpen my own understanding
-how Rust internally works and what I actually learned about it over the course of this project.
+Writing this blog post has been an interesting experience on its own and helped me to sharpen my
+understanding of how Rust internally works and also helped me to summarize what I actually learned
+about it over the course of this project.
 
 Porting such a large codebase from my past into a modern language and also re-visiting many of the
 taken design choices have been a great experience so far.
@@ -653,8 +654,8 @@ And in regard to the legacy code aspect I mentioned initially - there are tests 
 don't understand some of the odd namings for variables and steps in algorithm anymore.
 
 I currently do not dare to use subtle-rs as my daily window manager yet, mainly because some
-required features are still missing and especially something is missing to bring e.g. a clock into
-the panel, but I am eagerly looking at {extism}[Extism] for this matter.
+required features are still missing like something simple to bring e.g. a clock into the panel, but
+I am eagerly looking at {extism}[Extism] for this matter.
 
 Naturally I've read some books about Rust if you are looking for inspiration:
 
