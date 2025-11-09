@@ -310,36 +310,36 @@ Please have a look at the next code block:
 [source,rust]
 ----
 #[derive(Default)] // <.>
-struct Holder {
-    counter: u32,
+struct Counter {
+    number: u32,
 }
 
-impl Holder {
-    fn func_a(&mut self) { // <.>
-        self.counter += 1;
+impl Counter {
+    fn increment(&mut self) { // <.>
+        self.number += 1;
     }
 
-    fn func_b(&mut self) { // <.>
-        println!("counter={}", self.counter);
+    fn print(&mut self) { // <.>
+        println!("number={}", self.number);
     }
 }
 
-fn func_c(holder: &mut Holder) { // <.>
-    holder.counter += 1;
+fn increment_counter(counter: &mut Counter) { // <.>
+    counter.number += 1;
 }
 
-fn func_d(holder: &mut Holder) { // <.>
-    println!("counter={}", holder.counter);
+fn print_counter(counter: &mut Counter) { // <.>
+    println!("counter={}", counter.number);
 }
 
 fn main() {
-    let mut holder = Holder::default();
+    let mut counter = Counter::default();
 
-    holder.func_a(); // <.>
-    holder.func_b(); // <.>
+    counter.increment(); // <.>
+    counter.print(); // <.>
 
-    func_c(&mut holder); // <.>
-    func_d(&mut holder); // <.>
+    increment_counter(&mut counter); // <.>
+    print_counter(&mut counter); // <.>
 }
 ----
 <.> Derive is one of Rust's real work horses.
@@ -367,36 +367,36 @@ The easiest and most naive solution to this kind of problem is just omit `mut` w
 [source,rust]
 ----
 #[derive(Default)]
-struct Holder {
-    counter: u32,
+struct Counter {
+    number: u32,
 }
 
-impl Holder {
-    fn func_a(&mut self) {
-        self.counter += 1;
+impl Counter {
+    fn increment(&mut self) {
+        self.number += 1;
     }
 
-    fn func_b(&self) { // <.>
-        println!("counter={}", self.counter);
+    fn print(&self) { // <.>
+        println!("number={}", self.number);
     }
 }
 
-fn func_c(holder: &mut Holder) {
-    holder.counter += 1;
+fn increment_counter(counter: &mut Counter) {
+    counter.number += 1;
 }
 
-fn func_d(holder: &Holder) { // <.>
-    println!("counter={}", holder.counter);
+fn print_counter(counter: &Counter) { // <.>
+    println!("number={}", counter.number);
 }
 
 fn main() {
-    let mut holder = Holder::default();
+    let mut counter = Counter::default();
 
-    holder.func_a();
-    holder.func_b();
+    counter.increment();
+    counter.print();
 
-    func_c(&mut holder);
-    func_d(&holder); // <.>
+    increment_counter(&mut counter);
+    print_counter(&counter); // <.>
 }
 ----
 <.> This access is just read-only, so no need for `mut` and also a promises of being side-effect free.
