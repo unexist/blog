@@ -36,6 +36,12 @@ endif::[]
 :anti-pattern: https://en.wikipedia.org/wiki/Anti-pattern
 :sep-of-concerns: https://en.wikipedia.org/wiki/Separation_of_concerns
 :trade-off: https://en.wikipedia.org/wiki/Trade-off
+:raii: https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization
+:option: https://doc.rust-lang.org/std/option/
+:oncecell: https://doc.rust-lang.org/std/cell/struct.OnceCell.html
+:clap: https://docs.rs/clap/latest/clap/index.html
+:from-trait: https://docs.rs/clap/latest/clap/index.html
+:default-trait: https://doc.rust-lang.org/std/default/trait.Default.html
 :aliasing: https://www.slingacademy.com/article/understanding-borrowing-rules-aliasing-vs-mutability/
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
@@ -140,29 +146,168 @@ void subClientSetSizeHints(SubClient *c, int *flags) {
 .subtle-rs/client.rs (Rust):
 [source,rust]
 ----
-pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> {
+pub(crate) fn set_size_hints(&mut self, subtle: &Subtle, mode_flags: &mut ClientFlags) -> Result<()> { // <.>
 ...
 }
 ----
+<.> The signature includes a reference to `Subtle`.
 
-=== Interior mutability
+=== RAII
 
-Since the last problem was that easy to solve, let us face a new problem, that mainly has been
-introduced due to our easy approach before.
-I've never seen this problem in other languages before, nonetheless I still think this is relevant
-to other languages.
+{raii}[Resource acquisition is initialization] (RAII) is another programming idiom, which isn't of
+any concern in C-based languages, but can turn into a problem in strict languages like Rust.
+In layman's terns this just means whenever we initialize our holder, we also have to initialize
+all of its members.
 
 ==== Problem
 
-We are happily carrying our reference to our let us say demi-god object around, everything can
-access and read the data and some use-cases work splendidly.
-Now what happens when something wants to actually mutate (write) the data?
+This easily turns into a problem, whenever the holding structure contains something, that must be
+initialized later - like a socket connection:
 
+.Problematic code
+[source,C]
+----
+struct Holder {
+    Connection *conn;
+}
+
+Holder *holder = calloc(1, sizeof(Holder)); // <.>
+
+holder.conn = MagicallyOpenConnection(); // <.>
+----
+<.> Init the holding structure
+<.> Open the actual connection
+
+==== Solution
+
+Since this a more general problem in Rust, there exists a bunch of options with different
+ergonomics.
+One of the easies ways is to wrap the connection in {option][Option], which can be initialized
+with its default value and set later, but as I've said the ergonomics of mutatingfootnote:[I'll use
+mutate instead of write onwards, because I think it better transports the intent.] something on the
+inside is bothersome.
+
+A better [line-through]#option# alternative is let one of the many
+cellsfootnote:[More on this later.] handle this job.
+{oncecell}[OnceCell], as the name implies, offers an easy way to basically initialize our socket
+_once_ we are ready with the preparation.
+
+===== C version
+
+.subtle/subtle.h:
+[source,c]
+----
+struct subtle_t {
+...
+    Display *dpy; ///< Subtle Xorg display
+...
+} SubSubtle;
+
+extern SubSubtle *subtle; // <.>
+----
+<.> God mode - on!
+
+.subtle/display.c:
+[source,c]
+----
+void subDisplayInit(const char *display) { // <.>
+...
+    /* Connect to display and setup error handler */
+    if (!(subtle->dpy = XOpenDisplay(display))) {
+...
+}
+----
+<.> We usually pass the ENV var `DISPLAY`, but `NULL` is also an accepted value.
+
+.subtle/subtle.c:
+[source,c]
+----
+int main(int argc, char *argv[]) {
+...
+    /* Create subtle */
+    subtle = (SubSubtle *) (subSharedMemoryAlloc(1, sizeof(SubSubtle))); // <.>
+...
+}
+----
+<.> This is just `calloc` with some error handling.
+
+
+===== Rust version
+
+.subtle-rs/subtle.rs:
+[source,rust]
+----
+pub(crate) struct Subtle {
+...
+    pub(crate) conn: OnceCell<RustConnection>,
+...
+}
+
+impl Default for Subtle { // <.>
+    fn default() -> Self {
+        Subtle {
+...
+            conn: OnceCell::new(), // <.>
+...
+        }
+    }
+}
+----
+<.> Unfortunately deriving the {default-trait}[Default] trait doesn't work for all members of `Subtle`.
+<.> This initializes our `OnceCell` with its default value.
+
+.subtle-rs/display.rs:
+[source,rust]
+----
+pub(crate) fn init(config: &Config, subtle: &mut Subtle) -> Result<()> {
+    let (conn, screen_num) = x11rb::connect(Some(&*config.display))?;
+....
+    subtle.conn.set(conn).unwrap(); // <.>
+....
+}
+----
+<.> Error handling here would require more explanation, so let us just forget about it and move on.
+
+.subtle-rs/main.rs:
+[source,rust]
+----
+fn main() -> Result<()> {
+...
+    // Init subtle
+    let mut subtle = Subtle::from(&config); // <.>
+...
+    display::init(&config, &mut subtle)?;
+...
+}
+----
+<.> `Config` holds the configured values - a courtesy of {clap}[clap] - and we convert it with
+the help of our {from-trait}[From] trait.
+
+=== Interior mutability
+
+Since the last problem was that easy to solve, let us face a new problem, which mainly is a
+consequence of our easy approach before.
+
+NOTE: I've never seen this problem in other languages before, nonetheless I still think this should
+be relevant even for other languages.
+
+==== Problem
+
+We are happily carrying our reference of our let us say demi-god object around, everything can
+access and read the data and many use-cases work splendidly as long this is read-only.
+
+Now what happens, when something wants to actually wants to mutate (write) the data?
 
 .Problematic code
 [source,rust]
 ----
-pub(crate) fn configure(subtle: &Subtle) -> Result<()> {
+fn func_b(suntle: &mut Subtle) {
+    subtle.visible_tags = Tagging::empty();
+}
+
+fn func_a(subtle: &mut Subtle) {
+    func_b(subtle)?;
+}
 ----
 
 The compiler (or rather the borrow checker) happily reminds us, that there can only be one mutable
