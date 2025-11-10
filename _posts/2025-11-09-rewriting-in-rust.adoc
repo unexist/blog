@@ -446,7 +446,7 @@ impl Counter {
 
     fn print(&mut self) { // <.>
         self.last_printed = SystemTime::now()
-            .duration_since(UNIX_EPOCh).unwrap().as_secs() as u32; // <.>
+            .duration_since(UNIX_EPOCH).unwrap().as_secs() as u32; // <.>
 
         println!("number={}", self.number);
     }
