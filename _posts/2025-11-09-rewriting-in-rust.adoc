@@ -47,6 +47,7 @@ endif::[]
 :error-499: https://doc.rust-lang.org/error_codes/E0499.html
 :error-502: https://doc.rust-lang.org/error_codes/E0502.html
 :haskell: https://www.haskell.org/
+:derive: https://doc.rust-lang.org/rust-by-example/trait/derive.html
 :aliasing: https://www.slingacademy.com/article/understanding-borrowing-rules-aliasing-vs-mutability/
 :cell: https://doc.rust-lang.org/std/cell/
 :atomic: https://doc.rust-lang.org/core/sync/atomic/index.html
@@ -351,7 +352,7 @@ fn main() {
     print_counter(&mut counter); // <.>
 }
 ----
-<.> Derive is one of Rust's real work horses.
+<.> {derive}[Derive] is one of Rust's real work horses.
 <.> `Mut` required due to write to binding.
 <.> Is `mut` required here?
 <.> `Mut`!
