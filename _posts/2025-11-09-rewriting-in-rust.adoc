@@ -485,7 +485,7 @@ In our case Cell works splendidly here for our type comes prepared with the
 .subtle/subtle.h:
 [source,c]
 ----
-typedef struct subsubtle_t { /* {{{ */
+typedef struct subsubtle_t {
 ...
     int visible_tags; //< Subtle visible tags
 ...
