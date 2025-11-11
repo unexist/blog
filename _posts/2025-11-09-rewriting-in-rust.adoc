@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:page-liquid:
 
 :rust: https://rust-lang.org/
 :windowmanager: https://en.wikipedia.org/wiki/Window_manager
