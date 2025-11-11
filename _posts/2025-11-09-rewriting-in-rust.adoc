@@ -116,7 +116,7 @@ When I started subtle back then, I didn't even know that this pattern is called
 {godobject}[God Object] or that it is considered to be prime example of an
 {anti-pattern}[anti-pattern].
 To me it was something that I've learned by reading other people's code and looked like a good
-solution for a problem, which is still relevant today.
+solution to a problem, which is still relevant today.
 
 ==== Problem
 
