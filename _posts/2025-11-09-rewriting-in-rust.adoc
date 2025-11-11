@@ -82,7 +82,7 @@ usually a strong selling point and even without AI there are excellent tools on 
 So why is an excellent question.
 
 One of my main motivators isn't just to get the job done, like I lamented on a bit in my
-{{ site.url }}{% post_url 2025-09-22-fear_of_missing_out_on_ai %}[previous blog post], but to have
+{{ site.url }}{% post_url 2025-09-22-fear-of-missing-out-on-ai %}[previous blog post], but to have
 a learning experience and take something from it besides another code base, which easily ticks
 every point of the {legacycheck}[legacy code checklist].
 
@@ -200,7 +200,7 @@ holder.conn = MagicallyOpenConnection(); // <.>
 
 Since this a more general problem in Rust, there exists a bunch of options with different
 ergonomics.
-One of the easiest ways is to wrap the connection in {option][Option], which can be initialized
+One of the easiest ways is to wrap the connection in {option}[Option], which can be initialized
 with its default value and set later, but as I've said the ergonomics of mutatingfootnote:[I'll use
 _mutate_ instead of _write_ onwards, because I think it better transports the intent.] something
 on the inside are bothersome.
@@ -216,7 +216,7 @@ initialize our socket *once* we are prepped.
 ----
 struct subtle_t {
 ...
-    Display *dpy; ///< Subtle Xorg display
+    Display *dpy; //< Subtle Xorg display
 ...
 } SubSubtle;
 
@@ -487,7 +487,7 @@ In our case Cell works splendidly here for our type comes prepared with the
 ----
 typedef struct subsubtle_t { /* {{{ */
 ...
-    int visible_tags; ///< Subtle visible tags
+    int visible_tags; //< Subtle visible tags
 ...
 } SubSubtle;
 ----
