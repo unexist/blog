@@ -20,7 +20,14 @@ endif::[]
 :page-liquid:
 
 :deskbar: https://sourceforge.net/projects/deskbar/
-:subtle:
+:subtle: https://github.com/unexist/subtle
+:subtle-rs: https://github.com/unexist/subtle-rs
+:touchjs: https://github.com/unexist/touchjs
+:rubtle: https://github.com/unexist/rubtle
+:extism: https://extism.org/
+:wasm: https://webassembly.org/
+:lua: https://www.lua.org/
+:ruby: https://www.ruby-lang.org/en/
 
 == Conclusion
 
