@@ -5,8 +5,8 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
-categories: tech
+tags: showcase extism rust lua ruby
+categories: tech story
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -33,6 +33,7 @@ endif::[]
 :codeberg: https://codeberg.org/
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
 :hackernews: https://news.ycombinator.com/
+:clang: https://en.wikipedia.org/wiki/C_(programming_language)
 
 Coming up with a new software project is always a fun thing.
 You start from a mere idea, like some quality-of-life thing as replacement for a piece of software that drives you nuts
@@ -54,7 +55,36 @@ image::timmy_turner.png[]
 
 == Barebone
 
-The year is
+The year is 2004 and your project is obviously written in {clang}[C], so the only real thing is to accept contribution
+in the form of even more C.
+Since compiling the whole project from scratch everytime is quite annoying, you design your own plugin system with
+the good old buddies `dlopen` and `dlsym`:
+
+.{deskbar}[Deskbar], plug.c
+[source,c]
+----
+DbPlugElement *element = NULL;
+
+element = (DbPlugElement *) malloc (sizeof (DbPlugElement));
+
+snprintf (buf, sizeof (buf), "%s/%s.so", PLUGIN_DIR, file);
+
+element->handle = dlopen (buf, RTLD_LAZY);
+
+if ((err = dlerror ()))
+        {
+                db_log_err ("Cannot load plugin `%s'\n", file);
+                db_log_debug ("dlopen (): %s\n", err);
+
+                free (element);
+
+                return;
+        }
+
+/* Get entrypoint and call it */
+entrypoint      = dlsym (element->handle, "db_plug_init");
+element->data   = (*entrypoint) ();
+----
 
 == Scripting languages
 
