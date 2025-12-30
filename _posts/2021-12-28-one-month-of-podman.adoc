@@ -35,7 +35,7 @@ toc: true
 :24: https://en.wikipedia.org/wiki/Tracing_(software)
 :25: https://github.com/unexist/showcase-logging-vs-tracing-quarkus
 
-In my previous post [Migrating to Poadman]({% post_url 2021-12-01-migrating-to-podman %}) you
+In my previous post [Migrating to Podman]({% post_url 2021-12-01-migrating-to-podman %}) you
 basically accompanied me on my migration from a {4}[docker-compose] file to a more CLI-based
 approach with {19}[Podman].
 I am still working on my {25}[logging-vs-tracing] showcase, but there were a few surprises and I
