@@ -28,12 +28,35 @@ endif::[]
 :wasm: https://webassembly.org/
 :lua: https://www.lua.org/
 :ruby: https://www.ruby-lang.org/en/
+:foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
+:github: https://github.com/
+:codeberg: https://codeberg.org/
+
+Coming up with a new software project is always a fun thing.
+You start from a mere idea, like some quality-of-life thing as replacement for a piece of software that drives you nuts
+or even something that addresses a real problem, you tinker with it, play with it and move on.
+And *if* everything goes really well you might end up with something quite usable.
+
+This is by itself a great milestone, but wouldn't it be really great, if other people can also enjoy it?
+Living in a {FOSS}[FOSS] world publishing your code on
+{Github}[Github]footnote:[Or {Codeberg}[Codeberg], if you don't want to contribute to AI]  is just a stone throw away
+
+
+== Barebone
+
+== Scripting languages
+
+== Webassembly
 
 == Conclusion
 
-All examples can be found here:
+The list of examples is quite long, but please help yourself:
 
-<https://github.com/unexist/showcase->
+- <{deskbar}>
+- <{subtle}>
+- <{subtle-rs}>
+- <{touchjs}>
+- <{rubtle}>
 
 [bibliography]
 == Bibliography
