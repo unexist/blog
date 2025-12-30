@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 :deskbar: https://sourceforge.net/projects/deskbar/
 :subtle: https://github.com/unexist/subtle
@@ -42,12 +43,14 @@ And *if* everything goes really well you might end up with something quite usabl
 
 This is by itself a great milestone, but wouldn't it be really great, if other people can also enjoy it?
 Living in a {FOSS}[FOSS] world, publishing your code on
-{Github}[Github]footnote:[Or {Codeberg}[Codeberg], if you don't want to contribute to AI] is just a stone throw away.
+{Github}[Github]footnote:[Or {Codeberg}[Codeberg], if you don't want to contribute to AI] is just a stone
+throw away.
 This directly acts as a fine distribution channel, since you can just annouce it on pages like
 {hackernews}[Hacker News] and call it a day.
 
-Fast forward, your software is quite mature and among all the {ilities}[-ilities] you've already addressed since you
-are a professional, *extensibility* hasn't been high up on your list and you kind of lack behind user requests.
+Fast forward, your software is quite mature and among all the {ilities}[-ilities]
+you've already addressed since you are a professional, *extensibility* hasn't been high up on your list and you kind of
+lack behind user requests.
 
 What about your software supports user contributed code?
 
@@ -55,12 +58,12 @@ image::timmy_turner.png[]
 
 == Barebone
 
-The year is 2004 and your project is obviously written in {clang}[C], so the only real thing is to accept contribution
-in the form of even more C.
+The year is 2004 and your project is obviously written in {clang}[C], so
+the only real thing is to accept contribution in the form of even more C.
 Since compiling the whole project from scratch everytime is quite annoying, you design your own plugin system with
-the good old buddies `dlopen` and `dlsym`:
+your good old buddies `dlopen` and `dlsym`:
 
-.{deskbar}[Deskbar], plug.c
+.{deskbar}[Deskbar]/deskbar/plug.c:97
 [source,c]
 ----
 DbPlugElement *element = NULL;
@@ -84,6 +87,34 @@ if ((err = dlerror ()))
 /* Get entrypoint and call it */
 entrypoint      = dlsym (element->handle, "db_plug_init");
 element->data   = (*entrypoint) ();
+----
+
+
+This opens some new ways of enriching your software and from your perspective it based on a understandable API.
+
+.{deskbar}[Deskbar]/plugins/battery.c:107
+[source,c]
+----
+static DbPlug plugin =
+{
+        "Battery",       /* Plugin name */
+        battery_create,  /* Plugin create function */
+        battery_update,  /* Plugin update function */
+        battery_destroy, /* Plugin destroy function */
+
+        &data,           /* Plugin data */
+        NULL,            /* Plugin format */
+
+        3600             /* Plugin update interval */
+};
+
+DbPlug *
+db_plug_init (void)
+{
+        plug = &plugin;
+
+        return (&plugin);
+}
 ----
 
 == Scripting languages
