@@ -1,0 +1,32 @@
+---
+layout: post
+title: Embedding other languages
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/embedding_other_languages
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/embedding_other_languages
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
+:deskbar: https://sourceforge.net/projects/deskbar/
+:subtle:
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
