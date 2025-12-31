@@ -42,6 +42,7 @@ endif::[]
 :setjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
+:acpi: https://en.wikipedia.org/wiki/ACPI
 
 Coming up with a new software project is always a fun thing.
 You start from a mere idea, like some quality-of-life thing as replacement for a piece of software that drives you nuts
@@ -55,20 +56,20 @@ throw away.
 This directly acts as a fine distribution channel, since you can just annouce it on pages like
 {hackernews}[Hacker News] and call it a day.
 
-Fast forward, your software is quite mature and among all the {ilities}[-ilities]
-you've already addressed since you are a professional, *extensibility* hasn't been high up on your list and you kind of
-lack behind user requests.
+Fast forward, your software is quite mature and among all the
+{ilities}[-ilities] you've already addressed since you are a
+professional, *extensibility* hasn't been high up on your list and you are lacking behind user requests.
 
 What about your software supports user contributed code?
 
-image::timmy_turner.png[]
+image::go_wrong.png[]
 
 == Barebone
 
 The year is 2004 and your project is obviously written in {clang}[C], so
 the only real thing is to accept contribution in the form of even more C.
-Since compiling the whole project from scratch everytime is quite annoying, you design your own plugin system with
-your good old buddies `dlopen` and `dlsym`:
+Since integration and compiling the whole project from scratch everytime is quite annoying, you design your own plugin
+system with your good old buddies `dlopen` and `dlsym`:
 
 .{deskbar}[Deskbar]/deskbar/plug.c:97
 [source,c]
@@ -104,9 +105,33 @@ element->data   = (*entrypoint) (); // <.>
 This opens some new ways of enriching your software and from your perspective it bases on an understandable and
 approachable API.
 
-.{deskbar}[Deskbar]/plugins/battery.c:107
+.{deskbar}[Deskbar]/plugins/battery.c:58+107
 [source,c]
 ----
+void
+battery_update (void) // <.>
+{
+        int capacity    = 0,
+        percent         = 0;
+
+        char buf[100], state[20];
+
+        /* Get battery info */
+        if (!fd1)
+                {
+                        snprintf (buf, sizeof (buf), "/proc/acpi/battery/BAT%d/state", bat_slot);
+
+                        fd1 = fopen (buf, "r");
+
+                        memset (buf, 0, sizeof (buf));
+                }
+        else
+            fseek (fd1, 0, SEEK_SET);
+...
+}
+
+...
+
 static DbPlug plugin =
 {
         "Battery",       /* Plugin name */
@@ -128,18 +153,27 @@ db_plug_init (void)
         return (&plugin);
 }
 ----
+<.> This is just an excerpt, but the plugin relies on the {acpi}[ACPI] interface to extract the battery stats
 <.> Here we just pass a struct with function pointers to call the plugin
 
 The learning curve is steep, and you quickly realize allowing custom code offers lots of freedom to enhance the
-software, but like many double-edged sword can also introduce interesting surprises without special care.
-{segfault}[Segmentation faults] inside our plugins can crash the whole application now, and without question you don't
-want to violate the famous saying:
+software, but like so often with double-edged sword, there is an.. ehm another sharp edge?
+{segfault}[Segmentation faults], the bane of software engineering, don't make halt inside plugins like they should, but
+they wipe the board and kill the entire application!
+
+Shocked as you are, you grab your dusty C-bible and look for ways to mitigate this, since it goes without question you
+don't want to violate the famous saying:
 
 [quote,Linus Torvals,https://www.shutupmauro.com/]
 [line-through]#Mauro, SHUT THE FUCK UP!# +
 WE DO NOT BREAK USERSPACE!
 
-Taking this advice by heart, you grab your dusty C-bible and skim to another pair of buddies, `setjmp` and `longjmp`:
+Taking this advice by heart, you basically dive into the book and read on.
+
+image::few_hours_later.png[]
+
+Right there, in the forbidden section of the book, you stumble upon another pair of
+buddies - `setjmp` and `longjmp`:
 
 .{deskbar}[Deskbar]/deskbar/plug.c:32
 [source,c]
@@ -156,7 +190,7 @@ else
                 return (1);
         }
 ----
-<.> {setjmp}[setjmp] is a bit arcane magic, but essentially set a return markerfootnote:[Kind of a {goto}[goto label]] on the stack
+<.> {setjmp}[setjmp] is a bit arcane magic, but essentially sets a return markerfootnote:[Kind of a {goto}[goto label]] on the stack
 <.> Well, different times back then..
 
 .{deskbar}[Deskbar]/deskbar/sig.c:35
@@ -177,16 +211,29 @@ break;
 Once in place you feel content with the solution, reflect shortly on the impacts and release it to the wild.
 
 |===
-| Ease of use | Error handling | Language agnostic
+| Ease of use | Richness of API | Language agnostic | Error handling
 
 | Requires compilation and linking
+| Language + host provided
+| No, requires plugins to be in Cfootnote:[Technically everything that can be linked, so other languages might actually be possible here]
 | Arcane - requires stack unwinding
-| Plain C
 |===
 
 == Scripting languages
 
+Still happy with the success of the previous project, you think the previous great thing is lacking in design and
+ambition and you devise something new.
+
+
+|===
+| Ease of use | Richness of API | Language agnostic | Error handling
+|===
+
 == Webassembly
+
+|===
+| Ease of use | Richness of API | Language agnostic | Error handling
+|===
 
 == Conclusion
 
