@@ -32,7 +32,12 @@ endif::[]
 :foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
 :github: https://github.com/
 :codeberg: https://codeberg.org/
+
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
+:maintainability: https://en.wikipedia.org/wiki/Maintainability
+:extensibility: https://en.wikipedia.org/wiki/Extensibility
+:wikipedia: https://en.wikipedia.org
+
 :hackernews: https://news.ycombinator.com/
 :clang: https://en.wikipedia.org/wiki/C_(programming_language)
 :sharedobj: https://en.wikipedia.org/wiki/Shared_library
@@ -44,23 +49,17 @@ endif::[]
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
 :acpi: https://en.wikipedia.org/wiki/ACPI
 
-Coming up with a new software project is always a fun thing.
-You start from a mere idea, like some quality-of-life thing as replacement for a piece of software that drives you nuts
-or even something, that addresses a real problem, you tinker with it, play with it and move on.
-And *if* everything goes really well you might end up with something quite usable.
+There are many qualities modern software [line-through]#has to# *should* address, especially when this is part of your
+daily job.
+Among the long list of {ilities}[-ilities], some of them are pretty self-explaining like
+{maintainability}[maintainability], but others can be a tad more interesting like {extensibility}[extensibility].
 
-This is by itself a great milestone, but wouldn't it be really great, if other people can also enjoy it?
-Living in a {FOSS}[FOSS] world, publishing your code on
-{Github}[Github]footnote:[Or {Codeberg}[Codeberg], if you don't want to contribute to AI] is just a stone
-throw away.
-This directly acts as a fine distribution channel, since you can just annouce it on pages like
-{hackernews}[Hacker News] and call it a day.
+How a certain quality is best achieved depends, like so often, on of a plethora of things, but let us pick a fun one
+for the course of this post.
+According to {wikipedia}[Wikipedia] extensibility revolves around future growth and also proper design to make this
+possible, but also mentions scripting languages in the black box part.
 
-Fast forward, your software is quite mature and among all the
-{ilities}[-ilities] you've already addressed since you are a
-professional, *extensibility* hasn't been high up on your list and you are lacking behind user requests.
-
-What about your software supports user contributed code?
+To me future growth and proper design don't sound like fun in early 2026, therefore scripting languages here we come.
 
 image::go_wrong.png[]
 
