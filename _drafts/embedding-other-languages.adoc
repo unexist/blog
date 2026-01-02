@@ -29,46 +29,100 @@ endif::[]
 :wasm: https://webassembly.org/
 :lua: https://www.lua.org/
 :ruby: https://www.ruby-lang.org/en/
-:foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
 :github: https://github.com/
 :codeberg: https://codeberg.org/
 
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
 :maintainability: https://en.wikipedia.org/wiki/Maintainability
+:correctness: https://en.wikipedia.org/wiki/Correctness_(computer_science)
 :extensibility: https://en.wikipedia.org/wiki/Extensibility
 :wikipedia: https://en.wikipedia.org
-
-:hackernews: https://news.ycombinator.com/
+:foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
+:xlib: https://en.wikipedia.org/wiki/Correctness_(computer_science)
+:gkrellm: https://gkrellm.srcbox.net/
 :clang: https://en.wikipedia.org/wiki/C_(programming_language)
+:autotools: https://en.wikipedia.org/wiki/GNU_Autotools
+:linker: https://en.wikipedia.org/wiki/Linker_(computing)
 :sharedobj: https://en.wikipedia.org/wiki/Shared_library
-:segfault: https://en.wikipedia.org/wiki/Segmentation_fault
 :dlopen: https://man7.org/linux/man-pages/man3/dlopen.3.html
 :dlsym: https://man7.org/linux/man-pages/man3/dlsym.3.html
+
+:hackernews: https://news.ycombinator.com/
+:segfault: https://en.wikipedia.org/wiki/Segmentation_fault
 :setjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
 :acpi: https://en.wikipedia.org/wiki/ACPI
 
-There are many qualities modern software [line-through]#has to# *should* address, especially when this is part of your
-daily job.
-Among the long list of {ilities}[-ilities], some of them are pretty self-explaining like
-{maintainability}[maintainability], but others can be a tad more interesting like {extensibility}[extensibility].
+There are many qualities modern software [line-through]#has to# *should* address - when done properly - by a
+professional.
+Among the long list of {ilities}[-ilities], there are some boring and pretty self-explanatory ones like
+{maintainability}[maintainability], some dogmatic ones like {correctness}[correctness]footnote:[Correctnessily?], but
+also other more interesting ones, like {extensibility}[extensibility].
 
-How a certain quality is best achieved depends, like so often, on of a plethora of things, but let us pick a fun one
-for the course of this post.
-According to {wikipedia}[Wikipedia] extensibility revolves around future growth and also proper design to make this
-possible, but also mentions scripting languages in the black box part.
+How a certain quality is best achieved depends on a plethora of things, but overall the targeted ones should match the
+requirements and the budget to burn.
+Going into detail of even the essential qualities is something with lists like {wikipedia}[Wikipedia], we are far
+better off to stick to a funny one for the remainder of this post.
 
-To me future growth and proper design don't sound like fun in early 2026, therefore scripting languages here we come.
+According to {wikipedia}[Wikipedia] extensibility revolves around future growth and proper design, but also mentions
+scripting languages in the black box part and this is where we jump in.
+So feel free to accompany me here while I delve a bit in my {FOSS}[FOSS]-history and lay out how different approaches
+and scripting languages can be used to create entry points into your software.
 
 image::go_wrong.png[]
 
 == Barebone
 
-The year is 2004 and your project is obviously written in {clang}[C], so
+Unbeknownst to my past self, my first experience with extensibility has been in 2004 when I started my long journey
+with {xlib}[Xlib] and a lightweight system monitor called {deskbar}[deskbar].
+The goal was to print system information like cpu load, battery usage etc. directly onto the root window of the X
+session.
+There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but who likes floating windows in a
+tiling set?
+
+I would have loved to show some screenshots of it in action here, but unfortunately after messing with the beloved
+{autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler this is as far as I
+gotfootnote:[..followed by two kilometres of error trace I am not in the mood to fix right now]:
+
+[source,shell]
+----
+deskbar 0.1
+-----------------
+Build with ZLIB support.......: yes
+Build with PNG support........: yes
+
+Plugins:
+Common Plugins................: Clock CPU Date
+Battery Plugin................: no
+XMMS Plugin...................: no // <.>
+BMP Plugin....................: no // <.>
+Debug Plugin..................: no
+
+The binary will be installed in /usr/local/bin,
+the lib in /usr/local/lib and the plugins
+in /usr/local/lib/deskbar.
+
+Try make now, good luck!
+----
+<.> https://en.wikipedia.org/wiki/XMMS[X Multimedia System (XMMS)]
+<.> I can only guess - the plugin is just an empty stub that returns `NULL`
+
+Still, this output clearly shows there has been a plugin system with conditional compilation and bases solely on
+linker magic and the help of {dlopen}[dlopen] and {dlsym}[dlsym]:
+
+When a binary is put together it may consist of static libraries which are directly included
+
+
+{sharedobj}[Shared objects] or shared libraries can be loaded per runtime with the help of
+
+
+
+In order to load
+
+Back then everything was written in
 the only real thing is to accept contribution in the form of even more C.
 Since integration and compiling the whole project from scratch everytime is quite annoying, you design your own plugin
-system with your good old buddies `dlopen` and `dlsym`:
 
 .{deskbar}[Deskbar]/deskbar/plug.c:97
 [source,c]
