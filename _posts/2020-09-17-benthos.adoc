@@ -9,6 +9,8 @@ tags: streams processor to-be-continued
 categories: tools
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.benthos.dev/
 
 Sometimes you discover tools, that sound really awesome, but still after a while of thinking, you

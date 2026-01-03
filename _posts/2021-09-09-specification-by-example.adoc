@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://en.wikipedia.org/wiki/Test-driven_development
 :2: https://en.wikipedia.org/wiki/Acceptance_testing

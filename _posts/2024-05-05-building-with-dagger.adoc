@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 ////
 https://hub.docker.com/repository/docker/unexist/showcase-dagger-golang/general

@@ -9,6 +9,8 @@ tags: macos hate cynical to-be-continued
 categories: myself
 toc: true
 ---
+:source-highlighter: highlight.js
+
 I've been using macOs for over two years now and my overall experience is:
 I hate it more and more with each successive day.
 

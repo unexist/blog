@@ -9,6 +9,8 @@ tags: ruby watir chromedriver headless
 categories: myself
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://github.com/sparklemotion/mechanize
 :2: http://watir.com/
 :3: https://chromedriver.chromium.org/

@@ -9,6 +9,8 @@ tags: quarkus hoverfly podman showcase
 categories: testing
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://docs.hoverfly.io/projects/hoverfly-java/en/latest/pages/corefunctionality/dsl.html
 :2: https://github.com/
 :3: https://hoverfly.io

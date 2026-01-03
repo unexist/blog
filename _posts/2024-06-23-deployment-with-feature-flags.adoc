@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://en.wikipedia.org/wiki/A/B_testing
 :2: https://en.wikipedia.org/wiki/Feature_toggle#Canary_release

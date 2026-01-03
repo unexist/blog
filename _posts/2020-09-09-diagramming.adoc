@@ -9,6 +9,8 @@ tags: diagrams sequence-diagram plantuml cloud
 categories: tools
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://sequencediagram.org
 :2: https://plantuml.com/
 :3: https://github.com/mingrammer/diagrams/blob/master/README.md

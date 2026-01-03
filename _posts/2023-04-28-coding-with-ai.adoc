@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://openai.com/blog/chatgpt
 :2: https://en.wikipedia.org/wiki/COCOMO

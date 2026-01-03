@@ -9,6 +9,8 @@ tags: specs cucumber gradle spock to-be-continued
 categories: testing
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://cucumber.io
 :2: https://gradle.org
 :3: https://groovy-lang.org

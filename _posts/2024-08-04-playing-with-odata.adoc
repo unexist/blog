@@ -18,6 +18,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://olingo.apache.org/
 :2: https://www.sap.com/products/technology-platform.html

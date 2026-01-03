@@ -9,6 +9,8 @@ tags: kubernetes ansible make helm helmfile ansible to-be-continued
 categories: cloud
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://kubernetes.io/
 :2: https://kind.sigs.k8s.io/docs/user/quick-start/
 :3: https://www.ansible.com/

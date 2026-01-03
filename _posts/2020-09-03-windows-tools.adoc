@@ -9,6 +9,8 @@ tags: java quarkus maven intellij windows
 categories: tech
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://maven.apache.org/
 :2: https://quarkus.io/
 :3: https://www.jetbrains.com/idea/

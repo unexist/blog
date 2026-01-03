@@ -9,6 +9,8 @@ tags: books bookwyrm social
 categories: myself tools
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://bookwyrm.social/
 :2: https://docs.celeryproject.org/en/master/index.html
 :3: https://www.debian.org/

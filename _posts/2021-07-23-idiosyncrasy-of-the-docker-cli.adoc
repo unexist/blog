@@ -8,6 +8,8 @@ tags: docker cli quarkus kafka redpanda
 categories: myself
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://docker.com
 :2: https://quarkus.io
 :3: https://github.com/vectorizedio/redpanda

@@ -9,6 +9,8 @@ tags: adr asciidoc jqassistant markdown
 categories: documentation myself
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://adr.github.io/
 :2: https://daringfireball.net/projects/markdown/
 :3: https://asciidoc.org/

@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 :1: https://prometheus.io/docs/alerting/latest/alertmanager/
 :2: https://medium.com/@letathenasleep/alerting-the-dos-and-don-ts-for-effective-observability-139db9fb49d1

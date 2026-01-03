@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://en.wikipedia.org/wiki/Aspect-oriented_programming
 :2: https://opentelemetry.io/docs/instrumentation/java/manual/#context-propagation

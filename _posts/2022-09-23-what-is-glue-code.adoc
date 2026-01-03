@@ -9,6 +9,8 @@ tags: specification-by-example cucumber karate showcase
 categories: testing
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://en.wikipedia.org/wiki/Acceptance_testing
 :2: https://en.wikipedia.org/wiki/Behavior-driven_development
 :3: https://en.wikipedia.org/wiki/Characterization_test

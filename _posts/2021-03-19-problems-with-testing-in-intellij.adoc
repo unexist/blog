@@ -9,6 +9,8 @@ tags: intellij
 categories: myself
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.jetbrains.com/idea/
 
 Importing projects in {1}[IntelliJ] is usually a problem.

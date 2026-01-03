@@ -9,6 +9,8 @@ tags: people soft-skills management
 categories: myself
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.nngroup.com/articles/skill-mapping/
 
 For a new gig, we started with a bunch of new people with various sets of knowledge and skills.

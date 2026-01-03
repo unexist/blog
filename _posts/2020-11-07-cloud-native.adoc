@@ -9,6 +9,8 @@ tags: quarkus cloud docker kind helm k9s kubernetes to-be-continued
 categories: cloud
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://kubernetes.io/
 :2: https://kind.sigs.k8s.io/
 :3: https://helm.sh/

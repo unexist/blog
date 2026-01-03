@@ -9,6 +9,8 @@ tags: arc42 intellij maven asciidoc
 categories: tools
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://asciidoctor.org/
 :2: https://arc42.org/
 :3: https://asciidoctor.org/docs/asciidoc-writers-guide/

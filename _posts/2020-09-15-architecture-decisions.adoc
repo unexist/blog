@@ -9,6 +9,8 @@ tags: docs adr
 categories: documentation myself
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://adr.github.io/
 :2: https://github.com/npryce/adr-tools
 

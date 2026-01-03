@@ -19,6 +19,7 @@ endif::[]
 :table-caption!:
 :page-liquid:
 :experimental:
+:source-highlighter: highlight.js
 
 :1: https://github.com/npryce/adr-tools
 :2: https://asciidoctor.org/

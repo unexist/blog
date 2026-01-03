@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 :1: https://martinfowler.com/bliki/BoundedContext.html
 :2: https://communicationpatternsbook.com/

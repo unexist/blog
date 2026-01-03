@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://www.asciiart.eu/
 :2: https://github.com/trivago/cluecumber-report-plugin

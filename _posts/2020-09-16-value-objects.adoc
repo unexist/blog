@@ -9,6 +9,8 @@ tags: ddd frameworks
 categories: software-design
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://manifold.systems/
 
 Here, whenever we are talking about the general topic **value objects**, sooner or later we end up

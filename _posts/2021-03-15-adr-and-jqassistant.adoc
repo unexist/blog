@@ -9,6 +9,8 @@ tags: validation adr asciidoc jqassistant showcase
 categories: documentation testing
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://jqassistant.org
 :2: https://adr.github.io/
 :3: https://asciidoc.org/

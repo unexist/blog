@@ -9,6 +9,8 @@ tags: asciidoc antora docs markdown showcase
 categories: tools
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://asciidoctor.org
 :2: https://daringfireball.net/projects/markdown/
 :3: https://antora.org

@@ -9,6 +9,8 @@ tags: java jenv macos
 categories: tools
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.jenv.be/
 :2: https://adoptopenjdk.net/
 

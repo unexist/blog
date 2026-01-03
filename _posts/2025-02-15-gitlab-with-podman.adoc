@@ -19,6 +19,7 @@ endif::[]
 :table-caption!:
 :page-liquid:
 :experimental:
+:source-highlighter: highlight.js
 
 :1: https://docs.docker.com/engine/manage-resources/labels/
 :2: https://en.wikipedia.org/wiki/Convention_over_configuration

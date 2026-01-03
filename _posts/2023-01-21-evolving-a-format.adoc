@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://blog.stoplight.io/consistent-api-urls-with-openapi-and-style-guides
 :2: https://www.apicur.io/

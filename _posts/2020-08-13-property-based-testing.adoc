@@ -9,6 +9,8 @@ tags: java showcase
 categories: testing
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://hypothesis.readthedocs.io/en/latest/
 :2: https://jqwik.net/
 

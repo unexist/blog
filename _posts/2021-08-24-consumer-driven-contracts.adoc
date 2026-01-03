@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 :1: https://en.wikipedia.org/wiki/No_Silver_Bullet
 :2: https://spring.io/projects/spring-cloud-contract

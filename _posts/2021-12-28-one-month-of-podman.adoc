@@ -9,6 +9,8 @@ tags: docker podman jaeger quarkus opentracing opentelemetry gelf fluentd showca
 categories: tools
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://podman.io/getting-started/network
 :2: https://en.wikipedia.org/wiki/Cgroups
 :3: https://www.jaegertracing.io/docs/1.29/deployment/#collector

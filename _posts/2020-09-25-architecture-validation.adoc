@@ -9,6 +9,8 @@ tags: validation ddd showcase
 categories: architecture testing
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.archunit.org/
 :2: https://jqassistant.org/
 :3: https://structure101.com/

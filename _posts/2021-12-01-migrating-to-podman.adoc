@@ -9,6 +9,8 @@ tags: docker podman macos kibana elastic fluentd jaeger showcase
 categories: myself
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.docker.com/products/docker-desktop
 :2: https://www.docker.com/
 :3: https://docs.docker.com/engine/reference/builder/

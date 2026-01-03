@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://docs.asciidoctor.org/asciidoc/latest/blocks/admonitions/
 :2: https://www.apple.com/

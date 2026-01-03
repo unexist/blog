@@ -9,6 +9,8 @@ tags: minikube hyperkit virtualbox dns macos
 categories: cloud
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://github.com/moby/hyperkit
 :2: https://kubernetes.io/
 :3: https://developer.apple.com/documentation/security/disabling_and_enabling_system_integrity_protection

@@ -17,6 +17,7 @@ ifndef::asciidoctorconfigdir[]
 endif::[]
 :figure-caption!:
 :table-caption!:
+:source-highlighter: highlight.js
 
 :1: https://www.nomadproject.io/docs/concepts/scheduling/scheduling
 :2: https://www.nomadproject.io/docs/job-specification/artifact#artifact-stanza=

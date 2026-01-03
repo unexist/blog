@@ -9,6 +9,8 @@ tags: make
 categories: tools
 toc: false
 ---
+:source-highlighter: highlight.js
+
 :1: https://www.gnu.org/software/make/
 :2: https://www.gnu.org/software/make/manual/make.html#index-define
 

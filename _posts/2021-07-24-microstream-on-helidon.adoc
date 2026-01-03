@@ -9,6 +9,8 @@ tags: microstream helidon showcase
 categories: tech
 toc: true
 ---
+:source-highlighter: highlight.js
+
 :1: https://microstream.one/
 :2: https://helidon.io
 :3: https://www.amazon.com/dp/1484245423
