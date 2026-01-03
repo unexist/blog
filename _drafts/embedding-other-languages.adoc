@@ -46,6 +46,7 @@ endif::[]
 :sharedobj: https://en.wikipedia.org/wiki/Shared_library
 :dlopen: https://man7.org/linux/man-pages/man3/dlopen.3.html
 :dlsym: https://man7.org/linux/man-pages/man3/dlsym.3.html
+:convention: https://en.wikipedia.org/wiki/Convention_over_configuration
 
 :hackernews: https://news.ycombinator.com/
 :segfault: https://en.wikipedia.org/wiki/Segmentation_fault
@@ -118,8 +119,8 @@ on linker magic - how we are going to see next.
 
 === Linking late
 
-Again without a big swing, during the linking process all intermediate parts (obj(ect)-files and static libraries) are
-combined to a final executable binary or library:
+Linking is complex topic, but in a nutshell during the linking process all intermediate parts (obj(ect)-files and
+static libraries) are put together and rolled into a final executable binary or library:
 
 .Linking process based on the diagram from {linker}
 [plantuml]
@@ -145,13 +146,12 @@ linker --> bin
 <4> {sharedobj}[Shared objects] can be loaded at runtime
 <3> The artifact can either be a library type or an executable type
 
-The interesting part here is the mention shared objects can also be dynamically loaded at runtime with the help of
-{dlopen}[dlopen] and {dlsym}[dlsym].
+The interesting part here is the mentioned shared objects can also be dynamically loaded at runtime.
 
 === Runtime loading
 
-Everything is in C is a bit more complicated, but the next few lines of code from deskbar demonstrate how this can
-be done:
+Everything in C is a bit more complicated, so let us ignore the scar memory handling and just talk about the two
+calls {dlopen}[dlopen] and {dlsym}[dlsym]:
 
 .{deskbar}[deskbar]/deskbar/plug.c:97
 [source,c]
@@ -178,65 +178,73 @@ if ((err = dlerror ())) // <.>
 entrypoint      = dlsym (element->handle, "db_plug_init"); // <.>
 element->data   = (*entrypoint) (); // <.>
 ----
-<.> Load a named {sharedobj}[shared object] from path with {dlopen}[dlopen]
+<.> Load the named {sharedobj}[shared object] from path
 <.> There is apparently a third buddy, rarely mentioned at all
-<.> Find the address of a named entrypoint with {dlsym}[dlsym]
+<.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
+The entrypoint here is quite interesting, since the main application cannot know what is included in the plugin
+or even what is exported.
+Following the idea of {convention}[Convention over configuration], the defined contract here expects a symbol
+named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer to an initialized struct
+of type `DBPlug`:
 
-This opens some new ways of enriching your software and from your perspective it bases on an understandable and
-approachable API.
-
-.{deskbar}[Deskbar]/plugins/battery.c:58+107
+.{deskbar}[Deskbar]/plugins/battery.c:107
 [source,c]
 ----
-void
-battery_update (void) // <.>
-{
-        int capacity    = 0,
-        percent         = 0;
-
-        char buf[100], state[20];
-
-        /* Get battery info */
-        if (!fd1)
-                {
-                        snprintf (buf, sizeof (buf), "/proc/acpi/battery/BAT%d/state", bat_slot);
-
-                        fd1 = fopen (buf, "r");
-
-                        memset (buf, 0, sizeof (buf));
-                }
-        else
-            fseek (fd1, 0, SEEK_SET);
-...
-}
-
-...
-
 static DbPlug plugin =
 {
-        "Battery",       /* Plugin name */
-        battery_create,  /* Plugin create function */
-        battery_update,  /* Plugin update function */
-        battery_destroy, /* Plugin destroy function */
+    "Battery",       /* Plugin name */
+    battery_create,  /* Plugin create function */
+    battery_update,  /* Plugin update function */
+    battery_destroy, /* Plugin destroy function */
 
-        &data,           /* Plugin data */
-        NULL,            /* Plugin format */
+    &data,           /* Plugin data */
+    NULL,            /* Plugin format */
 
-        3600             /* Plugin update interval */
+    3600             /* Plugin update interval */
 };
 
 DbPlug *
 db_plug_init (void)
 {
-        plug = &plugin; // <.>
+    plug = &plugin;
 
-        return (&plugin);
+    return (&plugin); // <.>
 }
 ----
-<.> This is just an excerpt, but the plugin relies on the {acpi}[ACPI] interface to extract the battery stats
-<.> Here we just pass a struct with function pointers to call the plugin
+<.> Pass the local address back to the main application
+
+Once loaded the plugin is called in the given interval and can pass back data to the main application.
+
+.{deskbar}[Deskbar]/plugins/battery.c:58
+[source,c]
+----
+void
+battery_update (void)
+{
+    int capacity    = 0,
+    percent         = 0;
+
+    char buf[100], state[20];
+
+    /* Get battery info */
+    if (!fd1)
+        {
+            snprintf (buf, sizeof (buf), "/proc/acpi/battery/BAT%d/state", bat_slot); // <.>
+
+            fd1 = fopen (buf, "r");
+
+            memset (buf, 0, sizeof (buf));
+        }
+    else
+        fseek (fd1, 0, SEEK_SET);
+...
+}
+----
+<.> Here the battery plugin checks the battery values from the {acpi}[ACPI] interface
+
+=== Error handling
 
 The learning curve is steep, and you quickly realize allowing custom code offers lots of freedom to enhance the
 software, but like so often with double-edged sword, there is an.. ehm another sharp edge?
