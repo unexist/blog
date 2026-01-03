@@ -76,15 +76,15 @@ image::go_wrong.png[]
 
 == Barebone
 
-Unbeknownst to my past self, I got my first experience with extensibility in 2004, when I started my long journey
-with {xlib}[Xlib].
+Unbeknownst to my past self, I made my first experience with this kind of extensibility in 2004, when I started my long
+journey with {xlib}[Xlib].
 During that time I started a project called {deskbar}[deskbar] with the lofty goal to print
 system information like cpu load, battery usage etc. directly onto the root window of the X session.
 There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but who likes pre-built
 stuff when you can roll your own?
 
-The initial version just included everything in one binary, but I quickly discovered the ergonomics of re-compiling and
-shipping everything together are annoying and I switched to a simple plugin system.
+The initial idea was just to include everything in one binary, but I quickly discovered the ergonomics of re-compiling
+and shipping everything together are annoying and I switched to a simple plugin system.
 
 I would have loved to show some screenshots of deskbar in action here, but unfortunately after messing with
 {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler this is as far as I
@@ -114,23 +114,23 @@ Try make now, good luck!
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional compilation and bases solely
-on linker magic.
+on linker magic - how we are going to see next.
 
 === Linking late
 
-During the linking process the intermediate buildings blocks (namely obj(ect)-files and static libraries) are combined
-to a final library or executable artifact:
+Again without a big swing, during the linking process all intermediate parts (obj(ect)-files and static libraries) are
+combined to a final executable binary or library:
 
 .Linking process based on the diagram from {linker}
 [plantuml]
 ----
-rectangle "Static lib (1)" as lib1
-rectangle "Obj file (2)" as obj1
-rectangle "Obj file" as obj2
+rectangle "Static library (1)" as lib1
+rectangle "Object file (2)" as obj1
+rectangle "Object file" as obj2
 rectangle "Linker" as linker
-rectangle "Lib (3)" as lib3
-rectangle "Shared object (4)" as so
-rectangle "Binary (3)" as bin
+rectangle "Shared object (3)" as so
+rectangle "Library (4)" as lib3
+rectangle "Binary (4)" as bin
 
 lib1 --> linker
 obj1 --> linker
@@ -142,15 +142,16 @@ linker --> bin
 ----
 <1> Static libraries are directly included in the resulting artifact
 <2> Object files are the compiled form of the source code
-<3> The artifact can either be a library type or an executable type
 <4> {sharedobj}[Shared objects] can be loaded at runtime
+<3> The artifact can either be a library type or an executable type
 
-
-Shared objects are a type which can be dynamically loaded at runtime with the help of
-{dlopen}[dlopen] and
-{dlsym}[dlsym].
+The interesting part here is the mention shared objects can also be dynamically loaded at runtime with the help of
+{dlopen}[dlopen] and {dlsym}[dlsym].
 
 === Runtime loading
+
+Everything is in C is a bit more complicated, but the next few lines of code from deskbar demonstrate how this can
+be done:
 
 .{deskbar}[deskbar]/deskbar/plug.c:97
 [source,c]
@@ -164,14 +165,14 @@ snprintf (buf, sizeof (buf), "%s/%s.so", PLUGIN_DIR, file);
 element->handle = dlopen (buf, RTLD_LAZY); // <.>
 
 if ((err = dlerror ())) // <.>
-        {
-                db_log_err ("Cannot load plugin `%s'\n", file);
-                db_log_debug ("dlopen (): %s\n", err);
+    {
+        db_log_err ("Cannot load plugin `%s'\n", file);
+        db_log_debug ("dlopen (): %s\n", err);
 
-                free (element);
+        free (element);
 
-                return;
-        }
+        return;
+    }
 
 /* Get entrypoint and call it */
 entrypoint      = dlsym (element->handle, "db_plug_init"); // <.>
