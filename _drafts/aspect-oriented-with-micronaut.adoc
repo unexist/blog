@@ -9,6 +9,7 @@ tags: tech micronaut aspect-oriented-programming showcase
 categories: tech
 toc: true
 ---
+:source-highlighter: highlight.js
 
 [source,xml]
 ----
