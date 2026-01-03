@@ -83,7 +83,10 @@ system information like cpu load, battery usage etc. directly onto the root wind
 There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but who likes pre-built
 stuff when you can roll your own?
 
-I would have loved to show some screenshots of it in action here, but unfortunately after messing with the beloved
+The initial version just included everything in one binary, but I quickly discovered the ergonomics of re-compiling and
+shipping everything together are annoying and I switched to a simple plugin system.
+
+I would have loved to show some screenshots of deskbar in action here, but unfortunately after messing with
 {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler this is as far as I
 gotfootnote:[..followed by two kilometres of error trace I am not in the mood to fix right now]:
 
@@ -111,36 +114,45 @@ Try make now, good luck!
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional compilation and bases solely
-on {linker}[linker] magic.
-During the linking process the different immediate buildings blocks (namely obj(ect)-files and static libraries) are
-assembled to a final executable:
+on linker magic.
 
+=== Linking late
+
+During the linking process the intermediate buildings blocks (namely obj(ect)-files and static libraries) are combined
+to a final library or executable artifact:
+
+.Linking process based on the diagram from {linker}
 [plantuml]
 ----
-lib
-lib
+rectangle "Static lib (1)" as lib1
+rectangle "Obj file (2)" as obj1
+rectangle "Obj file" as obj2
+rectangle "Linker" as linker
+rectangle "Lib (3)" as lib3
+rectangle "Shared object (4)" as so
+rectangle "Binary (3)" as bin
 
-linker
+lib1 --> linker
+obj1 --> linker
+obj2 --> linker
 
-lib
-shared obbject
-binary
+linker --> lib3
+linker --> so
+linker --> bin
 ----
+<1> Static libraries are directly included in the resulting artifact
+<2> Object files are the compiled form of the source code
+<3> The artifact can either be a library type or an executable type
+<4> {sharedobj}[Shared objects] can be loaded at runtime
 
 
-but this can also be done dynamically at runtime with the help of
-{dlopen}[dlopen] and {dlsym}[dlsym].
-Theses {sharedobj}[shared objects] need to be prepared and treated specially,
+Shared objects are a type which can be dynamically loaded at runtime with the help of
+{dlopen}[dlopen] and
+{dlsym}[dlsym].
 
+=== Runtime loading
 
-
-In order to load
-
-Back then everything was written in
-the only real thing is to accept contribution in the form of even more C.
-Since integration and compiling the whole project from scratch everytime is quite annoying, you design your own plugin
-
-.{deskbar}[Deskbar]/deskbar/plug.c:97
+.{deskbar}[deskbar]/deskbar/plug.c:97
 [source,c]
 ----
 DbPlugElement *element = NULL;
