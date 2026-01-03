@@ -47,13 +47,13 @@ endif::[]
 :dlopen: https://man7.org/linux/man-pages/man3/dlopen.3.html
 :dlsym: https://man7.org/linux/man-pages/man3/dlsym.3.html
 :convention: https://en.wikipedia.org/wiki/Convention_over_configuration
+:acpi: https://en.wikipedia.org/wiki/ACPI
 
 :hackernews: https://news.ycombinator.com/
 :segfault: https://en.wikipedia.org/wiki/Segmentation_fault
 :setjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
-:acpi: https://en.wikipedia.org/wiki/ACPI
 
 There are many qualities modern software [line-through]#has to# *should* address especially when done properly.
 Among the long list of {ilities}[-ilities], there are some boring
@@ -117,8 +117,8 @@ Try make now, good luck!
 Nevertheless, this output clearly proves there has been a plugin system with conditional compilation and bases solely
 on linker magic - how we are going to see next.
 
-=== Linking late
-
+.Excursion: Linking late
+****
 Linking is complex topic, but in a nutshell during the linking process all intermediate parts (obj(ect)-files and
 static libraries) are put together and rolled into a final executable binary or library:
 
@@ -147,6 +147,7 @@ linker --> bin
 <3> The artifact can either be a library type or an executable type
 
 The interesting part here is the mentioned shared objects can also be dynamically loaded at runtime.
+****
 
 === Runtime loading
 
@@ -189,7 +190,7 @@ Following the idea of {convention}[Convention over configuration], the defined c
 named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer to an initialized struct
 of type `DBPlug`:
 
-.{deskbar}[Deskbar]/plugins/battery.c:107
+.{deskbar}[deskbar]/plugins/battery.c:107
 [source,c]
 ----
 static DbPlug plugin =
@@ -215,9 +216,9 @@ db_plug_init (void)
 ----
 <.> Pass the local address back to the main application
 
-Once loaded the plugin is called in the given interval and can pass back data to the main application.
+Once loaded the plugin is called in the given interval and can pass back data to the main application via init.
 
-.{deskbar}[Deskbar]/plugins/battery.c:58
+.{deskbar}[deskbar]/plugins/battery.c:58
 [source,c]
 ----
 void
@@ -246,6 +247,8 @@ battery_update (void)
 
 === Error handling
 
+
+
 The learning curve is steep, and you quickly realize allowing custom code offers lots of freedom to enhance the
 software, but like so often with double-edged sword, there is an.. ehm another sharp edge?
 {segfault}[Segmentation faults], the bane of software engineering, don't make halt inside plugins like they should, but
@@ -259,8 +262,6 @@ don't want to violate the famous saying:
 WE DO NOT BREAK USERSPACE!
 
 Taking this advice by heart, you basically dive into the book and read on.
-
-image::few_hours_later.png[]
 
 Right there, in the forbidden section of the book, you stumble upon another pair of
 buddies - `setjmp` and `longjmp`:

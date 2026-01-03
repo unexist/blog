@@ -77,8 +77,8 @@ the  range of this just adds clutter and is completely overkill for this really 
 
 So still why do I insist this adds benefits?
 
-=== Excursion: Visual perception
-
+.Excursion: Visual perception
+****
 We humans are {9}[really good in visual perception] and a lot of information is gathered that way in
 literally a glimpse.
 
@@ -87,6 +87,7 @@ How long does it take to read the single requirement vs how long do you have to 
 
 NOTE: There are so many sources to cite from, if you are curious about this whole topic please
 give {7}[Google Scholar] a spin, but going further probably leads away from the point I want to make.
+****
 
 === Technical use-cases
 
