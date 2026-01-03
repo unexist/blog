@@ -48,9 +48,9 @@ endif::[]
 :dlsym: https://man7.org/linux/man-pages/man3/dlsym.3.html
 :convention: https://en.wikipedia.org/wiki/Convention_over_configuration
 :acpi: https://en.wikipedia.org/wiki/ACPI
-
-:hackernews: https://news.ycombinator.com/
 :segfault: https://en.wikipedia.org/wiki/Segmentation_fault
+:torvalds: https://en.wikipedia.org/wiki/Linus_Torvalds
+
 :setjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
@@ -179,8 +179,8 @@ if ((err = dlerror ())) // <.>
 entrypoint      = dlsym (element->handle, "db_plug_init"); // <.>
 element->data   = (*entrypoint) (); // <.>
 ----
-<.> Load the named {sharedobj}[shared object] from path
-<.> There is apparently a third buddy, rarely mentioned at all
+<.> Load the named shared object from path
+<.> There is apparently a third call, but rarely mentioned at all
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
@@ -216,7 +216,7 @@ db_plug_init (void)
 ----
 <.> Pass the local address back to the main application
 
-Once loaded the plugin is called in the given interval and can pass back data to the main application via init.
+Once loaded the plugin is called in the given interval and can exchange data with the main application.
 
 .{deskbar}[deskbar]/plugins/battery.c:58
 [source,c]
@@ -245,44 +245,57 @@ battery_update (void)
 ----
 <.> Here the battery plugin checks the battery values from the {acpi}[ACPI] interface
 
-=== Error handling
+Allowing contribution this way is really easy and powerful, but like so often comes with a catch.
+{segfault}[Segmentation faults], the bane of software engineering, don't make
+halt inside plugins like they should, but they wipe the board and kill the entire application.
 
-
-
-The learning curve is steep, and you quickly realize allowing custom code offers lots of freedom to enhance the
-software, but like so often with double-edged sword, there is an.. ehm another sharp edge?
-{segfault}[Segmentation faults], the bane of software engineering, don't make halt inside plugins like they should, but
-they wipe the board and kill the entire application!
-
-Shocked as you are, you grab your dusty C-bible and look for ways to mitigate this, since it goes without question you
-don't want to violate the famous saying:
+I think {torvalds}[Torvalds] nailed it perfectly and I agree this should never happen:
 
 [quote,Linus Torvals,https://www.shutupmauro.com/]
 [line-through]#Mauro, SHUT THE FUCK UP!# +
 WE DO NOT BREAK USERSPACE!
 
-Taking this advice by heart, you basically dive into the book and read on.
+I am kind of surprised how far I went in trying to keep problems in the plugin at bay.
+The original project included memory managementfootnote:[Check `mem.c` if you are curious] for plugins and also applied
+the next two calls I'd like to demonstrate next.
 
-Right there, in the forbidden section of the book, you stumble upon another pair of
-buddies - `setjmp` and `longjmp`:
+=== Error handling
 
-.{deskbar}[Deskbar]/deskbar/plug.c:32
+Handling segmentation faults properly is really difficult and the common sense is normally catch them and exit
+gracefully when possible.
+Still, there are cases when faults _can_ be safely ignored and a plugin interface is a paragon for this.
+
+This can be done with the pair of {setjmp}[setjmp] and {longjmp}[longjmp], which behave for most practical senses
+like a {goto}[goto] on steroids:
+
+.{deskbar}[Deskbar]/deskbar/plug.c:25
 [source,c]
 ----
-if (setjmp (env) == 0) // <.>
-        plugfunc ();
-else
+static int¬                                                                                                                                                                                                                                                                                                                                                              26 save_call (DbPlugElement *element,¬
+save_call (DbPlugFunc plugfunc,
+    DbPlugFunc plugfunc
+    const char *name)
+{
+    if (plugfunc)
         {
-                db_log_mesg ("Ayyyee! Segmentation fault in plugin %s!\n",
-                                                                 element->data->name); // <.>
-                db_log_debug ("Call to %s () failed\n", name);
-                db_plug_unload (element);
+            if (setjmp (env) == 0) // <.>
+                plugfunc ();
+            else
+                {
+                    db_log_mesg ("Ayyyee! Segmentation fault in plugin %s!\n", element->data->name); // <.>
+                    db_log_debug ("Call to %s () failed\n", name);
+                    db_plug_unload (element);
 
-                return (1);
-        }
+                    return (1);
+                }
+....
+}
 ----
-<.> {setjmp}[setjmp] is a bit arcane magic, but essentially sets a return markerfootnote:[Kind of a {goto}[goto label]] on the stack
+<.> Save stack and instruction pointer for later use when it is for the first time; otherwise ditch the plugin
 <.> Well, different times back then..
+
+When the application receives the bad signal `SISEGV`, it checks if there are stored stack and instruction values and
+rewinds the stack accordingly:
 
 .{deskbar}[Deskbar]/deskbar/sig.c:35
 [source,c]
@@ -296,10 +309,9 @@ case SIGSEGV:
         abort ();
 break;
 ----
-<.> Once a segmentation fault occurs, unwind the stack with {longjmp}[longjmp] until the previous marker has been found
-(if any) and try again
+<.>  Check the values and pass control if necessary; otherwise just bail out
 
-Once in place you feel content with the solution, reflect shortly on the impacts and release it to the wild.
+
 
 |===
 | Ease of use | Richness of API | Language agnostic | Error handling
