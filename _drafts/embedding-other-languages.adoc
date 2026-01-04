@@ -356,7 +356,7 @@ later replacement with{Ruby}[Ruby] after a few years in this glorious {issue1}[i
 
 === Integrating Lua
 
-I am not entire sure where I picked up Lua, but I never played {wow}[WoW] so probably from somewhere
+I am not entire sure where I picked Lua up, but I never played {wow}[WoW] so probably from somewhere
 else and I can only talk about the state and API from back then.
 
 Adding a scripting language solves quite a few problems:
@@ -457,6 +457,10 @@ After a dive into the code there were some obviously problems and also a blatant
 can find the patch here if you are interested:
 
 <{patchgist}>
+
+And without further ado here is finally the screenshot of the scripting part in action:
+
+image::subtle-0.7b.png[]
 
 === Integrating Ruby
 
