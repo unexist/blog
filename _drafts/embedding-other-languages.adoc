@@ -20,15 +20,11 @@ endif::[]
 :page-liquid:
 :source-highlighter: highlight.js
 
-:deskbar: https://sourceforge.net/projects/deskbar/
-:subtle: https://github.com/unexist/subtle
 :subtle-rs: https://github.com/unexist/subtle-rs
 :touchjs: https://github.com/unexist/touchjs
 :rubtle: https://github.com/unexist/rubtle
 :extism: https://extism.org/
 :wasm: https://webassembly.org/
-:lua: https://www.lua.org/
-:ruby: https://www.ruby-lang.org/en/
 
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
 :maintainability: https://en.wikipedia.org/wiki/Maintainability
@@ -37,6 +33,7 @@ endif::[]
 :wikipedia: https://en.wikipedia.org
 :foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
 :xlib: https://en.wikipedia.org/wiki/Correctness_(computer_science)
+:deskbar: https://sourceforge.net/projects/deskbar/
 :gkrellm: https://gkrellm.srcbox.net/
 :clang: https://en.wikipedia.org/wiki/C_(programming_language)
 :autotools: https://en.wikipedia.org/wiki/GNU_Autotools
@@ -53,42 +50,55 @@ endif::[]
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
 :signal: https://man7.org/linux/man-pages/man7/signal.7.html
+:subtle: https://github.com/unexist/subtle
+:lua: https://www.lua.org/
+:ruby: https://www.ruby-lang.org/en/
+:issue1: https://subtle.de/issues/1
+:wow: https://worldofwarcraft.blizzard.com/en-us/
+:sublets: https://projects.unexist.dev/projects/subtle/wiki/Writing_sublets
+:patchgist: https://gist.github.com/unexist/4ee3cb94c91555b1bac01e23f992b9e4
 
-There are many qualities modern software [line-through]#has to# *should* address especially when done properly.
-Among the long list of {ilities}[-ilities], there are some boring
-and pretty self-explanatory ones like {maintainability}[maintainability], some dogmatic
-ones like {correctness}[correctness]footnote:[Correctnessily] and
-also interesting ones, like {extensibility}[extensibility].
+There are many qualities modern software [line-through]#has to# *should* address especially when
+done properly.
+Among the long list of {ilities}[-ilities],
+there are some boring and pretty self-explanatory ones like {maintainability}[maintainability],
+some dogmatic ones like {correctness}[correctness]footnote:[Correctness-ily?]
+and also interesting ones, like {extensibility}[extensibility].
 
-How a certain quality is best achieved depends on a plethora of things, but overall the targeted ones should match the
-requirements and the budget to burn.
-Stay put, we don't want to dwell on this longer than this introduction has to be, and we definitely also don't want to
-go into detail about essentials ones, this is best done by something with affinity to lists like
-{wikipedia}[Wikipedia].
+How a certain quality is best achieved depends on a plethora of things, but overall the targeted
+ones should match the requirements and the budget to burn.
+Stay put, we don't want to dwell on this longer than this introduction has to be, and we definitely
+also don't want to go into detail about essentials ones, this is best done by something with
+affinity to lists like {wikipedia}[Wikipedia].
 Instead, we fast-forward directly to extensibility and see what this is all about.
 
-According to Wikipedia extensibility revolves around future growth and proper design, but also mentions
-scripting languages in the black box and scripting sounds about right for the remainder of this post.
-So please be my guest while I delve a bit in my {FOSS}[FOSS]-history and lay out how different approaches and
-why integrating scripting languages is a great idea.
+According to Wikipedia extensibility revolves around future growth and proper design, but also
+mentions scripting languages in the black box and scripting sounds about right for the remainder of
+this post.
+So please be my guest while I delve a bit in my {FOSS}[FOSS]-history
+and lay out how different approaches and why integrating scripting languages is a great idea.
 
 image::go_wrong.png[]
 
 == Barebone
 
-Unbeknownst to my past self, I made my first experience with this kind of extensibility in 2004, when I started my long
-journey with {xlib}[Xlib].
-During that time I started a project called {deskbar}[deskbar] with the lofty goal to print
-system information like cpu load, battery usage etc. directly onto the root window of the X session.
-There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but who likes pre-built
+Unbeknownst to my past self, I made my first experience with this kind of extensibility in 2004,
+when I started my long journey with {xlib}[Xlib].
+During that time I started a project called {deskbar}[deskbar] with
+the lofty goal to print system information like cpu load, battery usage etc. directly onto the root
+window of the X session.
+There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but
+who likes pre-built
 stuff when you can roll your own?
 
-The initial idea was just to include everything in one binary, but I quickly discovered the ergonomics of re-compiling
-and shipping everything together are annoying and I switched to a simple plugin system.
+The initial idea was just to include everything in one binary, but I quickly discovered the
+ergonomics of re-compiling and shipping everything together are annoying and I switched to a simple
+plugin system.
 
-I would have loved to show some screenshots of deskbar in action here, but unfortunately after messing with
-{autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler this is as far as I
-gotfootnote:[..followed by two kilometres of error trace I am not in the mood to fix right now]:
+I would have loved to show some screenshots of deskbar in action here, but unfortunately after
+messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler
+this is as far as I gotfootnote:[..followed by two kilometres of error trace I am not in the mood
+to fix right now]:
 
 [source,shell]
 ----
@@ -113,13 +123,14 @@ Try make now, good luck!
 <.> https://en.wikipedia.org/wiki/XMMS[X Multimedia System (XMMS)]
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
 
-Nevertheless, this output clearly proves there has been a plugin system with conditional compilation and bases solely
-on linker magic - how we are going to see next.
+Nevertheless, this output clearly proves there has been a plugin system with conditional compilation
+and bases solely on linker magic - how we are going to see next.
 
 .Excursion: Linking late
 ****
-Linking is complex topic, but in a nutshell during the linking process all intermediate parts (obj(ect)-files and
-static libraries) are put together and rolled into a final executable binary or library:
+Linking is complex topic, but in a nutshell during the linking process all intermediate parts
+(obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
+library:
 
 .Linking process based on the diagram from {linker}
 [plantuml]
@@ -148,8 +159,8 @@ linker --> bin
 
 === Runtime loading
 
-Everything in C is a bit more complicated, so let us ignore the scar memory handling and just talk about the two
-calls {dlopen}[dlopen] and {dlsym}[dlsym]:
+Everything in C is a bit more complicated, so let us ignore the scar memory handling and just talk
+about the two calls {dlopen}[dlopen] and {dlsym}[dlsym]:
 
 .{deskbar}[deskbar]/deskbar/plug.c:97
 [source,c]
@@ -181,11 +192,11 @@ element->data   = (*entrypoint) (); // <.>
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
-The entrypoint here is quite interesting, since the main application cannot know what is included in the plugin
-or even what is exported.
-Following the idea of {convention}[Convention over configuration], the defined contract here expects a symbol
-named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer to an initialized struct
-of type `DBPlug`:
+The entrypoint here is quite interesting, since the main application cannot know what is included in
+the plugin or even what is exported.
+Following the idea of {convention}[Convention over configuration], the defined contract here expects
+a symbol named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer
+to an initialized struct of type `DBPlug`:
 
 .{deskbar}[deskbar]/plugins/battery.c:107
 [source,c]
@@ -213,7 +224,8 @@ db_plug_init (void)
 ----
 <.> Pass the local address back to the main application
 
-Once loaded the plugin is called in the given interval and can exchange data with the main application.
+Once loaded the plugin is called in the given interval and can exchange data with the main
+application.
 
 .{deskbar}[deskbar]/plugins/battery.c:58
 [source,c]
@@ -243,8 +255,9 @@ battery_update (void)
 <.> Here the battery plugin checks the battery values from the {acpi}[ACPI] interface
 
 Allowing contribution this way is really easy and powerful, but like so often comes with a catch.
-{segfault}[Segmentation faults], the bane of software engineering, don't make
-halt inside plugins like they should, but they wipe the board and kill the entire application.
+{segfault}[Segmentation faults], the bane of software
+engineering, don't make halt inside plugins like they should, but they wipe the board and kill the
+entire application.
 
 I think {torvalds}[Torvalds] nailed it perfectly and I agree this should never happen:
 
@@ -253,19 +266,20 @@ I think {torvalds}[Torvalds] nailed it perfectly and I agree this should never h
 WE DO NOT BREAK USERSPACE!
 
 I am kind of surprised how far I went in trying to keep problems in the plugin at bay.
-The original project included memory managementfootnote:[Check `mem.c` if you are curious] for plugins and also applied
-the next two calls I'd like to demonstrate next.
+The original project included memory managementfootnote:[Check `mem.c` if you are curious] for
+plugins and also applied the next two calls I'd like to demonstrate next.
 
 === Error handling
 
-Handling segmentation faults properly is really difficult and the common sense is normally catch them and exit
-gracefully when possible.
-Still, there are cases when faults _can_ be safely ignored and a plugin interface is a paragon for this.
+Handling segmentation faults properly is really difficult and the common sense is normally catch
+them and exit gracefully when possible.
+Still, there are cases when faults _can_ be safely ignored and a plugin interface is a paragon for
+this.
 
-This can be done with the pair of {setjmp}[setjmp] and {longjmp}[longjmp], which behave for most practical senses
-like a {goto}[goto] on steroids:
+This can be done with the pair of {setjmp}[setjmp] and {longjmp}[longjmp], which behave for most
+practical senses like a {goto}[goto] on steroids:
 
-.{deskbar}[Deskbar]/deskbar/plug.c:25
+.{deskbar}[deskbar]/deskbar/plug.c:25
 [source,c]
 ----
 static int¬                                                                                                                                                                                                                                                                                                                                                              26 save_call (DbPlugElement *element,¬
@@ -290,23 +304,31 @@ save_call (DbPlugElement *element,
     return (0);
 }
 ----
-<.> Save stack and instruction pointer for later use when it is for the first time; otherwise ditch the plugin
+<.> Save stack and instruction pointer for later use when it is for the first time; otherwise ditch
+the plugin
 <.> Well, different times back then..
 
-When the application receives the bad signal `SISEGV`, it checks if there are stored stack and instruction values and
-rewinds the stack accordingly:
+When the application receives the bad {signal}[signal] `SISEGV`, it checks if there are stored stack
+and instruction values and rewinds the stack accordingly:
 
-.{deskbar}[Deskbar]/deskbar/sig.c:35
+.{deskbar}[deskbar]/deskbar/sig.c:35
 [source,c]
 ----
-case SIGSEGV:
-        longjmp (env, 1); // <.>
+static void
+sig_handler (int sig)
+{
+    switch (sig)
+        {
+            case SIGSEGV:
+                    longjmp (env, 1); // <.>
 
-        db_log_debug ("Something went wrong! Segmentation fault!\n");
-        db_sig_destroy ();
+                    db_log_debug ("Something went wrong! Segmentation fault!\n");
+                    db_sig_destroy ();
 
-        abort ();
-break;
+                    abort ();
+            break;
+...
+}
 ----
 <.>  Check the values and pass control if necessary; otherwise just bail out
 
@@ -315,24 +337,140 @@ break;
 |===
 | Ease of use | Richness of API | Language agnostic | Error handling
 
-| Requires compilation and linking
-| Language + host provided
-| No, requires plugins to be in Cfootnote:[Technically everything that can be linked, so other languages _might_
-actually be possible here. Dare I to try {rust}[Rust]?]
-| Arcane - requires stack unwinding
+| Low; requires compilation and linking
+| The API is simple, but can be enriched by the host
+| No; requires plugins to be in Cfootnote:[Technically everything that can be linked, so other
+languages _might_ actually be possible here. Dare I to try {rust}[Rust]?]
+| Arcane; requires stack unwinding
 |===
 
 == Scripting languages
 
-Still happy with the success of the previous project, you think the previous great thing is lacking in design and
-ambition and you devise something new.
+Three years later in 2007 I continued on building upon my Xlib skills and started my long-lasting
+project {subtle}[subtle].
 
+Over the years there have been many major breaking changes, from the initial design to the state it
+currently is in.
+Two of the post-related changes were the integration of the scripting language {lua}[Lua] and its
+later replacement with{Ruby}[Ruby] after a few years in this glorious {issue1}[issue #1].
+
+=== Integrating Lua
+
+I am not entire sure where I picked up Lua, but I never played {wow}[WoW] so probably from somewhere
+else and I can only talk about the state and API from back then.
+
+Adding a scripting language solves quite a few problems:
+
+- File loading and parsing can be offloaded to the language core
+- The language itself comes with a basic subset of things you can do with it
+- Config handling can also be directly offloaded
+
+Starting with the easy part, offloading the config handling was one of the first things I did and
+this made a config like this entirely possible:
+
+.{subtle}[subtle-0.7b]/config/config.lua:1
+[source,lua]
+----
+-- Options config
+font = {
+    face    = "lucidatypewriter",  -- Font face for the text
+    style   = "medium",            -- Font style (medium|bold|italic)
+    size    = 12                   -- Font size
+}
+
+-- Color config
+colors = {
+    font       = "#ffffff",        -- Color of the font
+    border     = "#ffffff",        -- Color of the border/tiles
+    normal     = "#CFDCE6",        -- Color of the inactive windows
+    focus      = "#6096BF",        -- Color of the focussed window
+    shade      = "#bac5ce",        -- Color of shaded windows
+    background = "#596F80"         -- Color of the root background
+}
+...
+----
+
+The battery plugin from before, meanwhile rebranded to {sublets}[sublets], lost a bit of its
+arcaneness and became quite readable:
+
+.{subtle}[subtle-0.7b]/sublets/battery.lua:30
+[source,lua]
+----
+-- Get remaining battery in percent
+function battery:meter()
+    local f = io.open("/proc/acpi/battery/BAT" .. battery.slot .. "/state", "r")
+    local info = f:read("*a")
+    f:close()
+
+    _, _, battery.remaining = string.find(info, "remaining capacity:%s*(%d+).*")
+    _, _, battery.rate      = string.find(info, "present rate:%s*(%d+).*")
+    _, _, battery.state                     = string.find(info, "charging state:%s*(%a+).*")
+
+    return(math.floor(battery.remaining * 100 / battery.capacity))
+end
+----
+
+Trying my luck to actual attempt to compile it to provide a screenshot this time ended quickly as
+well:
+
+[source,shell]
+----
+$ ./configure && make
+...
+subtle 0.7b
+-----------------
+Binary....................: /usr/local/bin
+Sublets...................: /usr/local/share/subtle
+Config....................: /usr/local/etc/subtle
+
+Debugging messages........:
+
+Try make now, good luck!
+
+make  all-recursive
+make[1]: Entering directory '/home/unexist/build/subtle-0.7b'
+Making all in src
+make[2]: Entering directory '/home/unexist/build/subtle-0.7b/src'
+if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-client.o -MD -MP -MF ".deps/subtle-client.Tpo" -c -o subtle-client.o `test -f 'client.c' || echo './'`client.c; \
+then mv -f ".deps/subtle-client.Tpo" ".deps/subtle-client.Po"; else rm -f ".deps/subtle-client.Tpo"; exit 1; fi
+if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-display.o -MD -MP -MF ".deps/subtle-display.Tpo" -c -o subtle-display.o `test -f 'display.c' || echo './'`display.c; \
+then mv -f ".deps/subtle-display.Tpo" ".deps/subtle-display.Po"; else rm -f ".deps/subtle-display.Tpo"; exit 1; fi
+if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-event.o -MD -MP -MF ".deps/subtle-event.Tpo" -c -o subtle-event.o `test -f 'event.c' || echo './'`event.c; \
+then mv -f ".deps/subtle-event.Tpo" ".deps/subtle-event.Po"; else rm -f ".deps/subtle-event.Tpo"; exit 1; fi
+event.c: In function ‘subEventLoop’:
+event.c:352:57: error: implicit declaration of function ‘subSubletSift’; did you mean ‘subSubletKill’? [-Wimplicit-function-declaration]
+  352 |                                                         subSubletSift(1);
+      |                                                         ^~~~~~~~~~~~~
+      |                                                         subSubletKill
+make[2]: *** [Makefile:310: subtle-event.o] Error 1
+make[2]: Leaving directory '/home/unexist/build/subtle-0.7b/src'
+make[1]: *** [Makefile:233: all-recursive] Error 1
+make[1]: Leaving directory '/home/unexist/build/subtle-0.7b'
+make: *** [Makefile:171: all] Error 2
+----
+
+This is kind of embarrassing for an official release, but didn't stop us this time.
+
+image::few_hours_later.png[]
+
+After a dive into the code there were some obviously problems and also a blatant oversight, but you
+can find the patch here if you are interested:
+
+<{patchgist}>
+
+=== Integrating Ruby
+
+=== Integrating JavaScript
+
+=== Recap
 
 |===
 | Ease of use | Richness of API | Language agnostic | Error handling
 |===
 
 == Webassembly
+
+=== Recap
 
 |===
 | Ease of use | Richness of API | Language agnostic | Error handling
