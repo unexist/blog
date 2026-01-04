@@ -100,8 +100,10 @@ messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code wi
 this is as far as I gotfootnote:[..followed by two kilometres of error trace I am not in the mood
 to fix right now]:
 
+.Build attempt of {deskbar}[deskbar]
 [source,shell]
 ----
+$ ./configure && make
 deskbar 0.1
 -----------------
 Build with ZLIB support.......: yes
@@ -119,9 +121,36 @@ the lib in /usr/local/lib and the plugins
 in /usr/local/lib/deskbar.
 
 Try make now, good luck!
+
+make  all-recursive
+make[1]: Entering directory '/home/unexist/build/deskbar-0.1'
+...
+/bin/bash ../libtool  --tag=CC   --mode=compile gcc -DHAVE_CONFIG_H -I. -I..     -g -O2  -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c -o htable.lo htable.c
+libtool: compile:  gcc -DHAVE_CONFIG_H -I. -I.. -g -O2 -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c htable.c  -fPIC -DPIC -o .libs/htable.o
+In file included from htable.c:2:
+/usr/include/string.h:466:13: error: storage class specified for parameter 'explicit_bzero'
+  466 | extern void explicit_bzero (void *__s, size_t __n) __THROW __nonnull ((1)) // <.>
+      |             ^~~~~~~~~~~~~~
+/usr/include/string.h:471:14: error: make[2]: *** [Makefile:457: htable.lo] Error 1
+make[2]: Leaving directory '/home/unexist/build/deskbar-0.1/libdeskbar'
+make[1]: *** [Makefile:479: all-recursive] Error 1
+make[1]: Leaving directory '/home/unexist/build/deskbar-0.1'
+make: *** [Makefile:374: all] Error 2storage class specified for parameter 'strsep'
+  471 | extern char *strsep (char **__restrict __stringp,
+      |              ^~~~~~
+/usr/include/string.h:478:14: error: storage class specified for parameter 'strsignal'
+  478 | extern char *strsignal (int __sig) __THROW;
+      |              ^~~~~~~~~
+...
+make[2]: *** [Makefile:457: htable.lo] Error 1
+make[2]: Leaving directory '/home/unexist/build/deskbar-0.1/libdeskbar'
+make[1]: *** [Makefile:479: all-recursive] Error 1
+make[1]: Leaving directory '/home/unexist/build/deskbar-0.1'
+make: *** [Makefile:374: all] Error 2
 ----
 <.> https://en.wikipedia.org/wiki/XMMS[X Multimedia System (XMMS)]
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
+<.> Yes, oh well..
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional compilation
 and bases solely on linker magic - how we are going to see next.
@@ -413,6 +442,7 @@ end
 Trying my luck to actual attempt to compile it to provide a screenshot this time ended quickly as
 well:
 
+.Build attempt of {subtle}[subtle-0.7b]
 [source,shell]
 ----
 $ ./configure && make
@@ -430,11 +460,7 @@ Try make now, good luck!
 make  all-recursive
 make[1]: Entering directory '/home/unexist/build/subtle-0.7b'
 Making all in src
-make[2]: Entering directory '/home/unexist/build/subtle-0.7b/src'
-if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-client.o -MD -MP -MF ".deps/subtle-client.Tpo" -c -o subtle-client.o `test -f 'client.c' || echo './'`client.c; \
-then mv -f ".deps/subtle-client.Tpo" ".deps/subtle-client.Po"; else rm -f ".deps/subtle-client.Tpo"; exit 1; fi
-if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-display.o -MD -MP -MF ".deps/subtle-display.Tpo" -c -o subtle-display.o `test -f 'display.c' || echo './'`display.c; \
-then mv -f ".deps/subtle-display.Tpo" ".deps/subtle-display.Po"; else rm -f ".deps/subtle-display.Tpo"; exit 1; fi
+...
 if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-event.o -MD -MP -MF ".deps/subtle-event.Tpo" -c -o subtle-event.o `test -f 'event.c' || echo './'`event.c; \
 then mv -f ".deps/subtle-event.Tpo" ".deps/subtle-event.Po"; else rm -f ".deps/subtle-event.Tpo"; exit 1; fi
 event.c: In function ‘subEventLoop’:
