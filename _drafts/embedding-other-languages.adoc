@@ -29,8 +29,6 @@ endif::[]
 :wasm: https://webassembly.org/
 :lua: https://www.lua.org/
 :ruby: https://www.ruby-lang.org/en/
-:github: https://github.com/
-:codeberg: https://codeberg.org/
 
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
 :maintainability: https://en.wikipedia.org/wiki/Maintainability
@@ -50,10 +48,11 @@ endif::[]
 :acpi: https://en.wikipedia.org/wiki/ACPI
 :segfault: https://en.wikipedia.org/wiki/Segmentation_fault
 :torvalds: https://en.wikipedia.org/wiki/Linus_Torvalds
-
+:rust: https://rust-lang.org/
 :setjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :longjmp: https://man7.org/linux/man-pages/man3/setjmp.3.html
 :goto: https://learn.microsoft.com/en-us/cpp/c-language/goto-and-labeled-statements-c
+:signal: https://man7.org/linux/man-pages/man7/signal.7.html
 
 There are many qualities modern software [line-through]#has to# *should* address especially when done properly.
 Among the long list of {ilities}[-ilities], there are some boring
@@ -144,9 +143,7 @@ linker --> bin
 <1> Static libraries are directly included in the resulting artifact
 <2> Object files are the compiled form of the source code
 <4> {sharedobj}[Shared objects] can be loaded at runtime
-<3> The artifact can either be a library type or an executable type
-
-The interesting part here is the mentioned shared objects can also be dynamically loaded at runtime.
+<3> The result can either be a shared, library or executable type
 ****
 
 === Runtime loading
@@ -272,7 +269,7 @@ like a {goto}[goto] on steroids:
 [source,c]
 ----
 static int¬                                                                                                                                                                                                                                                                                                                                                              26 save_call (DbPlugElement *element,¬
-save_call (DbPlugFunc plugfunc,
+save_call (DbPlugElement *element,
     DbPlugFunc plugfunc
     const char *name)
 {
@@ -288,7 +285,9 @@ save_call (DbPlugFunc plugfunc,
 
                     return (1);
                 }
-....
+        }
+
+    return (0);
 }
 ----
 <.> Save stack and instruction pointer for later use when it is for the first time; otherwise ditch the plugin
@@ -318,7 +317,8 @@ break;
 
 | Requires compilation and linking
 | Language + host provided
-| No, requires plugins to be in Cfootnote:[Technically everything that can be linked, so other languages might actually be possible here]
+| No, requires plugins to be in Cfootnote:[Technically everything that can be linked, so other languages _might_
+actually be possible here. Dare I to try {rust}[Rust]?]
 | Arcane - requires stack unwinding
 |===
 
