@@ -95,6 +95,8 @@ The initial idea was just to include everything in one binary, but I quickly dis
 ergonomics of re-compiling and shipping everything together are annoying and I switched to a simple
 plugin system.
 
+=== Screenshots first
+
 I would have loved to show some screenshots of deskbar in action here, but unfortunately after
 messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler
 this is as far as I gotfootnote:[..followed by two kilometres of error trace I am not in the mood
@@ -439,6 +441,8 @@ function battery:meter()
 end
 ----
 
+==== Screenshots first
+
 Trying my luck to actual attempt to compile it to provide a screenshot this time ended quickly as
 well:
 
@@ -485,15 +489,28 @@ can find the patch here if you are interested:
 
 <{patchgist}>
 
-And without further ado here is finally the screenshot of the scripting part in action:
+And without further ado here is finally the screenshot of the scripting part in action before we
+check how this is actual done under the hood:
 
 image::subtle-0.7b.png[]
 
-
+=== Runtime loading
 
 === Integrating Ruby
 
+==== Screenshots first
+
+==== Runtime loading
+
+==== Error handling
+
 === Integrating JavaScript
+
+==== Screenshots first
+
+==== Runtime loading
+
+==== Error handling
 
 === Recap
 
@@ -502,6 +519,12 @@ image::subtle-0.7b.png[]
 |===
 
 == Webassembly
+
+=== Screenshots first
+
+=== Runtime loading
+
+==== Error handling
 
 === Recap
 
