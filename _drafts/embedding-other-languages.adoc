@@ -475,7 +475,8 @@ make[1]: Leaving directory '/home/unexist/build/subtle-0.7b'
 make: *** [Makefile:171: all] Error 2
 ----
 
-This is kind of embarrassing for an official release, but didn't stop us this time.
+This is kind of embarrassing for an official release and really have to question the quality in
+retrospect, but this won't stop us now.
 
 image::few_hours_later.png[]
 
@@ -487,6 +488,8 @@ can find the patch here if you are interested:
 And without further ado here is finally the screenshot of the scripting part in action:
 
 image::subtle-0.7b.png[]
+
+
 
 === Integrating Ruby
 
