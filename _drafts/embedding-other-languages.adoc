@@ -191,7 +191,7 @@ element->data   = (*entrypoint) (); // <.>
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
-.Excursion: Linking late
+.Excursion: Linking
 ****
 Linking is complex topic, but in a nutshell during the linking process all intermediate parts
 obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
@@ -551,6 +551,69 @@ GetString(lua_State *configstate,
 <.> We check and fetch a tablefootnote:[There are jokes about every type in Lua is a table]
 <.> Push the string onto the current stack
 <.> And pull the value with index -2 from the stack
+
+.Excursion: Stackmachine
+****
+Linking is complex topic, but in a nutshell during the linking process all intermediate parts
+obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
+library:
+
+.Linking process based on the diagram from {linker}
+[plantuml]
+----
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
+rectangle "lua_getglobal (1))" as l1
+rectangle "lua_pushstring (2))" as l2
+rectangle "lua_gettable (3))" as l3
+rectangle "lua_gettable (4))" as l4
+rectangle "lucidatypewriter" as res
+
+
+stack "Stack" as s1 {
+}
+
+stack "Stack" as s2 {
+  rectangle "[0] font"
+}
+
+stack "Stack" as s3 {
+  rectangle "[0]: font" as s3_font
+  rectangle "[-1] face"  as s3_face
+}
+
+
+stack "Stack" as s4 {
+  rectangle "[0] font" as s4_font
+  rectangle "[-1] face" as s4_face
+  rectangle "[-2] lucidatypewriter" as s4_luci
+}
+
+s3_font -[hidden]d-> s3_face
+s4_font -[hidden]d-> s4_face
+s4_face -[hidden]d-> s4_luci
+
+s1 -[hidden]r-> s2
+s2 -[hidden]r-> s3
+s3 -[hidden]r-> s4
+
+s1 -[hidden]u-> l1
+s2 -[hidden]u-> l2
+s3 -[hidden]u-> l3
+s4 -[hidden]u-> l4
+
+l1 -r-> l2
+l2 -r-> l3
+l3 -r-> l4
+l4 -r-> res
+----
+<1> Static libraries are directly included in the resulting artifact
+<2> Object files are the compiled form of the source code
+<4> {sharedobj}[Shared objects] can be loaded at runtime
+<3> The result can either be a shared, library or executable type
+****
 
 === Integrating Ruby
 
