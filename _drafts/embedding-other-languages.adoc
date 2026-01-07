@@ -57,6 +57,7 @@ endif::[]
 :wow: https://worldofwarcraft.blizzard.com/en-us/
 :sublets: https://projects.unexist.dev/projects/subtle/wiki/Writing_sublets
 :patchgist: https://gist.github.com/unexist/4ee3cb94c91555b1bac01e23f992b9e4
+:pcall: https://www.lua.org/pil/25.2.html
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -439,7 +440,7 @@ function battery:meter()
 end
 ----
 
-==== Screenshots first
+==== Time for Screenshots
 
 Trying my luck to actual attempt to compile it to provide a screenshot this time ended quickly as
 well:
@@ -494,9 +495,66 @@ image::subtle-0.7b.png[]
 
 === Runtime loading
 
+Essentially Lua is a stackmachine and the interaction with the core API used to be
+footnote:[Haven't touched Lua for ages] exactly like the one I wrote back then during my studies.
+
+I've removed a bit of the fluff and checks upfront, so we can have a quick glance at the config
+loading and jump further into nitty details:
+
+.{subtle}[subtle-0.7b]/src/lua.c:150
+[source,c]
+----
+subLogDebug("Reading `%s'\n", buf);
+if(luaL_loadfile(configstate, buf) || lua_pcall(configstate, 0, 0, 0)) // <.>
+    {
+        subLogDebug("%s\n", (char *)lua_tostring(configstate, -1));
+        lua_close(configstate);
+        subLogError("Can't load config file `%s'.\n", buf);
+    }
+
+/* Parse and load the font */¬
+face  = GetString(configstate, "font", "face", "fixed"); // <.>
+style = GetString(configstate, "font", "style", "medium");
+size  = GetNum(configstate, "font", "size", 12);
+----
+<.> Internal calls to load the config file and just execute it in a safe way {pcall}[pcall]
+<.> Once everything is stored inside `configstate` we fetch required values
+
+.{subtle}[subtle-0.7b]/src/lua.c:47+72
+[source,c]
+----
+#define GET_GLOBAL(configstate) do { \ // <.>
+    lua_getglobal(configstate, table); \ // <.>
+    if(lua_istable(configstate, -1)) \
+        { \
+            lua_pushstring(configstate, field); \ // <.>
+            lua_gettable(configstate, -2); \
+        } \
+} while(0)
+
+static char *
+GetString(lua_State *configstate,
+    const char *table,
+    const char *field,
+    char *fallback)
+{
+    GET_GLOBAL(configstate);
+    if(!lua_isstring(configstate, -1)) // <.>
+        {
+            subLogDebug("Expected string, got `%s' for `%s'.\n", lua_typename(configstate, -1), field);
+            return(fallback);
+        }
+    return((char *)lua_tostring(configstate, -1)); // <.>
+}
+----
+<.> Blocks in C macros require this fancy hack; probably best to skip over it
+<.> We check and fetch a tablefootnote:[There are jokes about every type in Lua is a table]
+<.> Push the string onto the current stack
+<.> And pull the value with index -2 from the stack
+
 === Integrating Ruby
 
-==== Screenshots first
+==== Time for Screenshots
 
 ==== Runtime loading
 
@@ -504,7 +562,7 @@ image::subtle-0.7b.png[]
 
 === Integrating JavaScript
 
-==== Screenshots first
+==== Time for Screenshots
 
 ==== Runtime loading
 
