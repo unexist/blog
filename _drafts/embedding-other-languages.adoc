@@ -60,10 +60,10 @@ endif::[]
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
-Among the long list of {ilities}[-ilities],
-there are some boring and pretty self-explanatory ones like {maintainability}[maintainability],
-some dogmatic ones like {correctness}[correctness]footnote:[Correctness-ily?]
-and also interesting ones, like {extensibility}[extensibility].
+Among the long list of {ilities}[-ilities], there are some boring and pretty self-explanatory ones
+like {maintainability}[maintainability], some dogmatic ones like
+{correctness}[correctness]footnote:[Correctness-ily?] and also interesting ones, like
+{extensibility}[extensibility].
 
 How a certain quality is best achieved depends on a plethora of things, but overall the targeted
 ones should match the requirements and the budget to burn.
@@ -75,8 +75,8 @@ Instead, we fast-forward directly to extensibility and see what this is all abou
 According to Wikipedia extensibility revolves around future growth and proper design, but also
 mentions scripting languages in the black box and scripting sounds about right for the remainder of
 this post.
-So please be my guest while I delve a bit in my {FOSS}[FOSS]-history
-and lay out how different approaches and why integrating scripting languages is a great idea.
+So please be my guest while I delve a bit in my {FOSS}[FOSS]-history and lay out how different
+approaches and why integrating scripting languages is a great idea.
 
 image::go_wrong.png[]
 
@@ -84,11 +84,9 @@ image::go_wrong.png[]
 
 Unbeknownst to my past self, I made my first experience with this kind of extensibility in 2004,
 when I started my long journey with {xlib}[Xlib].
-During that time I started a project called {deskbar}[deskbar] with
-the lofty goal to print system information like cpu load, battery usage etc. directly onto the root
-window of the X session.
-There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but
-who likes pre-built
+During that time I started a project called {deskbar}[deskbar] with the lofty goal to print system
+information like cpu load, battery usage etc. directly onto the root window of the X session.
+There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but ho likes pre-built
 stuff when you can roll your own?
 
 The initial idea was just to include everything in one binary, but I quickly discovered the
@@ -223,8 +221,8 @@ element->data   = (*entrypoint) (); // <.>
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
-The entrypoint here is quite interesting, since the main application cannot know what is included in
-the plugin or even what is exported.
+The entrypoint here is quite interesting, since the main application cannot know what is included
+in the plugin or even what is exported.
 Following the idea of {convention}[Convention over configuration], the defined contract here expects
 a symbol named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer
 to an initialized struct of type `DBPlug`:
@@ -380,8 +378,8 @@ languages _might_ actually be possible here. Dare I to try {rust}[Rust]?]
 Three years later in 2007 I continued on building upon my Xlib skills and started my long-lasting
 project {subtle}[subtle].
 
-Over the years there have been many major breaking changes, from the initial design to the state it
-currently is in.
+Over the years there have been many major breaking changes, from the initial design to the state
+it currently is in.
 Two of the post-related changes were the integration of the scripting language {lua}[Lua] and its
 later replacement with{Ruby}[Ruby] after a few years in this glorious {issue1}[issue #1].
 
