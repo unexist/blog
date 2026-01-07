@@ -563,16 +563,15 @@ GetString(lua_State *configstate,
 }
 ----
 <.> Blocks in C macros require this fancy hack; probably best to skip over it
-<.> We check and fetch a tablefootnote:[There are jokes about every type in Lua is a table]
+<.> We check and fetch a tablefootnote:[There are jokes about how every type in Lua is a table..]
 <.> Push the string onto the current stack
 <.> Pull the value with index -2 from the stack
 <.> And convert it to our desired format
 
 .Excursion: Stackmachine
 ****
-Linking is complex topic, but in a nutshell during the linking process all intermediate parts
-obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
-library:
+If you haven't played with stackmachines before it might be a bit difficult to follow what it is
+done, so here is a small break down how the API works.
 
 .Stack handling diagram
 [plantuml]
@@ -623,10 +622,11 @@ l2 -r-> l3
 l3 -r-> l4
 l4 -r-> res
 ----
-<1> Static libraries are directly included in the resulting artifact
-<2> Object files are the compiled form of the source code
-<4> {sharedobj}[Shared objects] can be loaded at runtime
-<3> The result can either be a shared, library or executable type
+<1> Call `lua_getglobal` to put the table `font` onto the stack at position
+0footnote:[The numbers in brackets are the position on the stack]
+<2> Call `lua_pushstring` to put the name of the desired row name on the stack at position -1
+<3> Call `lua_gettable` to fetch the row by givem name from the table and put the result at stack position -1
+<4> Call `lua_gettable` to fetch the value by given name from the row and put the result at stack position -1
 ****
 
 === Integrating Ruby
