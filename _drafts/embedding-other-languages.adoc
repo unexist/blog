@@ -97,8 +97,8 @@ plugin system.
 
 I would have loved to show some screenshots of deskbar in action here, but unfortunately after
 messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler
-this is as far as I gotfootnote:[..followed by two kilometres of error trace I am not in the mood
-to fix right now]:
+this is as far as I gotfootnote:[..followed by kilometres of error trace I wasn't in the mood to
+fix right now]:
 
 .Build attempt of {deskbar}[deskbar]
 [source,shell]
@@ -155,41 +155,10 @@ make: *** [Makefile:374: all] Error 2
 Nevertheless, this output clearly proves there has been a plugin system with conditional compilation
 and bases solely on linker magic - how we are going to see next.
 
-.Excursion: Linking late
-****
-Linking is complex topic, but in a nutshell during the linking process all intermediate parts
-(obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
-library:
-
-.Linking process based on the diagram from {linker}
-[plantuml]
-----
-rectangle "Static library (1)" as lib1
-rectangle "Object file (2)" as obj1
-rectangle "Object file" as obj2
-rectangle "Linker" as linker
-rectangle "Shared object (3)" as so
-rectangle "Library (4)" as lib3
-rectangle "Binary (4)" as bin
-
-lib1 --> linker
-obj1 --> linker
-obj2 --> linker
-
-linker --> lib3
-linker --> so
-linker --> bin
-----
-<1> Static libraries are directly included in the resulting artifact
-<2> Object files are the compiled form of the source code
-<4> {sharedobj}[Shared objects] can be loaded at runtime
-<3> The result can either be a shared, library or executable type
-****
-
 === Runtime loading
 
-Everything in C is a bit more complicated, so let us ignore the scar memory handling and just talk
-about the two calls {dlopen}[dlopen] and {dlsym}[dlsym]:
+Everything in C is a bit more complicated, so let us ignore the scary memory handling and just
+talk about the two interesting calls {dlopen}[dlopen] and {dlsym}[dlsym]:
 
 .{deskbar}[deskbar]/deskbar/plug.c:97
 [source,c]
@@ -221,11 +190,42 @@ element->data   = (*entrypoint) (); // <.>
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
+.Excursion: Linking late
+****
+Linking is complex topic, but in a nutshell during the linking process all intermediate parts
+obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
+library:
+
+.Linking process based on the diagram from {linker}
+[plantuml]
+----
+rectangle "Static library (1)" as lib1
+rectangle "Object file (2)" as obj1
+rectangle "Object file" as obj2
+rectangle "Linker" as linker
+rectangle "Shared object (3)" as so
+rectangle "Library (4)" as lib3
+rectangle "Binary (4)" as bin
+
+lib1 --> linker
+obj1 --> linker
+obj2 --> linker
+
+linker --> lib3
+linker --> so
+linker --> bin
+----
+<1> Static libraries are directly included in the resulting artifact
+<2> Object files are the compiled form of the source code
+<4> {sharedobj}[Shared objects] can be loaded at runtime
+<3> The result can either be a shared, library or executable type
+****
+
 The entrypoint here is quite interesting, since the main application cannot know what is included
 in the plugin or even what is exported.
-Following the idea of {convention}[Convention over configuration], the defined contract here expects
-a symbol named `db_plug_init` inside a plugin, which is called on load and *must* return a pointer
-to an initialized struct of type `DBPlug`:
+Following the idea of {convention}[Convention-over-configuration], the defined contract here
+expects a symbol named `db_plug_init` inside a plugin, which is called on load and *must* return
+a pointer to an initialized struct of type `DBPlug`:
 
 .{deskbar}[deskbar]/plugins/battery.c:107
 [source,c]
