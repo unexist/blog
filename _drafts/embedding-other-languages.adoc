@@ -350,12 +350,12 @@ sig_handler (int sig)
     switch (sig)
         {
             case SIGSEGV:
-                    longjmp (env, 1); // <.>
+                longjmp (env, 1); // <.>
 
-                    db_log_debug ("Something went wrong! Segmentation fault!\n");
-                    db_sig_destroy ();
+                db_log_debug ("Something went wrong! Segmentation fault!\n");
+                db_sig_destroy ();
 
-                    abort ();
+                abort ();
             break;
 ...
 }
