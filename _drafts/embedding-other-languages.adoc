@@ -36,6 +36,8 @@ endif::[]
 :deskbar: https://sourceforge.net/projects/deskbar/
 :gkrellm: https://gkrellm.srcbox.net/
 :clang: https://en.wikipedia.org/wiki/C_(programming_language)
+:sourceforge: https://sourceforge.net/
+:deskbarsf: https://deskbar.sourceforge.net
 :autotools: https://en.wikipedia.org/wiki/GNU_Autotools
 :linker: https://en.wikipedia.org/wiki/Linker_(computing)
 :sharedobj: https://en.wikipedia.org/wiki/Shared_library
@@ -153,8 +155,18 @@ make: *** [Makefile:374: all] Error 2
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
 <.> Yes, oh well..
 
-Nevertheless, this output clearly proves there has been a plugin system with conditional compilation
-and bases solely on linker magic - how we are going to see next.
+Nevertheless, this output clearly proves there has been a plugin system with conditional
+compilation, which bases solely on linking magic.
+
+I digged a bit further and stumbled upon my old project page on {sourceforge}[SourceForge], which
+luckily still provides sftp access to the project page:
+
+<{deskbarsf}>
+
+And even more luckily, although the page is a bit empty, the file listing included screenshots:
+
+image::deskbar-05-05-2005.png[]
+image::deskbar-shot.png[]
 
 === Runtime loading
 
@@ -558,19 +570,18 @@ Linking is complex topic, but in a nutshell during the linking process all inter
 obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
 library:
 
-.Linking process based on the diagram from {linker}
+.Stack handling diagram
 [plantuml]
 ----
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-rectangle "lua_getglobal (1))" as l1
-rectangle "lua_pushstring (2))" as l2
-rectangle "lua_gettable (3))" as l3
-rectangle "lua_gettable (4))" as l4
+rectangle "lua_getglobal (1)" as l1
+rectangle "lua_pushstring (2)" as l2
+rectangle "lua_gettable (3)" as l3
+rectangle "lua_gettable (4)" as l4
 rectangle "lucidatypewriter" as res
-
 
 stack "Stack" as s1 {
 }
@@ -583,7 +594,6 @@ stack "Stack" as s3 {
   rectangle "[0]: font" as s3_font
   rectangle "[-1] face"  as s3_face
 }
-
 
 stack "Stack" as s4 {
   rectangle "[0] font" as s4_font
