@@ -156,17 +156,20 @@ make: *** [Makefile:374: all] Error 2
 <.> Yes, oh well..
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional
-compilation, which bases solely on linking magic.
+compilation, which bases solely on linking magic, and we have to move on.
 
-I digged a bit further and stumbled upon my old project page on {sourceforge}[SourceForge], which
+.Edit
+****
+I dug a bit further and stumbled upon my old project page on {sourceforge}[SourceForge], which
 luckily still provides sftp access to the project page:
 
 <{deskbarsf}>
 
-And even more luckily, although the page is a bit empty, the file listing included screenshots:
+And with even more luck, although the page is a bit empty, the file listing included screenshots:
 
 image::deskbar-05-05-2005.png[]
 image::deskbar-shot.png[]
+****
 
 === Runtime loading
 
@@ -500,8 +503,8 @@ can find the patch here if you are interested:
 
 <{patchgist}>
 
-And without further ado here is finally the screenshot of the scripting part in action before we
-check how this is actual done under the hood:
+And without further ado here is finally the screenshot of the scripting part in action, before we
+dive into how this is actually done under the hood:
 
 image::subtle-0.7b.png[]
 
@@ -511,7 +514,7 @@ Essentially Lua is a stackmachine and the interaction with the core API used to 
 footnote:[Haven't touched Lua for ages] exactly like the one I wrote back then during my studies.
 
 I've removed a bit of the fluff and checks upfront, so we can have a quick glance at the config
-loading and jump further into nitty details:
+loading and jump further into nitty-gritty details:
 
 .{subtle}[subtle-0.7b]/src/lua.c:150
 [source,c]
@@ -562,7 +565,8 @@ GetString(lua_State *configstate,
 <.> Blocks in C macros require this fancy hack; probably best to skip over it
 <.> We check and fetch a tablefootnote:[There are jokes about every type in Lua is a table]
 <.> Push the string onto the current stack
-<.> And pull the value with index -2 from the stack
+<.> Pull the value with index -2 from the stack
+<.> And convert it to our desired format
 
 .Excursion: Stackmachine
 ****
