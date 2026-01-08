@@ -694,7 +694,8 @@ subLuaCall(SubSublet *s)
 
             switch(lua_type(state, -1)) // <.>
                 {
-                    case LUA_TNIL: subLogWarn("Sublet (#%d) does not return any usuable value\n", s->ref);>break;¬                                                                                                                                                     370 >--->--->--->--->---case LUA_TNUMBER: s->number = (int)lua_tonumber(state, -1); break;
+                    case LUA_TNIL: subLogWarn("Sublet (#%d) does not return any usuable value\n", s->ref); break;
+                    case LUA_TNUMBER: s->number = (int)lua_tonumber(state, -1); break;
                     case LUA_TSTRING:
                         if(s->string) free(s->string);
                         s->string = strdup((char *)lua_tostring(state, -1));
@@ -707,9 +708,9 @@ subLuaCall(SubSublet *s)
         }
 }
 ----
-<.> A bit stack setup upfront
-<.> Here we call {luapcall}[lua_pcall], which abstracts the nasty `setjmp` and `longjmp` handling
-for us away
+<.> A bit stack setup and retrieval via upfront
+<.> Here we call {luapcall}[lua_pcall], which abstracts and hides the nasty `setjmp` and `longjmp`
+handling from us
 <.> Looks like I discovered bitflags there and utilized it for error handling
 <.> Type handling for a more generic interface
 
