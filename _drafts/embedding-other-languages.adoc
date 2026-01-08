@@ -716,7 +716,31 @@ handling from us
 
 === Integrating Ruby
 
+I later replaced Lua with {Ruby}[Ruby] and this is an entirely different beast, but I basically
+followed the same approach as we are going to see.
+
 ==== Time for Screenshots
+
+Again let us start with something visual and this time it is quite easy, since I use subtle daily
+on several devices and don't even have to mess with outdated builds.
+
+[source,shell]
+----
+$ ./subtle -d :2 -c data/subtle.rb -s sublets
+subtle 0.12.6606 - Copyright (c) 2005-present Christoph Kappel
+Released under the GNU General Public License
+Compiled for X11R0 and Ruby 2.7.8
+Display (:2) is 640x480
+Running on 1 screen(s)
+ruby: warning: already initialized constant TMP_RUBY_PREFIX
+Reading file `data/subtle.rb'
+Reading file `sublets/battery.rb'
+Loaded sublet (battery)
+Reading file `sublets/fuzzytime.rb'
+Loaded sublet (fuzzytime)
+----
+
+image::subtle-0.12.6606.png[]
 
 ==== Runtime loading
 
