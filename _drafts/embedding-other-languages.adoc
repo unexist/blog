@@ -59,7 +59,11 @@ endif::[]
 :wow: https://worldofwarcraft.blizzard.com/en-us/
 :sublets: https://projects.unexist.dev/projects/subtle/wiki/Writing_sublets
 :patchgist: https://gist.github.com/unexist/4ee3cb94c91555b1bac01e23f992b9e4
-:pcall: https://www.lua.org/pil/25.2.html
+:luapcall: https://www.lua.org/pil/25.2.html
+:luagetglobal: https://www.lua.org/manual/2.4/node16.html
+:luagettable: https://www.lua.org/pil/25.1.html
+:luapushstring: https://www.lua.org/pil/24.2.1.html
+:luatostring: https://www.lua.org/pil/24.2.2.html
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -206,7 +210,7 @@ element->data   = (*entrypoint) (); // <.>
 <.> Find the address of a named entrypoint
 <.> Execute the entrypoint for profit
 
-.Excursion: Linking
+.Excursion: Linking in a Nutshell
 ****
 Linking is complex topic, but in a nutshell during the linking process all intermediate parts
 obj(ect)-files and static libraries) are put together and rolled into a final executable binary or
@@ -538,7 +542,7 @@ face  = GetString(configstate, "font", "face", "fixed"); // <.>
 style = GetString(configstate, "font", "style", "medium");
 size  = GetNum(configstate, "font", "size", 12);
 ----
-<.> Internal calls to load the config file and just execute it in a safe way {pcall}[pcall]
+<.> Internal calls to load the config file and just execute it in a safe way {luapcall}[pcall]
 <.> Once everything is stored inside `configstate` we fetch required values
 
 .{subtle}[subtle-0.7b]/src/lua.c:47+72
@@ -574,10 +578,10 @@ GetString(lua_State *configstate,
 <.> Pull the value with index -2 from the stack
 <.> And convert it to our desired format
 
-.Excursion: Stackmachine
+.Excursion: Playing with the stack
 ****
-If you haven't played with stackmachines before it might be a bit difficult to follow what it is
-done, so here is a small break down how the API works.
+If you haven't played with stack machines before it might be a bit difficult to follow what it is
+done, so here is a small break down how the API works:
 
 .Stack handling diagram
 [plantuml]
@@ -588,53 +592,63 @@ skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
-rectangle "lua_getglobal (1)" as l1
-rectangle "lua_pushstring (2)" as l2
-rectangle "lua_gettable (3)" as l3
-rectangle "lua_gettable (4)" as l4
-rectangle "lucidatypewriter" as res
-
-stack "Stack" as s1 {
+together {
+    rectangle "lua_getglobal (1)" as l1
+    stack "Stack (1)" as s1
 }
 
-stack "Stack" as s2 {
-  rectangle "[0] font"
+together {
+    rectangle "lua_pushstring (2)" as l2
+    stack "Stack (2)" as s2 {
+        rectangle "[-1] font\n(Table)"
+    }
 }
 
-stack "Stack" as s3 {
-  rectangle "[0]: font" as s3_font
-  rectangle "[-1] face"  as s3_face
+together {
+    rectangle "lua_gettable (3)" as l3
+    stack "Stack (3)" as s3 {
+        rectangle "[-1] font\n(Table)" as s3_font
+        rectangle "[-2] face\n(String)"  as s3_face
+    }
 }
 
-stack "Stack" as s4 {
-  rectangle "[0] font" as s4_font
-  rectangle "[-1] face" as s4_face
-  rectangle "[-2] lucidatypewriter" as s4_luci
+together {
+    rectangle "lua_tostring (4)" as l4
+    stack "Stack (4)" as s4 {
+        rectangle "[-1] lucidatypewriter\n(String)" as s4_luci
+    }
 }
 
+legend right
+    | (1) | Step number |
+    | [-1] | Stack position |
+    | (String) | Value type |
+endlegend
+
+' Placement
 s3_font -[hidden]d-> s3_face
-s4_font -[hidden]d-> s4_face
-s4_face -[hidden]d-> s4_luci
 
 s1 -[hidden]r-> s2
 s2 -[hidden]r-> s3
 s3 -[hidden]r-> s4
 
-s1 -[hidden]u-> l1
-s2 -[hidden]u-> l2
-s3 -[hidden]u-> l3
-s4 -[hidden]u-> l4
+l1 -[hidden]d-> s1
+l2 -[hidden]d-> s2
+l3 -[hidden]d-> s3
+l4 -[hidden]d-> s4
 
-l1 -r-> l2
-l2 -r-> l3
-l3 -r-> l4
-l4 -r-> res
+' Arrows
+l1 -r--> l2
+l2 -r--> l3
+l3 -r--> l4
 ----
-<1> Call `lua_getglobal` to put the table `font` onto the stack at position
-0footnote:[The numbers in brackets are the position on the stack]
-<2> Call `lua_pushstring` to put the name of the desired row name on the stack at position -1
-<3> Call `lua_gettable` to fetch the row by givem name from the table and put the result at stack position -1
-<4> Call `lua_gettable` to fetch the value by given name from the row and put the result at stack position -1
+<1> Call {luagetglobal}[lua_getglobal] to put the table `font` onto the stack at position
+`-1` footnote:[Lua uses negative numbers ]
+<2> Call {luapushstring}[lua_pushstring] to put the string `face` of the desired row name on the
+stack at position `-1`
+<3> Call {luagettable}[lua_gettable] to consume both values and fetch the row by given name from
+the table and put the result at stack position `-1`
+<4> Call {luatostring}[lua_tostring] to convert on the stack at position `-1` to string if possible
 ****
 
 === Integrating Ruby
