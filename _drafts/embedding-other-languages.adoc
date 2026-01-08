@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Embedding other languages
+title: Extensibility through scripting languages
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
@@ -10,10 +10,10 @@ categories: tech story
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/embedding_other_languages
+:imagesdir: {asciidoctorconfigdir}/../assets/images/extensibility_through_scripting_languages
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/embedding_other_languages
+:imagesdir: /assets/images/extensibility_through_scripting_languages
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -620,7 +620,7 @@ together {
 }
 
 legend right
-    | (1) | Step number |
+    | (1) | Step # |
     | [-1] | Stack position |
     | (String) | Value type |
 endlegend
