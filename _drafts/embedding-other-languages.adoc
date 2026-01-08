@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase rust  c lua ruby javascript duktape extism
+tags: showcase c rust lua ruby javascript duktape extism
 categories: tech
 toc: true
 ---
@@ -64,6 +64,7 @@ endif::[]
 :luagettable: https://www.lua.org/pil/25.1.html
 :luapushstring: https://www.lua.org/pil/24.2.1.html
 :luatostring: https://www.lua.org/pil/24.2.2.html
+:luapcall: https://www.lua.org/pil/25.2.html
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -655,13 +656,16 @@ function battery:meter() // <.>
 
     _, _, battery.remaining = string.find(info, "remaining capacity:%s*(%d+).*")
     _, _, battery.rate      = string.find(info, "present rate:%s*(%d+).*")
-    _, _, battery.state                     = string.find(info, "charging state:%s*(%a+).*")
+    _, _, battery.state     = string.find(info, "charging state:%s*(%a+).*")
 
     return(math.floor(battery.remaining * 100 / battery.capacity))
 end
 ----
 <.> The `:` here is used as a kind of namespace separator this is handled as a global table
 called `battery` with the entry `meter`.
+
+Once the sublet is loaded and initialized we can just call it analogue to our `save_call` from
+before:
 
 .{subtle}[subtle-0.7b]/src/lua.c:345
 [source,c]
@@ -671,9 +675,9 @@ subLuaCall(SubSublet *s)
 {
     if(s)
         {
-            lua_settop(state, 0);
-            lua_rawgeti(state, LUA_REGISTRYINDEX, s->ref); // <.>
-            if(lua_pcall(state, 0, 1, 0))
+            lua_settop(state, 0); // <.>
+            lua_rawgeti(state, LUA_REGISTRYINDEX, s->ref);
+            if(lua_pcall(state, 0, 1, 0)) // <.>
                 {
                     if(s->flags & SUB_SUBLET_FAIL_THIRD) // <.>
                         {
@@ -687,9 +691,27 @@ subLuaCall(SubSublet *s)
                     subLogWarn("Failed attempt #%d to call sublet (#%d).\n",
                         s->flags & SUB_SUBLET_FAIL_SECOND) ? 2 : 1, s->ref);
                 }
-...
+
+            switch(lua_type(state, -1)) // <.>
+                {
+                    case LUA_TNIL: subLogWarn("Sublet (#%d) does not return any usuable value\n", s->ref);>break;¬                                                                                                                                                     370 >--->--->--->--->---case LUA_TNUMBER: s->number = (int)lua_tonumber(state, -1); break;
+                    case LUA_TSTRING:
+                        if(s->string) free(s->string);
+                        s->string = strdup((char *)lua_tostring(state, -1));
+                        break;
+                    default:
+                        subLogDebug("Sublet (#%d) returned unkown type %s\n", s->ref, lua_typename(state, -1));
+                        lua_pop(state, -1);
+                    }
+                }
+        }
 }
 ----
+<.> A bit stack setup upfront
+<.> Here we call {luapcall}[lua_pcall], which abstracts the nasty `setjmp` and `longjmp` handling
+for us away
+<.> Looks like I discovered bitflags there and utilized it for error handling
+<.> Type handling for a more generic interface
 
 === Integrating Ruby
 
