@@ -215,6 +215,12 @@ library:
 .Linking process based on the diagram from {linker}
 [plantuml]
 ----
+'!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
+skinparam linetype ortho
+skinparam nodesep 20
+skinparam ranksep 20
+
 rectangle "Static library (1)" as lib1
 rectangle "Object file (2)" as obj1
 rectangle "Object file" as obj2
@@ -576,6 +582,8 @@ done, so here is a small break down how the API works.
 .Stack handling diagram
 [plantuml]
 ----
+'!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+
 skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
