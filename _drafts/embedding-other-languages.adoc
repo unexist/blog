@@ -5,8 +5,8 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase extism rust lua ruby
-categories: tech story
+tags: showcase rust  c lua ruby javascript duktape extism
+categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
@@ -418,57 +418,12 @@ Adding a scripting language solves quite a few problems:
 
 - File loading and parsing can be offloaded to the language core
 - The language itself comes with a basic subset of things you can do with it
-- Config handling can also be directly offloaded
-
-Starting with the easy part, offloading the config handling was one of the first things I did and
-this made a config like this entirely possible:
-
-.{subtle}[subtle-0.7b]/config/config.lua:1
-[source,lua]
-----
--- Options config
-font = {
-    face    = "lucidatypewriter",  -- Font face for the text
-    style   = "medium",            -- Font style (medium|bold|italic)
-    size    = 12                   -- Font size
-}
-
--- Color config
-colors = {
-    font       = "#ffffff",        -- Color of the font
-    border     = "#ffffff",        -- Color of the border/tiles
-    normal     = "#CFDCE6",        -- Color of the inactive windows
-    focus      = "#6096BF",        -- Color of the focussed window
-    shade      = "#bac5ce",        -- Color of shaded windows
-    background = "#596F80"         -- Color of the root background
-}
-...
-----
-
-The battery plugin from before, meanwhile rebranded to {sublets}[sublets], lost a bit of its
-arcaneness and became quite readable:
-
-.{subtle}[subtle-0.7b]/sublets/battery.lua:30
-[source,lua]
-----
--- Get remaining battery in percent
-function battery:meter()
-    local f = io.open("/proc/acpi/battery/BAT" .. battery.slot .. "/state", "r")
-    local info = f:read("*a")
-    f:close()
-
-    _, _, battery.remaining = string.find(info, "remaining capacity:%s*(%d+).*")
-    _, _, battery.rate      = string.find(info, "present rate:%s*(%d+).*")
-    _, _, battery.state                     = string.find(info, "charging state:%s*(%a+).*")
-
-    return(math.floor(battery.remaining * 100 / battery.capacity))
-end
-----
+- Bonus: Config handling can also be directly offloaded
 
 ==== Time for Screenshots
 
-Trying my luck to actual attempt to compile it to provide a screenshot this time ended quickly as
-well:
+My attempt of trying to compile the project and provide an actual screenshot this time ended
+quickly as well:
 
 .Build attempt of {subtle}[subtle-0.7b]
 [source,shell]
@@ -518,10 +473,36 @@ dive into how this is actually done under the hood:
 
 image::subtle-0.7b.png[]
 
-=== Runtime loading
+==== Runtime loading
 
-Essentially Lua is a stackmachine and the interaction with the core API used to be
-footnote:[Haven't touched Lua for ages] exactly like the one I wrote back then during my studies.
+Starting with the easy part, offloading the config handling was one of the first things I did and
+this made a config like this entirely possible:
+
+.{subtle}[subtle-0.7b]/config/config.lua:1
+[source,lua]
+----
+-- Options config
+font = {
+    face    = "lucidatypewriter",  -- Font face for the text
+    style   = "medium",            -- Font style (medium|bold|italic)
+    size    = 12                   -- Font size
+}
+
+-- Color config
+colors = {
+    font       = "#ffffff",        -- Color of the font
+    border     = "#ffffff",        -- Color of the border/tiles
+    normal     = "#CFDCE6",        -- Color of the inactive windows
+    focus      = "#6096BF",        -- Color of the focussed window
+    shade      = "#bac5ce",        -- Color of shaded windows
+    background = "#596F80"         -- Color of the root background
+}
+...
+----
+
+Essentially the C API of Lua is a stack machine and the interaction with is through pushing and
+popping values onto and from the
+stack.footnote:[Haven't touched Lua for ages, but apparently this is still true.]
 
 I've removed a bit of the fluff and checks upfront, so we can have a quick glance at the config
 loading and jump further into nitty-gritty details:
@@ -622,7 +603,7 @@ together {
 legend right
     | (1) | Step # |
     | [-1] | Stack position |
-    | (String) | Value type |
+    | (String) | Data type |
 endlegend
 
 ' Placement
@@ -650,6 +631,28 @@ stack at position `-1`
 the table and put the result at stack position `-1`
 <4> Call {luatostring}[lua_tostring] to convert on the stack at position `-1` to string if possible
 ****
+
+==== Error handling
+
+The battery plugin from before, meanwhile rebranded to {sublets}[sublets], lost a bit of its
+arcaneness and became quite readable:
+
+.{subtle}[subtle-0.7b]/sublets/battery.lua:30
+[source,lua]
+----
+-- Get remaining battery in percent
+function battery:meter()
+    local f = io.open("/proc/acpi/battery/BAT" .. battery.slot .. "/state", "r")
+    local info = f:read("*a")
+    f:close()
+
+    _, _, battery.remaining = string.find(info, "remaining capacity:%s*(%d+).*")
+    _, _, battery.rate      = string.find(info, "present rate:%s*(%d+).*")
+    _, _, battery.state                     = string.find(info, "charging state:%s*(%a+).*")
+
+    return(math.floor(battery.remaining * 100 / battery.capacity))
+end
+----
 
 === Integrating Ruby
 
