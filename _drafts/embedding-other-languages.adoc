@@ -634,14 +634,21 @@ the table and put the result at stack position `-1`
 
 ==== Error handling
 
-The battery plugin from before, meanwhile rebranded to {sublets}[sublets], lost a bit of its
-arcaneness and became quite readable:
+Loading of plugins at runtime is basically the same as loading the config upfront, so let us just
+move on to error handling, which is slightly more interesting.
+It is probably no surprise, but the API is quite rudimentary and the handling of the stack and
+calls in case of an actual error is up to person to embed the engine.
+
+Before we can see how this is done, let us quickly check how our battery plugin evolved from the
+arcane version in C to the Lua glory.
+First of all, plugins have been rebranded to {sublets}[sublets]footnote:[You probably get the pun..]
+and it (at least to me) became a bit more readable:
 
 .{subtle}[subtle-0.7b]/sublets/battery.lua:30
 [source,lua]
 ----
 -- Get remaining battery in percent
-function battery:meter()
+function battery:meter() // <.>
     local f = io.open("/proc/acpi/battery/BAT" .. battery.slot .. "/state", "r")
     local info = f:read("*a")
     f:close()
@@ -652,6 +659,36 @@ function battery:meter()
 
     return(math.floor(battery.remaining * 100 / battery.capacity))
 end
+----
+<.> The `:` here is used as a kind of namespace separator this is handled as a global table
+called `battery` with the entry `meter`.
+
+.{subtle}[subtle-0.7b]/src/lua.c:345
+[source,c]
+----
+void
+subLuaCall(SubSublet *s)
+{
+    if(s)
+        {
+            lua_settop(state, 0);
+            lua_rawgeti(state, LUA_REGISTRYINDEX, s->ref); // <.>
+            if(lua_pcall(state, 0, 1, 0))
+                {
+                    if(s->flags & SUB_SUBLET_FAIL_THIRD) // <.>
+                        {
+                            subLogWarn("Unloaded sublet (#%d) after 3 failed attempts\n", s->ref);
+                            subSubletDelete(s);
+                            return;¬
+                        }
+                    else if(s->flags & SUB_SUBLET_FAIL_SECOND) s->flags |= SUB_SUBLET_FAIL_THIRD;
+                    else if(s->flags & SUB_SUBLET_FAIL_FIRST) s->flags |= SUB_SUBLET_FAIL_SECOND;
+
+                    subLogWarn("Failed attempt #%d to call sublet (#%d).\n",
+                        s->flags & SUB_SUBLET_FAIL_SECOND) ? 2 : 1, s->ref);
+                }
+...
+}
 ----
 
 === Integrating Ruby
@@ -682,7 +719,7 @@ end
 
 === Runtime loading
 
-==== Error handling
+=== Error handling
 
 === Recap
 
@@ -699,6 +736,3 @@ The list of examples is quite long, but please help yourself:
 - <{subtle-rs}>
 - <{touchjs}>
 - <{rubtle}>
-
-[bibliography]
-== Bibliography
