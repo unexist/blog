@@ -716,13 +716,14 @@ handling from us
 
 === Integrating Ruby
 
-I later replaced Lua with {Ruby}[Ruby] and this is an entirely different beast, but I basically
-followed the same approach as we are going to see.
+Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] and this is an entirely
+different beast, but I basically followed the same recipe as before, as we are going to see.
 
 ==== Time for Screenshots
 
-Again let us start with something visual and this time it is quite easy, since I use subtle daily
-on several devices and don't even have to mess with outdated builds.
+First things first, let us start with a screenshot of subtle in action.
+This time it is quite easy, since I use subtle daily on several devices and don't even have to mess with outdated
+builds.
 
 [source,shell]
 ----
