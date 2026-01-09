@@ -722,19 +722,19 @@ different beast, but I basically followed the same recipe as before, as we are g
 ==== Time for Screenshots
 
 First things first, let us start with a screenshot of subtle in action.
-This time it is quite easy, since I use subtle daily on several devices and don't even have to mess with outdated
-builds.
+This time it is quite easy, since I use subtle daily on several devices and don't have to mess with outdated
+and somehow broken builds.
 
 [source,shell]
 ----
-$ ./subtle -d :2 -c data/subtle.rb -s sublets
+$ subtle -d :2 -c subtle.rb -s sublets
 subtle 0.12.6606 - Copyright (c) 2005-present Christoph Kappel
 Released under the GNU General Public License
 Compiled for X11R0 and Ruby 2.7.8
 Display (:2) is 640x480
 Running on 1 screen(s)
 ruby: warning: already initialized constant TMP_RUBY_PREFIX
-Reading file `data/subtle.rb'
+Reading file `subtle.rb'
 Reading file `sublets/battery.rb'
 Loaded sublet (battery)
 Reading file `sublets/fuzzytime.rb'
