@@ -464,8 +464,8 @@ retrospect, but this won't stop us now.
 
 image::few_hours_later.png[]
 
-After a dive into the code there were some obviously problems and also a blatant oversight, but you
-can find the patch here if you are interested:
+After a dive into the code there were some obviously problems and also blatant oversights and if
+you are interested in the shameful truth here is silly patch:
 
 <{patchgist}>
 
@@ -716,14 +716,18 @@ handling from us
 
 === Integrating Ruby
 
-Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] and this is an entirely
-different beast, but I basically followed the same recipe as before, as we are going to see.
+Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] after a while and this is
+an entirely different way of integration, but let us just stick to our recipe here and do one thing after another.
 
 ==== Time for Screenshots
 
-First things first, let us start with a screenshot of subtle in action.
-This time it is quite easy, since I use subtle daily on several devices and don't have to mess with outdated
-and somehow broken builds.
+This time it is quite easy to find and even to shoot a nice screenshot of subtle, since I am using it on a daily on
+several devices and don't have to mess with outdated and somehow broken
+buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version..].
+
+image::subtle-0.12.6606.png[]
+
+==== Runtime loading
 
 [source,shell]
 ----
@@ -740,10 +744,6 @@ Loaded sublet (battery)
 Reading file `sublets/fuzzytime.rb'
 Loaded sublet (fuzzytime)
 ----
-
-image::subtle-0.12.6606.png[]
-
-==== Runtime loading
 
 ==== Error handling
 
