@@ -68,6 +68,7 @@ endif::[]
 :sublets: https://github.com/unexist/sublets
 :metaprog: https://en.wikipedia.org/wiki/Metaprogramming
 :styles: https://subtle.de/projects/subtle/wiki/Styles
+:dsl: https://en.wikipedia.org/wiki/Domain-specific_language
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -737,8 +738,9 @@ image::subtle-0.12.6606.png[]
 ==== Runtime loading
 
 Are you still there?
-So when we finally start subtle everything comes together and we see the pieces from the other solutions before,
-therefore are there any objections when we just increase the pace a bit?
+So when we finally start subtle everything comes together, and we see the pieces from the other solutions before,
+therefore are there any objections when we just increase the pace a bit for similarities and go into detail for new
+stuff?
 
 .Start of {subtle}[subtle-0.12.6606]
 [source,shell]
@@ -756,6 +758,9 @@ Loaded sublet (battery)
 Reading file `sublets/fuzzytime.rb'
 Loaded sublet (fuzzytime)
 ----
+
+The config looks a bit different, mainly because we are now using a custom {DSL}[DSL], but we are
+going to cover this part in detail shortly.
 
 .{subtle}[subtle-0.12.6606]/data/subtle.rb:94
 [source,ruby]
@@ -783,11 +788,14 @@ end
 <.> {Styles}[Styles] are a CSS-like way of configuring colors in subtle - batteries and
 inheritance included
 
+And lastly a quick glimpse into the battery sublet, which naturally also makes use of the mentioned
+DSL:
+
 .{sublets}[battery-0.9]/battery.rb:64
 [source,ruby]
 ----
 on :run do |s| # {{{
-    begin
+    begin # <.>
         now     = IO.readlines(s.now).first.to_i
         state   = IO.readlines(s.status).first.chop
         percent = (now * 100 / s.full).to_i
@@ -815,6 +823,7 @@ on :run do |s| # {{{
     end
 end
 ----
+<.> Ruby comes with exception handling and this eases the whole scripting part greatly
 
 ==== Error handling
 
