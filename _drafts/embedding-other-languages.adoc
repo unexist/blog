@@ -768,7 +768,7 @@ Loaded sublet (fuzzytime)
 ----
 
 The config looks a bit different, mainly because we are now using a custom {DSL}[DSL], but we are
-going to cover this part in detail shortly.
+going to cover this part in detail shortly, promised.
 
 .{subtle}[subtle-0.12.6606]/data/subtle.rb:94
 [source,ruby]
