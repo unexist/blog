@@ -90,7 +90,8 @@ this post.
 So please be my guest while I delve a bit in my {FOSS}[FOSS]-history and lay out how different
 approaches and why integrating scripting languages is a great idea.
 
-image::go_wrong.png[]
+.https://knowyourmeme.com/photos/930538-the-fairly-oddparents
+image::meme-go_wrong.png[]
 
 == Barebone
 
@@ -469,7 +470,8 @@ make: *** [Makefile:171: all] Error 2
 This is kind of embarrassing for an official release and really have to question the quality in
 retrospect, but this won't stop us now.
 
-image::few_hours_later.png[]
+.https://knowyourmeme.com/memes/spongebob-time-cards
+image::meme-few_hours_later.png[]
 
 After a dive into the code there were some obviously problems and also blatant oversights and if
 you are interested in the shameful truth here is silly patch:
@@ -724,13 +726,14 @@ handling from us
 
 === Integrating Ruby
 
-Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] after a while and this is
-an entirely different way of integration, but let us just stick to our recipe here and do one thing after another.
+Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] after a
+while and this is an entirely different way of integration, but let us just stick to our recipe
+here and do one thing after another.
 
 ==== Time for Screenshots
 
-This time it is quite easy to find and even to shoot a nice screenshot of subtle, since I am using it on a daily on
-several devices and don't have to mess with outdated and broken
+This time it is quite easy to find and even to shoot a nice screenshot of subtle, since I am using
+it on a daily on several devices and don't have to mess with outdated and broken
 buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
 image::subtle-0.12.6606.png[]
@@ -738,11 +741,16 @@ image::subtle-0.12.6606.png[]
 ==== Runtime loading
 
 Are you still there?
-So when we finally start subtle everything comes together, and we see the pieces from the other solutions before,
-therefore are there any objections when we just increase the pace a bit for similarities and go into detail for new
-stuff?
+So when we finally start subtle everything comes together, and we see the pieces from the other
+solutions before, therefore are there any objections when we just increase the pace a bit for
+similarities and go into detail for new stuff?
 
-.Start of {subtle}[subtle-0.12.6606]
+Feel free to skip the listings after the next meme, I know it has been a lot so far.
+
+.https://knowyourmeme.com/memes/spongebob-time-cards
+image::meme-wall_of_text.png[]
+
+.Running of {subtle}[subtle-0.12.6606]
 [source,shell]
 ----
 $ subtle -d :2 -c subtle.rb -s sublets
@@ -788,7 +796,7 @@ end
 <.> {Styles}[Styles] are a CSS-like way of configuring colors in subtle - batteries and
 inheritance included
 
-And lastly a quick glimpse into the battery sublet, which naturally also makes use of the mentioned
+And lastly, a quick glimpse into the battery sublet, which naturally also makes use of the mentioned
 DSL:
 
 .{sublets}[battery-0.9]/battery.rb:64
@@ -824,6 +832,8 @@ on :run do |s| # {{{
 end
 ----
 <.> Ruby comes with exception handling and this eases the whole scripting part greatly
+
+
 
 ==== Error handling
 
