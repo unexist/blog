@@ -3,6 +3,10 @@ env:
   JEKYLL_ENV: '{{.JEKYLL_ENV | default "production" }}'
 
 tasks:
+  rvm:
+    cmds:
+      - rvm use ruby-3.3.6
+
   build:
     cmds:
       - bundle exec jekyll build
@@ -20,6 +24,7 @@ tasks:
       - zsh bin/create.sh
 
   drafts:
+    depends: [rvm]
     cmds:
       - "bundle exec jekyll serve --port 10000 --drafts {{.CLI_ARGS}}"
 
