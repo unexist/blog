@@ -65,6 +65,9 @@ endif::[]
 :luapushstring: https://www.lua.org/pil/24.2.1.html
 :luatostring: https://www.lua.org/pil/24.2.2.html
 :luapcall: https://www.lua.org/pil/25.2.html
+:sublets: https://github.com/unexist/sublets
+:metaprog: https://en.wikipedia.org/wiki/Metaprogramming
+:styles: https://subtle.de/projects/subtle/wiki/Styles
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -158,7 +161,7 @@ make: *** [Makefile:374: all] Error 2
 ----
 <.> https://en.wikipedia.org/wiki/XMMS[X Multimedia System (XMMS)]
 <.> I can only guess - the plugin is just an empty stub that returns `NULL`
-<.> Yes, oh well..
+<.> Yes, oh well...
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional
 compilation, which bases solely on linking magic, and we have to move on.
@@ -172,7 +175,9 @@ luckily still provides sftp access to the project page:
 
 And with even more luck, although the page is a bit empty, the file listing included screenshots:
 
+.Screenshot of {deskbar}[deskbar-0.7c (1/2)]
 image::deskbar-05-05-2005.png[]
+.Screenshot of {deskbar}[deskbar-0.7c (2/2)]
 image::deskbar-shot.png[]
 ****
 
@@ -391,13 +396,14 @@ sig_handler (int sig)
 === Recap
 
 |===
-| Ease of use | Richness of API | Language agnostic | Error handling
+| Ease of use | Richness of API | Language agnostic | Error handling | Performance
 
 | Low; requires compilation and linking
 | The API is simple, but can be enriched by the host
 | No; requires plugins to be in Cfootnote:[Technically everything that can be linked, so other
 languages _might_ actually be possible here. Dare I to try {rust}[Rust]?]
 | Arcane; requires stack unwinding
+| Runs natively, so pretty fast
 |===
 
 == Scripting languages
@@ -472,6 +478,7 @@ you are interested in the shameful truth here is silly patch:
 And without further ado here is finally the screenshot of the scripting part in action, before we
 dive into how this is actually done under the hood:
 
+.Screenshot of {subtle}[subtle-0.7b]
 image::subtle-0.7b.png[]
 
 ==== Runtime loading
@@ -722,13 +729,18 @@ an entirely different way of integration, but let us just stick to our recipe he
 ==== Time for Screenshots
 
 This time it is quite easy to find and even to shoot a nice screenshot of subtle, since I am using it on a daily on
-several devices and don't have to mess with outdated and somehow broken
-buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version..].
+several devices and don't have to mess with outdated and broken
+buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
 image::subtle-0.12.6606.png[]
 
 ==== Runtime loading
 
+Are you still there?
+So when we finally start subtle everything comes together and we see the pieces from the other solutions before,
+therefore are there any objections when we just increase the pace a bit?
+
+.Start of {subtle}[subtle-0.12.6606]
 [source,shell]
 ----
 $ subtle -d :2 -c subtle.rb -s sublets
@@ -745,6 +757,65 @@ Reading file `sublets/fuzzytime.rb'
 Loaded sublet (fuzzytime)
 ----
 
+.{subtle}[subtle-0.12.6606]/data/subtle.rb:94
+[source,ruby]
+----
+# Style for all style elements
+style :all do # <.>
+  foreground  "#757575"
+  background  "#202020"
+  icon        "#757575"
+  padding     0, 3
+  font        "-*-*-*-*-*-*-14-*-*-*-*-*-*-*"
+  #font        "xft:sans-8"
+end
+
+# Style for the all views
+style :views do # <.>
+  # Style for the active views
+  style :focus do
+    foreground  "#fecf35"
+  end
+...
+end
+----
+<.> Ruby is famous for {metaprog}[metaprogramming] and we obviously make have use of it here
+<.> {Styles}[Styles] are a CSS-like way of configuring colors in subtle - batteries and
+inheritance included
+
+.{sublets}[battery-0.9]/battery.rb:64
+[source,ruby]
+----
+on :run do |s| # {{{
+    begin
+        now     = IO.readlines(s.now).first.to_i
+        state   = IO.readlines(s.status).first.chop
+        percent = (now * 100 / s.full).to_i
+...
+        # Select icon for state
+        icon = case state
+            when "Charging"  then :ac
+            when "Discharging"
+                case percent
+                    when 67..100 then :full
+                    when 34..66  then :low
+                    when 0..33   then :empty
+                end
+            when "Full"          then :ac
+            else                      :unknown
+        end
+
+        s.data = "%s%s%s%d%%" % [
+            s.color_icon ? s.color : s.color_def, s.icons[icon],
+            s.color_text ? s.color : s.color_def, percent
+            ]
+        rescue => err # Sanitize to prevent unloading
+            s.data = "subtle"
+        p err
+    end
+end
+----
+
 ==== Error handling
 
 === Integrating JavaScript
@@ -758,7 +829,7 @@ Loaded sublet (fuzzytime)
 === Recap
 
 |===
-| Ease of use | Richness of API | Language agnostic | Error handling
+| Ease of use | Richness of API | Language agnostic | Error handling | Performance
 |===
 
 == Webassembly
