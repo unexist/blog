@@ -137,7 +137,7 @@ Try make now, good luck!
 
 make  all-recursive
 make[1]: Entering directory '/home/unexist/build/deskbar-0.1'
-...
+# --- %< --- snip --- %< ---
 /bin/bash ../libtool  --tag=CC   --mode=compile gcc -DHAVE_CONFIG_H -I. -I..     -g -O2  -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c -o htable.lo htable.c
 libtool: compile:  gcc -DHAVE_CONFIG_H -I. -I.. -g -O2 -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c htable.c  -fPIC -DPIC -o .libs/htable.o
 In file included from htable.c:2:
@@ -154,7 +154,7 @@ make: *** [Makefile:374: all] Error 2storage class specified for parameter 'strs
 /usr/include/string.h:478:14: error: storage class specified for parameter 'strsignal'
   478 | extern char *strsignal (int __sig) __THROW;
       |              ^~~~~~~~~
-...
+# --- %< --- snip --- %< ---
 make[2]: *** [Makefile:457: htable.lo] Error 1
 make[2]: Leaving directory '/home/unexist/build/deskbar-0.1/libdeskbar'
 make[1]: *** [Makefile:479: all-recursive] Error 1
@@ -312,7 +312,7 @@ battery_update (void)
         }
     else
         fseek (fd1, 0, SEEK_SET);
-...
+    /* --- %< --- snip --- %< --- */
 }
 ----
 <.> Here the battery plugin checks the battery values from the {acpi}[ACPI] interface
@@ -390,7 +390,7 @@ sig_handler (int sig)
 
                 abort ();
             break;
-...
+    /* --- %< --- snip --- %< --- */
 }
 ----
 <.>  Check the values and pass control if necessary; otherwise just bail out
@@ -438,7 +438,7 @@ quickly as well:
 [source,shell]
 ----
 $ ./configure && make
-...
+# --- %< --- snip --- %< ---
 subtle 0.7b
 -----------------
 Binary....................: /usr/local/bin
@@ -452,7 +452,7 @@ Try make now, good luck!
 make  all-recursive
 make[1]: Entering directory '/home/unexist/build/subtle-0.7b'
 Making all in src
-...
+# --- %< --- snip --- %< ---
 if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-event.o -MD -MP -MF ".deps/subtle-event.Tpo" -c -o subtle-event.o `test -f 'event.c' || echo './'`event.c; \
 then mv -f ".deps/subtle-event.Tpo" ".deps/subtle-event.Po"; else rm -f ".deps/subtle-event.Tpo"; exit 1; fi
 event.c: In function ‘subEventLoop’:
@@ -508,7 +508,7 @@ colors = {
     shade      = "#bac5ce",        -- Color of shaded windows
     background = "#596F80"         -- Color of the root background
 }
-...
+-- --- %< --- snip --- %< ---
 ----
 
 Essentially the C API of Lua is a stack machine and the interaction with is through pushing and
@@ -740,15 +740,15 @@ image::subtle-0.12.6606.png[]
 
 ==== Runtime loading
 
-Are you still there?
 So when we finally start subtle everything comes together, and we see the pieces from the other
 solutions before, therefore are there any objections when we just increase the pace a bit for
 similarities and go into detail for new stuff?
 
-Feel free to skip the listings after the next meme, I know it has been a lot so far.
+Just feel free to skip the next few listings and joins us later.
 
 .https://knowyourmeme.com/memes/spongebob-time-cards
 image::meme-wall_of_text.png[]
+
 
 .Running of {subtle}[subtle-0.12.6606]
 [source,shell]
@@ -775,41 +775,41 @@ going to cover this part in detail shortly, promised.
 ----
 # Style for all style elements
 style :all do # <.>
-  foreground  "#757575"
-  background  "#202020"
-  icon        "#757575"
-  padding     0, 3
-  font        "-*-*-*-*-*-*-14-*-*-*-*-*-*-*"
-  #font        "xft:sans-8"
+    foreground  "#757575"
+    background  "#202020"
+    icon        "#757575"
+    padding     0, 3
+    font        "-*-*-*-*-*-*-14-*-*-*-*-*-*-*"
+    #font        "xft:sans-8"
 end
 
 # Style for the all views
 style :views do # <.>
-  # Style for the active views
-  style :focus do
-    foreground  "#fecf35"
-  end
-...
+    # Style for the active views
+    style :focus do
+        foreground  "#fecf35"
+    end
+    # --- %< --- snip --- %< ---
 end
 ----
 <.> Ruby is famous for {metaprog}[metaprogramming] and we obviously make have use of it here
 <.> {Styles}[Styles] are a CSS-like way of configuring colors in subtle - batteries and
 inheritance included
 
-And lastly, a quick glimpse into the battery sublet, which naturally also makes use of the mentioned
+And lastly, a quick glimpse into the battery sublet, which naturally makes use of the mentioned
 DSL:
 
 .{sublets}[battery-0.9]/battery.rb:64
 [source,ruby]
 ----
-on :run do |s| # {{{
+on :run do |s|
     begin # <.>
         now     = IO.readlines(s.now).first.to_i
         state   = IO.readlines(s.status).first.chop
         percent = (now * 100 / s.full).to_i
-...
+        # --- %< --- snip --- %< ---
         # Select icon for state
-        icon = case state
+        icon = case state # <.>
             when "Charging"  then :ac
             when "Discharging"
                 case percent
@@ -832,10 +832,89 @@ on :run do |s| # {{{
 end
 ----
 <.> Ruby comes with exception handling and this eases the whole scripting part greatly
+<.> Aww, this kind of reminds of {rust}[Rust] <3
 
+So when we talk about metaprogramming, what exactly is different here?
+If you have a closer look at the previous examples, we mostly defined data structures and
+methods there, which are later collected during load and called.
+With metaprogramming, we actually define methods and call them from inside our config and
+scripts and handle this accordingly.
 
+The Ruby integration in subtle is quite vast, and we have to cut a few corners here and there
+and follow loads of [line-through]#indirection# abstraction, but I think it might work, if we just
+stick to the styles excerpt from above.
+
+Loading the styles from the config consists of following basic building blocks:
+
+.{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:3161
+[source,c]
+----
+void subRubyInit(void) {
+    VALUE config = Qnil, options = Qnil, sublet = Qnil;
+    /* --- %< --- snip --- %< --- */
+    config = rb_define_class_under(mod, "Config", rb_cObject); // <.>
+
+    /* Class methods */¬
+    rb_define_method(config, "style", RubyConfigStyle, 1); // <.>
+    /* --- %< --- snip --- %< --- */
+}
+----
+<.> Define a holding class for our method definition
+<.> Define the actual method `style` and bind it to `RubyConfigStyle`
+
+.{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:3239
+[source,c]
+----
+void subRubyLoadConfig(void) {
+    VALUE klass = Qnil;
+
+    /* Load supplied config or default */
+    klass = rb_const_get(mod, rb_intern("Config")); // <.>
+    config_instance = rb_funcall(klass, rb_intern("new"), 0, NULL);
+    rb_gc_register_address(&config_instance); // <.>
+
+    if (Qfalse == RubyConfigLoadConfig(config_instance,¬
+        rb_str_new2(subtle->paths.config ? subtle->paths.config : PKG_CONFIG))) { // <.>
+        subSubtleFinish();
+
+        exit(-1);¬
+    } else if (subtle->flags & SUB_SUBTLE_CHECK) {
+        printf("Syntax OK\n");
+    }
+    /* --- %< --- snip --- %< --- */
+}
+----
+<.> Call back our config class and create a new instance
+<.> Take care, that the internal garbage collector doesn't wipe it
+<.>
+
+.{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:1688
+[source,c]
+----
+static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
+    /* --- %< --- snip --- %< --- */
+    printf("Reading file `%s'\n", buf);
+
+    /* Carefully load and eval file */
+    rargs[0] = rb_str_new2(buf);
+    rargs[1] = self;
+
+    rb_protect(RubyWrapEvalFile, (VALUE) &rargs, &state); // <.>
+    if (state) {
+        subSubtleLogWarn("Cannot load file `%s'\n", buf);
+        RubyBacktrace();
+
+        return Qfalse;
+    }
+
+    return Qtrue;
+} /* }}} */¬
+----
+<.> Call Ruby's version of `setjmp` and `longjmp` and handle the leftovers
 
 ==== Error handling
+
+Actually we covered this already in the previous section, another meme for the time being?
 
 === Integrating JavaScript
 
