@@ -755,10 +755,11 @@ So when we finally start subtle everything comes together, and we see the pieces
 solutions before, therefore are there any objections when we just increase the pace a bit for
 similarities and go into detail for new stuff?
 
-Just feel free to skip the next few listings and joins us later.
-
 .https://knowyourmeme.com/memes/spongebob-time-cards
 image::meme-wall_of_text.png[]
+
+Just feel free to skip the next few listings and join us later and for the ones remaining here
+is the triplet of loading info, config and battery thingy:
 
 
 .Running of {subtle}[subtle-0.12.6606]
@@ -808,8 +809,8 @@ end
 <.> {Styles}[Styles] are a CSS-like way of configuring colors in subtle - batteries and
 inheritance included
 
-And lastly, a quick glimpse into the battery sublet, which naturally makes use of the mentioned
-DSL:
+And lastly, a quick glimpse into the battery sublet, which naturally also makes use of the
+mentioned DSL:
 
 .{sublets}[battery-0.9]/battery.rb:64
 [source,ruby]
@@ -850,12 +851,14 @@ end
 
 So when we talk about metaprogramming, what exactly is different here?
 If you have a closer look at the previous examples, we mostly defined data structures and
-methods there, which were later collected during load or actually called.
-With metaprogramming, we turn this around and define methods to provide an API for the scripts,
-which is then called from inside our config and scripts and handle this accordingly.
+methods there, which were later collected during load and/or actually called of the host
+application.
+In other words our scripts defined an API, although according to rules of application.
+Now with metaprogramming, we turn this a bit around and define methods to provide an API for the
+scripts, which is then used inside of scripts.
 
-The Ruby integration in subtle is quite vast and I'd like to show so many cool things in it, but
-still time is precious as is attention.
+The Ruby integration in subtle is quite vast, and I'd like to show so many cool things in it, but
+time is precious, as is any attention span.
 So we have to cut a few corners here and there and follow loads of [line-through]#indirection#
 abstraction, but I think it might work, if we just stick to the styles excerpt from above.
 
@@ -927,11 +930,34 @@ static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
     return Qtrue;
 } /* }}} */¬
 ----
-<.> Call Ruby's version of `setjmp` and `longjmp` and handle the leftovers
+<.> Call Ruby's version of `setjmp` and `longjmp` and wrap our own loaded
+
+.{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:1442
+[source,c]
+----
+/* RubyWrapEvalFile {{{ */
+static VALUE RubyWrapEvalFile(VALUE data) {
+    VALUE *rargs = (VALUE *) data, rargs2[3] = {Qnil};
+
+    /* Wrap data */
+    rargs2[0] = rb_funcall(rb_cFile, rb_intern("read"), 1, rargs[0]); <.>
+    rargs2[1] = rargs[0];
+    rargs2[2] = rargs[1];
+
+    rb_obj_instance_eval(2, rargs2, rargs[1]); <.>
+
+     return Qnil;
+ } /* }}} */
+----
+<.> `rb_cFile` is an internal symbol of `File` and we call its `read` method and pass our arguments
+<.> And then a final eval - see we stick to the motto!
 
 ==== Error handling
 
 Actually we covered this already in the previous section, so nothing to be done here.
+
+.https://knowyourmeme.com/memes/white-rabbit-pointing-at-a-clock
+image::meme-white_rabbit.png[]
 
 === Integrating JavaScript
 
