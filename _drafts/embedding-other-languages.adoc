@@ -137,7 +137,9 @@ Try make now, good luck!
 
 make  all-recursive
 make[1]: Entering directory '/home/unexist/build/deskbar-0.1'
+
 # --- %< --- snip --- %< ---
+
 /bin/bash ../libtool  --tag=CC   --mode=compile gcc -DHAVE_CONFIG_H -I. -I..     -g -O2  -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c -o htable.lo htable.c
 libtool: compile:  gcc -DHAVE_CONFIG_H -I. -I.. -g -O2 -I/usr/include -I/usr/include -MT htable.lo -MD -MP -MF .deps/htable.Tpo -c htable.c  -fPIC -DPIC -o .libs/htable.o
 In file included from htable.c:2:
@@ -154,7 +156,9 @@ make: *** [Makefile:374: all] Error 2storage class specified for parameter 'strs
 /usr/include/string.h:478:14: error: storage class specified for parameter 'strsignal'
   478 | extern char *strsignal (int __sig) __THROW;
       |              ^~~~~~~~~
+
 # --- %< --- snip --- %< ---
+
 make[2]: *** [Makefile:457: htable.lo] Error 1
 make[2]: Leaving directory '/home/unexist/build/deskbar-0.1/libdeskbar'
 make[1]: *** [Makefile:479: all-recursive] Error 1
@@ -312,6 +316,7 @@ battery_update (void)
         }
     else
         fseek (fd1, 0, SEEK_SET);
+
     /* --- %< --- snip --- %< --- */
 }
 ----
@@ -390,6 +395,7 @@ sig_handler (int sig)
 
                 abort ();
             break;
+
     /* --- %< --- snip --- %< --- */
 }
 ----
@@ -438,7 +444,9 @@ quickly as well:
 [source,shell]
 ----
 $ ./configure && make
+
 # --- %< --- snip --- %< ---
+
 subtle 0.7b
 -----------------
 Binary....................: /usr/local/bin
@@ -452,7 +460,9 @@ Try make now, good luck!
 make  all-recursive
 make[1]: Entering directory '/home/unexist/build/subtle-0.7b'
 Making all in src
+
 # --- %< --- snip --- %< ---
+
 if gcc -DHAVE_CONFIG_H -I. -I. -I.. -I..   -g -O2  -I/usr/include/lua5.1  -g -O2  -MT subtle-event.o -MD -MP -MF ".deps/subtle-event.Tpo" -c -o subtle-event.o `test -f 'event.c' || echo './'`event.c; \
 then mv -f ".deps/subtle-event.Tpo" ".deps/subtle-event.Po"; else rm -f ".deps/subtle-event.Tpo"; exit 1; fi
 event.c: In function ‘subEventLoop’:
@@ -508,6 +518,7 @@ colors = {
     shade      = "#bac5ce",        -- Color of shaded windows
     background = "#596F80"         -- Color of the root background
 }
+
 -- --- %< --- snip --- %< ---
 ----
 
@@ -789,6 +800,7 @@ style :views do # <.>
     style :focus do
         foreground  "#fecf35"
     end
+
     # --- %< --- snip --- %< ---
 end
 ----
@@ -807,7 +819,9 @@ on :run do |s|
         now     = IO.readlines(s.now).first.to_i
         state   = IO.readlines(s.status).first.chop
         percent = (now * 100 / s.full).to_i
+
         # --- %< --- snip --- %< ---
+
         # Select icon for state
         icon = case state # <.>
             when "Charging"  then :ac
@@ -836,13 +850,14 @@ end
 
 So when we talk about metaprogramming, what exactly is different here?
 If you have a closer look at the previous examples, we mostly defined data structures and
-methods there, which are later collected during load and called.
-With metaprogramming, we actually define methods and call them from inside our config and
-scripts and handle this accordingly.
+methods there, which were later collected during load or actually called.
+With metaprogramming, we turn this around and define methods to provide an API for the scripts,
+which is then called from inside our config and scripts and handle this accordingly.
 
-The Ruby integration in subtle is quite vast, and we have to cut a few corners here and there
-and follow loads of [line-through]#indirection# abstraction, but I think it might work, if we just
-stick to the styles excerpt from above.
+The Ruby integration in subtle is quite vast and I'd like to show so many cool things in it, but
+still time is precious as is attention.
+So we have to cut a few corners here and there and follow loads of [line-through]#indirection#
+abstraction, but I think it might work, if we just stick to the styles excerpt from above.
 
 Loading the styles from the config consists of following basic building blocks:
 
@@ -851,7 +866,9 @@ Loading the styles from the config consists of following basic building blocks:
 ----
 void subRubyInit(void) {
     VALUE config = Qnil, options = Qnil, sublet = Qnil;
+
     /* --- %< --- snip --- %< --- */
+
     config = rb_define_class_under(mod, "Config", rb_cObject); // <.>
 
     /* Class methods */¬
@@ -914,7 +931,7 @@ static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
 
 ==== Error handling
 
-Actually we covered this already in the previous section, another meme for the time being?
+Actually we covered this already in the previous section, so nothing to be done here.
 
 === Integrating JavaScript
 
