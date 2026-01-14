@@ -935,7 +935,7 @@ static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
 .{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:1442
 [source,c]
 ----
-/* RubyWrapEvalFile {{{ */
+/* RubyWrapEvalFile */
 static VALUE RubyWrapEvalFile(VALUE data) {
     VALUE *rargs = (VALUE *) data, rargs2[3] = {Qnil};
 
@@ -949,7 +949,7 @@ static VALUE RubyWrapEvalFile(VALUE data) {
      return Qnil;
  } /* }}} */
 ----
-<.> `rb_cFile` is an internal symbol of `File` and we call its `read` method and pass our arguments
+<.> Then we use the internal symbol  `rb_cFile` to call `File#read` with our arguments
 <.> And then a final eval - see we stick to the motto!
 
 ==== Error handling
