@@ -1014,7 +1014,7 @@ wins.filter(function (win) { // <.>
     );
 });
 ----
-<.> Highly ambitious as I've promised
+<.> Highly ambitious as I've promised, but basically follows the same idea as subtle
 <.> Well, just print some details of windows in the normal state
 
 I ultimately got rid of macOS and made the decision this is all for naught and
