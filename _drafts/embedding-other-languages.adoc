@@ -853,16 +853,16 @@ So when we talk about metaprogramming, what exactly is different here?
 If you have a closer look at the previous examples, we mostly defined data structures and
 methods there, which were later collected during load and/or actually called of the host
 application.
-In other words our scripts defined an API, although according to rules of application.
-Now with metaprogramming, we turn this a bit around and define methods to provide an API for the
-scripts, which is then used inside of scripts.
+In other words our scripts defined an API by the rules of the host application, which then runs it.
+Now with metaprogramming, we turn this around and define methods to provide an API for our
+scripts and let them call it.
 
 The Ruby integration in subtle is quite vast, and I'd like to show so many cool things in it, but
 time is precious, as is any attention span.
 So we have to cut a few corners here and there and follow loads of [line-through]#indirection#
-abstraction, but I think it might work, if we just stick to the styles excerpt from above.
+abstraction, but I think we better stay with the styles excerpt from above.
 
-Loading the styles from the config consists of following basic building blocks:
+Loading styles from the config consists of following basic building blocks:
 
 .{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:3161
 [source,c]
@@ -905,8 +905,8 @@ void subRubyLoadConfig(void) {
 }
 ----
 <.> Call back our config class and create a new instance
-<.> Take care, that the internal garbage collector doesn't wipe it
-<.>
+<.> Take care, that the internal garbage collector doesn't get rid of it
+<.> Wrap it again and continue in the next snippet
 
 .{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:1688
 [source,c]
@@ -930,7 +930,7 @@ static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
     return Qtrue;
 } /* }}} */¬
 ----
-<.> Call Ruby's version of `setjmp` and `longjmp` and wrap our own loaded
+<.> Ruby uses its own version of `setjmp` and `longjmp`, so wrap everything up and pass it over
 
 .{subtle}[subtle-0.12.6606]/src/subtle/ruby.c:1442
 [source,c]
@@ -949,12 +949,13 @@ static VALUE RubyWrapEvalFile(VALUE data) {
      return Qnil;
  } /* }}} */
 ----
-<.> Then we use the internal symbol  `rb_cFile` to call `File#read` with our arguments
-<.> And then a final eval - see we stick to the motto!
+<.> Then we use the internal symbol  `rb_cFile` to call `File#read` on our arguments
+<.> And then a final eval - see we adhere to the motto!
 
 ==== Error handling
 
-Actually we covered this already in the previous section, so nothing to be done here.
+Actually we covered this already in the previous section, so nothing to be done here and time to
+move on.
 
 .https://knowyourmeme.com/memes/white-rabbit-pointing-at-a-clock
 image::meme-white_rabbit.png[]
