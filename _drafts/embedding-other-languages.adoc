@@ -5,7 +5,7 @@ description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase c rust lua ruby javascript duktape extism
+tags: showcase c rust obj-c lua ruby javascript duktape extism
 categories: tech
 toc: true
 ---
@@ -69,6 +69,11 @@ endif::[]
 :metaprog: https://en.wikipedia.org/wiki/Metaprogramming
 :styles: https://subtle.de/projects/subtle/wiki/Styles
 :dsl: https://en.wikipedia.org/wiki/Domain-specific_language
+:macos: https://www.apple.com/os/macos/
+:touchbar: https://support.apple.com/guide/mac-help/use-the-touch-bar-mchlbfd5b039/mac
+:accessapi: https://github.com/unexist/touchjs
+:duktape: https://duktape.org/
+:obj-c: https://en.wikipedia.org/wiki/Objective-C
 
 There are many qualities modern software [line-through]#has to# *should* address especially when
 done properly.
@@ -961,6 +966,58 @@ move on.
 image::meme-white_rabbit.png[]
 
 === Integrating JavaScript
+
+During the 2020s lots of weird things happen, but it was also the time when I was forced into my own
+sort of crisis and had to use {macOS}[macOS] for some years.
+Needless to say the window management totally annoyed me and I started another highly ambitious
+project aptly named {touchjs}[touchjs].
+
+There, I tied the newfootnote:[To me at least..] {touchbar}[Touch Bar], basic window management via
+{accessapi}[Accessibility API] and a JavaScript integration based on {duktape}[duktape] together.
+
+I abide of throwing {obj-c}[Obj-c] into this mix here, but I can show off a a test script of the
+API, since I again have no real screenshots and lack the required hardware to give it a spin:
+
+.{touchjs}[touchjks]/test/wm.js:1
+[source,javascript]
+----
+/* WM */
+var wm = new TjsWM(); // <.>
+
+tjs_print("wm: trusted=" + wm.isTrusted());
+
+/* Screens */
+var screens = wm.getScreens();
+
+screens.forEach(function (screen) {
+    tjs_print("screen: frame=" + screen.getFrame());
+});
+
+/* Windows */
+var wins = wm.getWindows();
+
+wins.filter(function (win) { // <.>
+    return win.isNormalWindow();
+}).forEach(function (win) {
+    tjs_print("win: id=" + win.getId() +
+        ", title=" + win.getTitle() +
+        ", role=" + win.getRole() +
+        ", subrole=" + win.getSubrole() +
+        ", frame=" + win.getFrame() +
+        ", pid=" + win.getPid() +
+        ", movable=" + win.isMovable() +
+        ", resizable=" + win.isResizable() +
+        ", minimized=" + win.isMinimized() +
+        ", hidden=" + win.isHidden() +
+        ", normal=" + win.isNormalWindow() +
+        ", sheet=" + win.isSheet()
+    );
+});
+----
+<.> Highly ambitious as I've promised
+<.> Well, just print some details of windows in the normal state
+
+I ultimately got rid of macOS and made the decision this is all for naught and
 
 ==== Time for Screenshots
 
