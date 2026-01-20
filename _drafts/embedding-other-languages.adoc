@@ -975,8 +975,10 @@ project aptly named {touchjs}[touchjs].
 There, I tied the newfootnote:[To me at least..] {touchbar}[Touch Bar], basic window management via
 {accessapi}[Accessibility API] and a JavaScript integration based on {duktape}[duktape] together.
 
-Adding {obj-c}[Obj-c] to this blog is probably something for another day, but I can show off a
-test script of the API, since I again have no real screenshots and lack the required hardware to
+==== Time for Screenshots
+
+Adding {obj-c}[Obj-C] to this blog is probably something for another day, _but_ I can show off a
+test script of the API along with some scree since I again have no real screenshots and lack the required hardware to
 give it a spin:
 
 .{touchjs}[touchjs]/test/observer.js:1
@@ -1017,7 +1019,6 @@ project!
 Since I got tired of Obj-C, I made the decision this is all for naught and started again with Rust.
 This was around 2023 and the glorious project name {rubtle}[rubtle] in 2023.
 
-==== Time for Screenshots
 
 ==== Runtime loading
 
