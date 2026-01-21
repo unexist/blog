@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Fun with embedability
+title: Fun with embeddability
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
@@ -10,10 +10,10 @@ categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/fun_with_embedability
+:imagesdir: {asciidoctorconfigdir}/../assets/images/fun_with_embeddability
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/fun_with_embedability
+:imagesdir: /assets/images/fun_with_embeddability
 endif::[]
 :figure-caption!:
 :table-caption!:
@@ -21,7 +21,6 @@ endif::[]
 :source-highlighter: highlight.js
 
 :subtle-rs: https://github.com/unexist/subtle-rs
-:touchjs: https://github.com/unexist/touchjs
 :rubtle: https://github.com/unexist/rubtle
 :extism: https://extism.org/
 :wasm: https://webassembly.org/
@@ -69,31 +68,31 @@ endif::[]
 :metaprog: https://en.wikipedia.org/wiki/Metaprogramming
 :styles: https://subtle.de/projects/subtle/wiki/Styles
 :dsl: https://en.wikipedia.org/wiki/Domain-specific_language
+:touchjs: https://github.com/unexist/touchjs
 :macos: https://www.apple.com/os/macos/
 :touchbar: https://support.apple.com/guide/mac-help/use-the-touch-bar-mchlbfd5b039/mac
 :accessapi: https://github.com/unexist/touchjs
 :duktape: https://duktape.org/
 :obj-c: https://en.wikipedia.org/wiki/Objective-C
 
-There are many qualities modern software [line-through]#has to# *should* address especially when
+There are many qualities modern software [line-through]#has to# *should* address, especially when
 done properly.
 Among the long list of {ilities}[-ilities], there are some boring and pretty self-explanatory ones
 like {maintainability}[maintainability], some dogmatic ones like
 {correctness}[correctness]footnote:[Correctness-ily?] and also interesting ones, like
 {extensibility}[extensibility].
 
-How a certain quality is best achieved depends on a plethora of things, but overall the targeted
-ones should match the requirements and the budget to burn.
-Stay put, we don't want to dwell on this longer than this introduction has to be, and we definitely
-also don't want to go into detail about essentials ones, this is best done by something with
-affinity to lists like {wikipedia}[Wikipedia].
-Instead, we fast-forward directly to extensibility and see what this is all about.
+How a certain quality is best achieved depends on a plethora of things, but interestingly
+according to {Wikipedia}[Wikipedia], extensibility revolves around future growth and proper design,
+but also mentions scripting languages in the black box.
 
-According to Wikipedia extensibility revolves around future growth and proper design, but also
-mentions scripting languages in the black box and scripting sounds about right for the remainder of
-this post.
-So please be my guest while I delve a bit in my {FOSS}[FOSS]-history and lay out how different
-approaches and why integrating scripting languages is a great idea.
+Stay put, we don't want to dwell on theory longer than this introduction has to be, so instead, we
+fast-forward directly to extensibility and see what this is all about.
+
+
+So please be my guest on my journey through my 20+ years of {FOSS}[FOSS]-history and listen to an
+old man laying out different approaches of embedding scripting languages and why this is always
+great idea.
 
 .https://knowyourmeme.com/photos/930538-the-fairly-oddparents
 image::meme-go_wrong.png[]
