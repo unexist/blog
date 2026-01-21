@@ -33,7 +33,7 @@ endif::[]
 :wikipedia: https://en.wikipedia.org
 :foss: https://en.wikipedia.org/wiki/Free_and_open-source_software
 :xlib: https://en.wikipedia.org/wiki/Correctness_(computer_science)
-:deskbar: https://sourceforge.net/projects/deskbar/
+:deskbar: https://github.com/unexist/deskbar
 :gkrellm: https://gkrellm.srcbox.net/
 :clang: https://en.wikipedia.org/wiki/C_(programming_language)
 :sourceforge: https://sourceforge.net/
@@ -748,7 +748,7 @@ here and do one thing after another.
 
 ==== Time for Screenshots
 
-This time it is quite easy to find and even to shoot a nice screenshot of subtle, since I am using
+This time it is quite easy to find and even to make a nice screenshot of subtle, since I am using
 it on a daily on several devices and don't have to mess with outdated and broken
 buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
@@ -881,6 +881,7 @@ void subRubyInit(void) {
 
     /* Class methods */¬
     rb_define_method(config, "style", RubyConfigStyle, 1); // <.>
+
     /* --- %< --- snip --- %< --- */
 }
 ----
@@ -906,6 +907,7 @@ void subRubyLoadConfig(void) {
     } else if (subtle->flags & SUB_SUBTLE_CHECK) {
         printf("Syntax OK\n");
     }
+
     /* --- %< --- snip --- %< --- */
 }
 ----
@@ -918,6 +920,7 @@ void subRubyLoadConfig(void) {
 ----
 static VALUE RubyConfigLoadConfig(VALUE self, VALUE file) {
     /* --- %< --- snip --- %< --- */
+
     printf("Reading file `%s'\n", buf);
 
     /* Carefully load and eval file */
@@ -977,9 +980,47 @@ There, I tied the newfootnote:[To me at least..] {touchbar}[Touch Bar], basic wi
 
 ==== Time for Screenshots
 
-Adding {obj-c}[Obj-C] to this blog is probably something for another day, _but_ I can show off a
-test script of the API along with some scree since I again have no real screenshots and lack the required hardware to
-give it a spin:
+From an easy task back to a more complicated:
+Somehow I and totally unexplainable to me, I forgot to check in some essential headers to the
+project and there are quite some blocking issues on build:
+
+.Build attempt #1 of {touchjs}[touchjs]
+[source,shell]
+----
+$ make
+clang -c -mmacosx-version-min=10.12 -x objective-c src/touchjs.m -o src/touchjs.o
+src/touchjs.m:17:10: fatal error: 'delegate.h' file not found
+   17 | #include "delegate.h"
+      |          ^~~~~~~~~~~~
+1 error generated.
+make: *** [src/touchjs.o] Error 1
+----
+
+.Build attempt #2 of {touchjs}[touchjs]
+[source,shell]
+----
+$ make
+clang -c -mmacosx-version-min=10.12 -x objective-c src/touchbar.m -o src/touchbar.o
+src/touchbar.m:57:23: error: use of undeclared identifier 'kQuit'
+   57 |     [array addObject: kQuit];
+      |                       ^
+src/touchbar.m:149:21: warning: class method '+presentSystemModalTouchBar:systemTrayItemIdentifier:' not found (return type defaults to 'id') [-Wobjc-method-access]
+  149 |         [NSTouchBar presentSystemModalTouchBar: self.groupTouchBar
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  150 |             systemTrayItemIdentifier: kGroupButton];
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~
+src/touchbar.m:150:39: error: use of undeclared identifier 'kGroupButton'; did you mean 'kGroupIcon'?
+  150 |             systemTrayItemIdentifier: kGroupButton];
+      |                                       ^~~~~~~~~~~~
+      |                                       kGroupIcon
+
+# --- %< --- snip --- %< ---
+----
+
+It took me quite some time figuring out how to restore or rather re-invent what was missing.
+Additionally, there was never a real usage of the project on my side, _but_ I can show off test
+scripts in JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
+of the API along with some shots of the Touch Bar on a borrowed MacBook Pro:
 
 .{touchjs}[touchjs]/test/observer.js:1
 [source,javascript]
