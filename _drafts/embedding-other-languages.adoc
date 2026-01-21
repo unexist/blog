@@ -95,7 +95,7 @@ old man laying out different approaches of embedding scripting languages and why
 great idea.
 
 .https://knowyourmeme.com/photos/930538-the-fairly-oddparents
-image::meme-go_wrong.png[]
+image::meme-go_wrong.png[Meme Go Wrong]
 
 == Barebone
 
@@ -117,7 +117,7 @@ messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code wi
 this is as far as I gotfootnote:[..followed by kilometres of error trace I wasn't in the mood to
 fix right now]:
 
-.Build attempt of {deskbar}[deskbar]
+.Build #1 attempt of {deskbar}[deskbar]
 [source,shell]
 ----
 $ ./configure && make
@@ -186,9 +186,9 @@ luckily still provides sftp access to the project page:
 And with even more luck, although the page is a bit empty, the file listing included screenshots:
 
 .Screenshot of {deskbar}[deskbar-0.7c (1/2)]
-image::deskbar-05-05-2005.png[]
+image::deskbar-05-05-2005.png[Screenshot of deskbar #1]
 .Screenshot of {deskbar}[deskbar-0.7c (2/2)]
-image::deskbar-shot.png[]
+image::deskbar-shot.png[Screenshot of deskbar #2]
 ****
 
 === Runtime loading
@@ -444,7 +444,7 @@ Adding a scripting language solves quite a few problems:
 My attempt of trying to compile the project and provide an actual screenshot this time ended
 quickly as well:
 
-.Build attempt of {subtle}[subtle-0.7b]
+.Build attempt #1 of {subtle}[subtle-0.7b]
 [source,shell]
 ----
 $ ./configure && make
@@ -485,7 +485,7 @@ This is kind of embarrassing for an official release and really have to question
 retrospect, but this won't stop us now.
 
 .https://knowyourmeme.com/memes/spongebob-time-cards
-image::meme-few_hours_later.png[]
+image::meme-few_hours_later.png[Meme Few Hours Laters]
 
 After a dive into the code there were some obviously problems and also blatant oversights and if
 you are interested in the shameful truth here is silly patch:
@@ -495,8 +495,8 @@ you are interested in the shameful truth here is silly patch:
 And without further ado here is finally the screenshot of the scripting part in action, before we
 dive into how this is actually done under the hood:
 
-.Screenshot of {subtle}[subtle-0.7b]
-image::subtle-0.7b.png[]
+.Screenshot of {subtle}[subtle-0.7b] (1/2)
+image::subtle-0.7b.png[Screenshot of subtle #1]
 
 ==== Runtime loading
 
@@ -751,7 +751,8 @@ This time it is quite easy to find and even to make a nice screenshot of subtle,
 it on a daily on several devices and don't have to mess with outdated and broken
 buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
-image::subtle-0.12.6606.png[]
+.Screenshot of {subtle}[subtle-0.12.6606] (2/2)
+image::subtle-0.12.6606.png[screenshot of subtle #2]
 
 ==== Runtime loading
 
@@ -760,7 +761,7 @@ solutions before, therefore are there any objections when we just increase the p
 similarities and go into detail for new stuff?
 
 .https://knowyourmeme.com/memes/spongebob-time-cards
-image::meme-wall_of_text.png[]
+image::meme-wall_of_text.png[Meme Wall of Text]
 
 Just feel free to skip the next few listings and join us later and for the ones remaining here
 is the triplet of loading info, config and battery thingy:
@@ -965,7 +966,7 @@ Actually we covered this already in the previous section, so nothing to be done 
 move on.
 
 .https://knowyourmeme.com/memes/white-rabbit-pointing-at-a-clock
-image::meme-white_rabbit.png[]
+image::meme-white_rabbit.png[Meme White Rabbit]
 
 === Integrating JavaScript
 
@@ -1016,9 +1017,10 @@ src/touchbar.m:150:39: error: use of undeclared identifier 'kGroupButton'; did y
 # --- %< --- snip --- %< ---
 ----
 
-It took me quite some time figuring out how to restore or rather re-invent what was missing.
-Additionally, there was never a real usage of the project on my side, _but_ I can show off test
-scripts in JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
+It took me quite some time figuring out how to restore the missing parts and thankfully found them
+in a backup.
+Additionally, there has never been a real usage of the project on my side, _but_ I can show off
+test scripts in JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
 of the API along with some shots of the Touch Bar on a borrowed MacBook Pro:
 
 .{touchjs}[touchjs]/test/observer.js:1
@@ -1033,13 +1035,15 @@ tjs_print("wm: trusted=" + wm.isTrusted());
 wm.observe("win_open", function (win) {
     tjs_print("Open: name=" + win.getTitle() + ", id=" + win.getId() + ", frame=" + win.getFrame()); // <.>
 });
-
-/* --- %< --- snip --- %< --- */
 ----
-<.> Highly ambitious as I've promised, but basically follows the same idea as subtle
+<.> Highly ambitious as I've promised
 <.> Well, just print some details of windows in the normal state
 
-And another short one for the UI integration:
+.Screenshotfootnote:[Just kidding - see next shots!] of {touchjs}[touchjs/test/observer.js] (1/3)
+image::touchjs-iterm-observer.png[Screenshot of touchjs (1/3)]
+image::touchjs-touchbar-observer.png[Screenshot of touchjs (1/3)]
+
+And some more with the actual UI:
 
 .{touchjs}[touchjs]/test/button.js:1
 [source,javascript]
@@ -1053,6 +1057,44 @@ var b = new TjsButton("Test")
 /* Attach */
 tjs_attach(b);
 ----
+
+."Barshot" of {touchjs}[touchjs/test/button.js] (2/3)
+image::touchjs-touchbar-button.png[Screenshot of touchjs (2/3)]
+
+."Barshot" of {touchjs}[touchjs/test/widgets.js] (2/3)
+image::touchjs-touchbar-widgets.png[Screenshot of touchjs (3/3)]
+
+I ultimately got rid of macOS once-for-all, but before that I did more shenanigans in a sh iny new
+project!
+Since I got tired of Obj-C, I made the decision this is all for naught and started again with Rust.
+This was around 2023 and the glorious project name {rubtle}[rubtle] in 2023.
+
+
+==== Runtime loading
+
+==== Error handling
+
+=== Recap
+
+|===
+| Ease of use | Richness of API | Language agnostic | Error handling | Performance
+|===
+
+== Webassembly
+
+=== Screenshots first
+
+=== Runtime loading
+
+=== Error handling
+
+=== Recap
+
+|===
+| Ease of use | Richness of API | Language agnostic | Error handling
+|===
+
+
 
 I ultimately got rid of macOS once-for-all, but before that I did more shenanigans in a sh iny new
 project!
