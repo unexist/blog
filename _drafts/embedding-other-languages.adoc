@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Extensibility through scripting languages
+title: Fun with embedability
 description: TBD
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
@@ -10,10 +10,10 @@ categories: tech
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
-:imagesdir: {asciidoctorconfigdir}/../assets/images/extensibility_through_scripting_languages
+:imagesdir: {asciidoctorconfigdir}/../assets/images/fun_with_embedability
 endif::[]
 ifndef::asciidoctorconfigdir[]
-:imagesdir: /assets/images/extensibility_through_scripting_languages
+:imagesdir: /assets/images/fun_with_embedability
 endif::[]
 :figure-caption!:
 :table-caption!:
