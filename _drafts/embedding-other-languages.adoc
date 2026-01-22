@@ -25,6 +25,7 @@ endif::[]
 :extism: https://extism.org/
 :wasm: https://webassembly.org/
 
+:embeddability: https://en.wiktionary.org/wiki/embeddability
 :ilities: https://en.wikipedia.org/wiki/List_of_system_quality_attributes
 :maintainability: https://en.wikipedia.org/wiki/Maintainability
 :correctness: https://en.wikipedia.org/wiki/Correctness_(computer_science)
@@ -75,24 +76,21 @@ endif::[]
 :duktape: https://duktape.org/
 :obj-c: https://en.wikipedia.org/wiki/Objective-C
 
-There are many qualities modern software [line-through]#has to# *should* address, especially when
-done properly.
-Among the long list of {ilities}[-ilities], there are some boring and pretty self-explanatory ones
-like {maintainability}[maintainability], some dogmatic ones like
-{correctness}[correctness]footnote:[Correctness-ily?] and also interesting ones, like
+*Embeddability*?
+I am quite certain this is in fact an {embeddability}[english word], but you probably won't find it
+among the other {ilities}[-ilities] of qualities, software might want to address.
+Among it, there are some boring and pretty self-explanatory ones like
+{maintainability}[maintainability], even some dogmatic ones like
+{correctness}[correctness]footnote:[Correctness-ily?], but fortunately also funnier ones like
 {extensibility}[extensibility].
 
-How a certain quality is best achieved depends on a plethora of things, but interestingly
-according to {Wikipedia}[Wikipedia], extensibility revolves around future growth and proper design,
-but also mentions scripting languages in the black box.
+How a certain quality is best achieved depends on a plethora of things, but one way to archive
+extensibility, according to {Wikipedia}[Wikipedia], is to use scripting languages and they can
+be quite embeddable.
 
-Stay put, we don't want to dwell on theory longer than this introduction has to be, so instead, we
-fast-forward directly to extensibility and see what this is all about.
-
-
-So please be my guest on my journey through my 20+ years of {FOSS}[FOSS]-history and listen to an
-old man laying out different approaches of embedding scripting languages and why this is always
-great idea.
+So please be my guest on my lenghty journey through 20+ years of personal {FOSS}[FOSS]-history and
+listen to an old man laying out different approaches of embedding scripting languages and why this
+is always great idea.
 
 .https://knowyourmeme.com/photos/930538-the-fairly-oddparents
 image::meme-go_wrong.png[Meme Go Wrong]
@@ -1017,9 +1015,9 @@ src/touchbar.m:150:39: error: use of undeclared identifier 'kGroupButton'; did y
 # --- %< --- snip --- %< ---
 ----
 
-It took me quite some time figuring out how to restore the missing parts and thankfully found them
+It took me quite some time figuring out how to restore the missing parts and thankfully I found them
 in a backup.
-Additionally, there has never been a real usage of the project on my side, _but_ I can show off
+Still, there has never been a real usage of the project on my side, _but_ I can show off
 test scripts in JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
 of the API along with some shots of the Touch Bar on a borrowed MacBook Pro:
 
