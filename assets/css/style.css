@@ -454,7 +454,7 @@ svg.waves {
 }
 
 .post-content blockquote::before {
-    color: var(--highlight-color);
+    color: var(--h4-color);
     content: '“';
     float: left;
     font-size: 500%;
@@ -527,10 +527,6 @@ svg.waves {
     white-space: nowrap;
 }
 
-.post-tags {
-    font-size: 70%;
-}
-
 .post-content .imageblock > .title, .post-content .tableblock > .title {
     font-style: italic;
     font-size: 80%;
@@ -551,6 +547,17 @@ svg.waves {
     background-size: contain;
     display: inline-block;
     color: var(--h3-color);
+}
+
+.post-content div:nth-child(2) .paragraph p::first-letter,
+.post-content .sect1 .paragraph:first-child p::first-letter {
+    font-size: 1.5em;
+    color: var(--h4-color);
+    font-weight: bold;
+}
+
+.post-tags {
+    font-size: 70%;
 }
 
 a[href^="https://blog.unexist.dev"]::after,
