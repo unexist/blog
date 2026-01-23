@@ -3,13 +3,9 @@ env:
   JEKYLL_ENV: '{{.JEKYLL_ENV | default "production" }}'
 
 tasks:
-  rvm:
-    cmds:
-      - rvm use ruby-3.3.6
-
   build:
     cmds:
-      - bundle exec jekyll build
+      - rvm ruby-3.3.6 exec bundle exec jekyll build
 
   collect:
     cmds:
@@ -24,14 +20,13 @@ tasks:
       - zsh bin/create.sh
 
   drafts:
-    depends: [rvm]
     cmds:
-      - "bundle exec jekyll serve --port 10000 --drafts {{.CLI_ARGS}}"
+      - rvm ruby-3.3.6 exec bundle exec jekyll serve --port 10000 --drafts {{.CLI_ARGS}}
 
   publish:
     cmds:
-      - zsh bin/publish.sh
+      - rvm ruby-3.3.6 exec zsh bin/publish.sh
 
   start:
     cmds:
-      - "bundle exec jekyll serve --port 9000 {{.CLI_ARGS}}"
+      - rvm ruby-3.3.6 exec bundle exec jekyll serve --port 9000 {{.CLI_ARGS}}
