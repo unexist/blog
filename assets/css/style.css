@@ -549,7 +549,7 @@ svg.waves {
     color: var(--h3-color);
 }
 
-.post-content div:nth-child(2) .paragraph p::first-letter,
+.post-content .paragraph:first-child > p::first-letter,
 .post-content .sect1 .paragraph:first-child p::first-letter {
     font-size: 1.5em;
     color: var(--h4-color);
