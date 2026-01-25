@@ -24,6 +24,7 @@
     --padding-top-bot: 30px;
     --radius: 8px;
     --border: 1px solid var(--top-color);
+    --border-sidebar: 1px solid var(--font-color2);
 
     /* Admonitions */
     --admon-note: var(--link-color);
@@ -190,13 +191,13 @@ span.bold {
     padding: var(--padding);
 }
 
-#content .sidebarblock .title:before {
+#content .sidebarblock .title:first-child:before {
     content: "##";
     padding-right: 0.2em;
 }
 
-#content .sidebarblock .title {
-    text-align: right;
+#content .sidebarblock .content > .title:first-child {
+    text-align: center;
     text-decoration: none;
     color: var(--h2-color);
     border-bottom: 1px solid var(--h2-color);
@@ -212,6 +213,16 @@ span.bold {
     overflow-x: auto;
     -webkit-mask: var(--mask);
     mask: var(--mask);
+}
+
+#content .sidebarblock table tr,
+#content .sidebarblock table td,
+#content .sidebarblock table td {
+    border-color: var(--h2-color) !important;
+}
+
+#content .sidebarblock .conum[data-value] {
+    background-color: var(--h2-color);
 }
 
 #content table {
@@ -239,7 +250,8 @@ span.bold {
     padding: var(--padding);
 }
 
-#content table th:last-child, #content table td:last-child {
+#content table th:last-child,
+#content table td:last-child {
     border-right: none;
 }
 
@@ -537,12 +549,18 @@ svg.waves {
     white-space: nowrap;
 }
 
-.post-content .imageblock > .title, .post-content .tableblock > .title {
+.post-content .imageblock > .title,
+.post-content .tableblock > .title,
+.post-content .listingblock > .title {
     font-style: italic;
     font-size: 80%;
     text-align: left;
-    color: var(--h3-color);
+    color: var(--h4-color);
     caption-side: bottom;
+}
+
+.post-content .listingblock > .title {
+    text-align: right;
 }
 
 .post-content a[href^="http://"]::after,
@@ -557,13 +575,6 @@ svg.waves {
     background-size: contain;
     display: inline-block;
     color: var(--h3-color);
-}
-
-.post-content .paragraph:first-child > p::first-letter,
-.post-content .sect1 .paragraph:first-child p::first-letter {
-    font-size: 1.5em;
-    color: var(--h4-color);
-    font-weight: bold;
 }
 
 .post-tags {
