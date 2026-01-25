@@ -91,8 +91,8 @@ They can be quite embeddable.
 
 So in case you have some time to kill, join me on a lengthy journey through 20+ years of personal
 {FOSS}[FOSS]-history.
-This is going to fun and we are having a look at d approaches of embedding and also see why this
-is always great idea.
+This is going to fun and we are having a look at different approaches of embedding and also see why
+this is always great idea - plus we also have memes.
 
 .https://knowyourmeme.com/photos/930538-the-fairly-oddparents
 image::meme-go_wrong.png[Meme Go Wrong]
@@ -103,8 +103,9 @@ Unbeknownst to my past self, I made my first experience with this kind of extens
 when I started my long journey with {xlib}[Xlib].
 During that time I started a project called {deskbar}[deskbar] with the lofty goal to print system
 information like cpu load, battery usage etc. directly onto the root window of the X session.
-There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but ho likes pre-built
-stuff when you can roll your own?
+There were plenty of alternatives like {gkrellm}[GKrellM] readily available, but who in their right
+mind prefers pre-built stuff over rolling your ownfootnote:[Beside crypto, never do that unless
+this is your entire business]?
 
 The initial idea was just to include everything in one binary, but I quickly discovered the
 ergonomics of re-compiling and shipping everything together are annoying and I switched to a simple
@@ -113,9 +114,9 @@ plugin system.
 === Screenshots first
 
 I would have loved to show some screenshots of deskbar in action here, but unfortunately after
-messing with {autotools}[Autotools] and trying to compile old {clang}[C]-code with a modern compiler
-this is as far as I gotfootnote:[..followed by kilometres of error trace I wasn't in the mood to
-fix right now]:
+messing with the infamous {autotools}[Autotools] and trying to compile old {clang}[C]-code with a
+modern compiler this is as far as I gotfootnote:[..followed by kilometres of error trace I wasn't
+in the mood to fix right now]:
 
 .Build #1 attempt of {deskbar}[deskbar]
 [source,shell]
@@ -170,13 +171,13 @@ make[1]: Leaving directory '/home/unexist/build/deskbar-0.1'
 make: *** [Makefile:374: all] Error 2
 ----
 <.> https://en.wikipedia.org/wiki/XMMS[X Multimedia System (XMMS)]
-<.> I can only guess - the plugin is just an empty stub that returns `NULL`
+<.> I can only guess what is was supposed to do, since the plugin is just an empty stub that returns `NULL`
 <.> Yes, oh well...
 
 Nevertheless, this output clearly proves there has been a plugin system with conditional
 compilation, which bases solely on linking magic, and we have to move on.
 
-.Edit
+.Dang it!
 ****
 I dug a bit further and stumbled upon my old project page on {sourceforge}[SourceForge], which
 luckily still provides sftp access to the project page:
@@ -187,6 +188,7 @@ And with even more luck, although the page is a bit empty, the file listing incl
 
 .Screenshot of {deskbar}[deskbar-0.7c (1/2)]
 image::deskbar-05-05-2005.png[Screenshot of deskbar #1]
+
 .Screenshot of {deskbar}[deskbar-0.7c (2/2)]
 image::deskbar-shot.png[Screenshot of deskbar #2]
 ****
@@ -686,7 +688,7 @@ function battery:meter() // <.>
     return(math.floor(battery.remaining * 100 / battery.capacity))
 end
 ----
-<.> The `:` here is used as a kind of namespace separator this is handled as a global table
+<.> The `:` here is used as a kind of namespace separator and should be read as a global table
 called `battery` with the entry `meter`.
 
 Once the sublet is loaded and initialized we can just call it analogue to our `save_call` from
@@ -743,12 +745,12 @@ handling from us
 
 Moving fast-forward with subtle, I've replaced Lua with {Ruby}[Ruby] after a
 while and this is an entirely different way of integration, but let us just stick to our recipe
-here and do one thing after another.
+here and do one mistake after another.
 
 ==== Time for Screenshots
 
-This time it is quite easy to find and even to make a nice screenshot of subtle, since I am using
-it on a daily on several devices and don't have to mess with outdated and broken
+This time it is quite easy to find and also to make screenshots of subtle, since I am using it on
+a daily on several devices and don't have to mess with outdated and broken
 buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
 .Screenshot of {subtle}[subtle-0.12.6606] (2/2)
@@ -756,16 +758,15 @@ image::subtle-0.12.6606.png[screenshot of subtle #2]
 
 ==== Runtime loading
 
-So when we finally start subtle everything comes together, and we see the pieces from the other
-solutions before, therefore are there any objections when we just increase the pace a bit for
-similarities and go into detail for new stuff?
+So when we finally start subtle everything comes together, and we see known pieces from other
+projects before, which is more or the less entirely the same.
 
-.https://knowyourmeme.com/memes/spongebob-time-cards
+Just feel free to skip the next few listings and join us later and for the ones remaining..
+
+.https://knowyourmeme.com/memes/wall-of-text
 image::meme-wall_of_text.png[Meme Wall of Text]
 
-Just feel free to skip the next few listings and join us later and for the ones remaining here
-is the triplet of loading info, config and battery thingy:
-
+Just kidding, here is the promised triplet of loading info, config and the battery thingy:
 
 .Running of {subtle}[subtle-0.12.6606]
 [source,shell]
@@ -856,14 +857,15 @@ end
 
 So when we talk about metaprogramming, what exactly is different here?
 If you have a closer look at the previous examples, we mostly defined data structures and
-methods there, which were later collected during load and/or actually called of the host
+methods there, which were later collected during load and/or actually called by the host
 application.
-In other words our scripts defined an API by the rules of the host application, which then runs it.
-Now with metaprogramming, we turn this around and define methods to provide an API for our
-scripts and let them call it.
+In other words our scripts defined an API according to the rules of the host application, which
+then runs it.
+With metaprogramming now, we turn this around and define methods and provide an API for our
+scripts to let them call it.
 
-The Ruby integration in subtle is quite vast, and I'd like to show so many cool things in it, but
-time is precious, as is any attention span.
+The Ruby integration in subtle is quite vast, and there are many cool things I'd like to show, but
+time is precious, as is our attention span and sobriety is in order.
 So we have to cut a few corners here and there and follow loads of [line-through]#indirection#
 abstraction, but I think we better stay with the styles excerpt from above.
 
