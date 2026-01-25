@@ -5,7 +5,7 @@ description: Personal journey through 20+ years of FOSS-projects under the umbre
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase c rust obj-c lua ruby javascript duktape extism
+tags: showcase c rust lua ruby javascript duktape extism
 categories: tech
 toc: true
 ---
@@ -74,6 +74,7 @@ endif::[]
 :touchbar: https://support.apple.com/guide/mac-help/use-the-touch-bar-mchlbfd5b039/mac
 :accessapi: https://github.com/unexist/touchjs
 :duktape: https://duktape.org/
+:testdriven: https://en.wikipedia.org/wiki/Test-driven_development
 :obj-c: https://en.wikipedia.org/wiki/Objective-C
 :bindgen: https://github.com/rust-lang/rust-bindgen
 :unsafe: https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html
@@ -246,7 +247,7 @@ library:
 .Linking process based on the diagram from {linker}
 ++++
 {% plantuml %}
-'!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 'skinparam linetype ortho
 skinparam nodesep 20
@@ -438,7 +439,7 @@ project {subtle}[subtle].
 Over the years there have been many major breaking changes, from the initial design to the state
 it currently is in.
 Two of the post-related changes were the integration of the scripting language {lua}[Lua] and its
-later replacement with{Ruby}[Ruby] after a few years in this glorious {issue1}[issue #1].
+later replacement with {Ruby}[Ruby] after a few years in this glorious {issue1}[issue #1].
 
 === Integrating Lua
 
@@ -548,6 +549,8 @@ loading and jump further into nitty-gritty details:
 .{subtle}[subtle-0.7b]/src/lua.c:150
 [source,c]
 ----
+/* --- %< --- snip --- %< --- */
+
 subLogDebug("Reading `%s'\n", buf);
 if(luaL_loadfile(configstate, buf) || lua_pcall(configstate, 0, 0, 0)) // <.>
     {
@@ -556,10 +559,14 @@ if(luaL_loadfile(configstate, buf) || lua_pcall(configstate, 0, 0, 0)) // <.>
         subLogError("Can't load config file `%s'.\n", buf);
     }
 
+/* --- %< --- snip --- %< --- */
+
 /* Parse and load the font */¬
 face  = GetString(configstate, "font", "face", "fixed"); // <.>
 style = GetString(configstate, "font", "style", "medium");
 size  = GetNum(configstate, "font", "size", 12);
+
+/* --- %< --- snip --- %< --- */
 ----
 <.> Internal calls to load the config file and just execute it in a safe way {luapcall}[pcall]
 <.> Once everything is stored inside `configstate` we fetch required values
@@ -575,6 +582,8 @@ size  = GetNum(configstate, "font", "size", 12);
             lua_gettable(configstate, -2); \
         } \
 } while(0)
+
+/* --- %< --- snip --- %< --- */
 
 static char *
 GetString(lua_State *configstate,
@@ -605,7 +614,7 @@ done, so here is a small break down how the API works:
 .Stack handling diagram
 ++++
 {% plantuml %}
-'!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
+!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 skinparam linetype ortho
 skinparam nodesep 20
@@ -994,8 +1003,8 @@ There, I tied the newfootnote:[To me at least..] {touchbar}[Touch Bar], basic wi
 ==== Time for Screenshots
 
 Unfortunately we are back at build problems:
-Somehow I and totally unexplainable to me, I forgot to check in some essential headers to the
-project:
+Somehow and totally unexplainable to me, I forgot to check in some essential headers to the
+project which led to a full-halt:
 
 .Build attempt #1 of {touchjs}[touchjs]
 [source,shell]
@@ -1030,13 +1039,13 @@ src/touchbar.m:150:39: error: use of undeclared identifier 'kGroupButton'; did y
 # --- %< --- snip --- %< ---
 ----
 
-Fixing something that isn't there is quite difficult, and it took me some time and  reading
-reference manuals what I actually have to restore.
+Fixing something that isn't there is quite difficult, and it took me some time and reading
+reference manuals to understand what I actually have to restore.
 When I made the first progress there, I suddenly remembered I have in fact a backup of the MacBook
 Pro from back then.
 
 Although I really had fun playing with it, there has never been a real usage of the project.
-Luckily I already worked test-driven, so I can show off these test scripts written in
+Luckily I already worked {testdriven}[test-driven], so I can show off these test scripts written in
 JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
 along with some resulting shots of the Touch Bar:
 
@@ -1058,7 +1067,7 @@ wm.observe("win_open", function (win) {
 
 image::touchjs-iterm-observer.png[Screenshot of touchjs (1/3)]
 .Screenshotfootnote:[Just kidding - see next shots!] of {touchjs}[touchjs/test/observer.js] (1/3)
-image::touchjs-touchbar-observer.png["Barshot" of touchjs (1/3)]
+image::touchjs-touchbar-observer.png[Barshot of touchjs (1/3)]
 
 And some more with actual UI elements:
 
@@ -1075,7 +1084,7 @@ var b = new TjsButton("Test")
 tjs_attach(b);
 ----
 
-."Barshot" of {touchjs}[touchjs/test/button.js] (2/3)
+.Barshot of {touchjs}[touchjs/test/button.js] (2/3)
 image::touchjs-touchbar-button.png[Screenshot of touchjs (2/3)]
 
 .{touchjs}[touchjs]/test/widgets.js:1
@@ -1112,25 +1121,25 @@ tjs_attach(sc1);
 tjs_attach(s1);
 ----
 
-."Barshot" of {touchjs}[touchjs/test/widgets.js] (2/3)
+.Barshot of {touchjs}[touchjs/test/widgets.js] (2/3)
 image::touchjs-touchbar-widgets.png[Screenshot of touchjs (3/3)]
 
 ==== Runtime loading
 
 We could go into details here how the loading process and error handling works in Obj-C, but I
 ultimately replaced Obj-C with Rust and later on also got rid of the macbook, so interested in how
-this can be in Rust?
+this can be done in Rust?
 Bet you are!
 
 Around 2023 I started another pet project under the nice moniker {rubtle}[rubtle].
-I can only guess what my plans for it were, but might be a glimpse into the future, but more on that
-later, when we talk about the last project of this blog post.
-Whatever the plans were, I didn't spend to much time on it and rubtle isn't polished in any sense.
+I can only guess what my plans for it were, but might have been glimpse into the future, but more
+on that later, when we talk about the last project of this blog post.
+Whatever the plans were, I didn't spend too much time on it and rubtle isn't polished in any sense.
 
 So why do I mention it at all you might ask?
 Within rubtle I followed a different approach we haven't covered so far.
-Instead of inventing an own API, it is also entirely possible to create a
-bridgefootnote:[Which probably is another API?] and expose everything:
+Instead of inventing an own API, I created bridgefootnote:[Which probably is another API?] and
+allowed the scripts to interact directly with the underlying engine:
 
 .{rubtle}[rubtle]/src/main.rs.js:99
 [source,rust]
@@ -1223,7 +1232,7 @@ $ RUSTFLAGS=-Awarnings cargo run -- ./test.js
 ==== Error handling
 
 Inside rubtle-lib is lots of scary stuff and I don't want to scare away my dear readers, so the
-next excerpert is boiled down and absolutely safe to handle:
+next excerpt is boiled down and absolutely safe to handle:
 
 .{rubtle}[rubtle]/rutle-lib/src/rubtle.rs:291+777
 [source,rust]
@@ -1295,22 +1304,22 @@ unsafe extern "C" fn fatal_handler(_udata: *mut c_void, msg: *const c_char) { //
 | You provide the API, can be full-fledged interface but also just a simple bridge
 | Absolutely, there usually are many bindings and they can also be created with {ffi}[FFI]
 | Depends a bit on the language, but ranges from easy to complex
-| Another thing that depends on the embedder and the embeddeefootnote:[Does this exist?]
+| Another thing that depends on the embedder and the embeddeefootnote:[Does this word exist?]
 |===
 
 == Webassembly
 
 I think {webassembly}[Webassembly] is one of the more interesting topics from the web technology
 cosmos.
-It allows to create binaries from a plethora of languages and run them at mostly full speed
+It allows to create binaries from a plethora of languages and to run them mostly at full speed
 directly inside stack-basedfootnote:[Again a stack machine?] virtual machines.
 Originally meant for embedding in the web, it can also be utilized in other types of software
 and provide more flexibility when required, but also raw speed on execution.
 
 There is lots of movement and things might [line-through]#break# change quite often, but
 frameworks provide stability here where required.
-{Extism}[Extism] is such a framework and used in my latest project {subtle-rs}[subtle-rs] as a
-re-write in Rust and the successor of subtle.
+{Extism}[Extism] is such a framework and also the one used in my latest project
+{subtle-rs}[subtle-rs] as a re-write in Rust and the spiritual successor of subtle.
 
 === Screenshots first
 
@@ -1472,6 +1481,20 @@ impl Plugin {
 |===
 
 == Conclusion
+
+Time for a conclusion after such a marathon through many ideas, languages and projects, so we can
+call this a day.
+We have seen different approaches of providing an API to essentially shape what a guest or plugin
+can do in your application.
+And we have also covered error checking and seen how it can range from being arcane and nasty to be
+handled entirely by your framework.
+
+I think taken with care the integration of scripting languages can be a great way to ease the
+hurdle of providing new feature sets.
+It can also allow different audiences not familiar with the host language or host domain to enrich
+it.
+And additionally approaches like webassembly allow to combine the raw processing speed of compiled
+languages with the ease-of-use flow of scripting.
 
 The list of examples is quite long, but please help yourself:
 
