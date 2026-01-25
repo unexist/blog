@@ -749,8 +749,8 @@ here and do one mistake after another.
 
 ==== Time for Screenshots
 
-This time it is quite easy to find and also to make screenshots of subtle, since I am using it on
-a daily on several devices and don't have to mess with outdated and broken
+This time we can keep it short and simple, since I am using it on a daily on several devices and
+can easily provide screenshots without messing with outdated and broken
 buildsfootnote:[Well, technically this isn't true, if you consider the outdated Ruby version, but..].
 
 .Screenshot of {subtle}[subtle-0.12.6606] (2/2)
@@ -964,27 +964,27 @@ static VALUE RubyWrapEvalFile(VALUE data) {
 
 ==== Error handling
 
-Actually we covered this already in the previous section, so nothing to be done here and time to
-move on.
+Actually we covered this already in the previous section, so nothing to be done here and we better
+hurry.
 
 .https://knowyourmeme.com/memes/white-rabbit-pointing-at-a-clock
 image::meme-white_rabbit.png[Meme White Rabbit]
 
 === Integrating JavaScript
 
-During the 2020s lots of weird things happen, but it was also the time when I was forced into my own
-sort of crisis and had to use {macOS}[macOS] for some years.
-Needless to say the window management totally annoyed me and I started another highly ambitious
-project aptly named {touchjs}[touchjs].
+During the 2020s lots of weird things happened and I was forced into my own sort of crisis being stuck
+with and on a {macOS}[macOS] for some years.
+Needless to say the window management there totally annoyed me and I started another highly
+ambitious project aptly named {touchjs}[touchjs].
 
 There, I tied the newfootnote:[To me at least..] {touchbar}[Touch Bar], basic window management via
 {accessapi}[Accessibility API] and a JavaScript integration based on {duktape}[duktape] together.
 
 ==== Time for Screenshots
 
-From an easy task back to a more complicated:
+Unfortunately we are back at build problems:
 Somehow I and totally unexplainable to me, I forgot to check in some essential headers to the
-project and there are quite some blocking issues on build:
+project:
 
 .Build attempt #1 of {touchjs}[touchjs]
 [source,shell]
@@ -1019,11 +1019,15 @@ src/touchbar.m:150:39: error: use of undeclared identifier 'kGroupButton'; did y
 # --- %< --- snip --- %< ---
 ----
 
-It took me quite some time figuring out how to restore the missing parts and thankfully I found them
-in a backup.
-Still, there has never been a real usage of the project on my side, _but_ I can show off
-test scripts in JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
-of the API along with some shots of the Touch Bar on a borrowed MacBook Pro:
+Fixing something that isn't there is quite difficult, and it took me some time and  reading
+reference manuals what I actually have to restore.
+When I made the first progress there, I suddenly remembered I have in fact a backup of the MacBook
+Pro from back then.
+
+Although I really had fun playing with it, there has never been a real usage of the project.
+Luckily I already worked test-driven, so I can show off these test scripts written in
+JavaScriptfootnote:[Adding {Obj-C}[Obj-c] to this mix is something for another post..]
+along with some resulting shots of the Touch Bar:
 
 .{touchjs}[touchjs]/test/observer.js:1
 [source,javascript]
@@ -1041,11 +1045,11 @@ wm.observe("win_open", function (win) {
 <.> Highly ambitious as I've promised
 <.> Well, just print some details of windows in the normal state
 
-.Screenshotfootnote:[Just kidding - see next shots!] of {touchjs}[touchjs/test/observer.js] (1/3)
 image::touchjs-iterm-observer.png[Screenshot of touchjs (1/3)]
-image::touchjs-touchbar-observer.png[Screenshot of touchjs (1/3)]
+.Screenshotfootnote:[Just kidding - see next shots!] of {touchjs}[touchjs/test/observer.js] (1/3)
+image::touchjs-touchbar-observer.png["Barshot" of touchjs (1/3)]
 
-And some more with the actual UI:
+And some more with actual UI elements:
 
 .{touchjs}[touchjs]/test/button.js:1
 [source,javascript]
@@ -1063,48 +1067,76 @@ tjs_attach(b);
 ."Barshot" of {touchjs}[touchjs/test/button.js] (2/3)
 image::touchjs-touchbar-button.png[Screenshot of touchjs (2/3)]
 
+.{touchjs}[touchjs]/test/widgets.js:1
+[source,javascript]
+----
+/* --- %< --- snip --- %< --- */
+
+var b4 = new TjsButton("Exec")
+    .setBgColor(255, 0, 255)
+    .bind(function () {
+        var c1 = new TjsCommand("ls -l src/");
+
+        tjs_print(c1.exec().getOutput());
+    });
+
+var s1 = new TjsSlider(0)
+    .bind(function (value) {
+        tjs_print(value + "%");
+
+        rgb[idx] = parseInt(255 * value / 100);
+
+        l1.setFgColor.apply(l1, rgb);
+    });
+
+var sc1 = new TjsScrubber()
+    .attach(b1)
+    .attach(b2)
+    .attach(b3)
+    .attach(b4);
+
+/* Attach */
+tjs_attach(l1);
+tjs_attach(sc1);
+tjs_attach(s1);
+----
+
 ."Barshot" of {touchjs}[touchjs/test/widgets.js] (2/3)
 image::touchjs-touchbar-widgets.png[Screenshot of touchjs (3/3)]
 
-I ultimately got rid of macOS once-for-all, but before that I did more shenanigans in a sh iny new
-project!
-Since I got tired of Obj-C, I made the decision this is all for naught and started again with Rust.
-This was around 2023 and the glorious project name {rubtle}[rubtle] in 2023.
-
-
 ==== Runtime loading
 
-==== Error handling
+We could go into details here how the loading process and error handling works in Obj-C, but I
+ultimately replaced Obj-C with Rust and later on also got rid of the macbook, so interested in how
+this can be in Rust?
+Bet you are!
 
-=== Recap
+Around 2023 I started another pet project under the nice moniker {rubtle}[rubtle].
+I can only guess what my plans for it were, but might be a glimpse into the future, but more on that
+later, when we talk about the last project of this blog post.
 
-|===
-| Ease of use | Richness of API | Language agnostic | Error handling | Performance
-|===
+.{rubtle}[rubtle]/test/widgets.js:1
+[source,rust]
+----
+fn main() {
+    let args: Vec<String> = env::args().collect();
 
-== Webassembly
+    if 1 < args.len() {
+        let contents = fs::read_to_string(&args[1]);
+        let rubtle = Rubtle::new();
 
-=== Screenshots first
+        init_global(&rubtle);
+        init_rubtle(&rubtle);
 
-=== Runtime loading
-
-=== Error handling
-
-=== Recap
-
-|===
-| Ease of use | Richness of API | Language agnostic | Error handling
-|===
-
-
-
-I ultimately got rid of macOS once-for-all, but before that I did more shenanigans in a sh iny new
-project!
-Since I got tired of Obj-C, I made the decision this is all for naught and started again with Rust.
-This was around 2023 and the glorious project name {rubtle}[rubtle] in 2023.
-
-
-==== Runtime loading
+        match contents {
+            Ok(val) => rubtle.eval(&val),
+            Err(_) => eprintln!("File read failed"),
+        }
+    } else {
+        println!("Usage: {}: <JSFile>", args[0]);
+    }
+}
+----
 
 ==== Error handling
 
@@ -1134,6 +1166,6 @@ The list of examples is quite long, but please help yourself:
 
 - <{deskbar}>
 - <{subtle}>
-- <{subtle-rs}>
 - <{touchjs}>
 - <{rubtle}>
+- <{subtle-rs}>
