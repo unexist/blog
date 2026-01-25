@@ -191,7 +191,7 @@ span.bold {
     padding: var(--padding);
 }
 
-#content .sidebarblock .title:first-child:before {
+#content .sidebarblock .content > .title:first-child:before {
     content: "##";
     padding-right: 0.2em;
 }
