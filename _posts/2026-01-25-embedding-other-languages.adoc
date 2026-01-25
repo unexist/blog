@@ -2,8 +2,8 @@
 layout: post
 title: Fun with embeddability
 description: Personal journey through 20+ years of FOSS-projects under the umbrella of how to embed scripting languages for fun.
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+date: 2026-01-25 17:55 +0100
+last_updated: 2026-01-25 17:55 +0100
 author: Christoph Kappel
 tags: showcase c rust lua ruby javascript duktape extism
 categories: tech
