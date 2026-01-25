@@ -187,10 +187,12 @@ luckily still provides sftp access to the project page:
 
 <{deskbarsf}>
 
-And with even more luck, although the page is a bit empty, the file listing included screenshots:
+And with even more luck, although the page is a bit unfinished, the file listing included
+screenshots:
 
 .Screenshot of {deskbar}[deskbar-0.7c (1/2)]
 image::deskbar-05-05-2005.png[Screenshot of deskbar #1]
+{empty}
 
 .Screenshot of {deskbar}[deskbar-0.7c (2/2)]
 image::deskbar-shot.png[Screenshot of deskbar #2]
@@ -238,11 +240,11 @@ obj(ect)-files and static libraries) are put together and rolled into a final ex
 library:
 
 .Linking process based on the diagram from {linker}
-[plantuml]
-----
+++++
+{% plantuml %}
 '!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
-skinparam linetype ortho
+'skinparam linetype ortho
 skinparam nodesep 20
 skinparam ranksep 20
 
@@ -261,7 +263,8 @@ obj2 --> linker
 linker --> lib3
 linker --> so
 linker --> bin
-----
+{% endplantuml %}
+++++
 <1> Static libraries are directly included in the resulting artifact
 <2> Object files are the compiled form of the source code
 <4> {sharedobj}[Shared objects] can be loaded at runtime
@@ -596,8 +599,8 @@ If you haven't played with stack machines before it might be a bit difficult to 
 done, so here is a small break down how the API works:
 
 .Stack handling diagram
-[plantuml]
-----
+++++
+{% plantuml %}
 '!theme unexist from {{ site.asciidoctor_attributes.plantumldir }}
 
 skinparam linetype ortho
@@ -653,7 +656,8 @@ l4 -[hidden]d-> s4
 l1 -r--> l2
 l2 -r--> l3
 l3 -r--> l4
-----
+{% endplantuml %}
+++++
 <1> Call {luagetglobal}[lua_getglobal] to put the table `font` onto the stack at position
 `-1` footnote:[Lua uses negative numbers ]
 <2> Call {luapushstring}[lua_pushstring] to put the string `face` of the desired row name on the
