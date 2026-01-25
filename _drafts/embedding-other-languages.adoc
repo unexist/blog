@@ -79,6 +79,9 @@ endif::[]
 :unsafe: https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html
 :ffi: https://en.wikipedia.org/wiki/Foreign_function_interface
 :webassembly: https://webassembly.org/
+:toml: https://toml.io
+:subtleconfig: https://github.com/unexist/subtle-rs/blob/master/subtle.toml
+:zig: https://ziglang.org/
 
 *Embeddability*?
 I am quite certain this is in fact an {embeddability}[english word], but you probably won't find it
@@ -1318,6 +1321,13 @@ image::subtle-rs-0.1.0.png[screenshot of subtle-rs]
 
 === Runtime loading
 
+In contrast to the other projects, subtle-rs doesn't use a scripting language as its config, but
+relies on a simple {toml}[TOML] file.
+Therefore it doesn't make sense to go into detail here.
+If you still are curious just check the repository: <{subtleconfig}>
+
+Startup and loading the four existing plugins works like a charm:
+
 .Running of {subtle-rs}[subtle-rs-0.1.0]
 [source,shell]
 ----
@@ -1329,12 +1339,24 @@ $ cargo run -- -d :2 --config-file ./demo.toml
 [2026-01-25T15:48:20Z INFO  subtle_rs] Released under the GNU GPLv3
 [2026-01-25T15:48:20Z INFO  subtle_rs] Compiled for X11
 [2026-01-25T15:48:20Z INFO  subtle_rs::display] Display (:2) is 640x480
-[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (time)
-[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (fuzzytime)
-[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (mem)
-[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (battery)
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (time) # <.>
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (fuzzytime) #<.>
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (mem) # <.>
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (battery) # <.>
 [2026-01-25T15:48:20Z INFO  subtle_rs::screen] Running on 1 screen(s)
 ----
+<.> Written in {zig}[Zig] - <https://github.com/unexist/subtle-rs/tree/master/plugins/time>
+<.> Written in Go - <https://github.com/unexist/subtle-rs/tree/master/plugins/fuzzytime>
+<.> Written in JavaScript -  <https://github.com/unexist/subtle-rs/tree/master/plugins/mem>
+<.> Written in Rust - <https://github.com/unexist/subtle-rs/tree/master/plugins/battery>
+
+Under the hood the integration works a bit different to the embeddings before.
+The plugins run alone and isolate in their virtual machine and all capabilities beside the ones
+provided by the language and the wasm target must be exported by the embedding host.
+On the other side, the plugin can also define methods, export them and they can in turn be called
+by the host.
+
+Creating such exports and load a plugin is quite easy with Extism:
 
 .{subtle-rs}[subtle-rs]/src/plugin.rs:64+84
 [source,rust]
@@ -1385,15 +1407,17 @@ $ cargo run -- -d :2 --config-file ./demo.toml
 <.> Extism also provides an easy-to-use loader
 <.> Time to register our host function
 
+And just to complete the usual triplet again, here is what the battery plugin actually does:
+
 .{subtle-rs}[subtle-rs]/plugins/battery/src/lib.rs
 [source,rust]
 ----
 #[host_fn("extism:host/user")]
 extern "ExtismHost" {
-    fn get_battery(battery_idx: String) -> String;
+    fn get_battery(battery_idx: String) -> String; // <.>
 }
 
-#[plugin_fn]
+#[plugin_fn] // <.>
 pub unsafe fn run<'a>() -> FnResult<String> {
     let values: String = unsafe { get_battery("0".into())? }; // <.>
 
@@ -1408,15 +1432,43 @@ pub unsafe fn run<'a>() -> FnResult<String> {
     Ok(format!("{}%", charge_now * 100 / charge_full))
 }
 ----
+<.> This imports the function from the host
+<.> Mark this function for export to the host
 <.> Sadly the `unsafe` here is required...
 <.> Pretty straight forward - parse and convert with a bit error checking - one line
 
 === Error handling
 
+Due to the isolation of the plugins the error handling happens inside the virtual machine:
+
+.{subtle-rs}[subtle-rs]/src/plugins.rs:118
+[source,rust]
+----
+    /* --- %< --- snip --- %< --- */
+impl Plugin {
+
+    pub(crate) fn update(&self) -> Result<String> {
+        let res = self.plugin.borrow_mut().call("run", "")?; // <.>
+
+        debug!("{}: res={}", function_name!(), res);
+
+        Ok(res)
+    }
+
+    /* --- %< --- snip --- %< --- */
+}
+----
+<.> Just a quick call and result check of the plugin function
+
 === Recap
 
 |===
 | Ease of use | Richness of API | Language agnostic | Error handling
+
+| Depends on the language, but you can pick from the list of supported ones
+| All noteworthy API must be provided by the host, like time
+| Yes, the list of supported language is quite nice
+| Extism offers easy integration and error checking
 |===
 
 == Conclusion
