@@ -75,6 +75,8 @@ endif::[]
 :accessapi: https://github.com/unexist/touchjs
 :duktape: https://duktape.org/
 :obj-c: https://en.wikipedia.org/wiki/Objective-C
+:bindgen: https://github.com/rust-lang/rust-bindgen
+:unsafe: https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html
 
 *Embeddability*?
 I am quite certain this is in fact an {embeddability}[english word], but you probably won't find it
@@ -1114,19 +1116,25 @@ Bet you are!
 Around 2023 I started another pet project under the nice moniker {rubtle}[rubtle].
 I can only guess what my plans for it were, but might be a glimpse into the future, but more on that
 later, when we talk about the last project of this blog post.
+Whatever the plans were, I didn't spend to much time on it and rubtle isn't polished in any sense.
 
-.{rubtle}[rubtle]/test/widgets.js:1
+So why do I mention it at all you might ask?
+Within rubtle I followed a different approach we haven't covered so far.
+Instead of inventing an own API, it is also entirely possible to create a
+bridgefootnote:[Which probably is another API?] and expose everything:
+
+.{rubtle}[rubtle]/src/main.rs.js:99
 [source,rust]
 ----
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if 1 < args.len() {
-        let contents = fs::read_to_string(&args[1]);
+        let contents = fs::read_to_string(&args[1]); // <.>
         let rubtle = Rubtle::new();
 
         init_global(&rubtle);
-        init_rubtle(&rubtle);
+        init_rubtle(&rubtle); // <.>
 
         match contents {
             Ok(val) => rubtle.eval(&val),
@@ -1137,8 +1145,137 @@ fn main() {
     }
 }
 ----
+<.> Just file loading, no surprises here yet
+<.> Now it is getting exciting - off to the next listing!
+
+.{rubtle}[rubtle]/src/main.rs.js:55
+[source,rust]
+----
+fn init_rubtle(rubtle: &Rubtle) {
+    #[derive(Default)]
+    struct UserData {
+        value: i32,
+    };
+
+    let mut object = ObjectBuilder::<UserData>::new() // <.>
+        .with_constructor(|inv| {
+            let mut udata = inv.udata.as_mut().unwrap();
+
+            udata.value = 1;
+        })
+        .with_method("inc", |inv| -> CallbackResult<Value> { // <.>
+            let mut udata = inv.udata.as_mut().unwrap();
+
+            udata.value += 1;
+
+            Ok(Value::from(udata.value))
+        })
+
+        /* --- %< --- snip --- %< --- */
+
+        .build();
+
+    rubtle.set_global_object("Rubtle", &mut object); // <.>
+}
+----
+<.> Using the builder pattern was really a fight back then to me
+<.> Here we are assembling an object by adding some values and methods
+<.> And we register this as a global object
+
+Compiled, ready  and armed we can feed this fancy test script into it:
+
+.{rubtle}[rubtle]/test.rs.js:55
+[source,rust]
+----
+var rubtle = new Rubtle();
+
+rubtle.set(5);
+assert(5, rubtle.get(), "Damn"); // <.>
+rubtle.inc();
+assert(6, rubtle.get(), "Damn");
+print(rubtle.get()) // <.>
+----
+<.> Seriously no idea..
+
+[source,shell]
+----
+$ RUSTFLAGS=-Awarnings cargo run -- ./test.js
+   Compiling rubtle-duktape v0.1.0 (/home/unexist/projects/rubtle/rubtle-duktape) # <.>
+   Compiling rubtle-lib v0.1.0 (/home/unexist/projects/rubtle/rubtle-lib) # <.>
+   Compiling rubtle v0.1.0 (/home/unexist/projects/rubtle/rubtle)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.03s
+     Running `target/debug/rubtle ./test.js`
+<JS> "6" # <.>
+----
+<.> The required Rust-C-bindings, a courtesy of {bindgen}[bindgen]
+<.> This contains the heave and {unsafe}[unsafe] lifting we are going to see next
+<.> Well, 6, yes?
 
 ==== Error handling
+
+Inside rubtle-lib is lots of scary stuff and I don't want to scare away my dear readers, so the
+next excerpert is boiled down and absolutely safe to handle:
+
+.{rubtle}[rubtle]/rutle-lib/src/rubtle.rs:291+777
+[source,rust]
+----
+impl Rubtle {
+    /* --- %< --- snip --- %< --- */
+
+    ///
+    /// Set value to context and assign a global reachable name
+    ///
+    /// # Arguments
+    ///
+    /// `name`- Name of the value
+    /// `rval` - The actual value
+    ///
+    /// # Example
+    ///
+    ///     use rubtle_lib::{Rubtle, Value};
+    ///
+    ///     let rubtle = Rubtle::new();
+    ///     let rval = Value::from(4);
+    ///
+    ///     rubtle.set_global_value("rubtle", &rval);
+    ///
+
+    pub fn set_global_value(&self, name: &str, rval: &Value) {
+        unsafe {
+            let cstr = CString::new(to_cesu8(name));
+
+            match cstr {
+                Ok(cval) => {
+                    self.push_value(rval); // <.>
+
+                    ffi::duk_require_stack(self.ctx, 1); // <.>
+                    ffi::duk_put_global_lstring(
+                        self.ctx,
+                        cval.as_ptr(),
+                        cval.as_bytes().len() as u64,
+                    );
+                }
+                Err(_) => unimplemented!(),
+            }
+        }
+    }
+
+    /* --- %< --- snip --- %< --- */
+}
+
+unsafe extern "C" fn fatal_handler(_udata: *mut c_void, msg: *const c_char) { // <.>
+    let msg = from_cesu8(CStr::from_ptr(msg).to_bytes())
+        .map(|c| c.into_owned())
+        .unwrap_or_else(|_| "Failed to decode message".to_string());
+
+    eprintln!("Fatal error from duktape: {}", msg);
+
+    process::abort();
+}
+----
+<.> Did I mention duktape is also a stack machine and exposes this type of API?
+<.> This is a similar handling of the stack like we've seen in Lua
+<.> And we essentially provide a error handler to trap errors when they occur
 
 === Recap
 
