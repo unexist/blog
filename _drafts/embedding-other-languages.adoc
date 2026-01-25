@@ -78,6 +78,7 @@ endif::[]
 :bindgen: https://github.com/rust-lang/rust-bindgen
 :unsafe: https://doc.rust-lang.org/book/ch20-01-unsafe-rust.html
 :ffi: https://en.wikipedia.org/wiki/Foreign_function_interface
+:webassembly: https://webassembly.org/
 
 *Embeddability*?
 I am quite certain this is in fact an {embeddability}[english word], but you probably won't find it
@@ -1296,9 +1297,119 @@ unsafe extern "C" fn fatal_handler(_udata: *mut c_void, msg: *const c_char) { //
 
 == Webassembly
 
+I think {webassembly}[Webassembly] is one of the more interesting topics from the web technology
+cosmos.
+It allows to create binaries from a plethora of languages and run them at mostly full speed
+directly inside stack-basedfootnote:[Again a stack machine?] virtual machines.
+Originally meant for embedding in the web, it can also be utilized in other types of software
+and provide more flexibility when required, but also raw speed on execution.
+
+There is lots of movement and things might [line-through]#break# change quite often, but
+frameworks provide stability here where required.
+{Extism}[Extism] is such a framework and used in my latest project {subtle-rs}[subtle-rs] as a
+re-write in Rust and the successor of subtle.
+
 === Screenshots first
 
+subtle-rs is under active development and therefore a piece of a cake to demonstrate it:
+
+.Screenshot of {subtle-rs}[subtle-rs-0.1.0]
+image::subtle-rs-0.1.0.png[screenshot of subtle-rs]
+
 === Runtime loading
+
+.Running of {subtle-rs}[subtle-rs-0.1.0]
+[source,shell]
+----
+$ cargo run -- -d :2 --config-file ./demo.toml
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running `target/debug/subtle-rs -d ':2' --config-file ./demo.toml`
+[2026-01-25T15:48:20Z INFO  subtle_rs] Reading file `"./demo.toml"'
+[2026-01-25T15:48:20Z INFO  subtle_rs] subtle-rs 0.1.0 - Copyright (c) 2025-present Christoph Kappel <christoph@unexist.dev>
+[2026-01-25T15:48:20Z INFO  subtle_rs] Released under the GNU GPLv3
+[2026-01-25T15:48:20Z INFO  subtle_rs] Compiled for X11
+[2026-01-25T15:48:20Z INFO  subtle_rs::display] Display (:2) is 640x480
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (time)
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (fuzzytime)
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (mem)
+[2026-01-25T15:48:20Z INFO  subtle_rs::plugin] Loaded plugin (battery)
+[2026-01-25T15:48:20Z INFO  subtle_rs::screen] Running on 1 screen(s)
+----
+
+.{subtle-rs}[subtle-rs]/src/plugin.rs:64+84
+[source,rust]
+----
+    /* --- %< --- snip --- %< --- */
+
+    host_fn!(get_battery(_user_data: (); battery_idx: String) -> String { // <.>
+        let charge_full = std::fs::read_to_string(
+            format!("/sys/class/power_supply/BAT{}/charge_full", battery_idx))?; // <.>
+        let charge_now = std::fs::read_to_string(
+            format!("/sys/class/power_supply/BAT{}/charge_now", battery_idx))?;
+
+        Ok(format!("{} {}", charge_full.trim(), charge_now.trim()))
+    });
+
+    /* --- %< --- snip --- %< --- */
+
+    pub(crate) fn build(&self) -> Result<Plugin> {
+        let url = self.url.clone().context("Url not set")?;
+
+        // Load wasm plugin
+        let wasm = Wasm::file(url.clone());
+        let manifest = Manifest::new([wasm]);
+
+        let plugin = extism::PluginBuilder::new(&manifest) // <.>
+            .with_wasi(true)
+
+            /* --- %< --- snip --- %< --- */
+
+            .with_function("get_battery", [PTR], [PTR],
+                           UserData::default(), Self::get_battery) // <.>
+            .build()?;
+
+        debug!("{}", function_name!());
+
+        Ok(Plugin {
+            name: self.name.clone().context("Name not set")?,
+            url,
+            interval: self.interval.unwrap(),
+            plugin: Rc::new(RefCell::new(plugin)),
+        })
+    }
+
+    /* --- %< --- snip --- %< --- */
+----
+<.> The macro `host_fn!` allows us to define functions for our webassembly guest
+<.> Funny how the path of the acpi interface has changed over the years
+<.> Extism also provides an easy-to-use loader
+<.> Time to register our host function
+
+.{subtle-rs}[subtle-rs]/plugins/battery/src/lib.rs
+[source,rust]
+----
+#[host_fn("extism:host/user")]
+extern "ExtismHost" {
+    fn get_battery(battery_idx: String) -> String;
+}
+
+#[plugin_fn]
+pub unsafe fn run<'a>() -> FnResult<String> {
+    let values: String = unsafe { get_battery("0".into())? }; // <.>
+
+    info!("battery {}", values);
+
+    let (charge_full, charge_now) = values.split(" ") // <.>
+        .filter_map(|v| v.parse::<i32>().ok())
+        .collect_tuple()
+        .or(Some((1, 0)))
+        .unwrap();
+
+    Ok(format!("{}%", charge_now * 100 / charge_full))
+}
+----
+<.> Sadly the `unsafe` here is required...
+<.> Pretty straight forward - parse and convert with a bit error checking - one line
 
 === Error handling
 
