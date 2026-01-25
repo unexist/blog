@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Fun with embeddability
-description: TBD
+description: Personal journey through 20+ years of FOSS-projects under the umbrella of how to embed scripting languages for fun.
 #date: %%%DATE%%%
 #last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -79,17 +79,19 @@ endif::[]
 *Embeddability*?
 I am quite certain this is in fact an {embeddability}[english word], but you probably won't find it
 among the other {ilities}[-ilities] of qualities, software might want to address.
-Among it, there are some boring and pretty self-explanatory ones like
+Definitely among it, there are some boring and pretty self-explanatory ones like
 {maintainability}[maintainability], even some dogmatic ones like
 {correctness}[correctness]footnote:[Correctness-ily?], but fortunately also funnier ones like
 {extensibility}[extensibility].
 
-How a certain quality is best achieved depends on a plethora of things, but one way to archive
-extensibility, according to {Wikipedia}[Wikipedia], is to use scripting languages and they can
-be quite embeddable.
+And like to often, how a certain quality is best achieved depends on a plethora of things, but
+according to {Wikipedia}[Wikipedia], one to archive extensibility is to use scripting languages
+and everything finally comes together: +
+They can be quite embeddable.
 
-So please be my guest on my lenghty journey through 20+ years of personal {FOSS}[FOSS]-history and
-listen to an old man laying out different approaches of embedding scripting languages and why this
+So in case you have some time to kill, join me on a lengthy journey through 20+ years of personal
+{FOSS}[FOSS]-history.
+This is going to fun and we are having a look at d approaches of embedding and also see why this
 is always great idea.
 
 .https://knowyourmeme.com/photos/930538-the-fairly-oddparents
