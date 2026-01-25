@@ -204,6 +204,16 @@ span.bold {
     font-size: 1.5em;
 }
 
+#content .sidebarblock {
+    display: grid;
+    text-align: left;
+    padding: var(--padding-top-bot) var(--padding);
+    border: var(--border);
+    overflow-x: auto;
+    -webkit-mask: var(--mask);
+    mask: var(--mask);
+}
+
 #content table {
     border-collapse: collapse;
     text-align: left;
