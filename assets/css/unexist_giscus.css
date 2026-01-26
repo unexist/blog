@@ -34,9 +34,10 @@ main {
     --color-prettylights-syntax-brackethighlighter-angle: #768390;
     --color-prettylights-syntax-sublimelinter-gutter-mark: #545d68;
     --color-prettylights-syntax-constant-other-reference-link: #96d0ff;
+
     --color-btn-text: #adbac7;
     --color-btn-bg: #373e47;
-    --color-btn-border: #cdd9e51a;
+    --color-btn-border: #777777;
     --color-btn-shadow: 0 0 #0000;
     --color-btn-inset-shadow: 0 0 #0000;
     --color-btn-hover-bg: #444c56;
@@ -46,7 +47,7 @@ main {
     --color-btn-selected-bg: #2d333b;
     --color-btn-primary-text: #fff;
     --color-btn-primary-bg: #347d39;
-    --color-btn-primary-border: #cdd9e51a;
+    --color-btn-primary-border: #777777;
     --color-btn-primary-shadow: 0 0 #0000;
     --color-btn-primary-inset-shadow: 0 0 #0000;
     --color-btn-primary-hover-bg: #46954a;
@@ -56,20 +57,25 @@ main {
     --color-btn-primary-disabled-text: #cdd9e580;
     --color-btn-primary-disabled-bg: #347d3999;
     --color-btn-primary-disabled-border: #cdd9e51a;
+
     --color-action-list-item-default-hover-bg: #909dab1f;
     --color-segmented-control-bg: #636e7b1a;
     --color-segmented-control-button-bg: #22272e;
     --color-segmented-control-button-selected-border: #636e7b;
+
     --color-fg-default: #adbac7;
-    --color-fg-muted: #768390;
+    --color-fg-muted: #777777;
     --color-fg-subtle: #545d68;
-    --color-canvas-default: #192734;
+
+    --color-canvas-default: #313536;
     --color-canvas-overlay: #161b22;
-    --color-canvas-inset: #15202b;
-    --color-canvas-subtle: #253341;
-    --color-border-default: #444c56;
+    --color-canvas-inset: #1D2021;
+    --color-canvas-subtle: #1D2021;
+
+    --color-border-default: #1D2021;
     --color-border-muted: #373e47;
-    --color-neutral-muted: #636e7b66;
+
+    --color-neutral-muted: #777777;
     --color-accent-fg: #539bf5;
     --color-accent-emphasis: #316dca;
     --color-accent-muted: #4184e466;
