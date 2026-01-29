@@ -1,8 +1,9 @@
 ---
 layout: default
+title: Posts tagged as #{{ page.tag }}
 ---
 <div id="posts">
-    <h2>Posts tagged as #{{ page.tag }}</h2>
+    <h1>Posts tagged as #{{ page.tag }}</h1>
 
     <div class="post-content">
         {% for post in page.posts %}

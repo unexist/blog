@@ -1,8 +1,9 @@
 ---
 layout: default
+title: Posts categorized in {{ page.category }}
 ---
 <div id="posts">
-    <h2>Posts categorized in {{ page.category }}</h2>
+    <h1>Posts categorized in {{ page.category }}</h1>
 
     <div class="post-content">
         {% for post in page.posts %}
