@@ -1,0 +1,29 @@
+---
+layout: post
+title: Documenting shellscripts
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/documenting_shellscripts
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/documenting_shellscripts
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
