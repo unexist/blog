@@ -23,6 +23,7 @@ endif::[]
 :shunit: https://github.com/kward/shunit2
 :confluence: https://www.atlassian.com/software/confluence
 :doxygen: https://doxygen.nl/
+:commands: https://doxygen.nl/manual/commands.html
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -57,8 +58,8 @@ Are you up to this adventure?
 {doxygen}[Doxygen] is generally a good starting point for every documentation approach, especially
 when the targeted language is among the supported languages of the project.
 
-Doxygen offers easy to understand commands to properly describe variables, functions bodies and
-also complete files with every copyleft and `$ID$` information of your heart's desire.
+Doxygen offers easy to understand {commands}[commands] to properly describe variables, functions
+bodies and also complete files with every copyleft and `$ID$` information of your heart's desire.
 
 The basic format looks as easy as this:
 
