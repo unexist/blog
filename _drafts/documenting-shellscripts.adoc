@@ -19,6 +19,27 @@ endif::[]
 :table-caption!:
 :page-liquid:
 
+:bats: https://github.com/bats-core/bats-core
+:shunit: https://github.com/kward/shunit2
+
+If you have a look at the typical posts in this blog you will see quite a few about documenting
+stuff.
+In fact there are so many, I am kind of surprised by myself that I've found another piece I'd like
+to demonstrate.
+
+Actually I've thought shellscripts aren't the stuff you'd expect to see in a general documentation,
+but then there are projects like {bats}[Bats] and {shunit}[Shunit2].
+So when some people even spend time to write complete test harnesses to keep everything at bay,
+we, you and I, probably don't have to feel guilty.
+
+== Why?
+
+== Doxygen all the things
+
+== Preprocessing from hell
+
+== Grande finale
+
 == Conclusion
 
 All examples can be found here:
