@@ -21,6 +21,8 @@ endif::[]
 
 :bats: https://github.com/bats-core/bats-core
 :shunit: https://github.com/kward/shunit2
+:confluence: https://www.atlassian.com/software/confluence
+
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -33,6 +35,19 @@ So when some people even spend time to write complete test harnesses to keep eve
 we, you and I, probably don't have to feel guilty.
 
 == Why?
+
+Lately, I am working on a monitoring script, which to everyone's surprise exploded feature-wise and
+I had to rename/split it several times, just to limit the collateral damage.
+
+I am an eager adept of writing documentation(-as-code) directly into the files, but like I've
+probably mentioned in every other post here, there is always the problem to provide the right type
+of documentation, to the right audience at the right place.
+
+So since everybody should be able to read our carefully drafted and honed docs, we are going to
+learn in this post how we can move shellscript documentation to
+{confluence}[Confluence]footnote:[Yes, I KNOW!] to [line-through]#die# rest.
+
+Are you up to this adventure?
 
 == Doxygen all the things
 
