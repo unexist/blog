@@ -25,6 +25,7 @@ endif::[]
 :doxygen: https://doxygen.nl/
 :commands: https://doxygen.nl/manual/commands.html
 :plantuml: https://www.plantuml.com/
+:javadoc: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -62,7 +63,8 @@ when the targeted language is among the supported languages of the project.
 Doxygen offers easy to understand {commands}[commands] to properly describe variables, functions
 bodies and also complete files with every copyleft and `$ID$` information of your heart's desire.
 
-I am quite certain you know them by hart, but heads up for a quick example:
+I am quite certain you know them by heart, but let us quickly refresh our memory, so we are on the
+same page:
 
 [source,c]
 ----
@@ -95,6 +97,10 @@ I am quite certain you know them by hart, but heads up for a quick example:
 There aren't enough languages with pointers, so this is quite limited to them I am afraid.
 . And finally the return value - which can be either verbose with value by value or you can use just
 `@return` and describe what is to expected there
+
+INFO: There are different ways to prefix the commands:
+The default is probably with a leading backslash, but I prefer the @-symbol version from
+{javadoc}[Javadoc]
 
 == Preprocessing from hell
 
