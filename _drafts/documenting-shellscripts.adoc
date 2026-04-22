@@ -24,6 +24,7 @@ endif::[]
 :confluence: https://www.atlassian.com/software/confluence
 :doxygen: https://doxygen.nl/
 :commands: https://doxygen.nl/manual/commands.html
+:plantuml: https://www.plantuml.com/
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -61,21 +62,23 @@ when the targeted language is among the supported languages of the project.
 Doxygen offers easy to understand {commands}[commands] to properly describe variables, functions
 bodies and also complete files with every copyleft and `$ID$` information of your heart's desire.
 
-The basic format looks as easy as this:
+I am quite certain you know them by hart, but heads up for a quick example:
 
 [source,c]
 ----
  /** main
-  * @brief Main function
+  * @brief Main function <.>
   *
-  * @details
-  * @startuml
+  * @details <.>
+  * Handles the main stuff
+  *
+  * @startuml <.>
   * main.c -> lang.c : get_lang()
   * @enduml
   *
-  * @param[in]  argc  Number of arguments
-  * @param[in]  argv  Array with passed commandline arguments
-  * @retval  0  Default return value
+  * @param[in]  argc  Number of arguments <.>
+  * @param[in]  argv  Array with passed commandline arguments <.>
+  * @retval  0  Default return value <.>
   **/
 
  int main(int argc, char *argv[]) {
@@ -85,6 +88,10 @@ The basic format looks as easy as this:
     return 0;
  }
 ----
+. `@brief` is basically the headline of the block - so mostly the name of the function goes here
+. Obviously, `@details` is intended to be more verbose, so feel free to add some prosa here
+. This is a nice combination of sorts and allows to embed {plantuml}[PlantUML] diagrams
+.
 
 
 == Preprocessing from hell
