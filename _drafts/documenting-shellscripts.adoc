@@ -88,11 +88,13 @@ I am quite certain you know them by hart, but heads up for a quick example:
     return 0;
  }
 ----
-. `@brief` is basically the headline of the block - so mostly the name of the function goes here
+. This is basically the headline of the block - so mostly the name of the function goes here
 . Obviously, `@details` is intended to be more verbose, so feel free to add some prosa here
 . This is a nice combination of sorts and allows to embed {plantuml}[PlantUML] diagrams
-.
-
+. Next up are parameters, which can have a direction of access.
+There aren't enough languages with pointers, so this is quite limited to them I am afraid.
+. And finally the return value - which can be either verbose with value by value or you can use just
+`@return` and describe what is to expected there
 
 == Preprocessing from hell
 
