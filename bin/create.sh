@@ -24,6 +24,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 == Conclusion
 
