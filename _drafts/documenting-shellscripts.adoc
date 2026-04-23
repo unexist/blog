@@ -50,15 +50,15 @@ Unfortunately and I've probably probably mentioned in dozen of times in every ot
 there is always the problem to provide the right type of documentation, to the right audience at
 the right place.
 
-So much work shoudln't be for naught, so behold, we are going to learn in this post how we can move
-shellscript documentation from our repository to {confluence}[Confluence]footnote:[Yes, I KNOW!] and
-put it to rest.
+Thankfully this time the right audience is developers and we just postpone the whole
+{confluence}[Confluence]footnote:[Yes, I KNOW!] mess for times, when we actually want to impress
+some stakeholders.
 
 Are you up to this adventure?
 
 == Doxygen all the things
 
-{doxygen}[Doxygen] is generally a good starting point for every documentation approach, especially
+{doxygen}[Doxygen] is generally a good starting point for every documentation approach, even more
 when the targeted language is among the supported languages of the project.
 
 Doxygen offers easy to understand {commands}[commands] to properly describe variables, functions
@@ -91,13 +91,14 @@ same page:
     return 0;
  }
 ----
-. This is basically the headline of the block - so mostly the name of the function goes here
+. `@brief` is basically the headline of the block - so mostly the name of the function goes here
 . Obviously, `@details` is intended to be more verbose, so feel free to add some prosa here
-. This is a nice combination of sorts and allows to embed {plantuml}[PlantUML] diagrams
-. Next up are parameters, which can have a direction of access.
-There aren't enough languages with pointers, so this is quite limited to them I am afraid.
-. And finally the return value - which can be either verbose with value by value or you can use just
-`@return` and describe what is to expected there
+. This is a nice combination of sorts and allows to embed {plantuml}[PlantUML]
+diagramsfootnote:[YES, two pain points at the price of one!]
+. Next up are parameters with `@param` and also aa nice indication of the direction of access.
+There aren't enough languages with pointers, so I am afraid just want to use it for the looks
+. And finally the return value - which can be either verbose value by value or you can use just
+`@return` and describe what is to be expected there
 
 INFO: There are different ways to prefix the commands:
 The default is probably with a leading backslash, but I prefer the @-symbol version from
