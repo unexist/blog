@@ -18,6 +18,7 @@ endif::[]
 :figure-caption!:
 :table-caption!:
 :page-liquid:
+:source-highlighter: highlight.js
 
 :bats: https://github.com/bats-core/bats-core
 :shunit: https://github.com/kward/shunit2
