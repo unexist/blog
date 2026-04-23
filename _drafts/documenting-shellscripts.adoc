@@ -19,6 +19,7 @@ endif::[]
 :table-caption!:
 :page-liquid:
 :source-highlighter: highlight.js
+:experimental:
 
 :bats: https://github.com/bats-core/bats-core
 :shunit: https://github.com/kward/shunit2
@@ -41,8 +42,7 @@ we, you and I, probably don't have to feel guilty if we proceed here.
 == Why?
 
 Lately, I am working on a monitoring script, which to everyone's surprise, exploded
-feature-creepy-wise and I had to rename/split it several times, just to limit the collateral
-damage.
+feature-creepy-wise and I had to rename/split it several times, just to limit the damage on impact.
 
 And as the eager adept of writing documentation-as-code that I am, I carefully drafted all
 documentation into the living body of the scripts and honed it to perfection.
@@ -100,9 +100,88 @@ There aren't enough languages with pointers, so I am afraid just want to use it 
 . And finally the return value - which can be either verbose value by value or you can use just
 `@return` and describe what is to be expected there
 
-INFO: There are different ways to prefix the commands:
-The default is probably with a leading backslash, but I prefer the @-symbol version from
+[NOTE]
+There are different ways to prefix the commands:
+The default is probably with a leading kbd:[/] ( backslash), but I prefer the kbd:[@]-version from
 {javadoc}[Javadoc]
+
+So with fresh memory let us quickly draft our Doxygen config:
+
+[source,ini]
+----
+# Input/Output
+INPUT             = src
+OUTPUT_DIRECTORY  = doxygen
+FILE_PATTERNS     = *.c *.h *.sh # <.>
+
+# Special handling for shellscripts <.>
+EXTENSION_MAPPING = no_extension=c
+EXTENSION_MAPPING = sh=c
+
+# Generators
+GENERATE_HTML     = YES
+GENERATE_LATEX    = NO
+GENERATE_XML      = YES
+
+# Project based
+PROJECT_NAME      = showcase-asciidoxy
+JAVADOC_AUTOBRIEF = YES # <.>
+JAVADOC_BANNER    = YES
+#RECURSIVE         = YES
+EXTRACT_ALL       = YES #<.>
+
+# Trick to force Doxygen not to ignore plantuml <.>
+PLANTUML_JAR_PATH = /usr/share/java/plantuml.jar
+----
+<.> I like to suffix my shellscripts with  `.sh`, just to distinguish them from ordinary binaries,
+so we need to add this to our pattern list
+<.> Another trick in our sleeves is the `EXTENSION_MAPPING`, which allows us to tell Doxygen to
+treat unknown extension/files with no extension at all like C-files
+<.> Yes, yes!
+Give us the fully Javadoc experience!
+<.> We just add `EXTRACT_ALL` as well to avoid nasty surprises later on
+<.> And we also directly pin the PlantUML path, you never know
+
+And once we run Doxygen, we can see loads of text flying buy.
+Too fast?
+I've highlighted some interesting bits for us:
+
+[source,shell]
+----
+podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
+	-it docker.io/unexist/asciidoxy-builder:0.4 \
+	sh -c "cd /asciidoxy && doxygen"
+Adding custom extension mapping: 'sh' will be treated as language 'c'
+Doxygen version used: 1.13.2
+...
+Parsing files
+Preprocessing /asciidoxy/src/build.sh...
+Parsing file /asciidoxy/src/build.sh...
+...
+Generating file documentation...
+Generating docs for file src/build.sh...
+...
+Generating XML output...
+Generating XML output for file build.sh
+...
+finished...
+----
+
+Looks like Doxygen found our shellscript, threw in a bit of pre- and postprocessing and generated
+some output for us:
+
+.Screenshot of the generated documentation
+image::doxygen-empty.png[Doxygen Empty]
+
+
+Well..
+Remember when I told you Doxygen works best with supported language?
+Clearly this isn't the case here.
+
+.https://imgflip.com/memegenerator/292345791/But-H-how-does-that-help
+image::meme-how_does.png[Meme But..How does this help?]
+
+Fairly good question and thanks for asking - time for our own sorts of preprocessing.
 
 == Preprocessing from hell
 
