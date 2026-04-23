@@ -28,6 +28,11 @@ endif::[]
 :commands: https://doxygen.nl/manual/commands.html
 :plantuml: https://www.plantuml.com/
 :javadoc: https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html
+:inputfilter: https://www.doxygen.nl/manual/config.html#cfg_input_filter
+:sed: https://www.gnu.org/software/sed/manual/sed.html
+:awk: https://www.gnu.org/software/gawk/manual/gawk.html
+:litmustest: https://en.wikipedia.org/wiki/Litmus_test_(politics)
+:yolo: https://forum.cursor.com/t/how-to-use-enable-yolo-mode/112974
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -135,7 +140,7 @@ PLANTUML_JAR_PATH = /usr/share/java/plantuml.jar
 ----
 <.> I like to suffix my shellscripts with  `.sh`, just to distinguish them from ordinary binaries,
 so we need to add this to our pattern list
-<.> Another trick in our sleeves is the `EXTENSION_MAPPING`, which allows us to tell Doxygen to
+<.> Another trick up in our sleeves is the `EXTENSION_MAPPING`, which allows us to tell Doxygen to
 treat unknown extension/files with no extension at all like C-files
 <.> Yes, yes!
 Give us the fully Javadoc experience!
@@ -144,11 +149,11 @@ Give us the fully Javadoc experience!
 
 And once we run Doxygen, we can see loads of text flying buy.
 Too fast?
-I've highlighted some interesting bits for us:
+I've highlighted interesting bits for us:
 
 [source,shell]
 ----
-podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
+$ podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
 	-it docker.io/unexist/asciidoxy-builder:0.4 \
 	sh -c "cd /asciidoxy && doxygen"
 Adding custom extension mapping: 'sh' will be treated as language 'c'
@@ -173,7 +178,6 @@ some output for us:
 .Screenshot of the generated documentation
 image::doxygen-empty.png[Doxygen Empty]
 
-
 Well..
 Remember when I told you Doxygen works best with supported language?
 Clearly this isn't the case here.
@@ -184,6 +188,76 @@ image::meme-how_does.png[Meme But..How does this help?]
 Fairly good question and thanks for asking - time for our own sorts of preprocessing.
 
 == Preprocessing from hell
+
+I suppose the people behind Doxygen got lots of requests for fancy and esoteric languages, so
+many in fact they couldn't keep up or were just satisfied with C.
+Whatsoever, they've added {inputfilter}[input filters], which allow to prepare files before Doxygen
+tries to make sense of them.
+
+Gladly I am not the first one with this special interest and there is in fact a quite old Github
+project, which provides the filter script of our dreams:
+
+<https://github.com/Anvil/bash-doxygen>
+
+I am not sure, if the name of the user or the used license is of any significance, but the whole
+this was written in {sed}[sed] - yes just
+sedfootnote:[I am proud of myself not yet to have made this pun..], but the FAQ brings everything
+into perspective:
+
+[quote,Anvil,'<https://github.com/Anvil/bash-doxygen#faq>']
++++
+Q. Dude. sed ? Seriously ? A. Are you.. Jealous ?
++++
+
+Messing with this script was a thrill-ride and highly educative.
+In fact, I didn't know sed can be used in such a way and it felt a bit how I use
+{awk}[awk].footnote:[While writing this I think in fact I might want to blog about these though.]
+
+Quick {litmustest}[litmus-test]:
+If YOU can read this please contact me to write a proper explanation what this actually does:
+
+[source,shell]
+----
+/## \+@fn/{ # <.>
+    s/  \+/ /g¬
+    /@param [^ ]\+ .*$/{
+        s/\(@fn [^(\n]\+\)(\([^(]*\))\(.*\)\(@param \)\([^ \n]\+\(\.\.\.\)\?\)\([^\n]*\)$/\1(\2, \5)\3\4\5\7/¬
+    }
+    / *\(function \+\)\?[a-z:.A-Z0-9_]\+ *() *{ *$/!{
+        N
+        b step
+    }
+}
+----
+<.> I've omitted all comments to increase the dramatic effect!
+
+For the time being we just accept the script as-is, pretend we totally understand how it
+works and treat it like AI-generated code {yolo}[--yolo]:
+
+[source,shell]
+----
+$ doxygen/filter/doxygen-bash.sed src/build.sh | grep .
+//! @package showcase_asciidoxy
+//!
+//! @file build.sh
+//! @copyright 2026-present Christoph Kappel <christoph@unexist.dev>
+//! @version $Id$
+//!
+//! This program can be distributed under the terms of the Apache License.
+//! See the file LICENSE for details.
+//! Selected compiler
+UpperCase String CC = clang        ;
+//! Name of the created binary
+UpperCase String BIN_NAME = hello  ;
+//! @fn wildcard(arg1)
+//! @brief Get all files by wildcard mask
+//! @param[in] arg1 Pattern to use (e.g. "*.c")
+wildcard(arg1) { }
+//! @fn compile()
+//! @brief Compile program
+compile() { }
+----
+
 
 == Grande finale
 
