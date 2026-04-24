@@ -236,27 +236,32 @@ works and treat it like AI-generated code {yolo}[--yolo]:
 
 [source,shell]
 ----
-$ doxygen/filter/doxygen-bash.sed src/build.sh | grep .
 //! @package showcase_asciidoxy
 //!
 //! @file build.sh
 //! @copyright 2026-present Christoph Kappel <christoph@unexist.dev>
-//! @version $Id$
+//! @version $Id$ # <.>
 //!
 //! This program can be distributed under the terms of the Apache License.
 //! See the file LICENSE for details.
 //! Selected compiler
-UpperCase String CC = clang        ;
+UpperCase String CC = clang        ; # <.>
 //! Name of the created binary
 UpperCase String BIN_NAME = hello  ;
-//! @fn wildcard(arg1)
+//! @fn void wildcard(void arg1)
 //! @brief Get all files by wildcard mask
 //! @param[in] arg1 Pattern to use (e.g. "*.c")
-wildcard(arg1) { }
-//! @fn compile()
+wildcard(void arg1) { } # <.>
+//! @fn void compile()
 //! @brief Compile program
 compile() { }
 ----
+<.> `$ID$` - told you..
+<.> This is just the fancy way of telling Doxygen this is an uppercase variable of the type string
+<.> This might be a bit weird, but the processing further down the pipeline requires
+C-definitions and they don't cause any harm here, do they?
+
+
 
 
 == Grande finale
