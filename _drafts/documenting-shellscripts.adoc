@@ -232,10 +232,11 @@ If YOU can read this please contact me to write a proper explanation what this a
 <.> I've omitted all comments to increase the dramatic effect!
 
 For the time being we just accept the script as-is, pretend we totally understand how it
-works and treat it like AI-generated code {yolo}[--yolo]:
+works and treat it like AI-generated code and run it - {yolo}[--yolo]:
 
 [source,shell]
 ----
+$ doxygen/filter/doxygen-bash.sed src/build.sh | grep .
 //! @package showcase_asciidoxy
 //!
 //! @file build.sh
@@ -248,7 +249,7 @@ works and treat it like AI-generated code {yolo}[--yolo]:
 UpperCase String CC = clang        ; # <.>
 //! Name of the created binary
 UpperCase String BIN_NAME = hello  ;
-//! @fn void wildcard(void arg1)
+//! @fn void wildcard(void arg1) # <.>
 //! @brief Get all files by wildcard mask
 //! @param[in] arg1 Pattern to use (e.g. "*.c")
 wildcard(void arg1) { } # <.>
@@ -260,6 +261,7 @@ compile() { }
 <.> This is just the fancy way of telling Doxygen this is an uppercase variable of the type string
 <.> This might be a bit weird, but the processing further down the pipeline requires
 C-definitions and they don't cause any harm here, do they?
+<.> Oh we better strip the function bodies - less confusion for Doxygen is more good!
 
 
 
