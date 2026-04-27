@@ -257,14 +257,11 @@ wildcard(void arg1) { } # <.>
 //! @brief Compile program
 compile() { }
 ----
-<.> `$ID$` - told you..
-<.> This is just the fancy way of telling Doxygen this is an uppercase variable of the type string
+<.> `$ID$` - see?
+<.> This is just the way of telling Doxygen this is an uppercase variable of the type string
 <.> This might be a bit weird, but the processing further down the pipeline requires
 C-definitions and they don't cause any harm here, do they?
-<.> Oh we better strip the function bodies - less confusion for Doxygen is more good!
-
-
-
+<.> Oh and we better strip the function bodies - less confusion for Doxygen is more good!
 
 == Grande finale
 
