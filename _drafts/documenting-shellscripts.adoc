@@ -380,11 +380,21 @@ sed -i -e 's/kind="file"><name>\([^<]*\)/kind="file"><name>\1.c/g' doxygen/xml/*
 sed -i -e 's/<compoundname>\([^<]*\)/<compoundname>\1.c/g' doxygen/xml/*
 ----
 
-After that AsciiDoxy runs smoothly
+After that AsciiDoxy runs smoothly and I am happy to proclaim AsciiDoc is also quite happy:
 
-
--
-
+[source,shell]
+----
+$ make asciido
+c
+...
+[INFO] Converted /asciidoxy/src/site/asciidoc/index.adoc
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  13.285 s
+[INFO] Finished at: 2026-04-29T13:19:01Z
+[INFO] ------------------------------------------------------------------------
+----
 
 == Conclusion
 
