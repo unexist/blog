@@ -34,6 +34,7 @@ endif::[]
 :litmustest: https://en.wikipedia.org/wiki/Litmus_test_(politics)
 :yolo: https://forum.cursor.com/t/how-to-use-enable-yolo-mode/112974
 :asciidoxy: https://asciidoxy.org/
+:fork: https://github.com/unexist/asciidoxy
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -293,7 +294,41 @@ I think most of you have see on a previous post (like
 {{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
 what follows next, therefore we keep it short and sweet.
 
-Equipped with the generated XML nothing stops us from piping this through {asciidoxy}[AsciiDoxy]
+Equipped with the generated XML nothing can stops us from piping this through
+{asciidoxy}[AsciiDoxy], besides the expired SSL cert, but since I am a dutiful host tonight,
+here is a {fork}[fork] for you with small patches of the original repository.
+
+Like I've lined out in the mentioned post, AsciiDoxy basically parses the the xml structure and
+provides a bunch of macros to the AsciiDoc render pipeline.
+This allows us to reference the named functions and variables like this:
+
+[source,adoc]
+----
+=== Variables
+
+${insert("CC", leveloffset=3, template="shellvariable")} # <.>
+${insert("BIN_NAME", leveloffset=3, template="shellvariable")}
+
+=== Helper functions
+
+${insert("wildcard", leveloffset=3, template="shellfunc")} # <.>
+${insert("compile", leveloffset=3, template="shellfunc")}
+----
+<.> Somehow there is no template available by default for variables, but fortunately Asciidoxy let
+us provide our own.
+<.> Almost the same is true for functions: They can be rendered with the typical method template,
+but there is much to be desired and we provide our own version as well.
+
+How the templates are stitched together isn't exactly a trade secret, but there is
+documentationfootnote:[Weird..] missing and the best source is the actual code:
+
+<https://github.com/tomtom-international/asciidoxy/tree/master/asciidoxy/generator/templates/cpp>
+
+
+[source,html]
+----
+----
+
 
 == Conclusion
 
