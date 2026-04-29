@@ -35,6 +35,7 @@ endif::[]
 :yolo: https://forum.cursor.com/t/how-to-use-enable-yolo-mode/112974
 :asciidoxy: https://asciidoxy.org/
 :fork: https://github.com/unexist/asciidoxy
+:mako: https://www.makotemplates.org/
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -324,9 +325,24 @@ documentationfootnote:[Weird..] missing and the best source is the actual code:
 
 <https://github.com/tomtom-international/asciidoxy/tree/master/asciidoxy/generator/templates/cpp>
 
+I came up with this for variables, but I am sure you are way more creative with {mako}[Mako]
+templates and can easily outclass me and let me look like an amateur:
 
 [source,html]
 ----
+<%!
+from asciidoxy.generator.templates.helpers import h1
+from asciidoxy.generator.templates.cpp.helpers import CppTemplateHelper
+from html import escape
+%>
+
+[#${element.id},reftext='${element.full_name}']
+${h1(leveloffset, element.name)}
+${api.inserted(element)}
+
+${element.brief}
+
+${element.description}
 ----
 
 
