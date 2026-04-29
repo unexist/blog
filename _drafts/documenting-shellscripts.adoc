@@ -39,8 +39,8 @@ endif::[]
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
-In fact there are so many, I am kind of surprised by myself that I've found another piece I'd like
-to demonstrate.
+In fact there are so many, I kind of surprised by myself, that I've managed to find another piece
+I'd like show you.
 
 Actually I've thought shellscripts aren't the stuff you'd expect to see in a general documentation,
 but then there are projects like {bats}[Bats] and {shunit}[Shunit2].
@@ -53,14 +53,14 @@ Lately, I am working on a monitoring script, which to everyone's surprise, explo
 feature-creepy-wise and I had to rename/split it several times, just to limit the damage on impact.
 
 And as the eager adept of writing documentation-as-code that I am, I carefully drafted all
-documentation into the living body of the scripts and honed it to perfection.
+documentation into the living body of the scripts and honed them to perfection.
 Unfortunately and I've probably probably mentioned in dozen of times in every other post here,
 there is always the problem to provide the right type of documentation, to the right audience at
 the right place.
 
-Thankfully this time the right audience is developers and we just postpone the whole
-{confluence}[Confluence]footnote:[Yes, I KNOW!] mess for times, when we actually want to impress
-stakeholders.
+Thankfully this time the right audience is us developers and we just postpone the whole
+{confluence}[Confluence]footnote:[Yes, I KNOW!] mess for gloomier times, when we actually want to
+impress stakeholders.
 
 Are you up to this adventure?
 
@@ -69,7 +69,7 @@ Are you up to this adventure?
 {doxygen}[Doxygen] is generally a good starting point for every documentation approach, even more
 when the targeted language is among the supported languages of the project.
 
-Doxygen offers simple {commands}[commands] to properly describe variables, functions bodies and
+Doxygen offers simple {commands}[commands] to properly describe variables, function bodies and
 also complete files with every copyleft and `$ID$` information of your heart's desire.
 
 I am quite certain you know them by heart, but let us quickly refresh our memory, so we are on the
@@ -152,7 +152,7 @@ Give us the fully Javadoc experience!
 
 And once we run Doxygen, we can see loads of text flying buy.
 Too fast?
-I've highlighted interesting bits for us:
+I've highlighted the interesting bits for us:
 
 [source,shell]
 ----
@@ -193,12 +193,12 @@ Fairly good question and thanks for asking - time for our own sorts of preproces
 == Preprocessing from hell
 
 I suppose the people behind Doxygen got lots of requests for fancy and esoteric languages, so
-many in fact they couldn't keep up or were just satisfied with C.
+many in fact, I suppose they couldn't keep up or were just satisfied with C.
 Whatsoever, they've added {inputfilter}[input filters], which allow to prepare files before Doxygen
 tries to make sense of them.
 
-Gladly I am not the first one with this special interest and there is in fact a quite old Github
-project, which provides the filter script of our dreams:
+Gladly I am not the first one with this kind of special interest and there is in fact a quite
+old Github project, which provides the filter script of our dreams:
 
 <https://github.com/Anvil/bash-doxygen>
 
@@ -297,10 +297,10 @@ what follows next, therefore we keep it short and sweet.
 
 Equipped with the generated XML nothing can stops us from piping this through
 {asciidoxy}[AsciiDoxy], besides the expired SSL cert, but since I am a dutiful host tonight,
-here is a {fork}[fork] for you with small patches of the original repository.
+here is a {fork}[fork] for you along with small patches of the original repository.
 
-Like I've lined out in the mentioned post, AsciiDoxy basically parses the xml structure and provides
-a bunch of macros to the AsciiDoc render pipeline.
+Like I've lined out in the mentioned post, AsciiDoxy basically parses the xml structure and
+provides a bunch of macros to the AsciiDoc render pipeline.
 This allows us to reference the named functions and variables like this:
 
 [source,adoc]
@@ -345,7 +345,7 @@ ${element.brief}
 ${element.description}
 ----
 
-Unfortunately, if we just run AsciiDoxy now it fails horribly:
+Unfortunately, if we just run AsciiDoxy now it fails loud and horribly:
 
 [source,shell]
 ----
@@ -367,7 +367,7 @@ Traceback:
 make: *** [Makefile:36: asciidoxy] Error 1
 ----
 
-The short explanation for this is AsciiDoxy has some build-in checks for naming of files and hence
+The short explanation for this is AsciiDoxy has some built-in checks for naming of files and hence
 inexplicably expects files to come with a `.c` file extension.
 This has to be done multiple times in multiple places, but if we aren't experts on sed by now..
 
