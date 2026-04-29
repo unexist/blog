@@ -57,7 +57,7 @@ the right place.
 
 Thankfully this time the right audience is developers and we just postpone the whole
 {confluence}[Confluence]footnote:[Yes, I KNOW!] mess for times, when we actually want to impress
-some stakeholders.
+stakeholders.
 
 Are you up to this adventure?
 
@@ -176,7 +176,7 @@ Looks like Doxygen found our shellscript, threw in a bit of pre- and postprocess
 some output for us:
 
 .Screenshot of the generated documentation
-image::doxygen-empty.png[Doxygen Empty]
+image::doxygen-empty.png[Empty Doxygen documentation]
 
 Well..
 Remember when I told you Doxygen works best with supported language?
@@ -201,7 +201,7 @@ project, which provides the filter script of our dreams:
 
 I am not sure, if the name of the user or the used license is of any significance, but the whole
 this was written in {sed}[sed] - yes just
-sedfootnote:[I am proud of myself not yet to have made this pun..], but the FAQ brings everything
+sedfootnote:[I am proud of myself not to have made this pun yet..], but the FAQ brings everything
 into perspective:
 
 [quote,Anvil,'<https://github.com/Anvil/bash-doxygen#faq>']
@@ -262,6 +262,29 @@ compile() { }
 <.> This might be a bit weird, but the processing further down the pipeline requires
 C-definitions and they don't cause any harm here, do they?
 <.> Oh and we better strip the function bodies - less confusion for Doxygen is more good!
+
+This looks rather good, so let us quickly hack this into our `Doxyfile`:
+
+[source,shell]
+----
+$ head -n9 Doxyfile
+# Input/Output
+INPUT             = src
+OUTPUT_DIRECTORY  = doxygen
+FILE_PATTERNS     = *.c *.h *.sh
+
+# Special handling for shellscripts
+EXTENSION_MAPPING = no_extension=c
+EXTENSION_MAPPING = sh=c
+FILTER_PATTERNS   = *.sh=doxygen/filter/doxygen-bash.sed
+----
+
+And after a quick run we are greet by this:
+
+.Screenshot of the generated documentation
+image::doxygen-some_info.png[Doxygen with some infos]
+
+Splendid - time to move to our grande finale!
 
 == Grande finale
 
