@@ -33,6 +33,7 @@ endif::[]
 :awk: https://www.gnu.org/software/gawk/manual/gawk.html
 :litmustest: https://en.wikipedia.org/wiki/Litmus_test_(politics)
 :yolo: https://forum.cursor.com/t/how-to-use-enable-yolo-mode/112974
+:asciidoxy: https://asciidoxy.org/
 
 If you have a look at the typical posts in this blog you will see quite a few about documenting
 stuff.
@@ -66,8 +67,8 @@ Are you up to this adventure?
 {doxygen}[Doxygen] is generally a good starting point for every documentation approach, even more
 when the targeted language is among the supported languages of the project.
 
-Doxygen offers easy to understand {commands}[commands] to properly describe variables, functions
-bodies and also complete files with every copyleft and `$ID$` information of your heart's desire.
+Doxygen offers simple {commands}[commands] to properly describe variables, functions bodies and
+also complete files with every copyleft and `$ID$` information of your heart's desire.
 
 I am quite certain you know them by heart, but let us quickly refresh our memory, so we are on the
 same page:
@@ -288,7 +289,23 @@ Splendid - time to move to our grande finale!
 
 == Grande finale
 
+I think most of you have see on a previous post (like
+{{ site.url }}{% post_url 2024-12-26-bringing-documentation-together %}[Bringing documentation together])
+what follows next, therefore we keep it short and sweet.
+
+Equipped with the generated XML nothing stops us from piping this through {asciidoxy}[AsciiDoxy]
+
 == Conclusion
+
+Shellscripts are usually tiny utilities and small helpers, but more often than not they molt to
+backbones of businesses and [line-through]#have to# should be
+documentatedfootnote:[Mark my words!].
+
+Doxygen offers greats ways to include all kind of informationen and with the addition of filters
+allows us to parse even - well - shellscripts.
+Bundled with AsciiDoxy we can even reach next level and create really fancy documents for whatever
+purpose.
+Create some throw-away PDF or throw it onto the Confluence pile of shame.
 
 All examples can be found here:
 
