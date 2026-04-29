@@ -1,9 +1,9 @@
 ---
 layout: post
 title: Documenting shellscripts
-description: TBD
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+description: This blog post outlines how shellscripts contain way too much business logic and why it is a shame to keep them undocumented.
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
 tags: showcase
 categories: tech
@@ -416,6 +416,3 @@ Create some throw-away PDF or throw it onto the Confluence pile of shame.
 All examples can be found here:
 
 <https://github.com/unexist/showcase-documentation-asciidoxy>
-
-[bibliography]
-== Bibliography
