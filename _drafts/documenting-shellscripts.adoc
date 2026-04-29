@@ -299,8 +299,8 @@ Equipped with the generated XML nothing can stops us from piping this through
 {asciidoxy}[AsciiDoxy], besides the expired SSL cert, but since I am a dutiful host tonight,
 here is a {fork}[fork] for you with small patches of the original repository.
 
-Like I've lined out in the mentioned post, AsciiDoxy basically parses the the xml structure and
-provides a bunch of macros to the AsciiDoc render pipeline.
+Like I've lined out in the mentioned post, AsciiDoxy basically parses the xml structure and provides
+a bunch of macros to the AsciiDoc render pipeline.
 This allows us to reference the named functions and variables like this:
 
 [source,adoc]
@@ -315,7 +315,7 @@ ${insert("BIN_NAME", leveloffset=3, template="shellvariable")}
 ${insert("wildcard", leveloffset=3, template="shellfunc")} # <.>
 ${insert("compile", leveloffset=3, template="shellfunc")}
 ----
-<.> Somehow there is no template available by default for variables, but fortunately Asciidoxy let
+<.> Somehow there is no template available by default for variables, but fortunately AsciiDoxy let
 us provide our own.
 <.> Almost the same is true for functions: They can be rendered with the typical method template,
 but there is much to be desired and we provide our own version as well.
@@ -328,7 +328,7 @@ documentationfootnote:[Weird..] missing and the best source is the actual code:
 I came up with this for variables, but I am sure you are way more creative with {mako}[Mako]
 templates and can easily outclass me and let me look like an amateur:
 
-[source,html]
+[source,python]
 ----
 <%!
 from asciidoxy.generator.templates.helpers import h1
@@ -344,6 +344,46 @@ ${element.brief}
 
 ${element.description}
 ----
+
+Unfortunately, if we just run AsciiDoxy now it fails horribly:
+
+[source,shell]
+----
+$ podman run --rm -v /home/unexist/projects/showcase-documentation-asciidoxy:/asciidoxy \
+        -it docker.io/unexist/asciidoxy-builder:0.3 \
+        sh -c "cd /asciidoxy && mvn -f pom.xml generate-resources"
+...
+ERROR: Error while processing AsciiDoc files:
+Cannot find any CC for any
+Traceback:
+  File index.adoc, line 16, in AsciiDoc
+    ${insert("CC", leveloffset=3, template="shellvariable")}
+  File /usr/lib/python3.12/site-packages/asciidoxy-0.8.7-py3.12.egg/asciidoxy/generator/asciidoc.py, line 140, in _wrapper
+    ret = f(*args, **kwargs)
+  File /usr/lib/python3.12/site-packages/asciidoxy-0.8.7-py3.12.egg/asciidoxy/generator/asciidoc.py, line 283, in insert
+    return self.insert_fragment(self.find_element(name,
+  File /usr/lib/python3.12/site-packages/asciidoxy-0.8.7-py3.12.egg/asciidoxy/generator/asciidoc.py, line 608, in find_element
+    raise ReferenceNotFoundError(name, lang=lang, kind=kind)
+make: *** [Makefile:36: asciidoxy] Error 1
+----
+
+The short explanation for this is AsciiDoxy has some build-in checks for naming of files and hence
+inexplicably expects files to come with a `.c` file extension.
+This has to be done multiple times in multiple places, but if we aren't experts on sed by now..
+
+[source,shell]
+----
+$ make doxygen-fix-shellscripts
+sed -i -e 's/location file="\([^"]*\)"/location file="\1.c"/g' doxygen/xml/*
+sed -i -e 's/bodyfile="\([^"]*\)"/bodyfile="\1.c"/g' doxygen/xml/*
+sed -i -e 's/kind="file"><name>\([^<]*\)/kind="file"><name>\1.c/g' doxygen/xml/*
+sed -i -e 's/<compoundname>\([^<]*\)/<compoundname>\1.c/g' doxygen/xml/*
+----
+
+After that AsciiDoxy runs smoothly
+
+
+-
 
 
 == Conclusion
