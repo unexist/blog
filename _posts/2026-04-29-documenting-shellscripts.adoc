@@ -5,8 +5,8 @@ description: This blog post outlines how shellscripts contain way too much busin
 date: 2026-04-29 15:35 +0200
 last_updated: 2026-04-29 15:35 +0200
 author: Christoph Kappel
-tags: showcase
-categories: tech
+tags: asciidoc doxygen asciidoxy sed shellscripts showcase
+categories: documentation myself
 toc: true
 ---
 ifdef::asciidoctorconfigdir[]
