@@ -396,6 +396,11 @@ c
 [INFO] ------------------------------------------------------------------------
 ----
 
+And without further ado, the stage is prepared and the curtain slowly rises..
+
+.Screenshot of the generated documentation
+image::asciidoc-finale.png[Asciidoc documentation]
+
 == Conclusion
 
 Shellscripts are usually tiny utilities and small helpers, but more often than not they molt to
