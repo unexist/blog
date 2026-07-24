@@ -28,6 +28,8 @@ endif::[]
 :pgwire: https://github.com/sunng87/pgwire
 :rust: https://rust-lang.org/
 :endianess: https://en.wikipedia.org/wiki/Endianness
+:regex: https://en.wikipedia.org/wiki/Regular_expression
+:fsm: https://en.wikipedia.org/wiki/Finite-state_machine
 
 I am currently quite busy with architecture mapping in my day job and while
 drawing and mapping is fun, I am sometimes a bit afraid of getting
@@ -56,19 +58,149 @@ brainfuckfootnote:[The feeling, not the language, mind you!].
 
 The wire protocol itself is quite lengthy and involves all the fun of network
 protocols and {endianess}[endianess], but to keep the focus and to get
-side-tracked too much, let us just pick the simplest line:
+side-tracked too much, let us just pick a really simple statement:
 
 [source,sql]
 ----
-SELECT * from spotify;
+SELECT * FROM spotify;
 ----
 
 This should be fairly easy to parse, so here we go.
 
-
 == Simple tokenizer
 
+Since we are only naive here and not batshit crazy, we don't even bother with
+{regex}[regular expressions] and plug some conditionals and a loop together:
+
+[source,rust]
+----
+const STMNT: &str = "SELECT * FROM spotify;";
+
+fn main() {
+    let mut start: isize = -1;
+    let mut stop: isize = -1;
+
+    for (i, c) in STMNT.chars().enumerate() {
+        match c {
+            'A'..='Z' | 'a'..='z' => { // <.>
+                if -1 == start {
+                    start = i as isize;
+                }
+
+                stop = i as isize + 1;
+            },
+            ' ' | ';' => { // <.>
+                if stop > start {
+                    println!("Token `{:?}` at {}-{}",
+                        &STMNT[start as usize..stop as usize], start, stop);
+
+                    start = -1;
+                    stop = -1;
+                }
+
+                if ';' == c {
+                    println!("EoS at {}", i);
+                }
+            },
+            '*' => { // <.>
+                println!("Wildcard `*` at {}", i);
+            },
+            _ => panic!("Huh?"),
+        }
+    }
+}
+----
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+
+And if we run this beauty we can see we are basically done:
+
+[source,shell]
+----
+$ cargo run
+   Compiling simple-parser v0.1.0 (/home/unexist/simple-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `target/debug/simple-parser`
+Token `"SELECT"` at 0-6
+Wildcard `*` at 7
+Token `"FROM"` at 9-13
+Token `"spotify"` at 14-21
+EoS at 21
+----
+
+There is no fluff, virtually no error handling and also nothing that handles
+the results, but hey we are talking about parsing only.
+
 == Tokenizer with FSM
+
+I guess you've waiting for them and I cannot publish this without adding a bit
+of FSM flavor to the mix.
+Building upon our previous example, our next more university-tolerated
+approach looks like this:
+
+[source,rust]
+----
+const STMNT: &str = "SELECT * FROM spotify;";
+
+enum Tokens {
+    START,
+    TOKEN(isize, isize),
+    WILDCARD(isize),
+    BLANK(isize),
+    EOS(isize),
+    END,
+}
+
+fn main() {
+    let mut state = Tokens::START;
+
+    for (i, c) in STMNT.chars().enumerate() {
+        match state {
+            Tokens::START | Tokens::WILDCARD(_) => {
+                match c {
+                    'A'..='Z' | 'a'..='z' => { // <.>
+                        state = Tokens::Token(i, i + 1);
+                    },
+                    _ => panic!("Unexpected char `{:?}`", c),
+                }
+            },
+            Tokens::TOKEN(start, end) => {
+                match c {
+                    'A'..='Z' | 'a'..='z' => { // <.>
+                        if -1 == start {
+                            start = i as isize;
+                        }
+
+                        state = Tokens::Token(start, i + 1);
+                    },
+                    ' ' => {
+                        state = Tokens::BLANK(i);
+                    } ';' => { // <.>
+                        state = Tokens::EOS(i);
+
+                        println!("EoS at {}", i);
+                    },
+                    '*' => {
+                        state = Tokens::WILDCARD(i);
+
+                        println!("Wildcard `*` at {}", i);
+                    }
+                    _ => panic!("Unexpected char `{:?}`", c),
+                }
+            },
+            Tokens::EOS(_) | Tokens::BLANK(_) => {
+                // Nop
+            }
+        }
+
+        println!("State `{:?}`", token);
+    }
+}
+----
+
+
 
 == Parser combinator
 
