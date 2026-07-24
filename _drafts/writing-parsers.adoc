@@ -22,16 +22,37 @@ endif::[]
 
 :spotql: https://github.com/unexist/spotql/tree/master
 :spotify: https://spotify.com
-:pgwire: https://www.postgresql.org/docs/current/protocol.html
+:wireprot: https://www.postgresql.org/docs/current/protocol.html
 :postgres: https://www.postgresql.org/
+:pgwire: https://github.com/sunng87/pgwire
+:rust: https://rust-lang.org/
 
-I am currently quite busy with architecture mapping in my day job, therefore
-I am occasionally take a break and exhume some older FOSS projects of mine to
-avoid getting rustyfootnote:[Pun absolutely intended..]
+I am currently quite busy with architecture mapping in my day job and while
+drawing and mapping is fun, I am sometimes a bit afraid of getting
+rustyfootnote:[Pun absolutely intended..].
+To fight this, I occasionally take a stroll through my projects and exhume
+some older ones in my spare time.
 
-Among my parked project is something I've dubbed  {spotql}[spotql], a highly
-ambitious project to combine a {spotify}[Spotify] client via
-{pgwire}[wire protocol] with the CLI of {postgres}[Postgres].
+Among my parked project is something I've creatively dubbed {spotql}[spotql],
+a highly ambitious project to combine a {spotify}[Spotify] client and CLI of
+{postgres}[Postgres] via {wireprot}[Postgres' wire protocol].
+
+TIP: I am aware of the long list of really good libraries, like {pgwire}[pgwire],
+but  I ask you where is the fun, if I cannot combine two completely unrelated
+things  and invent the wheel again?
+
+This whole project naturally involves writing a parser hence the name of
+the blogpost you are currently reading.
+So over the course of the next few lines I am going to delve a bit in how to
+write parsers with {rust}[Rust], starting from the most naive version, over
+to something you probably learn at the university to more or less
+brainfuckfootnote:[The feeling, not the language, mind you!].
+
+
+== Example time
+
+The wire protocol itself is quite lengthy and involves all the fun of network
+protocols and endianess,but let us just pick the simplest line and
 
 
 == Simple tokenizer
