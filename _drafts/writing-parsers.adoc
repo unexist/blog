@@ -1,0 +1,50 @@
+---
+layout: post
+title: Writing parsers
+description: TBD
+#date: %%%DATE%%%
+#last_updated: %%%DATE%%%
+author: Christoph Kappel
+tags: showcase
+categories: tech
+toc: true
+---
+ifdef::asciidoctorconfigdir[]
+:imagesdir: {asciidoctorconfigdir}/../assets/images/writing_parsers
+endif::[]
+ifndef::asciidoctorconfigdir[]
+:imagesdir: /assets/images/writing_parsers
+endif::[]
+:figure-caption!:
+:table-caption!:
+:page-liquid:
+:source-highlighter: highlight.js
+
+:spotql: https://github.com/unexist/spotql/tree/master
+:spotify: https://spotify.com
+:pgwire: https://www.postgresql.org/docs/current/protocol.html
+:postgres: https://www.postgresql.org/
+
+I am currently quite busy with architecture mapping in my day job, therefore
+I am occasionally take a break and exhume some older FOSS projects of mine to
+avoid getting rustyfootnote:[Pun absolutely intended..]
+
+Among my parked project is something I've dubbed  {spotql}[spotql], a highly
+ambitious project to combine a {spotify}[Spotify] client via
+{pgwire}[wire protocol] with the CLI of {postgres}[Postgres].
+
+
+== Simple tokenizer
+
+== Tokenizer with FSM
+
+== Parser combinator
+
+== Conclusion
+
+All examples can be found here:
+
+<https://github.com/unexist/showcase->
+
+[bibliography]
+== Bibliography
