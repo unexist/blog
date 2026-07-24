@@ -142,60 +142,83 @@ approach looks like this:
 
 [source,rust]
 ----
+use std::fmt;
+
 const STMNT: &str = "SELECT * FROM spotify;";
 
+#[derive(Debug)]
 enum Tokens {
     START,
-    TOKEN(isize, isize),
-    WILDCARD(isize),
-    BLANK(isize),
-    EOS(isize),
+    TOKEN(usize, usize),
+    WILDCARD(usize),
+    BLANK(usize),
+    EOS(usize),
     END,
 }
 
+impl fmt::Display for Tokens {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Tokens::START => write!(f, "START"),
+            Tokens::TOKEN(start, stop) => write!(f, "TOKEN({}, {})", start, stop),
+            Tokens::WILDCARD(pos) => write!(f, "WILDCARD({})", pos),
+            Tokens::BLANK(pos) => write!(f, "BLANK({})", pos),
+            Tokens::EOS(pos) => write!(f, "EOS({})", pos),
+            Tokens::END => write!(f, "END"),
+        }
+
+    }
+}
+
 fn main() {
-    let mut state = Tokens::START;
+    let mut states: Vec<Tokens> = vec![Tokens::START];
 
     for (i, c) in STMNT.chars().enumerate() {
-        match state {
-            Tokens::START | Tokens::WILDCARD(_) => {
+        println!("{} => {}:{}", states.last(), i, c);
+
+        match states.last().unwrap_or(&Tokens::START) {
+            Tokens::START => {
                 match c {
                     'A'..='Z' | 'a'..='z' => { // <.>
-                        state = Tokens::Token(i, i + 1);
+                        states.push(Tokens::TOKEN(i, i + 1));
                     },
                     _ => panic!("Unexpected char `{:?}`", c),
                 }
             },
-            Tokens::TOKEN(start, end) => {
+            Tokens::TOKEN(start, _) => {
                 match c {
                     'A'..='Z' | 'a'..='z' => { // <.>
-                        if -1 == start {
-                            start = i as isize;
-                        }
-
-                        state = Tokens::Token(start, i + 1);
+                        states.pop();
+                        states.push(Tokens::TOKEN(*start, i + 1));
                     },
                     ' ' => {
-                        state = Tokens::BLANK(i);
+                        states.push(Tokens::BLANK(i));
                     } ';' => { // <.>
-                        state = Tokens::EOS(i);
-
-                        println!("EoS at {}", i);
+                        states.push(Tokens::EOS(i));
                     },
                     '*' => {
-                        state = Tokens::WILDCARD(i);
-
-                        println!("Wildcard `*` at {}", i);
+                        states.push(Tokens::WILDCARD(i));
                     }
                     _ => panic!("Unexpected char `{:?}`", c),
                 }
             },
-            Tokens::EOS(_) | Tokens::BLANK(_) => {
+            Tokens::WILDCARD(_) => {
+                states.push(Tokens::START);
+            }
+            Tokens::BLANK(_) => {
+                states.push(Tokens::START);
+            },
+            Tokens::EOS(_) => {
+                states.push(Tokens::END);
+            },
+            Tokens::END => {
                 // Nop
             }
         }
+    }
 
-        println!("State `{:?}`", token);
+    for state in states.iter() {
+        println!("{}", state);
     }
 }
 ----
