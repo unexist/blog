@@ -147,7 +147,7 @@ use std::fmt;
 const STMNT: &str = "SELECT * FROM spotify;";
 
 #[derive(Debug)]
-enum State { // <.>
+enum State {
     START,
     SCAN,
     TOKEN(usize, usize),
@@ -158,12 +158,12 @@ enum State { // <.>
     END,
 }
 
-impl fmt::Display for State { // <.>
+impl fmt::Display for State {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             State::START => write!(f, "START"),
             State::SCAN => write!(f, "SCAN"),
-            State::TOKEN(start, stop) => write!(f, "TOKEN({}, {}, {})", start, stop),
+            State::TOKEN(start, stop) => write!(f, "TOKEN({}, {})", start, stop),
             State::WILDCARD(pos) => write!(f, "WILDCARD({})", pos),
             State::BLANK(pos) => write!(f, "BLANK({})", pos),
             State::END_OF_STMNT(pos) => write!(f, "END_OF_STMNT({})", pos),
@@ -180,35 +180,37 @@ fn main() {
     let (mut i, mut c) = iter.next().unwrap_or((usize::MAX, char::MAX));
 
     'parser: loop { // <.>
-        match states.last().unwrap_or(&State::START) { // <.>
-            State::START | State::SCAN => {
+        match states.last().unwrap_or(&State::START) {
+            State::START | State::SCAN => { // <.>
                 match c {
-                    'A'..='Z' | 'a'..='z' => { // <.>
-                        states.push(State::TOKEN(i, i + 1, c));
-                    },
-                    ' ' => {
+                    'A'..='Z' | 'a'..='z' => {
+                        states.push(State::TOKEN(i, i + 1));
+                    }
+                    ' ' => { // <.>
                         states.push(State::BLANK(i));
-                    },
-                    ';' => { // <.>
+                    }
+                    ';' => {
                         states.push(State::END_OF_STMNT(i));
-                    },
+                    }
                     '*' => {
                         states.push(State::WILDCARD(i));
-                    },
+                    }
                     _ => panic!("Unexpected char `{:?}`", c),
                 }
-            }
+            },
             State::TOKEN(start, _) => { // <.>
                 match c {
-                    'A'..='Z' | 'a'..='z' => { // <.>
-                        states.push(State::TOKEN(*start, i + 1));
-                        (i, c) = iter.next().unwrap_or((0, '?'));
+                    'A'..='Z' | 'a'..='z' => {
+                        let newstate = State::TOKEN(*start, i + 1);
+                        states.pop(); // <.>
+                        states.push(newstate);
+                        (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX)); // <.>
                     }
                     _ => states.push(State::SCAN),
                 }
             },
-            State::WILDCARD(_) => {
-                states.push(State::SCAN); // <.>
+            State::WILDCARD(_) => { // <.>
+                states.push(State::SCAN);
                 (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX));
             },
             State::BLANK(_) => {
@@ -220,12 +222,18 @@ fn main() {
             },
             State::END => {
                 break 'parser;
-            },
+            }
         }
     }
 
-    for state in states.iter() {
-        println!("{}", state);
+    for state in states.iter() { // <.>
+        match state {
+            State::TOKEN(start, stop) => println!("Token `{}` at {}-{}",
+                &STMNT[*start..*stop], start, stop),
+            State::WILDCARD(pos) => println!("Wildcard `*`at {}", pos),
+            State::END_OF_STMNT(pos) => println!("End-of-Stmnt at {}", pos),
+            _ => {},
+        }
     }
 }
 ----
@@ -238,6 +246,21 @@ fn main() {
 <.> ..
 <.> ..
 <.> ..
+
+That is much more code and renders basically the same thing:
+
+[source,shell]
+----
+$ cargo run
+   Compiling fsm-parser v0.1.0 (/home/unexist/fsm-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running `target/debug/fsm-parser`
+Token `SELECT` at 0-6
+Wildcard `*`at 7
+Token `FROM` at 9-13
+Token `spotify` at 14-21
+End-of-Stmnt at 21
+----
 
 == Parser combinator
 
