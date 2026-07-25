@@ -30,35 +30,41 @@ endif::[]
 :endianess: https://en.wikipedia.org/wiki/Endianness
 :regex: https://en.wikipedia.org/wiki/Regular_expression
 :fsm: https://en.wikipedia.org/wiki/Finite-state_machine
+:debug: https://doc.rust-lang.org/rust-by-example/hello/print/print_debug.html
+:option: https://doc.rust-lang.org/std/option/
+:features: https://doc.rust-lang.org/cargo/reference/features.html
 
-I am currently quite busy with architecture mapping in my day job and while
-drawing and mapping is fun, I am sometimes a bit afraid of getting
-rustyfootnote:[Pun absolutely intended..].
+I am currently quite busy learning the ropes and architecture mapping in my day
+job and while drawing and mapping is fun, I am sometimes a bit afraid of
+getting rustyfootnote:[Pun absolutely intended..].
 To fight this, I occasionally take a stroll through my projects and exhume
 some older ones in my spare time.
 
-Among my parked project rots something I've creatively dubbed {spotql}[spotql],
-a highly ambitious project to combine a {spotify}[Spotify] client and {psql}[psql]
-via {wireprot}[Postgres' wire protocol].
+Among my parked project sitsfootnote[Rusts..?] something I've creatively dubbed
+{spotql}[spotql], a highly ambitious project to combine a {spotify}[Spotify]
+client and {psql}[psql] via {wireprot}[Postgres' wire protocol].
 
 TIP: I am well aware of the long list of really good libraries, like
 {pgwire}[pgwire], but  I ask you where is the fun, if I cannot combine two
 completely unrelated things and invent the wheel again?
 
-This whole project naturally involves writing a parser, hence the name of
-the blogpost you are currently reading.
-
-So over the course of the next few paragraphs I am going to delve a bit in how
-to write parsers with {rust}[Rust], starting from the most naive version, over
-to something you probably could learn at the university to more or less
+This whole project naturally involves writing a
+parserfootnote:[Hence the name of the blogpost you are currently reading] and
+this is exactly the topic of this blog post.
+We are going to create three parsers with more-or-less idiomatic {rust}[Rust],
+starting from a most naive version, hopping then over to something you probably
+could learn at the university to ultimately something nasty with a bit more
 brainfuckfootnote:[The feeling, not the language, mind you!].
 
+Om nom nom!
 
 == Example time
 
-The wire protocol itself is quite lengthy and involves all the fun of network
-protocols and {endianess}[endianess], but to keep focus and not to get
-side-tracked too much, let us just pick a really simple statement:
+Since it always good to follow some golden thread, we are using something
+from aforementioned project.
+Now, the wire protocol itself is quite lengthy and involves all the fun of
+network protocols and {endianess}[endianess], but we are going to avoid any
+side-tracks from my side by limiting us to a really simple SQL statement:
 
 [source,sql]
 ----
@@ -131,14 +137,15 @@ End-of-Stmnt at 21
 ----
 
 There is no fluff, virtually no error handling and also nothing that handles
-the results, but hey we are talking about parsing only.
+the results, but hey we are talking about parsing only and I assume the code
+basically speaks for itself.
 
 == Tokenizer with FSM
 
-I guess you've waiting for them and I cannot publish this without adding a bit
-of FSM flavor to the mix.
-Building upon our previous example, our next more university-tolerated
-approach looks like this:
+I guess you've read this far just to see another {fsm}[FSM] and hell I don't
+want to disappoint anyone here.
+So let us solve this again, this this time with a bit of abstraction and
+FSM-flavor and hopefully make my former university prof happy:
 
 [source,rust]
 ----
@@ -146,7 +153,7 @@ use std::fmt;
 
 const STMNT: &str = "SELECT * FROM spotify;";
 
-#[derive(Debug)]
+#[derive(Debug)] // <.>
 enum State {
     START,
     SCAN,
@@ -158,7 +165,7 @@ enum State {
     END,
 }
 
-impl fmt::Display for State {
+impl fmt::Display for State { // <.>
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             State::START => write!(f, "START"),
@@ -221,9 +228,14 @@ fn main() {
                 states.push(State::END);
             },
             State::END => {
-                break 'parser;
+                break 'parser; // <.>
             }
         }
+    }
+
+    #[cfg(feature = "debug")] // <.>
+    for state in states.iter() {
+        println!("{}", state);
     }
 
     for state in states.iter() { // <.>
@@ -237,15 +249,24 @@ fn main() {
     }
 }
 ----
-<.> ..
-<.> ..
-<.> ..
-<.> ..
-<.> ..
-<.> ..
-<.> ..
-<.> ..
-<.> ..
+<.> We start with the definition of our parsing states and use enum variants
+<.> Deriving from {debug}[Debug] is nice, but let us also roll our own formatter
+<.> We keep our states neatly collected in a vec, so we can do some post-processing later
+<.> Technically not required here, but adding labels to loops make it a bit easier to follow
+<.> Utilizing the FSM idea basically means we  step through the various states and have some checks,
+if something is reasonable within its boundaries
+<.> As before, the blank is some special case and we handle it accordingly
+<.> The token state is something special, because it also keeps tracks of the start and stop position
+<.> Handling a vector of {option}[options] is sometimes a pain to modify, so we just pop/push to basically
+compact the many states this creates
+<.> Iterator are also strictly safe-guarded, so we iterate here manually whenever we have to and
+avoid peeking or stepping back
+<.> The other states are a bit of repetitive, I left them in to make it easier to follow though
+<.> Here is the break with the label, this is easier to follow, right?
+<.> Another nifty feature is the {features}[feature] handling of Cargo, this allows us to see the
+state list when enabled
+<.> Any finally just the same output from the example before. *Noteworthy here it is decoupled from
+the actual parsing.*
 
 That is much more code and renders basically the same thing:
 
@@ -261,6 +282,44 @@ Token `FROM` at 9-13
 Token `spotify` at 14-21
 End-of-Stmnt at 21
 ----
+
+But if we enable the debug feature with `cargp run --features debug` we can
+also see the state changes of our FSM:
+
+[source,shell]
+----
+$ cargo run --features debug
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/fsm-parser`
+START
+TOKEN(0, 6)
+SCAN
+BLANK(6)
+SCAN
+WILDCARD(7)
+SCAN
+BLANK(8)
+SCAN
+TOKEN(9, 13)
+SCAN
+BLANK(13)
+SCAN
+TOKEN(14, 21)
+SCAN
+END_OF_STMNT(21)
+END
+Token `SELECT` at 0-6
+Wildcard `*`at 7
+Token `FROM` at 9-13
+Token `spotify` at 14-21
+End-of-Stmnt at 21
+----
+
+Needless to say there is much more room for improvements, but the goal here was
+to demonstrate how this can be done especially with focus what lurks behind
+the next paragraph.
+
+Curious?
 
 == Parser combinator
 
