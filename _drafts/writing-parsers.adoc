@@ -57,7 +57,7 @@ brainfuckfootnote:[The feeling, not the language, mind you!].
 == Example time
 
 The wire protocol itself is quite lengthy and involves all the fun of network
-protocols and {endianess}[endianess], but to keep the focus and to get
+protocols and {endianess}[endianess], but to keep focus and not to get
 side-tracked too much, let us just pick a really simple statement:
 
 [source,sql]
@@ -69,7 +69,7 @@ This should be fairly easy to parse, so here we go.
 
 == Simple tokenizer
 
-Since we are only naive here and not batshit crazy, we don't even bother with
+Since we are only naive here and not crazy, so we don't even bother with
 {regex}[regular expressions] and plug some conditionals and a loop together:
 
 [source,rust]
@@ -98,8 +98,8 @@ fn main() {
                     stop = -1;
                 }
 
-                if ';' == c {
-                    println!("EoS at {}", i);
+                if ';' == c { // <.>
+                    println!("End-of-Stmnt at {}", i);
                 }
             },
             '*' => { // <.>
@@ -110,10 +110,10 @@ fn main() {
     }
 }
 ----
-<.> ..
-<.> ..
-<.> ..
-<.> ..
+<.> Still naive, we just handle different characters here for our token handling
+<.> Theses two characters have a special meaning for end of token resp. end or statement
+<.> Either way we have to duplicate stuff without extraction into functions
+<.> Let us handle wildcards differently; could probably also be just allowed as token character
 
 And if we run this beauty we can see we are basically done:
 
@@ -127,7 +127,7 @@ Token `"SELECT"` at 0-6
 Wildcard `*` at 7
 Token `"FROM"` at 9-13
 Token `"spotify"` at 14-21
-EoS at 21
+End-of-Stmnt at 21
 ----
 
 There is no fluff, virtually no error handling and also nothing that handles
@@ -147,10 +147,10 @@ use std::fmt;
 const STMNT: &str = "SELECT * FROM spotify;";
 
 #[derive(Debug)]
-enum State {
+enum State { // <.>
     START,
     SCAN,
-    TOKEN(usize, usize, char),
+    TOKEN(usize, usize),
     WILDCARD(usize),
     BLANK(usize),
     #[allow(non_camel_case_types)]
@@ -158,12 +158,12 @@ enum State {
     END,
 }
 
-impl fmt::Display for State {
+impl fmt::Display for State { // <.>
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             State::START => write!(f, "START"),
             State::SCAN => write!(f, "SCAN"),
-            State::TOKEN(start, stop, c) => write!(f, "TOKEN({}, {}, {})", start, stop, c),
+            State::TOKEN(start, stop) => write!(f, "TOKEN({}, {}, {})", start, stop),
             State::WILDCARD(pos) => write!(f, "WILDCARD({})", pos),
             State::BLANK(pos) => write!(f, "BLANK({})", pos),
             State::END_OF_STMNT(pos) => write!(f, "END_OF_STMNT({})", pos),
@@ -174,53 +174,53 @@ impl fmt::Display for State {
 }
 
 fn main() {
-    let mut states: Vec<State> = vec![State::START];
+    let mut states: Vec<State> = vec![State::START]; // <.>
 
     let mut iter = STMNT.chars().enumerate();
     let (mut i, mut c) = iter.next().unwrap_or((usize::MAX, char::MAX));
 
-    'parser: loop {
-        match states.last().unwrap_or(&State::START) {
+    'parser: loop { // <.>
+        match states.last().unwrap_or(&State::START) { // <.>
             State::START | State::SCAN => {
                 match c {
                     'A'..='Z' | 'a'..='z' => { // <.>
                         states.push(State::TOKEN(i, i + 1, c));
-                    }
+                    },
                     ' ' => {
                         states.push(State::BLANK(i));
-                    }
+                    },
                     ';' => { // <.>
                         states.push(State::END_OF_STMNT(i));
-                    }
+                    },
                     '*' => {
                         states.push(State::WILDCARD(i));
-                    }
+                    },
                     _ => panic!("Unexpected char `{:?}`", c),
                 }
             }
-            State::TOKEN(start, _, _) => {
+            State::TOKEN(start, _) => { // <.>
                 match c {
                     'A'..='Z' | 'a'..='z' => { // <.>
-                        states.push(State::TOKEN(*start, i + 1, c));
+                        states.push(State::TOKEN(*start, i + 1));
                         (i, c) = iter.next().unwrap_or((0, '?'));
                     }
                     _ => states.push(State::SCAN),
                 }
-            }
+            },
             State::WILDCARD(_) => {
-                states.push(State::SCAN);
+                states.push(State::SCAN); // <.>
                 (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX));
-            }
+            },
             State::BLANK(_) => {
                 states.push(State::SCAN);
                 (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX));
-            }
+            },
             State::END_OF_STMNT(_) => {
                 states.push(State::END);
-            }
+            },
             State::END => {
                 break 'parser;
-            }
+            },
         }
     }
 
@@ -229,6 +229,15 @@ fn main() {
     }
 }
 ----
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+<.> ..
+<.> ..
 
 == Parser combinator
 
