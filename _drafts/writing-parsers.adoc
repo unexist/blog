@@ -33,6 +33,9 @@ endif::[]
 :debug: https://doc.rust-lang.org/rust-by-example/hello/print/print_debug.html
 :option: https://doc.rust-lang.org/std/option/
 :features: https://doc.rust-lang.org/cargo/reference/features.html
+:parsercombinator: https://en.wikipedia.org/wiki/Parser_combinator
+:nom: https://github.com/rust-bakery/nom
+:ast: https://en.wikipedia.org/wiki/Abstract_syntax_tree
 
 I am currently quite busy learning the ropes and architecture mapping in my day
 job and while drawing and mapping is fun, I am sometimes a bit afraid of
@@ -316,18 +319,43 @@ End-of-Stmnt at 21
 ----
 
 Needless to say there is much more room for improvements, but the goal here was
-to demonstrate how this can be done especially with focus what lurks behind
-the next paragraph.
+to demonstrate how this can be done and to establish there are different ways
+for parsing, just to explain a totally different approach next.
 
 Curious?
 
 == Parser combinator
 
+When I started spotql I did a quick check how one would write idiomatic parsers
+with Rust and I quickly discovered the create {nom}[nom] - a parser combinators
+library.
+It took me quite a while until it made click and the migration from version 6
+to version 8, which basically deprecated every macro in favor of functions,
+didn't make it easier either.
+
+{parsercombinator}[Parser combinators] or in general combinatory parsing works
+slightly different, than how we did that in the two examples above.
+Here we created our parsers as some kind a function, which accepts an input
+string and after some processing returns some kind of structure as result.
+The first parser didn't exactly do that, but technically the second did with
+its states vector - a preliminary form of {ast}[AST].
+
+Parser combinators, on the other hand, accept one or more parsers as an input
+and generally return a new parser as its output.
+I know this might sound a bit strange, but let us check with a few more examples
+of our well known statement how this actually works - again we rely only on
+Rust and avoid any particular library or framework.
+
+=== Definition of our parser
+
+
+
+
 == Conclusion
 
 All examples can be found here:
 
-<https://github.com/unexist/showcase->
+<https://github.com/unexist/spotql>
 
 [bibliography]
 == Bibliography
