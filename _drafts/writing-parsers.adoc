@@ -147,72 +147,79 @@ use std::fmt;
 const STMNT: &str = "SELECT * FROM spotify;";
 
 #[derive(Debug)]
-enum Tokens {
+enum State {
     START,
-    TOKEN(usize, usize),
+    SCAN,
+    TOKEN(usize, usize, char),
     WILDCARD(usize),
     BLANK(usize),
-    EOS(usize),
+    #[allow(non_camel_case_types)]
+    END_OF_STMNT(usize),
     END,
 }
 
-impl fmt::Display for Tokens {
+impl fmt::Display for State {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Tokens::START => write!(f, "START"),
-            Tokens::TOKEN(start, stop) => write!(f, "TOKEN({}, {})", start, stop),
-            Tokens::WILDCARD(pos) => write!(f, "WILDCARD({})", pos),
-            Tokens::BLANK(pos) => write!(f, "BLANK({})", pos),
-            Tokens::EOS(pos) => write!(f, "EOS({})", pos),
-            Tokens::END => write!(f, "END"),
+            State::START => write!(f, "START"),
+            State::SCAN => write!(f, "SCAN"),
+            State::TOKEN(start, stop, c) => write!(f, "TOKEN({}, {}, {})", start, stop, c),
+            State::WILDCARD(pos) => write!(f, "WILDCARD({})", pos),
+            State::BLANK(pos) => write!(f, "BLANK({})", pos),
+            State::END_OF_STMNT(pos) => write!(f, "END_OF_STMNT({})", pos),
+            State::END => write!(f, "END"),
         }
 
     }
 }
 
 fn main() {
-    let mut states: Vec<Tokens> = vec![Tokens::START];
+    let mut states: Vec<State> = vec![State::START];
 
-    for (i, c) in STMNT.chars().enumerate() {
-        println!("{} => {}:{}", states.last(), i, c);
+    let mut iter = STMNT.chars().enumerate();
+    let (mut i, mut c) = iter.next().unwrap_or((usize::MAX, char::MAX));
 
-        match states.last().unwrap_or(&Tokens::START) {
-            Tokens::START => {
+    'parser: loop {
+        match states.last().unwrap_or(&State::START) {
+            State::START | State::SCAN => {
                 match c {
                     'A'..='Z' | 'a'..='z' => { // <.>
-                        states.push(Tokens::TOKEN(i, i + 1));
-                    },
-                    _ => panic!("Unexpected char `{:?}`", c),
-                }
-            },
-            Tokens::TOKEN(start, _) => {
-                match c {
-                    'A'..='Z' | 'a'..='z' => { // <.>
-                        states.pop();
-                        states.push(Tokens::TOKEN(*start, i + 1));
-                    },
+                        states.push(State::TOKEN(i, i + 1, c));
+                    }
                     ' ' => {
-                        states.push(Tokens::BLANK(i));
-                    } ';' => { // <.>
-                        states.push(Tokens::EOS(i));
-                    },
+                        states.push(State::BLANK(i));
+                    }
+                    ';' => { // <.>
+                        states.push(State::END_OF_STMNT(i));
+                    }
                     '*' => {
-                        states.push(Tokens::WILDCARD(i));
+                        states.push(State::WILDCARD(i));
                     }
                     _ => panic!("Unexpected char `{:?}`", c),
                 }
-            },
-            Tokens::WILDCARD(_) => {
-                states.push(Tokens::START);
             }
-            Tokens::BLANK(_) => {
-                states.push(Tokens::START);
-            },
-            Tokens::EOS(_) => {
-                states.push(Tokens::END);
-            },
-            Tokens::END => {
-                // Nop
+            State::TOKEN(start, _, _) => {
+                match c {
+                    'A'..='Z' | 'a'..='z' => { // <.>
+                        states.push(State::TOKEN(*start, i + 1, c));
+                        (i, c) = iter.next().unwrap_or((0, '?'));
+                    }
+                    _ => states.push(State::SCAN),
+                }
+            }
+            State::WILDCARD(_) => {
+                states.push(State::SCAN);
+                (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX));
+            }
+            State::BLANK(_) => {
+                states.push(State::SCAN);
+                (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX));
+            }
+            State::END_OF_STMNT(_) => {
+                states.push(State::END);
+            }
+            State::END => {
+                break 'parser;
             }
         }
     }
@@ -222,8 +229,6 @@ fn main() {
     }
 }
 ----
-
-
 
 == Parser combinator
 
