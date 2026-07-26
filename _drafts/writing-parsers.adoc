@@ -43,7 +43,7 @@ getting rustyfootnote:[Pun absolutely intended..].
 To fight this, I occasionally take a stroll through my projects and exhume
 some older ones in my spare time.
 
-Among my parked project sitsfootnote[Rusts..?] something I've creatively dubbed
+Among my parked project sitsfootnote:[Rusts..?] something I've creatively dubbed
 {spotql}[spotql], a highly ambitious project to combine a {spotify}[Spotify]
 client and {psql}[psql] via {wireprot}[Postgres' wire protocol].
 
