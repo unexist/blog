@@ -2,8 +2,8 @@
 layout: post
 title: Writing parsers
 description: This blog post outlines three different approaches of writing a parser, starting from a naive way up to something that isn't shy to use mathematics terminology.
-date: %%%DATE%%%
-last_updated: %%%DATE%%%
+date: 2026-08-03 21:09 +0200
+last_updated: 2026-08-03 21:09 +0200
 author: Christoph Kappel
 tags: rust parsing showcase
 categories: tech
