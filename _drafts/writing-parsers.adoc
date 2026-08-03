@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Writing parsers
-description: This blog post outlines how shellscripts contain way too much business logic and why it is a shame to keep them undocumented.
+description: This blog post outlines three different approaches of writing a parser, starting from a naive way up to something that isn't shy to use mathematics terminology.
 date: %%%DATE%%%
 last_updated: %%%DATE%%%
 author: Christoph Kappel
@@ -159,7 +159,8 @@ And if we run this beauty we can see we are basically done:
 
 [source,shell]
 ----
-$    Compiling simple-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/simple-parser)
+$ cargo run
+Compiling simple-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/simple-parser)
     Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.97s
      Running `target/debug/simple-parser`
 Parsed: verb="SELECT", column="*", table="spotify"
@@ -174,8 +175,8 @@ basically speaks for itself.
 
 I guess you've read this far just to see another {fsm}[FSM] and hell I don't
 want to disappoint anyone here.
-So let us solve this again, this this time with a bit of abstraction and
-FSM-flavor and hopefully make my former university prof happy:
+So let us solve this again, this time with a bit of abstraction, FSM-flavor and
+hopefully make my former university prof happy:
 
 [source,rust]
 ----
@@ -455,7 +456,7 @@ fn tag(expected: &'static str) -> impl Fn(&str) -> Result<(&str, String), &str> 
 }
 ----
 <.> Here they are, higher-order functions with improved weirdness: This time we
-return a function (marked by the {impl}[impl] keyword, which returns our result
+return a function (marked by the {impl}[impl] keyword), which returns our result
 from before.
 <.> I don't want to throw {movesems}[move semantics] into the mix, just pretend
 this is the weird syntax of Rust to define that
@@ -496,8 +497,8 @@ return a function with our known result from before
 
 === Interim step
 
-`Pair` works exactly as the named implies:
-It allows to combine two parsers and returns the result when called.
+`Pair` works exactly as the name implies:
+It allows to combine two parsers and returns the result of both when called.
 This is probably easer to understand with a short example:
 
 [source,rust]
@@ -507,7 +508,7 @@ fn main() {
 
     let result = parser("SELECT from"); // <.>
 
-    println!("{:?}", result); // <.>
+    println!("{:?}", result);
 }
 ----
 <.> Throw both into a pair and receive a shiny new parser
@@ -569,14 +570,14 @@ $ cargo run
      Running `target/debug/combinator-parser`
 Ok(("", ("SELECT", (" ", "*")))) // <.>
 ----
-<.> Looks weird, but this actually our expected output with the nested tuples
+<.> Looks weird again, but this actually our expected output with the nested tuples
 
 === More mathematics
 
 Before we can really fire this off, we need one additional element - a
 {functor}[functor].
 A functor is basically something, that can map between things and in our case
-just call a function on our results:
+just calls a function on our results:
 
 [source,rust]
 ----
@@ -592,7 +593,7 @@ where
 }
 ----
 <.> We covered lots of ground today and barely start to sweat when seeing this:
-We just call the passed function and return the result
+We just call the passed function on our result and return whatever comes back
 
 === Mapping all the things
 
@@ -617,7 +618,7 @@ where
     map(pair(parser1, parser2), |(_left, right)| right) // <.>
 }
 ----
-<.> Every building block in place and this is just piece of cake:
+<.> With every building block in place and this is just piece of cake:
 Call both parsers from the pair and return just the result of the left one.
 <.> And opposite direction - call both and return right
 
@@ -628,9 +629,9 @@ achieve:
 
 Getting rid of leading and trailing whitespaces in a functional and cool way.
 
-Since we have everything in place, let us a create a new parser called
-`delimited`, that can use three parsers and like `left` and `right`, return
-only a selection - here we go for the middle this time:
+Since we have everything in place, let us create a new parser generator
+called `delimited`, that can use three parsers and like `left` and `right`,
+return only a selection - here we go for the middle this time:
 
 [source,rust]
 ----
@@ -648,8 +649,8 @@ on the result to get to the middle
 
 === Zero or more?
 
-When using `delimited` right now we have to deal with the problem it doesn't
-work when there is in fact no space:
+When using `delimited` right now we are going to face the problem of times
+when there is in fact no leading or trailing space:
 
 [source,rust]
 ----
@@ -675,7 +676,8 @@ Err("SELECT *") # <.>
 <.> Several whitespaces are missing
 
 So we need something that handles either optional or zero to many.
-Optional is something for another day, so we go with the last approach:
+Optional is something for another day, but the second approach sounds like it
+fits well:
 
 [source,rust]
 ----
@@ -699,8 +701,8 @@ where
 
 === Perfection
 
-Took us a while, but we have all elements in place and can successfully
-assemble our parser and ultimately parse the string:
+Took us a while, but we have all elements in place, can finally assemble our
+complete parser and ultimately parse the string:
 
 [source,rust]
 ----
@@ -711,7 +713,7 @@ fn main() {
         delimited(zero_or_more(whitespace), tag("FROM"), zero_or_more(whitespace)),
         left(identifier, tag(";")));
 
-    let parser = pair(verb_parser, pair(column_parser, table_parser));
+    let parser = pair(verb_parser, pair(column_parser, table_parser)); // <.>
 
     if let Ok(remainder) = map(parser, |(verb, (column, table))| {
         println!("Parsed: verb={:?}, column={:?}, table={:?}", verb, column, table);
@@ -720,6 +722,7 @@ fn main() {
     }
 }
 ----
+<.> Isn't it cool how easy this is to read?
 
 And if we run the whole example:
 
@@ -733,8 +736,8 @@ Parsed: verb="SELECT", column="*", table="spotify"
 Parsed: remainder=()
 ----
 
-There are many more ways to further optimize this parser, like introducing
-proper types and a trait, to avoid repeat yourself, but this is more on the
+There are many more ways to further optimize this, like introducing proper
+types and a trait, to avoid repeating yourself, but this is clearly just on the
 ergonomics side:
 
 [source,rust]
