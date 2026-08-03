@@ -89,6 +89,11 @@ fn main() {
     let mut start: isize = -1;
     let mut stop: isize = -1;
 
+    let mut verb = "";
+    let mut column = "";
+    let mut table = "";
+    let mut remainder = String::new();
+
     for (i, c) in STMNT.chars().enumerate() {
         match c {
             'A'..='Z' | 'a'..='z' => { // <.>
@@ -100,43 +105,55 @@ fn main() {
             },
             ' ' | ';' => { // <.>
                 if stop > start {
+                    #[cfg(feature = "stats")]
                     println!("Token `{:?}` at {}-{}",
                         &STMNT[start as usize..stop as usize], start, stop);
+
+                    if verb.is_empty() { // <.>
+                        verb = &STMNT[start as usize..stop as usize];
+                    } else {
+                        table = &STMNT[start as usize..stop as usize];
+                    }
 
                     start = -1;
                     stop = -1;
                 }
 
-                if ';' == c { // <.>
+                #[cfg(feature = "stats")]
+                if ';' == c {
                     println!("End-of-Stmnt at {}", i);
                 }
             },
             '*' => { // <.>
+                #[cfg(feature = "stats")]
                 println!("Wildcard `*` at {}", i);
+
+                column = "*";
             },
-            _ => panic!("Huh?"),
+            _ => remainder.push(c), // <.>
         }
     }
+
+    println!("Parsed: verb={:?}, column={:?}, table={:?}", verb, column, table);
+    println!("Parsed: remainder={:?}", remainder);
 }
+
 ----
 <.> Still naive, we just handle different characters here for our token handling
 <.> Theses two characters have a special meaning for end of token resp. end or statement
-<.> Either way we have to duplicate stuff without extraction into functions
+<.> Here is a good point to actually copy the values
 <.> Let us handle wildcards differently; could probably also be just allowed as token character
+<.> Just for completeness, let us collect everything we didn't catch
 
 And if we run this beauty we can see we are basically done:
 
 [source,shell]
 ----
-$ cargo run
-   Compiling simple-parser v0.1.0 (/home/unexist/simple-parser)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+$    Compiling simple-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/simple-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.97s
      Running `target/debug/simple-parser`
-Token `"SELECT"` at 0-6
-Wildcard `*` at 7
-Token `"FROM"` at 9-13
-Token `"spotify"` at 14-21
-End-of-Stmnt at 21
+Parsed: verb="SELECT", column="*", table="spotify"
+Parsed: remainder=""
 ----
 
 There is no fluff, virtually no error handling and also nothing that handles
