@@ -206,6 +206,11 @@ fn main() {
     let mut iter = STMNT.chars().enumerate();
     let (mut i, mut c) = iter.next().unwrap_or((usize::MAX, char::MAX));
 
+    let mut verb = "";
+    let mut column = "";
+    let mut table = "";
+    let mut remainder = String::new();
+
     'parser: loop { // <.>
         match states.last().unwrap_or(&State::START) {
             State::START | State::SCAN => { // <.>
@@ -222,15 +227,17 @@ fn main() {
                     '*' => {
                         states.push(State::WILDCARD(i));
                     }
-                    _ => panic!("Unexpected char `{:?}`", c),
+                    _ => remainder.push(c),
                 }
             },
             State::TOKEN(start, _) => { // <.>
                 match c {
                     'A'..='Z' | 'a'..='z' => {
                         let newstate = State::TOKEN(*start, i + 1);
+
                         states.pop(); // <.>
                         states.push(newstate);
+
                         (i, c) = iter.next().unwrap_or((usize::MAX, char::MAX)); // <.>
                     }
                     _ => states.push(State::SCAN),
@@ -260,14 +267,35 @@ fn main() {
 
     for state in states.iter() { // <.>
         match state {
-            State::TOKEN(start, stop) => println!("Token `{}` at {}-{}",
-                &STMNT[*start..*stop], start, stop),
-            State::WILDCARD(pos) => println!("Wildcard `*`at {}", pos),
-            State::END_OF_STMNT(pos) => println!("End-of-Stmnt at {}", pos),
+            State::TOKEN(start, stop) => {
+                #[cfg(feature = "stats")]
+                println!("Token `{}` at {}-{}", &STMNT[*start..*stop], start, stop);
+
+                if verb.is_empty() { // <.>
+                    verb = &STMNT[*start..*stop];
+                } else {
+                    table = &STMNT[*start..*stop];
+                }
+            },
+            #[allow(unused)] // <.>
+            State::WILDCARD(pos) => {
+                #[cfg(feature = "stats")]
+                println!("Wildcard `*`at {}", pos);
+                column = "*";
+            },
+            #[allow(unused)]
+            State::END_OF_STMNT(pos) => {
+                #[cfg(feature = "stats")]
+                println!("End-of-Stmnt at {}", pos);
+            },
             _ => {},
         }
     }
+
+    println!("Parsed: verb={:?}, column={:?}, table={:?}", verb, column, table);
+    println!("Parsed: remainder={:?}", remainder);
 }
+
 ----
 <.> We start with the definition of our parsing states and use enum variants
 <.> Deriving from {debug}[Debug] is nice, but let us also roll our own formatter
@@ -285,22 +313,21 @@ avoid peeking or stepping back
 <.> Here is the break with the label, this is easier to follow, right?
 <.> Another nifty feature is the {features}[feature] handling of Cargo, this allows us to see the
 state list when enabled
-<.> Any finally just the same output from the example before. *Noteworthy here it is decoupled from
-the actual parsing.*
+<.> Since we basically decoupled handling and parsing, we still need to strep through our states and
+assign variables
+<.> Not the best way to do that through..
+<.> And the rest is just boring default stuff
 
 That is much more code and renders basically the same thing:
 
 [source,shell]
 ----
 $ cargo run
-   Compiling fsm-parser v0.1.0 (/home/unexist/fsm-parser)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+   Compiling fsm-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/fsm-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.28s
      Running `target/debug/fsm-parser`
-Token `SELECT` at 0-6
-Wildcard `*`at 7
-Token `FROM` at 9-13
-Token `spotify` at 14-21
-End-of-Stmnt at 21
+Parsed: verb="SELECT", column="*", table="spotify"
+Parsed: remainder=""
 ----
 
 But if we enable the debug feature with `cargp run --features debug` we can
@@ -309,7 +336,8 @@ also see the state changes of our FSM:
 [source,shell]
 ----
 $ cargo run --features debug
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+   Compiling fsm-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/fsm-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
      Running `target/debug/fsm-parser`
 START
 TOKEN(0, 6)
@@ -328,11 +356,8 @@ TOKEN(14, 21)
 SCAN
 END_OF_STMNT(21)
 END
-Token `SELECT` at 0-6
-Wildcard `*`at 7
-Token `FROM` at 9-13
-Token `spotify` at 14-21
-End-of-Stmnt at 21
+Parsed: verb="SELECT", column="*", table="spotify"
+Parsed: remainder=""
 ----
 
 Needless to say there is much more room for improvements, but the goal here was
