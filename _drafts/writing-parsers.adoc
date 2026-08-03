@@ -36,6 +36,14 @@ endif::[]
 :parsercombinator: https://en.wikipedia.org/wiki/Parser_combinator
 :nom: https://github.com/rust-bakery/nom
 :ast: https://en.wikipedia.org/wiki/Abstract_syntax_tree
+:highorder: https://en.wikipedia.org/wiki/Higher-order_function
+:std: https://doc.rust-lang.org/std/
+:dry: https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+:impl: https://doc.rust-lang.org/std/keyword.impl.html
+:movesems: https://google.github.io/comprehensive-rust/memory-management/move.html
+:guard: https://doc.rust-lang.org/rust-by-example/flow_control/match/guard.html
+:unit: https://doc.rust-lang.org/std/primitive.unit.html
+:generics: https://doc.rust-lang.org/rust-by-example/generics.html
 
 I am currently quite busy learning the ropes and architecture mapping in my day
 job and while drawing and mapping is fun, I am sometimes a bit afraid of
@@ -369,6 +377,7 @@ Curious?
 == Parser combinator
 
 When I started spotql I did a quick check how one would write idiomatic parsers
+urc
 with Rust and I quickly discovered the create {nom}[nom] - a parser combinators
 library.
 It took me quite a while until it made click and the migration from version 6
@@ -377,20 +386,111 @@ didn't make it easier either.
 
 {parsercombinator}[Parser combinators] or in general combinatory parsing works
 slightly different, than how we did that in the two examples above.
-Here we created our parsers as some kind a function, which accepts an input
-string and after some processing returns some kind of structure as result.
-The first parser didn't exactly do that, but technically the second did with
-its states vector - a preliminary form of {ast}[AST].
+So far we've created a fancy loop, which accepts an input string and after some
+processing returns some kind of structure with the result.
+
+TIP: The first parser didn't exactly do that, but technically the second did with
+its states vector - consider it as a preliminary form of {ast}[AST].
 
 Parser combinators, on the other hand, accept one or more parsers as an input
-and generally return a new parser as its output.
-I know this might sound a bit strange, but let us check with a few more examples
-of our well known statement how this actually works - again we rely only on
-Rust and avoid any particular library or framework.
+and generally return a new parser as its output - this are so called
+{highorder}[higher-order functions].
+I know this might sound a bit strange, but let us start from bottom and learn
+about this on our way.
+Keep in mind we just use plain Rust here, so nothing beyond {std}[std].
 
-=== Definition of our parser
+=== Carving out
 
+Since we need functions, a good start is to move some of the actual parsing
+into a function, which makes re-use dramatically easier and more DRY-ish.
 
+We had to parse lots of things like our SQL verb or other identifiers, which is
+not rocket science, but looks quite nice and easy like this:
+
+[source,rust]
+----
+fn identifier(input: &str) -> Result<(&str, String), &str> { // <.>
+    let mut stop: usize = 0;
+    let mut iter = input.chars();
+
+    match iter.next() { // <.>
+        Some(next) if next.is_alphabetic() => stop += 1,
+        _ => return Err(input),
+    }
+
+    while let Some(next) = iter.next() { // <.>
+        if next.is_alphanumeric() {
+            stop += 1;
+        } else {
+            break;
+        }
+    }
+
+    Ok((&input[stop..], String::from(&input[..stop]))) // <.>
+}
+----
+<.> The return type looks odd I know, but let us ignore it for now
+<.> Identifiers basically always start with a letter
+<.> Followed by more of same including numbers this time
+<.> Unfortunately we have to deal with the return type now: This is basically
+a result, containing a tuple of 1) the remaining input we didn't consume and
+2) the actual string we've consumed and another string as error, we still ignore
+
+=== Higher-order
+
+Next up on our list are strings, which need to be there to keep the format, but
+we actually have no direct interest in, so we can just gobble them up:
+
+[source,rust]
+----
+fn tag(expected: &'static str) -> impl Fn(&str) -> Result<(&str, String), &str> { // <.>
+    move |input| match input.get(0..expected.len()) { // <.>
+        Some(next) if next == expected => { // <.>
+            Ok((&input[expected.len()..], expected.to_string()))
+        },
+        _ => Err(input),
+    }
+}
+----
+<.> Here they are, higher-order functions with improved weirdness: This time we
+return a function (marked by the {impl}[impl] keyword, which returns our result
+from before.
+<.> I don't want to throw {movesems}[move semantics] into the mix, just pretend
+this is the weird syntax of Rust to define that
+<.> And with our dutiful {guard}[guard] we filter for our wanted string and
+slice out remaining and matched tag - this is not directly gobbled up, but if
+you prefer it replace it with {unit}[unit].
+
+=== Adding a combinator
+
+Now it is getting interesting:
+We are having two functions now, but need a way to combine them or otherwise
+we'd basically re-create the first parser, just more complex.
+
+Take a seat and meet `pair`, our first actual combinator:
+
+[source,rust]
+----
+pub(crate) fn pair<P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Fn(&str) -> Result<(&str, (R1, R2)), &str>
+where
+    P1: Fn(&str) -> Result<(&str, R1), &str>,
+    P2: Fn(&str) -> Result<(&str, R2), &str>, // <.>
+{
+    move |input| match parser1(input) {
+        Ok((next_input, result1)) => match parser2(next_input) { // <.>
+            Ok((final_input, result2)) => Ok((final_input, (result1, result2))),
+            Err(err) => Err(err),
+        },
+        Err(err) => Err(err),
+    }
+}
+----
+<.> What the..? I know, I know. The syntax looks a bit oddfootnote:[Funny thing is
+we are trying to parse SQL and actually find something like a `where` clause in
+our function signature, how likely is that?], but this is just Rust's way of
+describing {generics}[generics] in detail. `P1` and respectively `P2` must
+return a function with our known result from before
+<.> And on the inside we just concat both and fail early, if possible
 
 
 == Conclusion
