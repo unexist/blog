@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Writing parsers
-description: TBD
-#date: %%%DATE%%%
-#last_updated: %%%DATE%%%
+description: This blog post outlines how shellscripts contain way too much business logic and why it is a shame to keep them undocumented.
+date: %%%DATE%%%
+last_updated: %%%DATE%%%
 author: Christoph Kappel
-tags: showcase
+tags: rust parsing showcase
 categories: tech
 toc: true
 ---
@@ -44,6 +44,8 @@ endif::[]
 :guard: https://doc.rust-lang.org/rust-by-example/flow_control/match/guard.html
 :unit: https://doc.rust-lang.org/std/primitive.unit.html
 :generics: https://doc.rust-lang.org/rust-by-example/generics.html
+:functor: https://en.wikipedia.org/wiki/Functor
+:parsertrait: https://github.com/unexist/blog-examples/blob/master/writing-parsers/combinator-parser/src/parser_trait.rs
 
 I am currently quite busy learning the ropes and architecture mapping in my day
 job and while drawing and mapping is fun, I am sometimes a bit afraid of
@@ -436,7 +438,7 @@ fn identifier(input: &str) -> Result<(&str, String), &str> { // <.>
 a result, containing a tuple of 1) the remaining input we didn't consume and
 2) the actual string we've consumed and another string as error, we still ignore
 
-=== Higher-order
+=== Higher-order functions
 
 Next up on our list are strings, which need to be there to keep the format, but
 we actually have no direct interest in, so we can just gobble them up:
@@ -464,8 +466,8 @@ you prefer it replace it with {unit}[unit].
 === Adding a combinator
 
 Now it is getting interesting:
-We are having two functions now, but need a way to combine them or otherwise
-we'd basically re-create the first parser, just more complex.
+We have two functions now, but need a way to combine them or otherwise we'd
+basically re-create the first parser, just more complex.
 
 Take a seat and meet `pair`, our first actual combinator:
 
@@ -492,12 +494,279 @@ describing {generics}[generics] in detail. `P1` and respectively `P2` must
 return a function with our known result from before
 <.> And on the inside we just concat both and fail early, if possible
 
+=== Interim step
+
+`Pair` works exactly as the named implies:
+It allows to combine two parsers and returns the result when called.
+This is probably easer to understand with a short example:
+
+[source,rust]
+----
+fn main() {
+    let parser = pair(identifier, tag("from")); // <.>
+
+    let result = parser("SELECT from"); // <.>
+
+    println!("{:?}", result); // <.>
+}
+----
+<.> Throw both into a pair and receive a shiny new parser
+<.> This actually calls our parser with this string
+
+And when run:
+
+[source,shell]
+----
+$ cargo run
+   Compiling combinator-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/combinator-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running `target/debug/combinator-parser`
+Err(" from") # <.>
+----
+<.> D'uh.. Looks like we forgot about the whitespace in between!
+
+=== Handling whitespaces
+
+Like before, we need a function to collect all consecutive whitespaces and
+this can probably done without any surprise:
+
+[source, rust]
+----
+fn whitespace(input: &str) -> Result<(&str, String), &str> {
+    let mut stop: usize = 0;
+    let mut iter = input.chars();
+
+    match iter.next() {
+        Some(next) if ' ' == next => stop += 1,
+        _ => return Err(input),
+    }
+
+    Ok((&input[stop..], String::from(&input[..stop])))
+}
+----
+
+Actually the same approach as before works, but looks totally knocked up if
+you ask me:
+
+[source,rust]
+----
+fn main() {
+    let parser = pair(identifier, pair(whitespace, tag("*"))); // <.>
+
+    let result = parser("SELECT *"); // <.>
+
+    println!("{:?}", result);
+}
+----
+
+And when called:
+
+[source,shell]
+----
+$ cargo run
+   Compiling combinator-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/combinator-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.15s
+     Running `target/debug/combinator-parser`
+Ok(("", ("SELECT", (" ", "*")))) // <.>
+----
+<.> Looks weird, but this actually our expected output with the nested tuples
+
+=== More mathematics
+
+Before we can really fire this off, we need one additional element - a
+{functor}[functor].
+A functor is basically something, that can map between things and in our case
+just call a function on our results:
+
+[source,rust]
+----
+pub(crate) fn map<P, F, A, B>(parser: P, map_fn: F) -> impl Fn(&str) -> Result<(&str, B), &str>
+where
+    P: Fn(&str) -> Result<(&str, A), &str>,
+    F: Fn(A) -> B,
+{
+    move |input| match parser(input) {
+        Ok((next_input, result)) => Ok((next_input, map_fn(result))), // <.>
+        Err(err) => Err(err),
+    }
+}
+----
+<.> We covered lots of ground today and barely start to sweat when seeing this:
+We just call the passed function and return the result
+
+=== Mapping all the things
+
+Now with our functor, we can quickly add some more trivial helper functions `left`
+and `right`:
+
+[source,rust]
+----
+pub(crate) fn left<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Fn(&str) -> Result<(&str, R1), &str>
+where
+    P1: Fn(&str) -> Result<(&str, R1), &str>,
+    P2: Fn(&str) -> Result<(&str, R2), &str>,
+{
+    map(pair(parser1, parser2), |(left, _right)| left) // <.>
+}
+
+pub(crate) fn right<'a, P1, P2, R1, R2>(parser1: P1, parser2: P2) -> impl Fn(&str) -> Result<(&str, R2), &str>
+where
+    P1: Fn(&str) -> Result<(&str, R1), &str>,
+    P2: Fn(&str) -> Result<(&str, R2), &str>,
+{
+    map(pair(parser1, parser2), |(_left, right)| right) // <.>
+}
+----
+<.> Every building block in place and this is just piece of cake:
+Call both parsers from the pair and return just the result of the left one.
+<.> And opposite direction - call both and return right
+
+=== Handle delimited strings
+
+Before adding more stuff, we should focus again on what we actually want to
+achieve:
+
+Getting rid of leading and trailing whitespaces in a functional and cool way.
+
+Since we have everything in place, let us a create a new parser called
+`delimited`, that can use three parsers and like `left` and `right`, return
+only a selection - here we go for the middle this time:
+
+[source,rust]
+----
+pub(crate) fn delimited<'a, P1, P2, P3, R1, R2, R3>(parser1: P1, parser2: P2, parser3: P3) -> impl Fn(&str) -> Result<(&str, R2), &str>
+where
+    P1: Fn(&str) -> Result<(&str, R1), &str>,
+    P2: Fn(&str) -> Result<(&str, R2), &str>,
+    P3: Fn(&str) -> Result<(&str, R3), &str>,
+{
+    map(right(parser1, left(parser2, parser3)), |middle| middle) // <.>
+}
+----
+<.> We use a combination of `right` and `left` to sort this out and call `map`
+on the result to get to the middle
+
+=== Zero or more?
+
+When using `delimited` right now we have to deal with the problem it doesn't
+work when there is in fact no space:
+
+[source,rust]
+----
+fn main() {
+    let parser = pair(delimited(whitespace, identifier, whitespace),
+        delimited(whitespace, tag("*"), whitespace));
+
+    let result = parser("SELECT *");
+
+    println!("{:?}", result);
+}
+----
+
+And when this is called:
+
+[source,shell]
+----
+   Compiling combinator-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/combinator-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running `target/debug/combinator-parser`
+Err("SELECT *") # <.>
+----
+<.> Several whitespaces are missing
+
+So we need something that handles either optional or zero to many.
+Optional is something for another day, so we go with the last approach:
+
+[source,rust]
+----
+pub(crate) fn zero_or_more<'a, P, A>(parser: P) -> impl Fn(&str) -> Result<(&str, Vec<A>), &str>
+where
+    P: Fn(&str) -> Result<(&str, A), &str>,
+{
+    move |mut input| {
+        let mut result = Vec::new();
+
+        while let Ok((next_input, next_item)) = parser(input) { // <.>
+            input = next_input;
+            result.push(next_item);
+        }
+
+        Ok((input, result))
+    }
+}
+----
+<.> Another loop, storing everything in a vector and never bail out - next!
+
+=== Perfection
+
+Took us a while, but we have all elements in place and can successfully
+assemble our parser and ultimately parse the string:
+
+[source,rust]
+----
+fn main() {
+    let verb_parser = delimited(zero_or_more(whitespace), identifier, zero_or_more(whitespace));
+    let column_parser = delimited(zero_or_more(whitespace), tag("*"), zero_or_more(whitespace));
+    let table_parser = right(
+        delimited(zero_or_more(whitespace), tag("FROM"), zero_or_more(whitespace)),
+        left(identifier, tag(";")));
+
+    let parser = pair(verb_parser, pair(column_parser, table_parser));
+
+    if let Ok(remainder) = map(parser, |(verb, (column, table))| {
+        println!("Parsed: verb={:?}, column={:?}, table={:?}", verb, column, table);
+    })(STMNT) {
+        println!("Parsed: remainder={:?}", remainder.1);
+    }
+}
+----
+
+And if we run the whole example:
+
+[source,rust]
+----
+$ cargo run
+   Compiling combinator-parser v0.1.0 (/home/unexist/projects/blog-examples/writing-parsers/combinator-parser)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running `/home/unexist/projects/blog-examples/writing-parsers/combinator-parser/target/debug/combinator-parser`
+Parsed: verb="SELECT", column="*", table="spotify"
+Parsed: remainder=()
+----
+
+There are many more ways to further optimize this parser, like introducing
+proper types and a trait, to avoid repeat yourself, but this is more on the
+ergonomics side:
+
+[source,rust]
+----
+pub(crate) type ParseResult<'a, Output> = Result<(&'a str, Output), &'a str>;
+
+pub(crate) trait Parser<'a, Output> {
+    fn parse(&self, input: &'a str) -> ParseResult<'a, Output>;
+}
+----
+
+TIP: If you feel adventurous have a look at the {parsertrait}[parser_trait.rs]
+examples, if you want to see how this can be done.
 
 == Conclusion
 
+I wonder if people think it is weird to write about manually writing a parser
+nowadays, but nevertheless I really enjoyed preparing the examples and also
+trying to find and hopefully to keep a golden thread.
+
+Even so, parsing is for me an integral part of programming and I wanted to show
+these three versions of parsers, that I've written many times over during my
+personal and professional programming careerfootnote:[Probably once you've
+learned some kind of recipe you stick to it all the time.],
+
+If I had to pick a favorite I'd probably prefer number three, because playing
+with it was the most fun to me.
+If it is not just for joy, I'd probably just hack some iterative version like
+number one together or really throw in some FSM-magic, to have a more
+error-safe version.
+
 All examples can be found here:
 
-<https://github.com/unexist/spotql>
-
-[bibliography]
-== Bibliography
+<https://github.com/unexist/spotql> +
+<https://github.com/unexist/blog-examples>
