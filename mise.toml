@@ -1,0 +1,23 @@
+[env]
+JEKYLL_ENV = '{{.JEKYLL_ENV | default "production" }}'
+
+[tasks. build]
+run = 'rvm ruby-3.3.6 exec bundle exec jekyll build'
+
+[tasks.collect]
+run = 'zsh bin/collect.sh'
+
+[tasks.convert]
+run = 'zsh bin/convert.sh'
+
+[tasks.create]
+run = 'zsh bin/create.sh'
+
+[tasks.drafts]
+run = 'rvm ruby-3.3.6 exec bundle exec jekyll serve --port 10000 --draft'
+
+[tasks.publish]
+run ='rvm ruby-3.3.6 exec zsh bin/publish.sh'
+
+[tasks.start]
+run = 'rvm ruby-3.3.6 exec bundle exec jekyll serve --port 9000'
